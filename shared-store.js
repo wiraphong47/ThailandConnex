@@ -14,10 +14,10 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const STORAGE_KEY = 'TC_DATA_STORE_V3';
+  const STORAGE_KEY = 'TC_DATA_STORE_V4';
 
   const DEFAULT_STATE = {
-    version: 3,
+    version: 4,
     lastUpdated: Date.now(),
     user: {
       name: 'อลิสา ใจดี',
@@ -26,6 +26,113 @@
       phone: '082-340-1223',
       walletAddress: '0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760',
       tokenBalance: 41520.00
+    },
+    auth: {
+      currentUser: {
+        isLoggedIn: true,
+        name: 'อลิสา ใจดี',
+        id: 'TC-849204',
+        email: 'alisa.jaidee@thailandconnex.com',
+        phone: '082-340-1223',
+        walletAddress: '0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760',
+        tokenBalance: 41520.00,
+        avatar: 'AJ',
+        tier: 'VIP Platinum Traveler',
+        registeredDate: '2023-01-15'
+      },
+      currentAdmin: {
+        isLoggedIn: true,
+        name: 'ฐาปกรณ์ สันติชาติศักดิ์ (depa)',
+        email: 'thapakorn.s@depa.or.th',
+        role: 'Super Administrator',
+        org: 'depa Central Hub',
+        avatar: '👨‍💼',
+        badge: 'Super Admin'
+      },
+      registeredUsers: [
+        {
+          id: 'TC-849204',
+          name: 'คุณอลิสา ใจดี',
+          email: 'alisa.jaidee@thailandconnex.com',
+          phone: '082-340-1223',
+          walletAddress: '0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760',
+          tokenBalance: 41520.00,
+          avatar: 'AJ',
+          tier: 'VIP Platinum Traveler',
+          status: 'Active',
+          registeredDate: '2023-01-15'
+        },
+        {
+          id: 'TC-391820',
+          name: 'สมชาย ท่องไทย',
+          email: 'somchai.t@gmail.com',
+          phone: '089-123-4567',
+          walletAddress: '0x71C4B92F26c95BfBE8b105A12E83204981Ea1945',
+          tokenBalance: 5800.00,
+          avatar: 'ST',
+          tier: 'Gold Traveler',
+          status: 'Active',
+          registeredDate: '2023-02-01'
+        },
+        {
+          id: 'TC-512093',
+          name: 'Panop Api',
+          email: 'panop@inrum.co.th',
+          phone: '081-987-6543',
+          walletAddress: '0x992B16c3182b8F6aF4f98Da3f9468F635d87bB62',
+          tokenBalance: 12450.00,
+          avatar: 'PA',
+          tier: 'Silver Explorer',
+          status: 'Active',
+          registeredDate: '2023-02-05'
+        },
+        {
+          id: 'TC-620184',
+          name: 'Ahibal Lahiri',
+          email: 'ahibal@thailandconnex.com',
+          phone: '083-456-7890',
+          walletAddress: '0x438A9412F5eA19C08D649216cA96Ea90729783D1',
+          tokenBalance: 3200.00,
+          avatar: 'AL',
+          tier: 'Explorer',
+          status: 'Active',
+          registeredDate: '2023-02-06'
+        }
+      ],
+      adminAccounts: [
+        {
+          email: 'thapakorn.s@depa.or.th',
+          name: 'ฐาปกรณ์ สันติชาติศักดิ์ (depa)',
+          role: 'Super Administrator',
+          org: 'depa Central Hub',
+          avatar: '👨‍💼',
+          badge: 'Super Admin'
+        },
+        {
+          email: 'boonyarit.r@travizgo.com',
+          name: 'บุญญฤทธิ์ ฤทธิ์เดช',
+          role: 'Platform Operations Admin',
+          org: 'TRAVIZGO Platform',
+          avatar: '👨‍💻',
+          badge: 'Operations'
+        },
+        {
+          email: 'somchai@phuket-tour.co.th',
+          name: 'สมชาย ท่องเที่ยว (Hotel Partner)',
+          role: 'Merchant / Hotel Manager',
+          org: 'Phuket Tour & Partner Hub',
+          avatar: '🏨',
+          badge: 'Hotel Partner'
+        },
+        {
+          email: 'auditor@tat.or.th',
+          name: 'ผู้ตรวจสอบ ททท. (TAT Auditor)',
+          role: 'TAT Tourism Data Auditor',
+          org: 'Tourism Authority of Thailand',
+          avatar: '🏛️',
+          badge: 'TAT Auditor'
+        }
+      ]
     },
     services: [
       {
@@ -664,6 +771,8 @@
       const earnedPoints = Math.round(amount * 0.05 * 100) / 100;
       if (earnedPoints > 0) {
         state.user.tokenBalance = Math.round((state.user.tokenBalance + earnedPoints) * 100) / 100;
+        if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
+        this.syncUserBalanceToRegistered(state.user);
         state.tokenLogs.unshift({
           time: now,
           action: 'Token Minting',
@@ -768,6 +877,161 @@
 
       this.save(state);
       return { success: true, balance: state.user.tokenBalance };
+    }
+
+    // Authentication & User Management (V4)
+    loginUser(emailOrId, password) {
+      const state = this.getState();
+      const users = state.auth ? state.auth.registeredUsers : [];
+      const q = String(emailOrId).trim().toLowerCase();
+      
+      const found = users.find(u => 
+        (u.email && u.email.toLowerCase() === q) || 
+        (u.id && u.id.toLowerCase() === q) || 
+        (u.name && u.name.toLowerCase().includes(q))
+      );
+
+      if (!found) {
+        return { success: false, message: 'ไม่พบบัญชีผู้ใช้งานนี้ในระบบ หรือรหัสผ่านไม่ถูกต้อง' };
+      }
+
+      if (found.status === 'Disabled' || found.status === 'Blocked') {
+        return { success: false, message: 'บัญชีนี้ถูกปิดกั้นการเข้าถึงชั่วคราวโดยผู้ดูแลระบบ' };
+      }
+
+      const activeUser = { ...found, isLoggedIn: true };
+      if (!state.auth) state.auth = {};
+      state.auth.currentUser = activeUser;
+      state.user = activeUser;
+
+      this.save(state);
+      return { success: true, user: activeUser };
+    }
+
+    logoutUser() {
+      const state = this.getState();
+      const guest = {
+        isLoggedIn: false,
+        name: 'ผู้เยี่ยมชม (Guest)',
+        id: 'TC-GUEST',
+        email: '',
+        phone: '',
+        walletAddress: '',
+        tokenBalance: 0,
+        avatar: '👤',
+        tier: 'Guest'
+      };
+      if (!state.auth) state.auth = {};
+      state.auth.currentUser = guest;
+      state.user = guest;
+
+      this.save(state);
+      return { success: true };
+    }
+
+    registerUser(info) {
+      const state = this.getState();
+      if (!state.auth) state.auth = { registeredUsers: [], adminAccounts: [] };
+      if (!state.auth.registeredUsers) state.auth.registeredUsers = [];
+
+      const name = (info.name || 'ผู้ใช้งานใหม่').trim();
+      const email = (info.email || 'user@example.com').trim();
+      const phone = (info.phone || '080-000-0000').trim();
+
+      // Check if email already exists
+      const existing = state.auth.registeredUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (existing) {
+        return { success: false, message: 'อีเมลนี้มีผู้ลงทะเบียนใช้งานในระบบแล้ว' };
+      }
+
+      const newId = 'TC-' + Math.floor(100000 + Math.random() * 900000);
+      const hex = Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      const wallet = '0x' + hex;
+      const initialBonus = 500.00;
+
+      // Extract initials for avatar
+      let initials = 'TC';
+      const parts = name.split(' ');
+      if (parts.length >= 2 && parts[0] && parts[1]) {
+        initials = (parts[0][0] + parts[1][0]).toUpperCase();
+      } else if (name.length >= 2) {
+        initials = name.slice(0, 2).toUpperCase();
+      }
+
+      const newUser = {
+        id: newId,
+        name: name,
+        email: email,
+        phone: phone,
+        walletAddress: wallet,
+        tokenBalance: initialBonus,
+        avatar: initials,
+        tier: 'Silver Explorer (Welcome Bonus)',
+        status: 'Active',
+        registeredDate: getNowStr().split(' ')[0],
+        isLoggedIn: true
+      };
+
+      state.auth.registeredUsers.unshift(newUser);
+
+      // Welcome bonus minting on blockchain
+      state.tokenLogs.unshift({
+        time: getNowStr(),
+        action: 'Token Minting',
+        actionCode: '+',
+        detail: `🎉 Welcome Bonus 500 TCP สมัครสมาชิกใหม่ (${newUser.name})`,
+        amount: initialBonus,
+        balance: initialBonus,
+        txHash: generateHash(),
+        block: generateBlock(),
+        status: 'Confirmed'
+      });
+
+      state.auth.currentUser = newUser;
+      state.user = newUser;
+
+      this.save(state);
+      return { success: true, user: newUser };
+    }
+
+    loginAdmin(emailOrRole) {
+      const state = this.getState();
+      if (!state.auth) state.auth = {};
+      const admins = state.auth.adminAccounts || [];
+      const q = String(emailOrRole).trim().toLowerCase();
+
+      const found = admins.find(a => 
+        (a.email && a.email.toLowerCase() === q) || 
+        (a.role && a.role.toLowerCase().includes(q)) ||
+        (a.name && a.name.toLowerCase().includes(q))
+      );
+
+      if (!found) {
+        return { success: false, message: 'ไม่พบบัญชีผู้ดูแลระบบนี้' };
+      }
+
+      state.auth.currentAdmin = { ...found, isLoggedIn: true };
+      this.save(state);
+      return { success: true, admin: state.auth.currentAdmin };
+    }
+
+    logoutAdmin() {
+      const state = this.getState();
+      if (state.auth && state.auth.currentAdmin) {
+        state.auth.currentAdmin.isLoggedIn = false;
+        this.save(state);
+      }
+      return { success: true };
+    }
+
+    syncUserBalanceToRegistered(user) {
+      const state = this.getState();
+      if (state.auth && state.auth.registeredUsers && user && user.id) {
+        const u = state.auth.registeredUsers.find(x => x.id === user.id);
+        if (u) {
+          u.tokenBalance = user.tokenBalance;
+        }
+      }
     }
 
     // Reset Defaults

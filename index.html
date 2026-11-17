@@ -1302,6 +1302,161 @@
         padding: 7px 10px;
       }
     }
+
+    /* Authentication & Profile Modal Styles */
+    .btn-auth-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff !important;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+      transition: all 0.2s ease;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+    }
+    .btn-auth-header:hover {
+      background: linear-gradient(135deg, #0369a1, #075985);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    }
+    .auth-tab-bar {
+      display: flex;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 18px;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.15s ease;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+    }
+    .auth-tab-btn.active {
+      color: var(--navy);
+      border-bottom-color: var(--orange);
+    }
+    .input-auth {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: #1e293b;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+    }
+    .input-auth:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+    .btn-auth-submit {
+      width: 100%;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #083b7c, #0284c7);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(8, 59, 124, 0.25);
+      transition: all 0.15s ease;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+    }
+    .btn-auth-submit:hover {
+      opacity: 0.94;
+      transform: translateY(-1px);
+    }
+    .btn-demo-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+    }
+    .btn-demo-user:hover {
+      border-color: #0284c7;
+      background: #f0f9ff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .btn-thaid {
+      width: 100%;
+      padding: 9px 14px;
+      background: #ffffff;
+      border: 1.5px solid #0284c7;
+      color: #0369a1;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+    }
+    .btn-thaid:hover {
+      background: #f0f9ff;
+    }
+    .profile-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
+    .profile-card-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff7834, #f59e0b);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(255, 120, 52, 0.35);
+    }
+    .profile-field-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed #f1f5f9;
+      font-size: 13px;
+    }
+    .wallet-box-wrap {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 12px 0 16px;
+    }
+
   </style>
 </head>
 <body>
@@ -1347,7 +1502,14 @@
             <span class="btn-admin-arrow">➔</span>
           </a>
 
-          <div class="token-pill" onclick="switchTab('view-wallet', 'กระเป๋าเงิน & ประวัติโทเคน')" title="คลิกเพื่อดูกระเป๋าเงินและโอนคะแนน">
+          <!-- Logged Out Login Button -->
+          <button id="btn-header-login" class="btn-auth-header" onclick="openAuthModal('login')" style="display:none;" title="เข้าสู่ระบบหรือลงทะเบียน">
+            <span>🔑</span>
+            <span>เข้าสู่ระบบ / ลงทะเบียน</span>
+          </button>
+
+          <!-- Logged In Elements -->
+          <div class="token-pill" id="header-token-pill" onclick="switchTab('view-wallet', 'กระเป๋าเงิน & ประวัติโทเคน')" title="คลิกเพื่อดูกระเป๋าเงินและโอนคะแนน">
             <div class="token-icon">₮</div>
             <div>
               <div class="token-val" id="top-token-balance">41,520 TCP</div>
@@ -1355,11 +1517,11 @@
             </div>
           </div>
 
-          <div class="user-profile" onclick="openProfileModal()" title="คลิกเพื่อดูโปรไฟล์">
-            <div class="user-avatar">AJ</div>
+          <div class="user-profile" id="header-user-profile" onclick="openProfileModal()" title="คลิกเพื่อดูโปรไฟล์และสลับบัญชี">
+            <div class="user-avatar" id="header-user-avatar">AJ</div>
             <div class="user-meta">
-              <span class="user-name">อลิสา ใจดี</span>
-              <span class="user-id">ID: TC-849204</span>
+              <span class="user-name" id="header-user-name">อลิสา ใจดี</span>
+              <span class="user-id" id="header-user-id">ID: TC-849204</span>
             </div>
           </div>
         </div>
@@ -1380,18 +1542,31 @@
       </div>
 
       <!-- User Info Card in Sidebar -->
-      <div class="sidebar-user-card">
+      <!-- Sidebar User Card (Logged in) -->
+      <div id="sidebar-user-card-logged-in" class="sidebar-user-card">
         <div class="suc-top">
-          <div class="suc-avatar">AJ</div>
-          <div>
-            <div class="suc-name">คุณอลิสา ใจดี</div>
-            <div class="suc-id">รหัสสมาชิก: TC-849204</div>
+          <div class="suc-avatar" id="sidebar-user-avatar">AJ</div>
+          <div style="flex:1;">
+            <div class="suc-name" id="sidebar-user-name">คุณอลิสา ใจดี</div>
+            <div class="suc-id" id="sidebar-user-id">รหัสสมาชิก: TC-849204</div>
           </div>
+          <button onclick="openProfileModal()" title="จัดการโปรไฟล์" style="background:rgba(255,255,255,0.18); border:none; color:#fff; border-radius:6px; padding:4px 8px; font-size:12px; cursor:pointer;">⚙️</button>
         </div>
         <div class="suc-balance">
           <span class="suc-bal-label">ยอดแต้มสะสม TCP:</span>
           <span class="suc-bal-val" id="sidebar-token-balance">41,520 TCP</span>
         </div>
+        <div style="display:flex; gap:6px; margin-top:10px;">
+          <button onclick="openAuthModal('login')" style="flex:1; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; font-size:11.5px; border-radius:6px; padding:5px 0; cursor:pointer;">🔄 สลับบัญชี</button>
+          <button onclick="logoutUser()" style="background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; font-size:11.5px; border-radius:6px; padding:5px 10px; cursor:pointer;">ออกจากระบบ</button>
+        </div>
+      </div>
+
+      <!-- Sidebar User Card (Logged out) -->
+      <div id="sidebar-user-card-logged-out" class="sidebar-user-card" style="display:none; background:linear-gradient(135deg, #1e293b, #334155);">
+        <div style="font-weight:700; font-size:14px; margin-bottom:4px;">ยินดีต้อนรับสู่ ThailandCONNEX</div>
+        <div style="font-size:12px; color:#cbd5e1; margin-bottom:12px;">เข้าสู่ระบบเพื่อสะสมแต้ม TCP และสิทธิประโยชน์พิเศษ</div>
+        <button onclick="openAuthModal('login')" style="width:100%; background:var(--orange); color:#fff; border:none; border-radius:8px; padding:8px 0; font-weight:700; font-size:13px; cursor:pointer;">🔑 เข้าสู่ระบบ / ลงทะเบียน</button>
       </div>
 
       <!-- Navigation Menu Items -->
@@ -1944,6 +2119,180 @@
       <div class="modal-foot">
         <button class="btn-export" onclick="closeModal('voucher-code-modal')">เก็บไว้ใช้ภายหลัง</button>
         <button class="btn-book" onclick="markCouponAsUsed()">ยืนยันการใช้คูปองเดี๋ยวนี้</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: AUTHENTICATION (LOGIN & REGISTER) -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="modal-auth">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-head">
+        <div>
+          <h3 style="margin:0; font-size:17px; color:var(--navy);">บัญชีสมาชิก ThailandCONNEX</h3>
+          <div style="font-size:12px; color:var(--muted); margin-top:2px;">Traveler & Tourism Token Ecosystem</div>
+        </div>
+        <button class="btn-close" onclick="closeModal('modal-auth')">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 16px 20px 20px;">
+        <div class="auth-tab-bar">
+          <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">🔑 เข้าสู่ระบบ</button>
+          <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">📝 ลงทะเบียน (+500 TCP)</button>
+        </div>
+
+        <!-- TAB 1: LOGIN -->
+        <div id="auth-pane-login">
+          <!-- 1-Click Demo Logins -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:16px;">
+            <div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:8px;">⚡ เลือกเข้าสู่ระบบด่วน (1-Click Demo Profiles):</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px;">
+              <button type="button" class="btn-demo-user" onclick="quickLoginUser('alisa.jaidee@thailandconnex.com')">
+                <span style="font-size:18px;">👩‍💼</span>
+                <div>
+                  <b style="font-size:12px;">อลิสา ใจดี</b>
+                  <div style="font-size:10.5px; color:#0284c7;">VIP • 41,520 TCP</div>
+                </div>
+              </button>
+              <button type="button" class="btn-demo-user" onclick="quickLoginUser('somchai.t@gmail.com')">
+                <span style="font-size:18px;">👨</span>
+                <div>
+                  <b style="font-size:12px;">สมชาย ท่องไทย</b>
+                  <div style="font-size:10.5px; color:#0284c7;">Gold • 5,800 TCP</div>
+                </div>
+              </button>
+              <button type="button" class="btn-demo-user" onclick="quickLoginUser('panop@inrum.co.th')">
+                <span style="font-size:18px;">👨‍💻</span>
+                <div>
+                  <b style="font-size:12px;">Panop Api</b>
+                  <div style="font-size:10.5px; color:#0284c7;">Explorer • 12,450 TCP</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Standard Form -->
+          <form onsubmit="handleLoginFormSubmit(event)">
+            <div style="margin-bottom:12px;">
+              <label style="display:block; font-size:12.5px; font-weight:600; margin-bottom:4px;">อีเมล หรือ รหัสสมาชิก TC-ID</label>
+              <input type="text" id="login-input-email" class="input-auth" placeholder="เช่น alisa.jaidee@thailandconnex.com หรือ TC-849204" required>
+            </div>
+            <div style="margin-bottom:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <label style="font-size:12.5px; font-weight:600;">รหัสผ่าน</label>
+                <a href="javascript:void(0)" onclick="showToast('ระบบส่งอีเมลรีเซ็ตรหัสผ่านเรียบร้อยแล้ว')" style="font-size:11.5px; color:#0284c7; text-decoration:none;">ลืมรหัสผ่าน?</a>
+              </div>
+              <input type="password" id="login-input-pass" class="input-auth" placeholder="••••••••" value="password123" required>
+            </div>
+            <button type="submit" class="btn-auth-submit">เข้าสู่ระบบ ➔</button>
+
+            <div style="text-align:center; margin:14px 0 10px; font-size:11.5px; color:#94a3b8;">หรือเข้าสู่ระบบด้วยบริการยืนยันตัวตนภาครัฐ</div>
+            <button type="button" class="btn-thaid" onclick="quickLoginUser('alisa.jaidee@thailandconnex.com', 'ThaiD')">
+              <span style="font-size:16px;">🇹🇭</span>
+              <span>เข้าสู่ระบบด้วย ThaiD (Digital ID ภาครัฐ)</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- TAB 2: REGISTER -->
+        <div id="auth-pane-register" style="display:none;">
+          <!-- Welcome Bonus Banner -->
+          <div style="background:linear-gradient(135deg, #ecfdf5, #d1fae5); border:1px solid #6ee7b7; border-radius:10px; padding:12px 14px; margin-bottom:14px; display:flex; gap:10px; align-items:center;">
+            <span style="font-size:26px;">🎁</span>
+            <div>
+              <div style="font-weight:700; color:#065f46; font-size:13.5px;">รับทันที 500 TCP Welcome Bonus!</div>
+              <div style="font-size:11.5px; color:#047857;">สมาชิกใหม่รับ 500 TCP เข้ากระเป๋าเงิน Web3 อัตโนมัติ ซิงค์ข้อมูลกับระบบ Admin สดทันที</div>
+            </div>
+          </div>
+
+          <form onsubmit="handleRegisterFormSubmit(event)">
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">ชื่อ - นามสกุล *</label>
+              <input type="text" id="reg-name" class="input-auth" placeholder="เช่น กิตติพงษ์ รัตนเดชา" required>
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">อีเมล *</label>
+              <input type="email" id="reg-email" class="input-auth" placeholder="your.email@example.com" required>
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">เบอร์โทรศัพท์มือถือ *</label>
+              <input type="tel" id="reg-phone" class="input-auth" placeholder="08x-xxx-xxxx" required>
+            </div>
+            <div style="margin-bottom:14px;">
+              <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">รหัสผ่าน *</label>
+              <input type="password" id="reg-pass" class="input-auth" placeholder="กำหนดรหัสผ่านอย่างน้อย 6 ตัวอักษร" value="password123" required>
+            </div>
+            <label style="display:flex; align-items:center; gap:8px; font-size:11.5px; color:#475569; margin-bottom:14px; cursor:pointer;">
+              <input type="checkbox" checked required>
+              <span>ยอมรับเงื่อนไขการใช้งานและนโยบายความเป็นส่วนตัว ThailandCONNEX</span>
+            </label>
+            <button type="submit" class="btn-auth-submit" style="background:linear-gradient(135deg, #10b981, #059669);">
+              🎉 ลงทะเบียน & รับ 500 TCP ทันที
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: USER PROFILE & WALLET DETAILS -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="modal-user-profile">
+    <div class="modal-box" style="max-width: 460px;">
+      <div class="modal-head">
+        <h3 style="margin:0; font-size:17px; color:var(--navy);">ข้อมูลโปรไฟล์สมาชิก</h3>
+        <button class="btn-close" onclick="closeModal('modal-user-profile')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 18px 20px;">
+        <div class="profile-card-header">
+          <div class="profile-card-avatar" id="prof-modal-avatar">AJ</div>
+          <div style="flex:1;">
+            <div style="font-weight:700; font-size:16px; color:#0f172a;" id="prof-modal-name">คุณอลิสา ใจดี</div>
+            <div style="font-size:12px; color:#0284c7; font-weight:600; margin-top:2px;" id="prof-modal-tier">VIP Platinum Traveler</div>
+            <div style="font-size:11.5px; color:#64748b;" id="prof-modal-id">Member ID: TC-849204</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div class="profile-field-row">
+            <span style="color:#64748b;">อีเมล (Email):</span>
+            <b id="prof-modal-email">alisa.jaidee@thailandconnex.com</b>
+          </div>
+          <div class="profile-field-row">
+            <span style="color:#64748b;">เบอร์โทรศัพท์ (Phone):</span>
+            <b id="prof-modal-phone">082-340-1223</b>
+          </div>
+          <div class="profile-field-row">
+            <span style="color:#64748b;">สถานะบัญชี (Status):</span>
+            <span class="badge badge-success">✓ Active (ยืนยันตัวตนแล้ว)</span>
+          </div>
+        </div>
+
+        <div class="wallet-box-wrap">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11.5px; font-weight:700; color:#475569; text-transform:uppercase;">Web3 Token Wallet (ERC-20)</span>
+            <span class="badge badge-info" style="font-size:10px;">Bitkub Chain / Connex</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; margin-bottom:10px;">
+            <span style="font-family:monospace; font-size:11px; color:#334155;" id="prof-modal-wallet">0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760</span>
+            <button onclick="copyWalletAddress()" style="background:none; border:none; color:#0284c7; font-size:11.5px; font-weight:600; cursor:pointer;">คัดลอก</button>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; color:#64748b;">คะแนนสะสมคงเหลือ:</span>
+            <b style="font-size:16px; color:#0284c7;" id="prof-modal-balance">41,520 TCP</b>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn-export" onclick="closeModal('modal-user-profile'); openAuthModal('login');" style="flex:1;">🔄 สลับบัญชีผู้ใช้</button>
+          <button class="btn-secondary" onclick="logoutUser()" style="color:#ef4444; border-color:#fca5a5;">🚪 ออกจากระบบ</button>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-export" onclick="closeModal('modal-user-profile')" style="width:100%;">ปิดหน้าต่าง</button>
       </div>
     </div>
   </div>

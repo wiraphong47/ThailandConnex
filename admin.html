@@ -655,13 +655,14 @@
         </div>
       </div>
 
-      <div class="sidebar-user">
+      <div class="sidebar-user" onclick="openAdminAuthModal()" style="cursor:pointer;" title="คลิกเพื่อสลับบทบาทหรือบัญชีผู้ดูแล">
         <div class="user-avatar-wrap">
-          <span>👦</span>
+          <span id="admin-sidebar-avatar">👨‍💼</span>
           <div class="user-avatar-badge"></div>
         </div>
-        <div class="user-name">Demo</div>
-        <div class="user-role-tag">Operator / Administrator</div>
+        <div class="user-name" id="admin-sidebar-name">ฐาปกรณ์ สันติชาติศักดิ์</div>
+        <div class="user-role-tag" id="admin-sidebar-role">Super Administrator (depa)</div>
+        <div style="margin-top:6px;"><span class="badge badge-info" style="font-size:10px; cursor:pointer;">🔄 สลับบทบาท / บัญชี</span></div>
       </div>
 
       <nav class="menu-group">
@@ -2538,6 +2539,71 @@
     </div>
   </div>
 
+  <!-- Modal: Admin Auth & Role Switcher -->
+  <div class="modal-overlay" id="modal-admin-auth" onclick="if(event.target===this) closeModal('modal-admin-auth')">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-head">
+        <div>
+          <h3 style="margin:0;">สลับบัญชีผู้ดูแลระบบ (Admin Role Switcher)</h3>
+          <small style="color:var(--text-muted)">เลือกบทบาทเพื่อทดสอบสิทธิ์การเข้าถึงระบบ ThailandCONNEX</small>
+        </div>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-admin-auth')">✕</button>
+      </div>
+      <div class="modal-body" style="padding:16px 20px;">
+        <div style="font-size:12.5px; font-weight:700; color:#334155; margin-bottom:10px;">เลือกบัญชีผู้ดูแลระบบ (1-Click Switch):</div>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:18px;">
+          <button type="button" class="btn-demo-admin" onclick="switchAdminRole('thapakorn.s@depa.or.th')">
+            <span style="font-size:24px;">👨‍💼</span>
+            <div style="flex:1; text-align:left;">
+              <b style="font-size:13.5px; color:var(--primary-navy);">ฐาปกรณ์ สันติชาติศักดิ์</b>
+              <div style="font-size:11.5px; color:var(--primary-blue); font-weight:600;">Super Administrator • depa Central Hub</div>
+            </div>
+            <span class="badge badge-info">Active Root</span>
+          </button>
+
+          <button type="button" class="btn-demo-admin" onclick="switchAdminRole('boonyarit.r@travizgo.com')">
+            <span style="font-size:24px;">👨‍💻</span>
+            <div style="flex:1; text-align:left;">
+              <b style="font-size:13.5px; color:var(--primary-navy);">บุญญฤทธิ์ ฤทธิ์เดช</b>
+              <div style="font-size:11.5px; color:#475569; font-weight:600;">Platform Operations Admin • TRAVIZGO</div>
+            </div>
+            <span class="badge" style="background:#f1f5f9; color:#475569;">Operations</span>
+          </button>
+
+          <button type="button" class="btn-demo-admin" onclick="switchAdminRole('somchai@phuket-tour.co.th')">
+            <span style="font-size:24px;">🏨</span>
+            <div style="flex:1; text-align:left;">
+              <b style="font-size:13.5px; color:var(--primary-navy);">สมชาย ท่องเที่ยว</b>
+              <div style="font-size:11.5px; color:#059669; font-weight:600;">Merchant & Hotel Partner • Phuket Tour Hub</div>
+            </div>
+            <span class="badge badge-success">Partner</span>
+          </button>
+
+          <button type="button" class="btn-demo-admin" onclick="switchAdminRole('auditor@tat.or.th')">
+            <span style="font-size:24px;">🏛️</span>
+            <div style="flex:1; text-align:left;">
+              <b style="font-size:13.5px; color:var(--primary-navy);">ผู้ตรวจสอบ ททท.</b>
+              <div style="font-size:11.5px; color:#d97706; font-weight:600;">Tourism Data Auditor • ททท. (TAT)</div>
+            </div>
+            <span class="badge badge-warning">Auditor</span>
+          </button>
+        </div>
+
+        <div style="border-top:1px dashed #cbd5e1; padding-top:14px;">
+          <div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:8px;">หรือเข้าสู่ระบบด้วยบัญชีอื่น:</div>
+          <form onsubmit="handleAdminCustomLogin(event)">
+            <input type="email" id="admin-login-email" class="input-clean" placeholder="admin@depa.or.th" style="width:100%; margin-bottom:8px;" required>
+            <input type="password" id="admin-login-pass" class="input-clean" placeholder="รหัสผ่าน" value="admin123" style="width:100%; margin-bottom:10px;" required>
+            <button type="submit" class="btn-action" style="width:100%;">เข้าสู่ระบบผู้ดูแล ➔</button>
+          </form>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-admin-auth')">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
     <script src="shared-store.js"></script>
   <script>
 
@@ -2545,6 +2611,50 @@
     function renderAdminFromStore(data) {
       if (!data) data = (typeof TCStore !== 'undefined') ? TCStore.getState() : null;
       if (!data) return;
+
+      // Update Current Admin in Sidebar
+      if (data.auth && data.auth.currentAdmin) {
+        const adm = data.auth.currentAdmin;
+        const aAvatar = document.getElementById('admin-sidebar-avatar');
+        const aName = document.getElementById('admin-sidebar-name');
+        const aRole = document.getElementById('admin-sidebar-role');
+        if (aAvatar) aAvatar.textContent = adm.avatar || '👨‍💼';
+        if (aName) aName.textContent = adm.name || 'Admin';
+        if (aRole) aRole.textContent = (adm.role || 'Administrator') + (adm.org ? ' (' + adm.org + ')' : '');
+      }
+
+      // Render Activity Users from real-time registered users
+      const actTable = document.getElementById('tbody-activity-users');
+      if (actTable && data.auth && data.auth.registeredUsers) {
+        const currentUser = data.auth.currentUser || {};
+        actTable.innerHTML = data.auth.registeredUsers.map(u => {
+          const isOnline = (currentUser.id === u.id || currentUser.email === u.email) && currentUser.isLoggedIn !== false;
+          const isWelcome = u.tier && u.tier.includes('Welcome Bonus');
+          return `
+            <tr style="${isOnline ? 'background: rgba(22, 141, 225, 0.08); font-weight:600;' : ''}">
+              <td>
+                <b>${u.name}</b>
+                ${isOnline ? '<span class="badge badge-info" style="font-size:10px; margin-left:6px;">🟢 กำลังออนไลน์ (User Portal)</span>' : ''}
+                ${isWelcome ? '<span class="badge badge-success" style="font-size:10px; margin-left:6px;">✨ สมาชิกใหม่ (Live Registered)</span>' : ''}
+              </td>
+              <td>${u.email}</td>
+              <td><span style="font-size:16px;">${u.avatar || '👤'}</span> <span style="font-size:11px; color:var(--text-muted);">${u.id}</span></td>
+              <td>
+                <label class="switch-ui" title="ปิดกั้นการเข้าถึง">
+                  <input type="checkbox" ${u.status === 'Disabled' ? 'checked' : ''} onchange="toggleUserStatus(this, '${u.id}', '${u.name}')">
+                  <span class="switch-slider"></span>
+                </label>
+              </td>
+              <td style="text-align: right;">
+                <span class="badge ${u.status === 'Active' ? 'badge-success' : 'badge-danger'}" style="margin-right:4px;">${u.status || 'Active'}</span>
+                <button class="btn-secondary" onclick="editActivityUser('${u.name}', '${u.email}')">✏️ แก้ไข</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+        const actCountEl = document.getElementById('activity-user-count');
+        if (actCountEl) actCountEl.textContent = data.auth.registeredUsers.length;
+      }
 
       const reservations = data.reservations || [];
       const tokenLogs = data.tokenLogs || [];
@@ -3004,7 +3114,31 @@
       showToast(`เพิ่มผู้ใช้งาน ${name} สำเร็จ!`, 'success');
     }
 
-    function toggleUserStatus(checkbox, name) {
+
+    function openAdminAuthModal() {
+      openModal('modal-admin-auth');
+    }
+
+    function switchAdminRole(emailOrRole) {
+      if (typeof TCStore !== 'undefined') {
+        const res = TCStore.loginAdmin(emailOrRole);
+        if (res.success) {
+          renderAdminFromStore(TCStore.getState());
+          closeModal('modal-admin-auth');
+          showToast(`สลับเข้าสู่บทบาท: ${res.admin.name} (${res.admin.role}) สำเร็จ`, 'success');
+        } else {
+          showToast(res.message || 'สลับบัญชีไม่สำเร็จ', 'error');
+        }
+      }
+    }
+
+    function handleAdminCustomLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-login-email').value;
+      switchAdminRole(email);
+    }
+
+    function toggleUserStatus(checkbox, idOrName, name) {
       const status = checkbox.checked ? 'ปิดการใช้งาน (Disabled)' : 'เปิดการใช้งาน (Active)';
       showToast(`เปลี่ยนสถานะผู้ใช้ ${name}: ${status}`, checkbox.checked ? 'warning' : 'success');
     }

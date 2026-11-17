@@ -2203,6 +2203,35 @@
     </div>
   </div>
 
+  <!-- ============================================== -->
+  <!-- MODAL: CONFIRM BOOKING (ยืนยันการจองห้องพักและการบริการ) -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="modal-confirm-booking" onclick="if(event.target===this) cancelBookingConfirmation()">
+    <div class="modal-box" style="max-width: 530px;">
+      <div class="modal-head" style="background: linear-gradient(135deg, #0b2240 0%, #173d6b 100%); color:#fff; padding:18px 22px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:24px;">🛎️</span>
+          <div>
+            <h3 style="margin:0; font-size:16px; font-weight:700; color:#fff;">ยืนยันคำสั่งจอง (Confirm Booking)</h3>
+            <p style="margin:2px 0 0 0; font-size:11.5px; color:rgba(255,255,255,0.8);">กรุณาตรวจสอบข้อมูลและยืนยันว่าต้องการจองจริงหรือไม่</p>
+          </div>
+        </div>
+        <button class="btn-close" onclick="cancelBookingConfirmation()" style="background:rgba(255,255,255,0.15); color:#fff;">&times;</button>
+      </div>
+      <div class="modal-body" id="confirm-booking-body" style="padding:20px; font-size:13px;">
+        <!-- Populated dynamically by openConfirmBookingModal() -->
+      </div>
+      <div class="modal-foot" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:14px 20px;">
+        <button type="button" class="btn-export" onclick="cancelBookingConfirmation()" style="padding:9px 18px; font-size:12.5px; font-weight:600; color:#64748b; background:#fff; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer;">
+          ✕ ยกเลิก (ไม่ต้องการจอง)
+        </button>
+        <button type="button" class="btn-book" id="btn-submit-confirm-booking" onclick="executeConfirmedBooking()" style="padding:10px 22px; font-size:13px; font-weight:700; background:linear-gradient(135deg, #10b981 0%, #059669 100%); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 8px rgba(16,185,129,0.3);">
+          <span>✓ ยืนยันการจองจริง (Confirm)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: BOOKING DETAIL (PDF Page 55, 95) -->
   <!-- ============================================== -->
   <div class="modal-backdrop" id="booking-detail-modal" onclick="if(event.target===this) closeModal('booking-detail-modal')">
@@ -2499,6 +2528,8 @@
       },
       currentCategoryFilter: 'all',
       selectedCouponId: null,
+      pendingBooking: null,
+      activeConfirmBooking: null,
       
       // Services for booking (PDF Pages 91, 208-220)
       services: [
@@ -3515,20 +3546,161 @@
       showToast(`คัดลอกลิงก์ที่พัก "${title}" เรียบร้อยแล้ว!`, 'success');
     }
 
+    // Login check helper
+    function isUserLoggedIn() {
+      return !!(state.user && state.user.isLoggedIn !== false && state.user.id !== 'TC-GUEST');
+    }
+
+    // Book from accommodation detail modal
     function bookFromModal() {
       if (currentDetailServiceId) {
+        if (!isUserLoggedIn()) {
+          closeModal('modal-accommodation-detail');
+          state.pendingBooking = { type: 'service', serviceId: currentDetailServiceId };
+          showToast('⚠️ กรุณาเข้าสู่ระบบก่อนทำการจองห้องพักหรือบริการ', true);
+          openAuthModal('login');
+          return;
+        }
         closeModal('modal-accommodation-detail');
         instantBook(currentDetailServiceId);
       }
     }
 
-    // Instant booking simulation
+    // Instant booking entry point (Checks login -> Opens confirmation modal)
     function instantBook(serviceId) {
+      if (!isUserLoggedIn()) {
+        state.pendingBooking = { type: 'service', serviceId: serviceId };
+        showToast('⚠️ กรุณาเข้าสู่ระบบก่อนทำการจองห้องพักหรือบริการท่องเที่ยว', true);
+        openAuthModal('login');
+        return;
+      }
+
       const s = state.services.find(x => x.id === serviceId);
       if (!s) return;
 
+      openConfirmBookingModal({
+        type: 'service',
+        serviceId: serviceId,
+        title: s.title,
+        provider: s.provider,
+        category: s.categoryName || s.category || 'โรงแรมและที่พัก',
+        price: s.price,
+        checkin: '2026-11-20',
+        checkout: '2026-11-22',
+        image: s.image
+      });
+    }
+
+    // Open booking confirmation modal
+    function openConfirmBookingModal(data) {
+      state.activeConfirmBooking = data;
+      const body = document.getElementById('confirm-booking-body');
+      if (!body) return;
+
+      const rewardTCP = Math.round(data.price * 0.05);
+
+      body.innerHTML = `
+        <div style="background:#f0f7ff; border:1px solid #bae6fd; border-radius:12px; padding:14px; margin-bottom:14px; display:flex; gap:12px; align-items:flex-start;">
+          ${data.image ? `<img src="${data.image}" style="width:72px; height:72px; object-fit:cover; border-radius:8px; flex-shrink:0;" alt="item">` : '<div style="width:52px; height:52px; border-radius:8px; background:#0284c7; color:#fff; display:grid; place-items:center; font-size:24px; flex-shrink:0;">🏨</div>'}
+          <div style="flex:1; min-width:0;">
+            <span style="display:inline-block; font-size:10.5px; font-weight:700; color:#0369a1; background:#e0f2fe; padding:2px 7px; border-radius:4px; margin-bottom:4px;">
+              ${data.category || 'บริการท่องเที่ยวและที่พัก'}
+            </span>
+            <div style="font-size:15px; font-weight:700; color:#0f172a; line-height:1.35; margin-bottom:4px;">
+              ${data.title}
+            </div>
+            <div style="font-size:12px; color:#475569;">
+              🏢 ผู้ให้บริการ: <b>${data.provider}</b>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:14px;">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px;">
+            <label style="display:block; font-size:11px; color:#64748b; margin-bottom:4px;">📅 วันที่เช็คอิน</label>
+            <input type="date" id="confirm-booking-checkin" value="${data.checkin || '2026-11-20'}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; color:#0f172a; background:#fff; font-family:inherit;">
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px;">
+            <label style="display:block; font-size:11px; color:#64748b; margin-bottom:4px;">📅 วันที่เช็คเอาท์</label>
+            <input type="date" id="confirm-booking-checkout" value="${data.checkout || '2026-11-22'}" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; color:#0f172a; background:#fff; font-family:inherit;">
+          </div>
+        </div>
+
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 14px; margin-bottom:14px;">
+          <div style="font-size:11.5px; font-weight:700; color:#475569; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+            <span>👤</span> ข้อมูลผู้จอง (บัญชีที่ล็อกอินอยู่)
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:3px; font-size:12px;">
+            <span style="color:#64748b;">ชื่อ-นามสกุล:</span>
+            <span style="font-weight:700; color:#0f172a;">${state.user.name}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:3px; font-size:12px;">
+            <span style="color:#64748b;">อีเมล:</span>
+            <span style="font-weight:500; color:#0f172a;">${state.user.email || '-'}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:12px;">
+            <span style="color:#64748b;">เบอร์โทรศัพท์:</span>
+            <span style="font-weight:500; color:#0f172a;">${state.user.phone || '-'}</span>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1px solid #fde68a; border-radius:10px; padding:10px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">🪙</span>
+            <div>
+              <div style="font-size:12px; font-weight:700; color:#92400e;">สิทธิ์รับแต้มสะสม (Token Cash Back 5%)</div>
+              <div style="font-size:11px; color:#b45309;">ได้รับทันทีเข้า Wallet หลังยืนยันการจอง</div>
+            </div>
+          </div>
+          <div style="font-size:15px; font-weight:800; color:#b45309;">
+            +${rewardTCP.toLocaleString()} TCP
+          </div>
+        </div>
+
+        <div style="background:#f1f5f9; border-radius:10px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:11.5px; color:#64748b;">ยอดชำระสุทธิ (Total Amount)</div>
+            <div style="font-size:11px; color:#94a3b8;">รวมภาษีมูลค่าเพิ่มและค่าบริการแล้ว</div>
+          </div>
+          <div style="font-size:22px; font-weight:800; color:#0284c7; font-family:'IBM Plex Sans Thai';">
+            ฿${Number(data.price).toLocaleString('th-TH')}
+          </div>
+        </div>
+
+        <div style="margin-top:14px; padding:10px 12px; background:#fff7ed; border:1px dashed #fdba74; border-radius:8px; font-size:12px; color:#9a3412; display:flex; gap:8px; align-items:center;">
+          <span style="font-size:18px;">❓</span>
+          <span><b>ยืนยันคำสั่งจอง:</b> คุณต้องการจองบริการ/ห้องพักนี้จริงๆ หรือไม่? เมื่อกดยืนยัน ระบบจะทำการบันทึกและส่งข้อมูลไปยังระบบผู้ดูแลทันที</span>
+        </div>
+      `;
+
+      openModal('modal-confirm-booking');
+    }
+
+    // Cancel booking confirmation
+    function cancelBookingConfirmation() {
+      closeModal('modal-confirm-booking');
+      state.activeConfirmBooking = null;
+      showToast('ℹ️ ยกเลิกรายการ ไม่ได้ทำการจอง', 'info');
+    }
+
+    // Execute confirmed booking
+    function executeConfirmedBooking() {
+      if (!state.activeConfirmBooking) return;
+      if (!isUserLoggedIn()) {
+        closeModal('modal-confirm-booking');
+        showToast('⚠️ กรุณาเข้าสู่ระบบก่อนทำการจองห้องพักหรือบริการ', true);
+        openAuthModal('login');
+        return;
+      }
+
+      const b = state.activeConfirmBooking;
       const newId = (100100 + state.reservations.length + 1).toString();
       const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
+
+      const checkinInput = document.getElementById('confirm-booking-checkin');
+      const checkoutInput = document.getElementById('confirm-booking-checkout');
+      const checkinVal = checkinInput && checkinInput.value ? checkinInput.value : (b.checkin || '2026-11-20');
+      const checkoutVal = checkoutInput && checkoutInput.value ? checkoutInput.value : (b.checkout || '2026-11-22');
 
       const newBooking = {
         id: newId,
@@ -3536,16 +3708,16 @@
         guest: state.user.name,
         email: state.user.email,
         phone: state.user.phone,
-        agent: 'User Direct (Web Portal)',
-        serviceName: s.title,
-        property: s.provider,
-        checkin: '2026-11-20',
-        checkout: '2026-11-22',
+        agent: b.type === 'directory' ? 'User Direct (Data Bank)' : 'User Direct (Web Portal)',
+        serviceName: b.title,
+        property: b.provider,
+        checkin: checkinVal,
+        checkout: checkoutVal,
         bookedOn: nowStr,
-        amount: s.price,
-        commission: Math.round(s.price * 0.05),
+        amount: b.price,
+        commission: Math.round(b.price * 0.05),
         status: 'Confirmed',
-        notes: 'จองออนไลน์ผ่าน ThailandCONNEX Platform (Earn Points)'
+        notes: b.type === 'directory' ? 'จองผ่าน Data Bank Directory' : 'จองออนไลน์ผ่าน ThailandCONNEX Platform (Earn Points)'
       };
 
       if (typeof TCStore !== 'undefined') {
@@ -3553,14 +3725,17 @@
         syncStateFromStore();
       } else {
         state.reservations.unshift(newBooking);
-        state.user.tokenBalance += Math.round(s.price * 0.05);
+        state.user.tokenBalance += Math.round(b.price * 0.05);
       }
 
       updateHeaderBadges();
       renderReservations();
       renderTokenLogs();
 
-      showToast(`🎉 ทำการจองสำเร็จ! รหัสการจอง: BK-${newId} (รับ +${Math.round(s.price * 0.05)} TCP) ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
+      closeModal('modal-confirm-booking');
+      state.activeConfirmBooking = null;
+
+      showToast(`🎉 ยืนยันการจองสำเร็จ! รหัสการจอง: BK-${newId} (รับ +${Math.round(b.price * 0.05)} TCP) ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
       setTimeout(() => switchTab('view-reservations', 'ประวัติการจอง'), 600);
     }
 
@@ -3902,41 +4077,24 @@
     }
 
     function bookFromDirectory(name, price, supplier) {
-      const newId = (100100 + state.reservations.length + 1).toString();
-      const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
-
-      const newBooking = {
-        id: newId,
-        refNo: '1675' + Math.floor(100000000000 + Math.random() * 900000000000),
-        guest: state.user.name,
-        email: state.user.email,
-        phone: state.user.phone,
-        agent: 'User Direct (Data Bank)',
-        serviceName: name,
-        property: supplier,
-        checkin: '25/11/2026',
-        checkout: '26/11/2026',
-        bookedOn: nowStr,
-        amount: price,
-        commission: Math.round(price * 0.05),
-        status: 'Confirmed',
-        notes: 'จองผ่าน Data Bank Directory'
-      };
-
-      if (typeof TCStore !== 'undefined') {
-        TCStore.addReservation(newBooking);
-        syncStateFromStore();
-      } else {
-        state.reservations.unshift(newBooking);
-        state.user.tokenBalance += Math.round(price * 0.05);
+      if (!isUserLoggedIn()) {
+        state.pendingBooking = { type: 'directory', name, price, supplier };
+        showToast('⚠️ กรุณาเข้าสู่ระบบก่อนทำการจองห้องพักหรือบริการท่องเที่ยว', true);
+        openAuthModal('login');
+        return;
       }
 
-      updateHeaderBadges();
-      renderReservations();
-      renderTokenLogs();
-
-      showToast(`🎉 จองสำเร็จ: ${name} (BK-${newId}) ได้รับ +${Math.round(price * 0.05)} TCP ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
-      switchTab('view-reservations', 'ประวัติการจอง');
+      openConfirmBookingModal({
+        type: 'directory',
+        name: name,
+        price: price,
+        supplier: supplier,
+        title: name,
+        provider: supplier,
+        category: 'สารบบบริการ Data Bank',
+        checkin: '2026-11-25',
+        checkout: '2026-11-26'
+      });
     }
 
     // Modal Helpers
@@ -3974,6 +4132,21 @@
       }
     }
 
+    // Automatically resume booking after login if pending
+    function checkPendingBookingAfterLogin() {
+      if (state.pendingBooking) {
+        const pending = state.pendingBooking;
+        state.pendingBooking = null;
+        setTimeout(() => {
+          if (pending.type === 'service') {
+            instantBook(pending.serviceId);
+          } else if (pending.type === 'directory') {
+            bookFromDirectory(pending.name, pending.price, pending.supplier);
+          }
+        }, 450);
+      }
+    }
+
     function quickLoginUser(emailOrId, method = 'Password') {
       if (typeof TCStore !== 'undefined') {
         const res = TCStore.loginUser(emailOrId);
@@ -3982,6 +4155,7 @@
           updateHeaderBadges();
           closeModal('modal-auth');
           showToast(`🎉 ยินดีต้อนรับคุณ ${res.user.name} (${method === 'ThaiD' ? 'ยืนยันตัวตนผ่าน ThaiD สำเร็จ' : 'เข้าสู่ระบบสำเร็จ'})`);
+          checkPendingBookingAfterLogin();
         } else {
           showToast(res.message || 'เข้าสู่ระบบไม่สำเร็จ', true);
         }
@@ -4001,6 +4175,7 @@
           updateHeaderBadges();
           closeModal('modal-auth');
           showToast(`🎉 เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${res.user.name}`);
+          checkPendingBookingAfterLogin();
         } else {
           showToast(res.message || 'เข้าสู่ระบบไม่สำเร็จ', true);
         }
@@ -4021,6 +4196,7 @@
           updateHeaderBadges();
           closeModal('modal-auth');
           showToast(`🎉 ยินดีต้อนรับคุณ ${res.user.name}! ได้รับ 500 TCP Welcome Bonus เรียบร้อยแล้ว`);
+          checkPendingBookingAfterLogin();
         } else {
           showToast(res.message || 'ลงทะเบียนไม่สำเร็จ', true);
         }
@@ -4028,6 +4204,9 @@
     }
 
     function logoutUser() {
+      state.pendingBooking = null;
+      state.activeConfirmBooking = null;
+      closeModal('modal-confirm-booking');
       if (typeof TCStore !== 'undefined') {
         TCStore.logoutUser();
       }

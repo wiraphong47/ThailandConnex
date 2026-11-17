@@ -6,7 +6,7 @@
   <title>ThailandCONNEX | Admin & Merchant Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-blue: #168de1;
@@ -20,15 +20,19 @@
       --border-line: #e2e8f0;
       --sidebar-width: 250px;
     }
-    * { box-sizing: border-box; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+    }
     body {
       margin: 0;
       color: var(--text-main);
-      font: 13.5px 'IBM Plex Sans Thai', -apple-system, sans-serif;
+      font-family: 'IBM Plex Sans Thai', sans-serif !important;
+      font-size: 13.5px;
       background: var(--bg-wash);
       -webkit-font-smoothing: antialiased;
     }
-    button, input, select { font: inherit; }
+    button, input, select { font-family: 'IBM Plex Sans Thai', sans-serif !important; font-size: inherit; }
     button { cursor: pointer; border: 0; }
 
     /* Layout */
@@ -57,7 +61,7 @@
       justify-content: space-between;
     }
     .brand-logo {
-      font: 700 24px 'Plus Jakarta Sans', sans-serif;
+      font: 700 24px 'IBM Plex Sans Thai', sans-serif;
       color: var(--primary-navy);
       letter-spacing: -1.2px;
       line-height: 0.95;
@@ -265,7 +269,7 @@
       font-size: 26px;
       font-weight: 600;
       color: #1e293b;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'IBM Plex Sans Thai', sans-serif;
     }
     .today-revenue small {
       color: var(--text-muted);
@@ -292,7 +296,7 @@
       font-weight: 600;
       color: #334155;
     }
-    .total-range-val b { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; }
+    .total-range-val b { font-family: 'IBM Plex Sans Thai', sans-serif; font-size: 15px; }
 
     .wave-chart-container {
       position: relative;
@@ -322,7 +326,7 @@
     .kpi-box small { color: var(--text-muted); font-size: 12.5px; }
     .kpi-box strong {
       display: block;
-      font: 700 28px 'Plus Jakarta Sans', sans-serif;
+      font: 700 28px 'IBM Plex Sans Thai', sans-serif;
       color: #0f172a;
       margin: 10px 0 6px;
     }
@@ -1892,7 +1896,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style="font-family:monospace; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x19969313908271dfcc89100293847a98b', '8481515', 'Token Minting', '50 TCN', 'Earned from booking #128669226')">0x19969313908271dfcc... 🔍</td>
+                  <td style="font-family: 'IBM Plex Sans Thai', sans-serif; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x19969313908271dfcc89100293847a98b', '8481515', 'Token Minting', '50 TCN', 'Earned from booking #128669226')">0x19969313908271dfcc... 🔍</td>
                   <td><span class="badge badge-success">Token Minting</span></td>
                   <td><b>50 TCN</b></td>
                   <td>Earned from booking #128669226</td>
@@ -1900,7 +1904,7 @@
                   <td style="text-align: right;"><span class="badge badge-success">Block #8481515</span></td>
                 </tr>
                 <tr>
-                  <td style="font-family:monospace; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x0c4a9cea7a1efde4e8194017583920194', '8481443', 'Token Burning', '10 TCN', 'Redeemed for voucher discount')">0x0c4a9cea7a1efde4e8... 🔍</td>
+                  <td style="font-family: 'IBM Plex Sans Thai', sans-serif; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x0c4a9cea7a1efde4e8194017583920194', '8481443', 'Token Burning', '10 TCN', 'Redeemed for voucher discount')">0x0c4a9cea7a1efde4e8... 🔍</td>
                   <td><span class="badge badge-warning">Token Burning</span></td>
                   <td><b>10 TCN</b></td>
                   <td>Redeemed for voucher discount</td>
@@ -2363,7 +2367,7 @@
         <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-token-verify')">✕</button>
       </div>
       <div class="modal-body">
-        <div style="background:#0f172a; color:#38bdf8; padding:16px; border-radius:8px; font-family:monospace; font-size:12px; margin-bottom:16px; line-height:1.7;">
+        <div style="background:#0f172a; color:#38bdf8; padding:16px; border-radius:8px; font-family: 'IBM Plex Sans Thai', sans-serif; font-size:12px; margin-bottom:16px; line-height:1.7;">
           <div style="color:#94a3b8;">TRANSACTION HASH:</div>
           <div style="word-break:break-all; color:#ffffff; font-weight:bold;" id="verify-tx-hash">0x19969313908271dfcc89100293847a98b</div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">

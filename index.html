@@ -3242,6 +3242,286 @@
       showToast('อัปเดตผลการค้นหาตามเงื่อนไขเรียบร้อย');
     }
 
+
+    // ==========================================
+    // ACCOMMODATION / HOTEL DETAIL HANDLER
+    // ==========================================
+    let currentDetailServiceId = null;
+
+    const accommodationDataDetails = {
+      'SRV-01': {
+        title: 'Sukhumvit Park, Bangkok - Marriott Executive Apartments',
+        cat: 'โรงแรมและที่พัก (5-Star Serviced Apartment)',
+        rating: '4.9 ★ (1,420 รีวิว)',
+        roomType: 'One Bedroom Suite (เตียงคิงไซส์ + ห้องนั่งเล่น)',
+        roomSize: '65 ตร.ม. • 1 King Bed',
+        capacity: 'ผู้ใหญ่ 2 ท่าน + เด็ก 1 ท่าน',
+        allotment: 'เหลือ 12 ห้องว่างวันนี้',
+        location: 'สุขุมวิท ซอย 24, คลองเตย, กรุงเทพมหานคร (ใกล้ BTS พร้อมพงษ์ & EmQuartier)',
+        provider: 'Sukhumvit Park Hotel • ทะเบียน ททท. 11/08422 • DBD Certified',
+        price: 28999,
+        checkIn: '15:00 น.',
+        checkOut: '12:00 น.',
+        cancellation: 'ยกเลิกฟรีล่วงหน้า 48 ชม.',
+        description: 'เซอร์วิสอพาร์ตเมนต์ระดับพรีเมียม 5 ดาว ตั้งอยู่ใจกลางย่านสุขุมวิท 24 ตกแต่งอย่างหรูหราพร้อมห้องครัวแบบยุโรปที่มีอุปกรณ์ทำอาหารครบครัน ห้องนั่งเล่นแยกเป็นสัดส่วน พร้อมบริการแม่บ้านระดับโรงแรมห้าดาว เดินทางสะดวกด้วยบริการรถรับส่ง Shuttle Tuk-Tuk ฟรีไปยังสถานีรถไฟฟ้า BTS พร้อมพงษ์และห้างสรรพสินค้าชั้นนำ Emporium & EmQuartier',
+        gallery: [
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80'
+        ],
+        amenities: [
+          '🛏️ เตียงคิงไซส์เกรดพรีเมียม',
+          '📶 ฟรี Super Hi-Speed Wi-Fi 500Mbps',
+          '🏊 สระว่ายน้ำกลางแจ้งระบบเกลือ',
+          '🍳 บุฟเฟต์อาหารเช้านานาชาติ 2 ท่าน',
+          '🍳 ห้องครัวสไตล์ยุโรปพร้อมเตาอบ ไมโครเวฟ ตู้เย็น',
+          '🧺 เครื่องซักผ้าและเครื่องอบผ้าในห้องพัก',
+          '🏋️ ฟิตเนสเซ็นเตอร์ สนามเทนนิส และสนามสควอช',
+          '🚗 ที่จอดรถส่วนตัวฟรี พร้อมสถานีชาร์จ EV Charger',
+          '셔 รถ Shuttle Tuk-Tuk รับส่ง BTS ฟรีตลอดวัน',
+          '🛡️ ระบบคีย์การ์ดรักษาความปลอดภัยและ รปภ. 24 ชม.'
+        ]
+      },
+      'SRV-02': {
+        title: 'Cye 428 All Day Hostel @ Sukhumvit',
+        cat: 'โรงแรมและที่พัก (Boutique Hostel & Co-Working)',
+        rating: '4.8 ★ (890 รีวิว)',
+        roomType: 'Deluxe Private Double Room (ห้องส่วนตัวพร้อมห้องน้ำ)',
+        roomSize: '24 ตร.ม. • 1 Queen Bed',
+        capacity: 'ผู้ใหญ่ 2 ท่าน',
+        allotment: 'เหลือ 24 ห้องว่างวันนี้',
+        location: 'สุขุมวิท ซอย 42, คลองเตย, กรุงเทพมหานคร (เดิน 3 นาทีถึง BTS เอกมัย)',
+        provider: 'Cye Hospitality Group • ทะเบียน ททท. 11/09511 • DBD Certified',
+        price: 1850,
+        checkIn: '14:00 น.',
+        checkOut: '11:30 น.',
+        cancellation: 'ยกเลิกฟรีก่อนเข้าพัก 24 ชม.',
+        description: 'โฮสเทลดีไซน์มินิมอลยอดนิยมสำหรับนักเดินทางรุ่นใหม่และ Digital Nomad มีพื้นที่ Co-working space ความเร็วสูง คาเฟ่บริการกาแฟ Specialty และสิ่งอำนวยความสะดวกครบครันในบรรยากาศอบอุ่นและเป็นกันเอง ใกล้ศูนย์การค้าเกตเวย์ เอกมัย และสถานีขนส่งสายตะวันออก',
+        gallery: [
+          'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80'
+        ],
+        amenities: [
+          '🛏️ เตียงควีนไซส์นุ่มพิเศษ',
+          '📶 ฟรี Super Hi-Speed Wi-Fi ทั่วอาคาร',
+          '💻 Co-working Space 24 ชั่วโมง',
+          '☕ ฟรี ชา/กาแฟ Specialty และอาหารเช้าแบบเบา',
+          '❄️ เครื่องปรับอากาศระบบอินเวอร์เตอร์เงียบสนิท',
+          '🔒 ตู้เซฟดิจิทัลและตู้ล็อคเกอร์ส่วนตัว',
+          '🧼 ห้องน้ำแยกโซนเปียก/แห้ง พร้อมไดร์เป่าผม',
+          '🚲 บริการยืมจักรยานท่องเที่ยวฟรี'
+        ]
+      },
+      'SRV-03': {
+        title: 'เดอะ มยุ สกาย รีสอร์ท แมท หัวหิน (SHA Extra Plus)',
+        cat: 'โรงแรมและที่พัก (Beachfront Luxury Resort)',
+        rating: '4.9 ★ (2,100 รีวิว)',
+        roomType: 'Deluxe Sea View With Breakfast (ห้องพักวิวทะเลสุดหรู)',
+        roomSize: '48 ตร.ม. • 1 King Bed',
+        capacity: 'ผู้ใหญ่ 2 ท่าน + เด็ก 1 ท่าน',
+        allotment: 'เหลือ 8 ห้องว่างวันนี้',
+        location: 'ถนนเพชรเกษม, ชายหาดหัวหิน, ประจวบคีรีขันธ์ (ติดหาดหัวหิน)',
+        provider: 'บจก. สวนพักรักไทยโฮมสเตย์ • ทะเบียน ททท. 12/03291 • DBD Certified',
+        price: 3994,
+        checkIn: '14:00 น.',
+        checkOut: '12:00 น.',
+        cancellation: 'ยกเลิกฟรีล่วงหน้า 48 ชม.',
+        description: 'รีสอร์ทติดริมชายหาดหัวหิน สัมผัสทิวทัศน์ทะเลอ่าวไทยแบบพาโนรามา ดื่มด่ำกับพระอาทิตย์ขึ้นจากระเบียงห้องพักส่วนตัว สระว่ายน้ำอินฟินิตี้พูลริมหาด พร้อมห้องอาหารซีฟู้ดสดใหม่จากชาวประมงท้องถิ่น เหมาะสำหรับการพักผ่อนแบบโรแมนติกและครอบครัว',
+        gallery: [
+          'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80'
+        ],
+        amenities: [
+          '🛏️ 1 เตียงคิงไซส์ซีวิวพรีเมียม',
+          '🌅 ระเบียงส่วนตัวมองเห็นวิวทะเลหัวหิน 180 องศา',
+          '🏊 สระว่ายน้ำอินฟินิตี้พูลติดริมชายหาด',
+          '🍳 บริการ Floating Breakfast เสิร์ฟถึงห้องพัก',
+          '🛁 อ่างอาบน้ำหินอ่อนพร้อมวิวทะเล',
+          '📶 ฟรี Wi-Fi ความเร็วสูงครอบคลุมถึงหน้าหาด',
+          '🚗 ที่จอดรถกว้างขวางพร้อม รปภ. 24 ชม.'
+        ]
+      },
+      'SRV-09': {
+        title: 'Andaman Seaview Resort Kata Beach (SHA Extra Plus)',
+        cat: 'โรงแรมและที่พัก (4-Star Beachfront Resort)',
+        rating: '4.9 ★ (1,850 รีวิว)',
+        roomType: 'Deluxe Ocean View Room (วิวทะเลอันดามัน)',
+        roomSize: '52 ตร.ม. • 1 King Bed หรือ 2 Twin Beds',
+        capacity: 'ผู้ใหญ่ 2 ท่าน + เด็ก 1 ท่าน',
+        allotment: 'เหลือ 14 ห้องว่างวันนี้',
+        location: 'หาดกะตะ, อำเภอเมืองภูเก็ต, จังหวัดภูเก็ต',
+        provider: 'บจก. กะตะ ซีวิว ภูเก็ต • ทะเบียน ททท. 31/01489 • DBD Certified',
+        price: 2450,
+        checkIn: '14:00 น.',
+        checkOut: '12:00 น.',
+        cancellation: 'ยกเลิกฟรีล่วงหน้า 48 ชม.',
+        description: 'รีสอร์ทสไตล์ Sino-Portuguese ริมหาดกะตะ ให้คุณพักผ่อนอย่างเงียบสงบท่ามกลางสวนเมืองร้อนร่มรื่น สระว่ายน้ำขนาดใหญ่ 2 สระ และเพียงไม่กี่ก้าวก็ถึงผืนทรายขาวละเอียดของหาดกะตะ จุดชมพระอาทิตย์ตกดินอันเลื่องชื่อของเกาะภูเก็ต',
+        gallery: [
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80'
+        ],
+        amenities: [
+          '🛏️ เตียงคิงไซส์หรือเตียงคู่',
+          '🌊 ระเบียงส่วนตัวเห็นวิวทะเลกะตะ',
+          '🏊 สระว่ายน้ำ 2 สระพร้อมบาร์ริมสระ',
+          '🍳 บุฟเฟ่ต์อาหารเช้าซีฟู้ด & นานาชาติ',
+          '💆 สปาแผนไทยและห้องนวดอโรมา',
+          '📶 ฟรี Wi-Fi ทั่วบริเวณโรงแรม'
+        ]
+      },
+      'SRV-11': {
+        title: 'Chiang Mai Heritage Boutique Hotel & Lanna Spa',
+        cat: 'โรงแรมและที่พัก (Heritage Boutique Hotel)',
+        rating: '4.8 ★ (1,620 รีวิว)',
+        roomType: 'Lanna Heritage Superior (ห้องพักไม้สักล้านนา)',
+        roomSize: '42 ตร.ม. • 1 King Bed',
+        capacity: 'ผู้ใหญ่ 2 ท่าน',
+        allotment: 'เหลือ 9 ห้องว่างวันนี้',
+        location: 'ถนนราชดำเนิน, คูเมืองเชียงใหม่ (ใกล้ประตูท่าแพ & วัดเจดีย์หลวง)',
+        provider: 'เฮอริเทจ ลานนา กรุ๊ป • ทะเบียน ททท. 21/00842 • DBD Certified',
+        price: 1950,
+        checkIn: '14:00 น.',
+        checkOut: '12:00 น.',
+        cancellation: 'ยกเลิกฟรีล่วงหน้า 48 ชม.',
+        description: 'ดื่มด่ำกับมนต์เสน่ห์ศิลปวัฒนธรรมล้านนาแท้ๆ ใจกลางเมืองเก่าเชียงใหม่ เฟอร์นิเจอร์ไม้สักทองทำมือ พร้อมสระว่ายน้ำน้ำเกลือในสวนร่มรื่น เดินเพียง 3 นาทีถึงถนนคนเดินวันอาทิตย์และวัดเจดีย์หลวง',
+        gallery: [
+          'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80'
+        ],
+        amenities: [
+          '🛏️ เตียงไม้สักทองคิงไซส์พร้อมเครื่องนอนผ้าฝ้ายทอมือ',
+          '🏊 สระว่ายน้ำระบบเกลือกลางสวนล้านนา',
+          '🍳 อาหารเช้าสไตล์พื้นเมืองเชียงใหม่และอาหารสากล',
+          '🍵 ชุดชาออร์แกนิกจากยอดดอยฟรีในห้องพัก',
+          '🚲 บริการจักรยานยืมปั่นชมเมืองเก่าฟรี',
+          '📶 ฟรี Wi-Fi ความเร็วสูง'
+        ]
+      },
+      'SRV-14': {
+        title: 'Samui Sunset Bay Private Pool Villa',
+        cat: 'โรงแรมและที่พัก (Luxury Cliffside Pool Villa)',
+        rating: '4.9 ★ (980 รีวิว)',
+        roomType: 'Oceanfront Pool Villa (พูลวิลล่าส่วนตัววิวทะเลพาโนรามา)',
+        roomSize: '110 ตร.ม. • 1 King Bed',
+        capacity: 'ผู้ใหญ่ 2 ท่าน + เด็ก 1 ท่าน',
+        allotment: 'เหลือ 6 หลังว่างวันนี้',
+        location: 'อ่าวบ่อผุด, เกาะสมุย, สุราษฎร์ธานี',
+        provider: 'สมุย ซันเซ็ท รีสอร์ท กรุ๊ป • ทะเบียน ททท. 34/00712 • DBD Certified',
+        price: 4890,
+        checkIn: '15:00 น.',
+        checkOut: '12:00 น.',
+        cancellation: 'ยกเลิกฟรีล่วงหน้า 72 ชม.',
+        description: 'วิลล่าส่วนตัวพร้อมสระว่ายน้ำส่วนตัวบนหน้าผาชมวิวพระอาทิตย์ตกดินที่สวยที่สุดในเกาะสมุย ความเป็นส่วนตัวสูงสุด ล้อมรอบด้วยธรรมชาติอันเขียวชอุ่มและทัศนียภาพทะเลอ่าวไทย 180 องศา',
+        gallery: [
+          'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80'
+        ],
+        amenities: [
+          '🏊 สระว่ายน้ำส่วนตัวแบบอินฟินิตี้ในวิลล่า',
+          '🛏️ เตียงคิงไซส์หรูหราซีวิว',
+          '🍳 บริการ Floating Breakfast เสิร์ฟถึงสระน้ำ',
+          '🛁 อ่างอาบน้ำกลางแจ้งมองเห็นวิวทะเล',
+          '🍸 บาร์ส่วนตัวพร้อมเครื่องดื่ม Welcome drink',
+          '🚗 บริการรถรับส่งสนามบินสมุยฟรี',
+          '📶 ฟรี Wi-Fi ความเร็วสูง'
+        ]
+      }
+    };
+
+    function openAccommodationDetail(serviceId) {
+      currentDetailServiceId = serviceId;
+      const s = (typeof TCStore !== 'undefined' && TCStore.getServiceById(serviceId)) ||
+                (state.services && state.services.find(x => x.id === serviceId)) || null;
+
+      const detail = accommodationDataDetails[serviceId] || {
+        title: s ? s.title : 'รายละเอียดบริการ',
+        cat: s ? s.categoryName : 'บริการท่องเที่ยว',
+        rating: s ? `${s.rating} (ผู้ใช้ประเมินยอดเยี่ยม)` : '4.9 ★',
+        roomType: s ? (s.roomType || 'Standard Package') : 'Standard Package',
+        roomSize: 'ตามมาตรฐาน ThailandCONNEX',
+        capacity: 'ตามเงื่อนไขที่ระบุ',
+        allotment: s ? `เหลือ ${s.allotment || 10} สิทธิ์วันนี้` : 'มีที่ว่างพร้อมจอง',
+        location: s ? s.location : 'ประเทศไทย',
+        provider: s ? `ให้บริการโดย ${s.provider} • depa Verified` : 'ThailandCONNEX Certified Partner',
+        price: s ? s.price : 1000,
+        checkIn: '14:00 น.',
+        checkOut: '12:00 น.',
+        cancellation: 'ยกเลิกฟรีล่วงหน้า 24-48 ชม.',
+        description: s ? `${s.title} บริการคุณภาพมาตรฐานระดับสากล ผ่านการรับรองโดยสำนักงานส่งเสริมเศรษฐกิจดิจิทัล (depa) และการท่องเที่ยวแห่งประเทศไทย` : '',
+        gallery: [
+          s ? s.image : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80',
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80'
+        ],
+        amenities: (s && s.features) ? s.features.map(f => `✓ ${f}`) : ['✓ มาตรฐาน SHA Plus', '✓ ประกันอุบัติเหตุ', '✓ ฟรี Wi-Fi']
+      };
+
+      document.getElementById('hotel-detail-title').textContent = detail.title;
+      document.getElementById('hotel-detail-cat').textContent = detail.cat;
+      document.getElementById('hotel-detail-rating').textContent = detail.rating;
+      document.getElementById('hotel-room-type').textContent = detail.roomType;
+      document.getElementById('hotel-room-size').textContent = detail.roomSize;
+      document.getElementById('hotel-capacity').textContent = detail.capacity;
+      document.getElementById('hotel-allotment').textContent = detail.allotment;
+      document.getElementById('hotel-location-text').textContent = detail.location;
+      document.getElementById('hotel-provider-text').textContent = detail.provider;
+      document.getElementById('hotel-description').textContent = detail.description;
+      document.getElementById('hotel-checkin').textContent = detail.checkIn;
+      document.getElementById('hotel-checkout').textContent = detail.checkOut;
+      document.getElementById('hotel-cancellation').textContent = detail.cancellation;
+      document.getElementById('hotel-footer-price').textContent = `฿${detail.price.toLocaleString('th-TH')}`;
+      document.getElementById('hotel-reward-token').textContent = `+${Math.round(detail.price * 0.05).toLocaleString('th-TH')} TCP Token`;
+
+      // Set Main Image
+      const mainImg = document.getElementById('hotel-main-img');
+      mainImg.style.backgroundImage = `url('${detail.gallery[0]}')`;
+
+      // Set Gallery Thumbnails
+      const thumbsContainer = document.getElementById('hotel-gallery-thumbs');
+      thumbsContainer.innerHTML = detail.gallery.slice(1, 4).map((imgUrl, idx) => `
+        <div class="hotel-thumb-item" style="background-image:url('${imgUrl}');" onclick="changeHotelHeroImage('${imgUrl}')" title="คลิกเพื่อดูรูปภาพขนาดใหญ่"></div>
+      `).join('');
+
+      // Set Amenities
+      const amenitiesContainer = document.getElementById('hotel-amenities-list');
+      amenitiesContainer.innerHTML = detail.amenities.map(a => `
+        <div class="amenity-card">${a}</div>
+      `).join('');
+
+      openModal('modal-accommodation-detail');
+    }
+
+    function changeHotelHeroImage(url) {
+      const mainImg = document.getElementById('hotel-main-img');
+      if (mainImg) mainImg.style.backgroundImage = `url('${url}')`;
+    }
+
+    function shareHotelDetail() {
+      const title = document.getElementById('hotel-detail-title').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+      }
+      showToast(`คัดลอกลิงก์ที่พัก "${title}" เรียบร้อยแล้ว!`, 'success');
+    }
+
+    function bookFromModal() {
+      if (currentDetailServiceId) {
+        closeModal('modal-accommodation-detail');
+        instantBook(currentDetailServiceId);
+      }
+    }
+
     // Instant booking simulation
     function instantBook(serviceId) {
       const s = state.services.find(x => x.id === serviceId);

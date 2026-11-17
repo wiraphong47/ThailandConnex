@@ -3139,8 +3139,19 @@
     }
 
     function toggleUserStatus(checkbox, idOrName, name) {
-      const status = checkbox.checked ? 'ปิดการใช้งาน (Disabled)' : 'เปิดการใช้งาน (Active)';
-      showToast(`เปลี่ยนสถานะผู้ใช้ ${name}: ${status}`, checkbox.checked ? 'warning' : 'success');
+      const isBlocked = checkbox.checked;
+      const statusStr = isBlocked ? 'Disabled' : 'Active';
+      if (typeof TCStore !== 'undefined') {
+        const state = TCStore.getState();
+        if (state.auth && state.auth.registeredUsers) {
+          const u = state.auth.registeredUsers.find(x => x.id === idOrName || x.name === idOrName || x.name === name);
+          if (u) {
+            u.status = statusStr;
+            TCStore.save(state);
+          }
+        }
+      }
+      showToast(`เปลี่ยนสถานะผู้ใช้ ${name || idOrName}: ${isBlocked ? 'ปิดการใช้งาน (Disabled)' : 'เปิดการใช้งาน (Active)'}`, isBlocked ? 'warning' : 'success');
     }
 
     function toggleAdminStatus(checkbox, name) {

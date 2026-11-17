@@ -2040,7 +2040,7 @@
   <!-- ============================================== -->
   <!-- MODAL: BOOKING DETAIL (PDF Page 55, 95) -->
   <!-- ============================================== -->
-  <div class="modal-backdrop" id="booking-detail-modal">
+  <div class="modal-backdrop" id="booking-detail-modal" onclick="if(event.target===this) closeModal('booking-detail-modal')">
     <div class="modal-box">
       <div class="modal-head">
         <h3>รายละเอียดการจอง (Reservation Details)</h3>
@@ -2059,7 +2059,7 @@
   <!-- ============================================== -->
   <!-- MODAL: REDEEM VOUCHER & BARCODE (PDF Page 113) -->
   <!-- ============================================== -->
-  <div class="modal-backdrop" id="voucher-code-modal">
+  <div class="modal-backdrop" id="voucher-code-modal" onclick="if(event.target===this) closeModal('voucher-code-modal')">
     <div class="modal-box">
       <div class="modal-head">
         <h3 id="modal-coupon-title">บัตรคูปองของคุณ</h3>
@@ -2126,7 +2126,7 @@
   <!-- ============================================== -->
   <!-- MODAL: AUTHENTICATION (LOGIN & REGISTER) -->
   <!-- ============================================== -->
-  <div class="modal-backdrop" id="modal-auth">
+  <div class="modal-backdrop" id="modal-auth" onclick="if(event.target===this) closeModal('modal-auth')">
     <div class="modal-box" style="max-width: 480px;">
       <div class="modal-head">
         <div>
@@ -2240,7 +2240,7 @@
   <!-- ============================================== -->
   <!-- MODAL: USER PROFILE & WALLET DETAILS -->
   <!-- ============================================== -->
-  <div class="modal-backdrop" id="modal-user-profile">
+  <div class="modal-backdrop" id="modal-user-profile" onclick="if(event.target===this) closeModal('modal-user-profile')">
     <div class="modal-box" style="max-width: 460px;">
       <div class="modal-head">
         <h3 style="margin:0; font-size:17px; color:var(--navy);">ข้อมูลโปรไฟล์สมาชิก</h3>
@@ -2308,11 +2308,17 @@
     function syncStateFromStore() {
       if (typeof TCStore !== 'undefined') {
         const storeData = TCStore.getState();
-        if (storeData.user) state.user = storeData.user;
+        if (storeData.auth && storeData.auth.currentUser) {
+          state.user = storeData.auth.currentUser;
+        } else if (storeData.user) {
+          state.user = storeData.user;
+        }
         if (storeData.reservations) state.reservations = storeData.reservations;
         if (storeData.tokenLogs) state.tokenLogs = storeData.tokenLogs;
         if (storeData.vouchers) state.vouchers = storeData.vouchers;
         if (storeData.myCoupons) state.myCoupons = storeData.myCoupons;
+        if (storeData.services) state.services = storeData.services;
+        if (storeData.directory) state.directory = storeData.directory;
       }
     }
 
@@ -2836,8 +2842,9 @@
       ]
     };
 
-    // Initialize application
+    // Initialize application with TCStore Live Subscription
     document.addEventListener('DOMContentLoaded', () => {
+      syncStateFromStore();
       renderServices();
       renderRewards();
       renderCoupons();
@@ -2845,6 +2852,17 @@
       renderTokenLogs();
       renderDirectory();
       updateHeaderBadges();
+
+      if (typeof TCStore !== 'undefined') {
+        TCStore.subscribe((data) => {
+          syncStateFromStore();
+          renderReservations();
+          renderTokenLogs();
+          renderCoupons();
+          renderRewards();
+          updateHeaderBadges();
+        });
+      }
     });
 
     // Toggle Sidebar Drawer
@@ -2860,11 +2878,17 @@
 
     // Handle Menu Item Click inside Sidebar
     function handleMenuClick(viewId, titleName, el) {
+      if ((viewId === 'view-wallet' || viewId === 'view-coupons') && (!state.user || state.user.isLoggedIn === false)) {
+        showToast('กรุณาเข้าสู่ระบบเพื่อเข้าถึงกระเป๋าเงินและคูปองของคุณ', true);
+        openAuthModal('login');
+        toggleSidebar();
+        return;
+      }
       document.querySelectorAll('.side-nav-item').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
       
       switchTab(viewId, titleName);
-      toggleSidebar(); // Close sidebar after clicking
+      toggleSidebar();
     }
 
     function switchTab(viewId, titleName) {
@@ -2885,14 +2909,56 @@
     }
 
     function updateHeaderBadges() {
-      document.getElementById('top-token-balance').textContent = state.user.tokenBalance.toLocaleString('th-TH') + ' TCP';
-      document.getElementById('sidebar-token-balance').textContent = state.user.tokenBalance.toLocaleString('th-TH') + ' TCP';
-      document.getElementById('rewards-balance-display').textContent = state.user.tokenBalance.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' TCP';
-      document.getElementById('wallet-big-balance').textContent = state.user.tokenBalance.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' TCP';
-      
-      const activeCount = state.myCoupons.filter(c => c.status === 'active').length;
-      document.getElementById('side-coupon-badge').textContent = activeCount;
-      document.getElementById('active-coupon-count').textContent = activeCount;
+      const isLogged = state.user && state.user.isLoggedIn !== false;
+      const bal = state.user ? (parseFloat(state.user.tokenBalance) || 0) : 0;
+      const name = state.user ? (state.user.name || 'ผู้ใช้งาน') : 'ผู้ใช้งาน';
+      const id = state.user ? (state.user.id || 'TC-000000') : 'TC-000000';
+      const avatar = state.user ? (state.user.avatar || 'TC') : 'TC';
+
+      // Topbar elements
+      const headerLoginBtn = document.getElementById('btn-header-login');
+      const headerTokenPill = document.getElementById('header-token-pill');
+      const headerUserProfile = document.getElementById('header-user-profile');
+      const topToken = document.getElementById('top-token-balance');
+      const headerAvatar = document.getElementById('header-user-avatar');
+      const headerName = document.getElementById('header-user-name');
+      const headerId = document.getElementById('header-user-id');
+
+      if (headerLoginBtn) headerLoginBtn.style.display = isLogged ? 'none' : 'inline-flex';
+      if (headerTokenPill) headerTokenPill.style.display = isLogged ? 'flex' : 'none';
+      if (headerUserProfile) headerUserProfile.style.display = isLogged ? 'flex' : 'none';
+
+      if (topToken) topToken.textContent = bal.toLocaleString('th-TH') + ' TCP';
+      if (headerAvatar) headerAvatar.textContent = avatar;
+      if (headerName) headerName.textContent = name;
+      if (headerId) headerId.textContent = 'ID: ' + id;
+
+      // Sidebar card elements
+      const sideCardIn = document.getElementById('sidebar-user-card-logged-in');
+      const sideCardOut = document.getElementById('sidebar-user-card-logged-out');
+      const sideToken = document.getElementById('sidebar-token-balance');
+      const sideAvatar = document.getElementById('sidebar-user-avatar');
+      const sideName = document.getElementById('sidebar-user-name');
+      const sideId = document.getElementById('sidebar-user-id');
+
+      if (sideCardIn) sideCardIn.style.display = isLogged ? 'block' : 'none';
+      if (sideCardOut) sideCardOut.style.display = isLogged ? 'none' : 'block';
+      if (sideToken) sideToken.textContent = bal.toLocaleString('th-TH') + ' TCP';
+      if (sideAvatar) sideAvatar.textContent = avatar;
+      if (sideName) sideName.textContent = name;
+      if (sideId) sideId.textContent = 'รหัสสมาชิก: ' + id;
+
+      // Wallet & Rewards displays
+      const rewBal = document.getElementById('rewards-balance-display');
+      if (rewBal) rewBal.textContent = bal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' TCP';
+      const wBigBal = document.getElementById('wallet-big-balance');
+      if (wBigBal) wBigBal.textContent = bal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' TCP';
+
+      const activeCount = state.myCoupons ? state.myCoupons.filter(c => c.status === 'active').length : 0;
+      const sBadge = document.getElementById('side-coupon-badge');
+      if (sBadge) sBadge.textContent = activeCount;
+      const aCount = document.getElementById('active-coupon-count');
+      if (aCount) aCount.textContent = activeCount;
       document.querySelectorAll('.coupon-pill-count').forEach(el => el.textContent = activeCount);
     }
 
@@ -3073,6 +3139,11 @@
 
     // Redeem Voucher Action
     function redeemVoucher(voucherId) {
+      if (!state.user || state.user.isLoggedIn === false) {
+        showToast('กรุณาเข้าสู่ระบบก่อนทำการแลกสิทธิ์', true);
+        openAuthModal('login');
+        return;
+      }
       if (typeof TCStore !== 'undefined') {
         const res = TCStore.redeemVoucher(voucherId);
         if (!res.success) {
@@ -3426,8 +3497,160 @@
       document.getElementById(id).classList.remove('show');
     }
 
+    // ==========================================
+    // AUTHENTICATION & SESSION MANAGEMENT (V4)
+    // ==========================================
+    function openAuthModal(tab = 'login') {
+      switchAuthTab(tab);
+      openModal('modal-auth');
+    }
+
+    function switchAuthTab(tab) {
+      const loginTab = document.getElementById('tab-btn-login');
+      const regTab = document.getElementById('tab-btn-register');
+      const loginPane = document.getElementById('auth-pane-login');
+      const regPane = document.getElementById('auth-pane-register');
+
+      if (tab === 'login') {
+        if (loginTab) loginTab.classList.add('active');
+        if (regTab) regTab.classList.remove('active');
+        if (loginPane) loginPane.style.display = 'block';
+        if (regPane) regPane.style.display = 'none';
+      } else {
+        if (regTab) regTab.classList.add('active');
+        if (loginTab) loginTab.classList.remove('active');
+        if (loginPane) loginPane.style.display = 'none';
+        if (regPane) regPane.style.display = 'block';
+      }
+    }
+
+    function quickLoginUser(emailOrId, method = 'Password') {
+      if (typeof TCStore !== 'undefined') {
+        const res = TCStore.loginUser(emailOrId);
+        if (res.success) {
+          state.user = res.user;
+          updateHeaderBadges();
+          closeModal('modal-auth');
+          showToast(`🎉 ยินดีต้อนรับคุณ ${res.user.name} (${method === 'ThaiD' ? 'ยืนยันตัวตนผ่าน ThaiD สำเร็จ' : 'เข้าสู่ระบบสำเร็จ'})`);
+        } else {
+          showToast(res.message || 'เข้าสู่ระบบไม่สำเร็จ', true);
+        }
+      } else {
+        showToast('กำลังเชื่อมต่อระบบ กรุณาลองใหม่อีกครั้ง', true);
+      }
+    }
+
+    function handleLoginFormSubmit(e) {
+      e.preventDefault();
+      const emailOrId = document.getElementById('login-input-email').value;
+      const pass = document.getElementById('login-input-pass').value;
+      if (typeof TCStore !== 'undefined') {
+        const res = TCStore.loginUser(emailOrId, pass);
+        if (res.success) {
+          state.user = res.user;
+          updateHeaderBadges();
+          closeModal('modal-auth');
+          showToast(`🎉 เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${res.user.name}`);
+        } else {
+          showToast(res.message || 'เข้าสู่ระบบไม่สำเร็จ', true);
+        }
+      }
+    }
+
+    function handleRegisterFormSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const phone = document.getElementById('reg-phone').value;
+      const password = document.getElementById('reg-pass').value;
+
+      if (typeof TCStore !== 'undefined') {
+        const res = TCStore.registerUser({ name, email, phone, password });
+        if (res.success) {
+          state.user = res.user;
+          updateHeaderBadges();
+          closeModal('modal-auth');
+          showToast(`🎉 ยินดีต้อนรับคุณ ${res.user.name}! ได้รับ 500 TCP Welcome Bonus เรียบร้อยแล้ว`);
+        } else {
+          showToast(res.message || 'ลงทะเบียนไม่สำเร็จ', true);
+        }
+      }
+    }
+
+    function logoutUser() {
+      if (typeof TCStore !== 'undefined') {
+        TCStore.logoutUser();
+      }
+      state.user = {
+        isLoggedIn: false,
+        name: 'ผู้เยี่ยมชม (Guest)',
+        id: 'TC-GUEST',
+        email: '',
+        phone: '',
+        walletAddress: '',
+        tokenBalance: 0,
+        avatar: '👤',
+        tier: 'Guest'
+      };
+
+      closeModal('modal-user-profile');
+
+      // Close sidebar if open
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar && sidebar.classList.contains('active')) {
+        toggleSidebar();
+      }
+
+      // If user was viewing Wallet or My Coupons, switch them back to Booking view
+      const curView = document.getElementById('current-view-name');
+      if (curView && (curView.textContent.includes('กระเป๋าเงิน') || curView.textContent.includes('คูปอง'))) {
+        switchTab('view-booking', 'จองบริการท่องเที่ยว');
+      }
+
+      updateHeaderBadges();
+      showToast('🚪 ออกจากระบบเรียบร้อยแล้ว (คุณสามารถเข้าสู่ระบบใหม่ได้ตลอดเวลา)');
+
+      // Open the login modal after 350ms so user can immediately sign in or test another account
+      setTimeout(() => {
+        openAuthModal('login');
+      }, 350);
+    }
+
     function openProfileModal() {
-      alert(`บัญชีผู้ใช้งาน: ${state.user.name}\nอีเมล: ${state.user.email}\nเบอร์โทร: ${state.user.phone}\nรหัสสมาชิก: ${state.user.id}\nกระเป๋าเงิน ERC-20: ${state.user.walletAddress}\nยอดคะแนนสะสม: ${state.user.tokenBalance} TCP`);
+      if (!state.user || state.user.isLoggedIn === false) {
+        openAuthModal('login');
+        return;
+      }
+      const u = state.user;
+      const avatarEl = document.getElementById('prof-modal-avatar');
+      const nameEl = document.getElementById('prof-modal-name');
+      const tierEl = document.getElementById('prof-modal-tier');
+      const idEl = document.getElementById('prof-modal-id');
+      const emailEl = document.getElementById('prof-modal-email');
+      const phoneEl = document.getElementById('prof-modal-phone');
+      const walletEl = document.getElementById('prof-modal-wallet');
+      const balEl = document.getElementById('prof-modal-balance');
+
+      if (avatarEl) avatarEl.textContent = u.avatar || 'TC';
+      if (nameEl) nameEl.textContent = u.name;
+      if (tierEl) tierEl.textContent = u.tier || 'Traveler Member';
+      if (idEl) idEl.textContent = 'Member ID: ' + u.id;
+      if (emailEl) emailEl.textContent = u.email || '-';
+      if (phoneEl) phoneEl.textContent = u.phone || '-';
+      if (walletEl) walletEl.textContent = u.walletAddress || '0x...';
+      if (balEl) balEl.textContent = Number(u.tokenBalance || 0).toLocaleString() + ' TCP';
+
+      openModal('modal-user-profile');
+    }
+
+    function copyWalletAddress() {
+      const addr = state.user ? state.user.walletAddress : '';
+      if (navigator.clipboard && addr) {
+        navigator.clipboard.writeText(addr);
+        showToast('📋 คัดลอกที่อยู่กระเป๋าเงิน ERC-20 แล้ว');
+      } else {
+        showToast('Wallet: ' + addr);
+      }
     }
 
     // CSV Exporters

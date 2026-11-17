@@ -54,6 +54,7 @@
           id: 'TC-849204',
           name: 'คุณอลิสา ใจดี',
           email: 'alisa.jaidee@thailandconnex.com',
+          password: 'password123',
           phone: '082-340-1223',
           walletAddress: '0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760',
           tokenBalance: 41520.00,
@@ -66,6 +67,7 @@
           id: 'TC-391820',
           name: 'สมชาย ท่องไทย',
           email: 'somchai.t@gmail.com',
+          password: 'password123',
           phone: '089-123-4567',
           walletAddress: '0x71C4B92F26c95BfBE8b105A12E83204981Ea1945',
           tokenBalance: 5800.00,
@@ -78,6 +80,7 @@
           id: 'TC-512093',
           name: 'Panop Api',
           email: 'panop@inrum.co.th',
+          password: 'password123',
           phone: '081-987-6543',
           walletAddress: '0x992B16c3182b8F6aF4f98Da3f9468F635d87bB62',
           tokenBalance: 12450.00,
@@ -90,6 +93,7 @@
           id: 'TC-620184',
           name: 'Ahibal Lahiri',
           email: 'ahibal@thailandconnex.com',
+          password: 'password123',
           phone: '083-456-7890',
           walletAddress: '0x438A9412F5eA19C08D649216cA96Ea90729783D1',
           tokenBalance: 3200.00,
@@ -879,10 +883,10 @@
       return { success: true, balance: state.user.tokenBalance };
     }
 
-    // Authentication & User Management (V4)
+        // Authentication & User Management (V4)
     loginUser(emailOrId, password) {
       const state = this.getState();
-      const users = state.auth ? state.auth.registeredUsers : [];
+      const users = (state.auth && state.auth.registeredUsers) ? state.auth.registeredUsers : [];
       const q = String(emailOrId).trim().toLowerCase();
       
       const found = users.find(u => 
@@ -892,11 +896,17 @@
       );
 
       if (!found) {
-        return { success: false, message: 'ไม่พบบัญชีผู้ใช้งานนี้ในระบบ หรือรหัสผ่านไม่ถูกต้อง' };
+        return { success: false, message: 'ไม่พบบัญชีผู้ใช้งานนี้ในระบบ กรุณาตรวจสอบอีเมลหรือรหัสสมาชิก' };
       }
 
       if (found.status === 'Disabled' || found.status === 'Blocked') {
         return { success: false, message: 'บัญชีนี้ถูกปิดกั้นการเข้าถึงชั่วคราวโดยผู้ดูแลระบบ' };
+      }
+
+      // Validate password if provided (master demo pass: password123 or 123456)
+      const userPass = found.password || 'password123';
+      if (password && password !== userPass && password !== 'password123' && password !== '123456') {
+        return { success: false, message: 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง' };
       }
 
       const activeUser = { ...found, isLoggedIn: true };
@@ -963,6 +973,7 @@
         name: name,
         email: email,
         phone: phone,
+        password: info.password || 'password123',
         walletAddress: wallet,
         tokenBalance: initialBonus,
         avatar: initials,

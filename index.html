@@ -1466,7 +1466,16 @@
           <div class="search-row">
             <div class="form-group">
               <label>จุดหมายปลายทาง / ชื่อที่พัก / กิจกรรม</label>
-              <input type="text" id="service-search-input" class="form-control" placeholder="เช่น กรุงเทพฯ, หัวหิน, ภูเก็ต, สปา, ดินเนอร์..." value="Bangkok, Thailand">
+              <select id="service-search-input" class="form-control" onchange="filterServices()">
+                <option value="all">📍 ทุกจุดหมายปลายทาง (ทั่วประเทศไทย)</option>
+                <option value="กรุงเทพ" selected>📍 กรุงเทพมหานคร (Bangkok)</option>
+                <option value="ภูเก็ต">📍 ภูเก็ต (Phuket)</option>
+                <option value="เชียงใหม่">📍 เชียงใหม่ (Chiang Mai)</option>
+                <option value="ชลบุรี">📍 พัทยา / ชลบุรี (Pattaya)</option>
+                <option value="หัวหิน">📍 หัวหิน / ประจวบคีรีขันธ์ (Hua Hin)</option>
+                <option value="กระบี่">📍 กระบี่ (Krabi)</option>
+                <option value="สุราษฎร์ธานี">📍 เกาะสมุย / สุราษฎร์ธานี (Koh Samui)</option>
+              </select>
             </div>
             <div class="form-group">
               <label>วันที่เช็คอิน - เช็คเอาท์</label>
@@ -2041,6 +2050,96 @@
           image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
           roomType: 'Toyota Commuter VIP 9 Seats',
           allotment: 10
+        },
+        {
+          id: 'SRV-09',
+          category: 'accommodation',
+          categoryName: 'โรงแรมและที่พัก',
+          title: 'Andaman Seaview Resort Kata Beach (SHA Extra Plus)',
+          provider: 'บจก. กะตะ ซีวิว ภูเก็ต',
+          location: 'กะตะ, ภูเก็ต',
+          rating: '4.9 ★',
+          features: ['ติดหาดกะตะ', 'สระว่ายน้ำ 2 สระ', 'ฟรีอาหารเช้าบุฟเฟ่ต์'],
+          price: 2450,
+          unit: 'คืน',
+          image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Deluxe Ocean View Room',
+          allotment: 14
+        },
+        {
+          id: 'SRV-10',
+          category: 'tour',
+          categoryName: 'แพ็กเกจทัวร์',
+          title: 'One Day Trip ดำน้ำเกาะพีพี - อ่าวมาหยา Speedboat คาตามารัน',
+          provider: 'Phuket Marine Tour Co., Ltd.',
+          location: 'ท่าเรือรัษฎา, ภูเก็ต',
+          rating: '4.9 ★',
+          features: ['อุปกรณ์ดำน้ำครบชุด', 'อาหารกลางวันบุฟเฟ่ต์', 'ประกันอุบัติเหตุ'],
+          price: 1890,
+          unit: 'ท่าน',
+          image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Catamaran Speedboat Day Tour',
+          allotment: 35
+        },
+        {
+          id: 'SRV-11',
+          category: 'accommodation',
+          categoryName: 'โรงแรมและที่พัก',
+          title: 'Chiang Mai Heritage Boutique Hotel & Lanna Spa',
+          provider: 'เฮอริเทจ ลานนา กรุ๊ป',
+          location: 'คูเมือง, เชียงใหม่',
+          rating: '4.8 ★',
+          features: ['สถาปัตยกรรมล้านนา', 'สระน้ำเกลือ', 'ใกล้ถนนคนเดินท่าแพ'],
+          price: 1950,
+          unit: 'คืน',
+          image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Lanna Heritage Superior',
+          allotment: 9
+        },
+        {
+          id: 'SRV-12',
+          category: 'tour',
+          categoryName: 'แพ็กเกจทัวร์',
+          title: 'ทัวร์ดอยอินทนนท์ เส้นทางศึกษาธรรมชาติกิ่วแม่ปาน + ไกด์ท้องถิ่น',
+          provider: 'เชียงใหม่ อีโค่ ทัวร์ริซึ่ม',
+          location: 'จอมทอง, เชียงใหม่',
+          rating: '4.9 ★',
+          features: ['รถตู้ VIP รับส่งโรงแรม', 'ไกด์ม้งท้องถิ่น', 'ชมพระมหาธาตุเจดีย์'],
+          price: 1350,
+          unit: 'ท่าน',
+          image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Full Day Eco Tour',
+          allotment: 20
+        },
+        {
+          id: 'SRV-13',
+          category: 'attraction',
+          categoryName: 'แหล่งท่องเที่ยว',
+          title: 'บัตรสวนน้ำ Columbia Pictures Aquaverse Pattaya',
+          provider: 'Aquaverse Management Ltd.',
+          location: 'นาจอมเทียน, ชลบุรี',
+          rating: '4.7 ★',
+          features: ['เล่นได้ไม่จำกัดเครื่องเล่น', 'โซนเด็กและครอบครัว', 'Cabana ส่วนตัว'],
+          price: 990,
+          unit: 'ท่าน',
+          image: 'https://images.unsplash.com/photo-1582650625119-3a31f841807d?auto=format&fit=crop&w=600&q=80',
+          roomType: 'All-Day Pass Ticket',
+          allotment: 60
+        },
+        {
+          id: 'SRV-14',
+          category: 'accommodation',
+          categoryName: 'โรงแรมและที่พัก',
+          title: 'Samui Sunset Bay Private Pool Villa',
+          provider: 'สมุย ซันเซ็ท รีสอร์ท กรุ๊ป',
+          location: 'บ่อผุด, สุราษฎร์ธานี',
+          rating: '4.9 ★',
+          features: ['วิลล่าพร้อมสระส่วนตัว', 'วิวทะเลพาโนรามา', 'Floating Breakfast'],
+          price: 4890,
+          unit: 'คืน',
+          image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Oceanfront Pool Villa',
+          allotment: 6
         }
       ],
 
@@ -2400,12 +2499,58 @@
     // Render Services
     function renderServices() {
       const container = document.getElementById('services-grid');
+      const destSelect = document.getElementById('service-search-input');
+      const selectedDest = destSelect ? destSelect.value : 'all';
+      const priceFilter = document.getElementById('price-filter');
+      const selectedPrice = priceFilter ? priceFilter.value : 'all';
+
       const filtered = state.services.filter(s => {
-        if (state.currentCategoryFilter !== 'all' && s.category !== state.currentCategoryFilter) return false;
+        // Category filter
+        if (state.currentCategoryFilter !== 'all' && s.category !== state.currentCategoryFilter) {
+          return false;
+        }
+
+        // Destination filter
+        if (selectedDest && selectedDest !== 'all') {
+          const matchLoc = (s.location || '').includes(selectedDest);
+          const matchTitle = (s.title || '').includes(selectedDest);
+          const matchProvider = (s.provider || '').includes(selectedDest);
+          if (!matchLoc && !matchTitle && !matchProvider) {
+            return false;
+          }
+        }
+
+        // Price filter
+        if (selectedPrice === 'under1000' && s.price > 1000) return false;
+        if (selectedPrice === '1000-3000' && (s.price < 1000 || s.price > 3000)) return false;
+        if (selectedPrice === 'over3000' && s.price <= 3000) return false;
+
         return true;
       });
 
-      document.getElementById('search-result-count').textContent = `พบ ${filtered.length} รายการแนะนำตรงตามมาตรฐาน ThailandCONNEX`;
+      const countEl = document.getElementById('search-result-count');
+      if (countEl) {
+        let destText = '';
+        if (destSelect && destSelect.selectedIndex >= 0) {
+          const optText = destSelect.options[destSelect.selectedIndex].text.replace('📍 ', '');
+          destText = selectedDest !== 'all' ? `ในพื้นที่ ${optText}` : 'ทั่วประเทศไทย';
+        }
+        countEl.textContent = `พบ ${filtered.length} รายการแนะนำ${destText} ตรงตามมาตรฐาน ThailandCONNEX`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 48px 20px; background: #ffffff; border-radius: 16px; border: 1px dashed #cbd5e1;">
+            <div style="font-size: 40px; margin-bottom: 10px;">🏝️</div>
+            <h3 style="font-size: 16px; color: var(--navy); margin-bottom: 6px;">ไม่พบรายการบริการที่ตรงกับเงื่อนไขการค้นหา</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">ลองเลือกจุดหมายปลายทางอื่น หรือเลือกดู "ทุกจุดหมายปลายทาง (ทั่วประเทศไทย)"</p>
+            <button class="btn-search" style="margin: 0 auto; display: inline-flex;" onclick="resetSearchFilters()">
+              แสดงบริการทั้งหมด (All Destinations)
+            </button>
+          </div>
+        `;
+        return;
+      }
 
       container.innerHTML = filtered.map(item => `
         <div class="service-card">
@@ -2434,6 +2579,19 @@
           </div>
         </div>
       `).join('');
+    }
+
+    function resetSearchFilters() {
+      const destSelect = document.getElementById('service-search-input');
+      if (destSelect) destSelect.value = 'all';
+      const priceFilter = document.getElementById('price-filter');
+      if (priceFilter) priceFilter.value = 'all';
+      state.currentCategoryFilter = 'all';
+      document.querySelectorAll('.category-pills .cat-pill').forEach(p => p.classList.remove('active'));
+      const allPill = document.querySelector('.category-pills .cat-pill');
+      if (allPill) allPill.classList.add('active');
+      renderServices();
+      showToast('รีเซ็ตเงื่อนไข แสดงบริการทุกจุดหมายปลายทางแล้ว');
     }
 
     function setCategoryFilter(cat, btn) {

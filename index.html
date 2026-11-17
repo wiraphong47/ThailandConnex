@@ -3,63 +3,2568 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ThailandCONNEX | Supplier Portal</title>
+  <title>ThailandCONNEX | แพลตฟอร์มท่องเที่ยวแห่งชาติ (User Portal)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
-    :root { --navy:#083b7c; --blue:#168de1; --teal:#08b99d; --ink:#15243b; --muted:#708099; --line:#e6edf5; --wash:#f5f8fc; --orange:#ff7834; }
-    * { box-sizing:border-box; } body { margin:0; color:var(--ink); font:14px 'IBM Plex Sans Thai',sans-serif; background:var(--wash); }
-    button { font:inherit; border:0; cursor:pointer; } .shell { min-height:100vh; display:grid; grid-template-columns:250px 1fr; }
-    .side { background:#fff; border-right:1px solid var(--line); padding:25px 14px; position:relative; }
-    .brand { font:700 25px 'Plus Jakarta Sans',sans-serif; letter-spacing:-1.6px; line-height:.88; padding:6px 13px 34px; color:var(--navy); }
-    .brand span { color:var(--orange); font-weight:500; letter-spacing:-1.8px; } .brand small { display:block; color:#92a0b2; letter-spacing:0; font:11px 'IBM Plex Sans Thai'; margin-top:10px; }
-    .menu-label { color:#94a1b3; font-size:11px; margin:12px 13px 8px; text-transform:uppercase; letter-spacing:1px; }
-    .nav { width:100%; padding:11px 13px; display:flex; align-items:center; gap:11px; color:#53627a; background:transparent; text-align:left; border-radius:9px; margin:2px 0; }
-    .nav:hover,.nav.active { background:#eaf5ff; color:#087ed3; font-weight:600; } .nav i { width:20px; font-style:normal; text-align:center; }
-    .profile { position:absolute; bottom:22px; left:20px; right:20px; padding:12px; border-radius:12px; background:#f5f8fc; display:flex; gap:10px; align-items:center; }
-    .avatar { width:34px; height:34px; display:grid; place-items:center; color:#fff; background:linear-gradient(135deg,var(--blue),var(--teal)); border-radius:50%; font-weight:700; }.profile b { display:block; font-size:12px; }.profile small { color:var(--muted); }
-    .main { min-width:0; } .topbar { height:72px; background:#fff; border-bottom:1px solid var(--line); padding:0 35px; display:flex; justify-content:space-between; align-items:center; }.crumb { color:#79869a; }.crumb b { color:var(--ink); }.actions { display:flex; align-items:center; gap:18px; color:#627189; }.bell { position:relative; font-size:20px; }.bell:after { content:''; position:absolute; width:7px;height:7px;background:#f94d55;border:2px solid #fff;border-radius:50%;top:0;right:-1px; }.property { border:1px solid var(--line); background:#fff; border-radius:8px; padding:9px 12px; font-weight:600; color:#34435b; }
-    .content { padding:31px 35px 45px; max-width:1440px; } .heading { display:flex; align-items:end; justify-content:space-between; margin-bottom:25px; }.heading h1 { font-size:27px; margin:0 0 4px; }.heading p { color:var(--muted); margin:0; }.primary { color:#fff; border-radius:8px; background:linear-gradient(100deg,#168de1,#0bb8a1); padding:10px 17px; box-shadow:0 7px 16px #168de132; font-weight:600; }.secondary { border:1px solid var(--line); background:#fff; color:#526178; border-radius:8px; padding:10px 16px; }
-    .hero { border-radius:16px; color:#fff; padding:29px 31px; background:linear-gradient(105deg,#074995,#1288d3 54%,#0eaf9d); overflow:hidden; position:relative; }.hero:after { content:'';width:230px;height:230px;border:45px solid #ffffff12;border-radius:50%;position:absolute;right:-42px;top:-115px; }.hero h2 { margin:0 0 5px;font-size:22px; }.hero p { margin:0;opacity:.83; }.hero .date { position:absolute;right:30px;bottom:26px;text-align:right;z-index:1; }.hero .date b{display:block;font:600 18px 'Plus Jakarta Sans';}
-    .metrics { display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:21px 0; }.metric { background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px; }.metric .icon { float:right;background:#e8f6ff;color:#0d8de0;border-radius:9px;padding:8px; }.metric small,.card-head p { color:var(--muted); }.metric strong { display:block;font:700 26px 'Plus Jakarta Sans';margin:13px 0 4px; }.up { color:#08a88e;font-size:12px;font-weight:600; }.grid { display:grid;grid-template-columns:1.55fr 1fr;gap:18px; }.card { background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px; }.card-head { display:flex;justify-content:space-between;align-items:start;margin-bottom:18px; }.card-head h3{margin:0;font-size:16px}.card-head p{margin:3px 0 0;font-size:12px}.select { border:1px solid var(--line);padding:7px 10px;border-radius:7px;color:#5c6b82;background:#fff;font-size:12px;}.chart { height:205px;position:relative;border-bottom:1px solid #dce5ef;background:repeating-linear-gradient(to bottom,transparent 0,transparent 50px,#eef3f8 51px); }.bars {position:absolute;inset:25px 14px 0;display:flex;align-items:end;gap:17px}.bar {flex:1;background:linear-gradient(#2fa9eb,#14b79c);border-radius:5px 5px 0 0;min-height:15px;position:relative}.bar:after{content:attr(data-day);position:absolute;bottom:-24px;width:35px;left:50%;transform:translateX(-50%);font-size:11px;color:#8794a6;text-align:center}.donut { width:145px;height:145px;border-radius:50%;background:conic-gradient(#0eb79d 0 64%,#1890df 64% 87%,#edf2f7 87%);margin:12px auto;position:relative}.donut:after {content:'68%\A Occupancy';white-space:pre;display:grid;place-items:center;text-align:center;font-weight:700;line-height:1.5;position:absolute;inset:20px;background:#fff;border-radius:50%;font-size:15px}.legend{display:flex;justify-content:center;gap:14px;color:#67768d;font-size:12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}.activity{padding:0;margin:0;list-style:none}.activity li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.activity li:last-child{border:0}.activity b{font-size:13px}.activity span{color:var(--muted);font-size:12px}.tag{font-size:11px;padding:3px 7px;border-radius:10px;background:#e7f8f3;color:#008d75}
-    .view{display:none}.view.active{display:block}.filters { padding:15px;display:flex;gap:11px;align-items:end;margin-bottom:18px }.field{flex:1}.field label{display:block;color:#768399;font-size:11px;margin-bottom:5px}.input{height:39px;width:100%;padding:0 11px;border:1px solid var(--line);border-radius:7px;color:#3a4a62;background:#fff}.search{background:#168de1;color:#fff;padding:10px 18px;border-radius:7px}.table-card{padding:0;overflow:hidden}.table-toolbar{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.table-toolbar h3{margin:0}.table{width:100%;border-collapse:collapse}.table th{text-align:left;background:#f7f9fc;color:#8693a6;padding:12px 18px;font-size:11px;font-weight:600}.table td{padding:15px 18px;border-top:1px solid var(--line);font-size:13px}.link{color:#168de1;font-weight:600}.status{padding:4px 8px;border-radius:12px;font-size:11px;font-weight:600}.confirmed{background:#e6f8f2;color:#008b72}.pending{background:#fff4df;color:#c77b00}.cancelled{background:#ffedf0;color:#d84152}
-    .calendar-grid{display:grid;grid-template-columns:150px repeat(7,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden}.calendar-grid > div{min-height:49px;padding:10px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:12px}.calendar-grid .head{background:#f7f9fc;color:#718098;font-weight:600;min-height:39px}.room{background:#fbfcfe;font-weight:600}.available{background:#dff6ec;color:#07856f;text-align:center}.limited{background:#fff0cb;color:#b87900;text-align:center}.sold{background:#ffe2e4;color:#d54452;text-align:center}.key{display:flex;gap:18px;color:#65748b;font-size:12px;margin-top:15px}.key span:before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}.key .a:before{background:#dff6ec}.key .l:before{background:#fff0cb}.key .s:before{background:#ffe2e4}
-    @media(max-width:900px){.shell{grid-template-columns:72px 1fr}.side{padding:18px 8px}.brand{font-size:0;padding:13px 6px 30px}.brand:after{content:'TC';font:700 18px 'Plus Jakarta Sans';color:var(--navy)}.brand small,.nav span,.menu-label,.profile div{display:none}.nav{justify-content:center;padding:12px}.profile{left:11px;right:11px;padding:5px;justify-content:center}.metrics,.grid{grid-template-columns:1fr 1fr}.content{padding:24px 18px}.topbar{padding:0 18px}.filters{flex-wrap:wrap}.calendar-grid{overflow:auto}.calendar-grid{min-width:800px}}@media(max-width:620px){.metrics,.grid{grid-template-columns:1fr}.property{display:none}.heading{align-items:start;gap:12px}.hero .date{display:none}.content{padding:20px 13px}.table-card{overflow-x:auto}.table{min-width:720px}}
+    :root {
+      --navy: #083b7c;
+      --navy-dark: #062b5c;
+      --blue: #168de1;
+      --blue-light: #e8f4fd;
+      --teal: #08b99d;
+      --teal-light: #e6f8f4;
+      --orange: #ff7834;
+      --orange-light: #fff2eb;
+      --ink: #15243b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --wash: #f4f7fb;
+      --card-bg: #ffffff;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 14px;
+      --shadow-sm: 0 2px 8px rgba(15, 30, 60, 0.05);
+      --shadow-md: 0 8px 24px rgba(15, 30, 60, 0.08);
+      --shadow-lg: 0 16px 40px rgba(15, 30, 60, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font: 14px/1.5 'IBM Plex Sans Thai', sans-serif;
+      background: var(--wash);
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; border: 0; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Layout Shell */
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Bar */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 28px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand {
+      font: 800 24px 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -1.2px;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .brand span { color: var(--orange); }
+    .badge-user {
+      background: linear-gradient(135deg, rgba(22, 141, 225, 0.12), rgba(8, 185, 157, 0.15));
+      color: var(--navy);
+      border: 1px solid rgba(22, 141, 225, 0.25);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-user::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--teal);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-btn:hover {
+      color: var(--ink);
+    }
+    .tab-btn.active {
+      background: #ffffff;
+      color: var(--navy);
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .token-pill {
+      background: linear-gradient(100deg, #093b7b, #1377c8);
+      color: #ffffff;
+      padding: 7px 14px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(8, 59, 124, 0.18);
+      transition: transform 0.15s;
+    }
+    .token-pill:hover {
+      transform: translateY(-1px);
+    }
+    .token-icon {
+      width: 22px;
+      height: 22px;
+      background: #ffffff;
+      color: var(--navy);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 11px;
+    }
+    .token-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #38bdf8;
+    }
+    .token-sub {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 6px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff7834, #f59e0b);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(255, 120, 52, 0.25);
+    }
+    .user-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .user-name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .user-id {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Main Content Area */
+    .main-body {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 28px 60px;
+      flex: 1;
+    }
+
+    /* Views container */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    .view-panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero Banner for User */
+    .user-hero {
+      background: linear-gradient(110deg, #073d7f 0%, #116cb7 50%, #0ab59e 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 34px 40px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 30px rgba(8, 59, 124, 0.15);
+    }
+    .user-hero::after {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border: 60px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      right: -80px;
+      top: -120px;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: 0.3px;
+    }
+    .hero-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 10px;
+      line-height: 1.25;
+    }
+    .hero-desc {
+      font-size: 14px;
+      opacity: 0.9;
+      margin: 0 0 20px;
+      max-width: 650px;
+    }
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      padding-top: 18px;
+    }
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fce77d;
+    }
+    .stat-lbl {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    /* Search & Filter Bar */
+    .search-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px 24px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 28px;
+    }
+    .search-row {
+      display: grid;
+      grid-template-columns: 2fr 1.3fr 1.3fr 1.2fr auto;
+      gap: 14px;
+      align-items: flex-end;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-control {
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0 14px;
+      color: var(--ink);
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-control:focus {
+      border-color: var(--blue);
+    }
+    .btn-search {
+      height: 44px;
+      background: linear-gradient(100deg, var(--blue), var(--teal));
+      color: #ffffff;
+      font-weight: 600;
+      padding: 0 24px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(22, 141, 225, 0.25);
+      transition: transform 0.15s;
+    }
+    .btn-search:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Category Pill Filters */
+    .category-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+    .cat-pill {
+      background: #f1f5f9;
+      color: var(--muted);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .cat-pill:hover {
+      background: #e2e8f0;
+      color: var(--ink);
+    }
+    .cat-pill.active {
+      background: var(--navy);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Section Headers */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+    .section-head h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 4px;
+    }
+    .section-head p {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* Card Grids */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+
+    /* Service / Booking Card */
+    .service-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .service-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .card-thumb {
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .card-category-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(8, 59, 124, 0.85);
+      color: #ffffff;
+      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .card-rating-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fce77d;
+      backdrop-filter: blur(4px);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 6px;
+      line-height: 1.35;
+    }
+    .card-loc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .feat-tag {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+    .card-foot {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .price-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+    .price-sub {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .price-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .btn-book {
+      background: var(--blue);
+      color: #ffffff;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      transition: background 0.15s;
+    }
+    .btn-book:hover {
+      background: #0f78c2;
+    }
+
+    /* Voucher / Rewards Cards */
+    .voucher-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .voucher-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .voucher-top {
+      height: 160px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    .voucher-points-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: linear-gradient(100deg, #ff7834, #f59e0b);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(255, 120, 52, 0.35);
+    }
+    .voucher-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .voucher-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: var(--ink);
+    }
+    .voucher-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .voucher-meta {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn-redeem {
+      width: 100%;
+      background: linear-gradient(100deg, var(--teal), #059669);
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      transition: opacity 0.15s;
+    }
+    .btn-redeem:hover {
+      opacity: 0.92;
+    }
+
+    /* Coupon Ticket Style (My Coupons View) */
+    .coupon-ticket {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .coupon-img {
+      background-size: cover;
+      background-position: center;
+    }
+    .coupon-info {
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .coupon-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: var(--ink);
+    }
+    .coupon-detail {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .coupon-exp {
+      font-size: 11px;
+      color: #f59e0b;
+      font-weight: 600;
+    }
+    .coupon-side {
+      padding: 18px 24px;
+      border-left: 2px dashed #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #fafcff;
+      min-width: 170px;
+    }
+    .btn-use-coupon {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .btn-use-coupon:hover {
+      background: var(--blue);
+    }
+
+    /* Data Tables Styling */
+    .table-container {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    .table-toolbar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      background: #ffffff;
+    }
+    .table-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .table-search {
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 12px;
+      width: 220px;
+      outline: none;
+    }
+    .table-search:focus {
+      border-color: var(--blue);
+    }
+    .table-filter-select {
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 10px;
+      font-size: 12px;
+      color: var(--ink);
+      background: #ffffff;
+      outline: none;
+    }
+    .btn-export {
+      height: 36px;
+      background: #f1f5f9;
+      color: var(--navy);
+      border: 1px solid var(--line);
+      padding: 0 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .btn-export:hover {
+      background: #e2e8f0;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .data-table th {
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      user-select: none;
+    }
+    .data-table th.sortable {
+      cursor: pointer;
+    }
+    .data-table th.sortable:hover {
+      color: var(--navy);
+    }
+    .data-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink);
+    }
+    .data-table tr:last-child td {
+      border-bottom: 0;
+    }
+    .data-table tr:hover td {
+      background: #f8fbff;
+    }
+
+    /* Badges & Pills */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-badge.confirmed {
+      background: var(--teal-light);
+      color: #0d826e;
+    }
+    .status-badge.pending {
+      background: #fffbeb;
+      color: #b45309;
+    }
+    .status-badge.cancelled {
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+    .status-badge.completed {
+      background: var(--blue-light);
+      color: #0369a1;
+    }
+
+    /* Pagination */
+    .table-foot {
+      padding: 12px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafcff;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .pagination-btns {
+      display: flex;
+      gap: 4px;
+    }
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .page-btn.active {
+      background: var(--navy);
+      color: #ffffff;
+      border-color: var(--navy);
+    }
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 25, 47, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      place-items: center;
+      padding: 20px;
+      animation: fadeIn 0.15s ease-out;
+    }
+    .modal-backdrop.show {
+      display: grid;
+    }
+    .modal-box {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    .modal-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-head h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .btn-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 18px;
+      display: grid;
+      place-items: center;
+    }
+    .btn-close:hover {
+      background: #e2e8f0;
+      color: var(--ink);
+    }
+    .modal-body {
+      padding: 24px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+    .modal-foot {
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #f8fafc;
+    }
+
+    /* Barcode & QR Display (depa PDF page 113 replicate) */
+    .ticket-display {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .barcode-svg {
+      width: 100%;
+      max-width: 360px;
+      height: 60px;
+      margin: 12px auto;
+    }
+    .barcode-num {
+      font-family: monospace;
+      letter-spacing: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .qr-mock {
+      width: 140px;
+      height: 140px;
+      margin: 14px auto;
+      border: 2px solid var(--navy);
+      padding: 6px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+    }
+
+    /* Toast Notifications */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast-item {
+      background: #ffffff;
+      border-left: 4px solid var(--teal);
+      border-radius: 8px;
+      padding: 14px 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 280px;
+      animation: slideIn 0.25s ease-out;
+    }
+    .toast-item.error {
+      border-left-color: var(--danger);
+    }
+    @keyframes slideIn {
+      from { transform: translateX(50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .search-row {
+        grid-template-columns: 1fr 1fr;
+      }
+      .coupon-ticket {
+        grid-template-columns: 1fr;
+      }
+      .coupon-side {
+        border-left: 0;
+        border-top: 2px dashed #cbd5e1;
+        flex-direction: row;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 0 16px;
+        height: auto;
+        flex-wrap: wrap;
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }
+      .nav-tabs {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+      }
+      .main-body {
+        padding: 16px;
+      }
+      .search-row {
+        grid-template-columns: 1fr;
+      }
+      .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <aside class="side">
-      <div class="brand">Thailand<br><span>CONNEX</span><small>Supplier Portal</small></div>
-      <div class="menu-label">Overview</div>
-      <button class="nav active" data-view="dashboard"><i>▦</i><span>แดชบอร์ด</span></button>
-      <div class="menu-label">จัดการที่พัก</div>
-      <button class="nav" data-view="reservations"><i>▤</i><span>การจอง</span></button>
-      <button class="nav" data-view="calendar"><i>▧</i><span>ราคาและห้องว่าง</span></button>
-      <button class="nav" data-view="allotment"><i>◫</i><span>จัดการ Allotment</span></button>
-      <div class="menu-label">การตั้งค่า</div>
-      <button class="nav"><i>⚙</i><span>ข้อมูลที่พัก</span></button>
-      <button class="nav"><i>?</i><span>ศูนย์ช่วยเหลือ</span></button>
-      <div class="profile"><div class="avatar">DV</div><div><b>Digital Valley Hotel</b><small>ผู้ดูแลระบบ</small></div></div>
-    </aside>
-    <main class="main">
-      <header class="topbar"><div class="crumb">ThailandCONNEX / <b id="crumb">แดชบอร์ด</b></div><div class="actions"><span class="bell">♧</span><button class="property">Digital Valley Hotel ▾</button></div></header>
-      <section class="content">
-        <div class="view active" id="dashboard">
-          <div class="heading"><div><h1>สวัสดี, Digital Valley Hotel</h1><p>ภาพรวมผลการดำเนินงานของที่พักคุณวันนี้</p></div><button class="primary">+ เพิ่มห้องพัก</button></div>
-          <div class="hero"><h2>ยกระดับการขายของคุณไปอีกขั้น</h2><p>จัดการห้องพัก ราคา และการจองจากทุกช่องทางในที่เดียว</p><div class="date">อัปเดตล่าสุด<b>16 พ.ย. 2566</b></div></div>
-          <div class="metrics"><div class="metric"><span class="icon">▣</span><small>ยอดจองวันนี้</small><strong>24</strong><span class="up">↑ 18% จากเมื่อวาน</span></div><div class="metric"><span class="icon">฿</span><small>รายได้คาดการณ์</small><strong>฿48,620</strong><span class="up">↑ 12% จากสัปดาห์ก่อน</span></div><div class="metric"><span class="icon">▥</span><small>อัตราการเข้าพัก</small><strong>68%</strong><span class="up">↑ 6% จากเดือนก่อน</span></div><div class="metric"><span class="icon">◉</span><small>ห้องว่างวันนี้</small><strong>17</strong><span style="color:#ef8b17;font-size:12px;font-weight:600">เหลือจำกัดในสุดสัปดาห์</span></div></div>
-          <div class="grid"><div class="card"><div class="card-head"><div><h3>รายได้และยอดจอง</h3><p>ภาพรวม 7 วันที่ผ่านมา</p></div><button class="select">7 วันล่าสุด ▾</button></div><div class="chart"><div class="bars"><div class="bar" data-day="จ."></div><div class="bar" style="height:48%" data-day="อ."></div><div class="bar" style="height:65%" data-day="พ."></div><div class="bar" style="height:42%" data-day="พฤ."></div><div class="bar" style="height:82%" data-day="ศ."></div><div class="bar" style="height:93%" data-day="ส."></div><div class="bar" style="height:76%" data-day="อา."></div></div></div></div><div class="card"><div class="card-head"><div><h3>อัตราการเข้าพัก</h3><p>เดือนพฤศจิกายน 2566</p></div><button class="select">เดือนนี้ ▾</button></div><div class="donut"></div><div class="legend"><span><i class="dot" style="background:#0eb79d"></i>เข้าพัก</span><span><i class="dot" style="background:#1890df"></i>จองแล้ว</span></div></div><div class="card"><div class="card-head"><div><h3>การจองล่าสุด</h3><p>รายการที่ต้องติดตาม</p></div><button class="select" onclick="showView('reservations')">ดูทั้งหมด</button></div><ul class="activity"><li><div><b>BK-10852 · Deluxe Pool View</b><br><span>Kanokwan H. · 18–20 พ.ย.</span></div><em class="tag">ยืนยันแล้ว</em></li><li><div><b>BK-10851 · Superior Room</b><br><span>James Lee · 17–19 พ.ย.</span></div><em class="tag">ยืนยันแล้ว</em></li><li><div><b>BK-10849 · Family Suite</b><br><span>สุพัตรา ว. · 18–19 พ.ย.</span></div><em class="tag" style="background:#fff4df;color:#c77b00">รอชำระเงิน</em></li></ul></div><div class="card"><div class="card-head"><div><h3>คำแนะนำวันนี้</h3><p>โอกาสเพิ่มยอดขาย</p></div></div><div style="padding:14px;border-radius:10px;background:#eaf7ff;color:#236384;line-height:1.7">ห้อง Deluxe Pool View เหลือเพียง 2 ห้องในวันเสาร์<br><b style="color:#087ed3">แนะนำเพิ่มราคา 10–15%</b></div><button class="secondary" style="margin-top:17px;width:100%" onclick="showView('calendar')">จัดการราคาและห้องว่าง</button></div></div>
+  <div class="app-shell">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-container">
+        <div class="brand-wrap">
+          <div class="brand">Thailand<span>CONNEX</span></div>
+          <span class="badge-user">User & Traveler Portal</span>
         </div>
-        <div class="view" id="reservations"><div class="heading"><div><h1>รายการจอง</h1><p>ตรวจสอบและบริหารจัดการการจองของที่พัก</p></div><button class="secondary">⇩ ส่งออก Excel</button></div><div class="card filters"><div class="field"><label>วันเข้าพัก</label><input class="input" value="16/11/2566"></div><div class="field"><label>วันออก</label><input class="input" value="30/11/2566"></div><div class="field"><label>สถานะ</label><select class="input"><option>ทุกสถานะ</option><option>ยืนยันแล้ว</option><option>รอชำระเงิน</option></select></div><button class="search">ค้นหา</button></div><div class="card table-card"><div class="table-toolbar"><h3>รายการจองทั้งหมด</h3><span style="color:#758398">ทั้งหมด 24 รายการ</span></div><table class="table"><thead><tr><th>รหัสการจอง</th><th>ชื่อลูกค้า</th><th>เช็กอิน</th><th>เช็กเอาต์</th><th>ห้องพัก</th><th>ยอดรวม</th><th>สถานะ</th></tr></thead><tbody><tr><td class="link">BK-10852</td><td>Kanokwan Hachiman</td><td>18/11/2566</td><td>20/11/2566</td><td>Deluxe Pool View</td><td>฿8,900</td><td><span class="status confirmed">ยืนยันแล้ว</span></td></tr><tr><td class="link">BK-10851</td><td>James Lee</td><td>17/11/2566</td><td>19/11/2566</td><td>Superior Room</td><td>฿6,400</td><td><span class="status confirmed">ยืนยันแล้ว</span></td></tr><tr><td class="link">BK-10849</td><td>สุพัตรา วัฒนาวงศ์</td><td>18/11/2566</td><td>19/11/2566</td><td>Family Suite</td><td>฿5,200</td><td><span class="status pending">รอชำระเงิน</span></td></tr><tr><td class="link">BK-10843</td><td>Peter Choi</td><td>15/11/2566</td><td>17/11/2566</td><td>Deluxe Pool View</td><td>฿7,800</td><td><span class="status cancelled">ยกเลิก</span></td></tr></tbody></table></div></div>
-        <div class="view" id="calendar"><div class="heading"><div><h1>ราคาและห้องว่าง</h1><p>อัปเดตราคา จำนวนห้อง และเงื่อนไขการขาย</p></div><button class="primary">บันทึกการเปลี่ยนแปลง</button></div><div class="card" style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:center"><div><b>พฤศจิกายน 2566</b><span style="color:#79869a;margin-left:10px">16 – 22 พ.ย.</span></div><div><button class="secondary">‹ สัปดาห์ก่อน</button> <button class="secondary">สัปดาห์ถัดไป ›</button></div></div><div class="card" style="overflow:auto"><div class="calendar-grid"><div class="head">ประเภทห้อง</div><div class="head">พฤ. 16</div><div class="head">ศ. 17</div><div class="head">ส. 18</div><div class="head">อา. 19</div><div class="head">จ. 20</div><div class="head">อ. 21</div><div class="head">พ. 22</div><div class="room">Deluxe Pool View<br><small style="color:#8794a6;font-weight:400">฿4,450 / คืน</small></div><div class="available">12</div><div class="available">8</div><div class="limited">2</div><div class="limited">3</div><div class="available">14</div><div class="available">16</div><div class="available">15</div><div class="room">Superior Room<br><small style="color:#8794a6;font-weight:400">฿3,200 / คืน</small></div><div class="available">18</div><div class="available">14</div><div class="limited">5</div><div class="available">9</div><div class="available">19</div><div class="available">20</div><div class="available">20</div><div class="room">Family Suite<br><small style="color:#8794a6;font-weight:400">฿5,800 / คืน</small></div><div class="available">6</div><div class="limited">2</div><div class="sold">0</div><div class="limited">1</div><div class="available">7</div><div class="available">8</div><div class="available">8</div></div><div class="key"><span class="a">ห้องว่าง</span><span class="l">เหลือจำกัด</span><span class="s">เต็มแล้ว</span></div></div></div>
-        <div class="view" id="allotment"><div class="heading"><div><h1>จัดการ Allotment</h1><p>กำหนดจำนวนห้องที่เปิดขายให้แต่ละช่องทาง</p></div><button class="primary">+ เพิ่ม Allotment</button></div><div class="card table-card"><div class="table-toolbar"><h3>รายการ Allotment</h3><button class="select">ตัวกรอง ▾</button></div><table class="table"><thead><tr><th>ชื่อ Allotment</th><th>ช่องทางการขาย</th><th>ประเภทห้อง</th><th>จำนวนห้อง</th><th>ช่วงเวลา</th><th>สถานะ</th><th></th></tr></thead><tbody><tr><td><b>Weekend Premium</b></td><td>ThailandCONNEX</td><td>Deluxe Pool View</td><td>5 ห้อง</td><td>16–30 พ.ย. 2566</td><td><span class="status confirmed">เปิดใช้งาน</span></td><td class="link">แก้ไข</td></tr><tr><td><b>ASEAN Partner Rate</b></td><td>Travel Partner API</td><td>Superior Room</td><td>10 ห้อง</td><td>1–30 พ.ย. 2566</td><td><span class="status confirmed">เปิดใช้งาน</span></td><td class="link">แก้ไข</td></tr><tr><td><b>Early Bird</b></td><td>ThailandCONNEX</td><td>Family Suite</td><td>3 ห้อง</td><td>20 พ.ย.–20 ธ.ค. 2566</td><td><span class="status pending">พักใช้งาน</span></td><td class="link">แก้ไข</td></tr></tbody></table></div></div>
+
+        <nav class="nav-tabs">
+          <button class="tab-btn active" data-target="view-booking">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            จองบริการท่องเที่ยว
+          </button>
+          <button class="tab-btn" data-target="view-rewards">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            แลกคะแนน TCP
+          </button>
+          <button class="tab-btn" data-target="view-coupons">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M7 15h4M15 15h2M7 11h2M13 11h4"></path></svg>
+            คูปองของฉัน (<span id="coupon-count-badge">3</span>)
+          </button>
+          <button class="tab-btn" data-target="view-reservations">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            ประวัติการจอง
+          </button>
+          <button class="tab-btn" data-target="view-wallet">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path><circle cx="18" cy="16" r="1"></circle></svg>
+            กระเป๋าเงิน & ประวัติโทเคน
+          </button>
+          <button class="tab-btn" data-target="view-directory">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            ฐานข้อมูลบริการ (Data Bank)
+          </button>
+        </nav>
+
+        <div class="user-actions">
+          <div class="token-pill" onclick="switchTab('view-wallet')" title="คลิกเพื่อดูกระเป๋าเงินและโอนคะแนน">
+            <div class="token-icon">₮</div>
+            <div>
+              <div class="token-val" id="top-token-balance">41,520 TCP</div>
+              <div class="token-sub">Thailand Point</div>
+            </div>
+          </div>
+
+          <div class="user-profile" onclick="openProfileModal()">
+            <div class="user-avatar">AJ</div>
+            <div class="user-meta">
+              <span class="user-name">อลิสา ใจดี</span>
+              <span class="user-id">ID: TC-849204</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-body">
+
+      <!-- ============================================== -->
+      <!-- VIEW 1: BOOKING & SERVICES (PDF Page 91-93) -->
+      <!-- ============================================== -->
+      <section id="view-booking" class="view-panel active">
+        <!-- Hero Banner -->
+        <div class="user-hero">
+          <div class="hero-content">
+            <span class="hero-tag">✨ National Digital Tourism Platform</span>
+            <h1 class="hero-title">ปลายทางในฝัน ของคนนับล้าน</h1>
+            <p class="hero-desc">ค้นหาและจองโรงแรม รีสอร์ท กิจกรรมท่องเที่ยว และบริการนำเที่ยวทั่วไทย ด้วยราคาตรงจากผู้ประกอบการ พร้อมสะสม Travel Token (TCP) ในทุกการเดินทาง</p>
+            <div class="hero-stats">
+              <div class="stat-box">
+                <span class="stat-val">108,659+</span>
+                <span class="stat-lbl">ผู้ประกอบการในระบบ</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-val">201,764+</span>
+                <span class="stat-lbl">สินค้าและบริการที่เข้าร่วม</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-val">77 จังหวัด</span>
+                <span class="stat-lbl">ครอบคลุมทุกภูมิภาคทั่วไทย</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-val">ERC-20 Token</span>
+                <span class="stat-lbl">รับแต้มสะสมบนบล็อกเชน</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-card">
+          <div class="search-row">
+            <div class="form-group">
+              <label>จุดหมายปลายทาง / ชื่อที่พัก / กิจกรรม</label>
+              <input type="text" id="service-search-input" class="form-control" placeholder="เช่น กรุงเทพฯ, หัวหิน, ภูเก็ต, สปา, ดินเนอร์..." value="Bangkok, Thailand">
+            </div>
+            <div class="form-group">
+              <label>วันที่เช็คอิน - เช็คเอาท์</label>
+              <input type="date" id="booking-checkin" class="form-control" value="2026-11-20">
+            </div>
+            <div class="form-group">
+              <label>จำนวนผู้เดินทาง</label>
+              <select id="booking-guests" class="form-control">
+                <option value="1">1 ท่าน (ห้องเดี่ยว)</option>
+                <option value="2" selected>2 ท่าน (1 ห้อง)</option>
+                <option value="3">3 ท่าน (Family)</option>
+                <option value="4">4 ท่านขึ้นไป</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>ช่วงราคา</label>
+              <select id="price-filter" class="form-control" onchange="filterServices()">
+                <option value="all">ทุกช่วงราคา</option>
+                <option value="under1000">ไม่เกิน ฿1,000</option>
+                <option value="1000-3000">฿1,000 - ฿3,000</option>
+                <option value="over3000">มากกว่า ฿3,000</option>
+              </select>
+            </div>
+            <button class="btn-search" onclick="filterServices()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              ค้นหาบริการ
+            </button>
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div class="category-pills">
+            <span class="cat-pill active" onclick="setCategoryFilter('all', this)">ทั้งหมด (201,764)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('accommodation', this)">🏨 ที่พักและโรงแรม (143,035)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('attraction', this)">🎡 แหล่งท่องเที่ยวและบัตรเข้าชม (6,652)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('wellness', this)">💆 สุขภาพและสปา (8,386)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('tour', this)">🧭 แพ็กเกจทัวร์ & มัคคุเทศก์ (30,948)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('food', this)">🍽️ ร้านอาหารและเครื่องดื่ม (6,044)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('mobility', this)">🚗 ยานพาหนะและรถรับส่ง (5,172)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('community', this)">🌿 ชุมชนท่องเที่ยว (553)</span>
+          </div>
+        </div>
+
+        <!-- Results Header -->
+        <div class="section-head">
+          <div>
+            <h2>ผลการค้นหาบริการท่องเที่ยว</h2>
+            <p id="search-result-count">พบ 8 รายการแนะนำตรงตามมาตรฐาน ThailandCONNEX</p>
+          </div>
+          <div style="font-size:12px; color:var(--muted)">
+            เรียงตาม: <b style="color:var(--navy)">ยอดนิยม & แนะนำ</b>
+          </div>
+        </div>
+
+        <!-- Service Cards Grid -->
+        <div class="grid-3" id="services-grid">
+          <!-- Dynamically populated via JS from PDF exact dataset -->
+        </div>
       </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 2: TCP REWARDS & CATALOG (PDF Page 106-113, 156) -->
+      <!-- ============================================== -->
+      <section id="view-rewards" class="view-panel">
+        <!-- TCP Banner -->
+        <div style="background:linear-gradient(135deg, #0f172a, #1e293b); color:#fff; border-radius:20px; padding:28px 32px; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
+          <div>
+            <div style="color:#38bdf8; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">ThailandCONNEX Token Ecosystem</div>
+            <h2 style="font-size:24px; margin:0 0 6px;">ศูนย์แลกสิทธิประโยชน์ & Travel Token (TCP)</h2>
+            <p style="margin:0; opacity:0.8; font-size:13px; max-width:600px;">สะสมคะแนนจากการท่องเที่ยว แล้วนำมาแลก Voucher ส่วนลดห้องพัก อาหาร สปา และบัตรเข้าชมสถานที่ท่องเที่ยวฟรี</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:16px 24px; text-align:right;">
+            <div style="font-size:11px; opacity:0.8; margin-bottom:4px;">ยอดคะแนนสะสมของคุณ</div>
+            <div style="font-family:'Plus Jakarta Sans'; font-size:26px; font-weight:800; color:#38bdf8;" id="rewards-balance-display">41,520.00 TCP</div>
+            <div style="font-size:11px; color:#fde047; margin-top:4px;">⚡ มี 500 TCP หมดอายุ 31 ธ.ค. 2566</div>
+          </div>
+        </div>
+
+        <!-- Rewards Category Pills -->
+        <div class="section-head">
+          <div>
+            <h2>คลังของรางวัลและคูปอง (Redeem Catalog)</h2>
+            <p>เลือกแลกของรางวัลที่ต้องการได้ทันที ระบบจะสร้างคูปองพร้อม Barcode ใช้งานให้อัตโนมัติ</p>
+          </div>
+          <button class="btn-export" onclick="switchTab('view-coupons')">
+            ดูคูปองของฉัน (<span class="coupon-pill-count">3</span>) ➔
+          </button>
+        </div>
+
+        <div class="grid-4" id="rewards-grid">
+          <!-- Dynamically populated via JS with items from PDF -->
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 3: MY COUPONS (PDF Page 113) -->
+      <!-- ============================================== -->
+      <section id="view-coupons" class="view-panel">
+        <div class="section-head">
+          <div>
+            <h2>คูปองและบัตรกำนัลของฉัน (My Active Coupons)</h2>
+            <p>แสดงบัตรคูปองและ Barcode / QR Code เพื่อใช้สิทธิ์กับผู้ประกอบการที่เข้าร่วมโครงการ</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="cat-pill active" onclick="filterCouponState('active', this)">คูปองพร้อมใช้ (<span id="active-coupon-count">3</span>)</button>
+            <button class="cat-pill" onclick="filterCouponState('used', this)">คูปองที่ใช้แล้ว (2)</button>
+          </div>
+        </div>
+
+        <div id="coupons-list">
+          <!-- Populated from PDF page 113 -->
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 4: MY RESERVATIONS TABLE (PDF Page 54, 56-57, 94-95) -->
+      <!-- ============================================== -->
+      <section id="view-reservations" class="view-panel">
+        <div class="section-head">
+          <div>
+            <h2>ประวัติรายการจองห้องพักและบริการ (Reservation History)</h2>
+            <p>ข้อมูลการจองตามบันทึกระบบ ThailandCONNEX Booking Engine & Extranet</p>
+          </div>
+          <button class="btn-search" style="height:36px; padding:0 16px; font-size:12px;" onclick="switchTab('view-booking')">
+            + จองบริการใหม่
+          </button>
+        </div>
+
+        <div class="table-container">
+          <div class="table-toolbar">
+            <h3 class="table-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              รายการจองทั้งหมด
+            </h3>
+            <div class="table-actions">
+              <input type="text" id="res-search" class="table-search" placeholder="ค้นหา รหัสจอง / ชื่อผู้เข้าพัก / บริการ..." oninput="filterReservationsTable()">
+              <select id="res-status-filter" class="table-filter-select" onchange="filterReservationsTable()">
+                <option value="all">ทุกสถานะ</option>
+                <option value="Confirmed">ยืนยันแล้ว (Confirmed)</option>
+                <option value="PendingConfirm">รอตรวจสอบ (Pending)</option>
+                <option value="Completed">เสร็จสมบูรณ์ (Completed)</option>
+                <option value="Cancelled">ยกเลิก (Cancelled)</option>
+              </select>
+              <button class="btn-export" onclick="exportReservationsCSV()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="data-table" id="reservations-table">
+              <thead>
+                <tr>
+                  <th class="sortable" onclick="sortReservations('id')">รหัสการจอง (Booking ID) ↕</th>
+                  <th>ชื่อผู้เข้าพัก / ผู้จอง</th>
+                  <th>บริการ / ประเภทห้อง</th>
+                  <th class="sortable" onclick="sortReservations('checkin')">วันเช็คอิน ↕</th>
+                  <th>วันเช็คเอาท์</th>
+                  <th class="sortable" onclick="sortReservations('amount')">ยอดชำระ ↕</th>
+                  <th>วันที่ทำรายการ</th>
+                  <th>สถานะ</th>
+                  <th style="text-align:right;">การจัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="reservations-tbody">
+                <!-- Injected via JavaScript from exact PDF records -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-foot">
+            <span id="res-table-summary">แสดงรายการที่ 1 ถึง 6 จากทั้งหมด 6 รายการ</span>
+            <div class="pagination-btns">
+              <button class="page-btn" disabled>‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn" disabled>›</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 5: WALLET & BLOCKCHAIN LOGS (PDF Page 107, 126-137, 146-148) -->
+      <!-- ============================================== -->
+      <section id="view-wallet" class="view-panel">
+        <div style="display:grid; grid-template-columns:1.2fr 1.8fr; gap:24px; margin-bottom:28px;">
+          <!-- Wallet Card & Transfer Box -->
+          <div style="background:#ffffff; border-radius:18px; border:1px solid var(--line); padding:24px; box-shadow:var(--shadow-sm);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+              <div>
+                <span style="font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase;">กระเป๋าเงินโทเคน</span>
+                <h3 style="margin:2px 0 0; font-size:18px; color:var(--navy);">Travel Token Wallet</h3>
+              </div>
+              <span style="background:#e0f2fe; color:#0369a1; font-size:11px; font-weight:600; padding:4px 8px; border-radius:6px; font-family:monospace;">ERC-20</span>
+            </div>
+
+            <div style="background:linear-gradient(135deg, #093b7c, #1377c8); border-radius:14px; padding:20px; color:#ffffff; margin-bottom:20px; box-shadow:0 6px 16px rgba(9,59,124,0.2);">
+              <div style="font-size:12px; opacity:0.85;">ยอดคงเหลือ (Balance)</div>
+              <div style="font-family:'Plus Jakarta Sans'; font-size:32px; font-weight:800; color:#38bdf8; margin:4px 0 12px;" id="wallet-big-balance">41,520.00 TCP</div>
+              <div style="display:flex; justify-content:space-between; font-size:11px; opacity:0.8; border-top:1px solid rgba(255,255,255,0.15); padding-top:10px;">
+                <span>Wallet: 0x5E2D...33760</span>
+                <span>ThailandCONNEX Custody</span>
+              </div>
+            </div>
+
+            <!-- Point Transfer Form (PDF Page 158) -->
+            <div style="border:1px solid var(--line); border-radius:12px; padding:16px; background:#fafcff;">
+              <h4 style="margin:0 0 12px; font-size:14px; color:var(--navy); display:flex; align-items:center; gap:6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                โอนคะแนนให้เพื่อน (Point Transfer)
+              </h4>
+              <div class="form-group" style="margin-bottom:10px;">
+                <label>ปลายทาง (เบอร์โทรศัพท์ หรือ ThailandCONNEX ID)</label>
+                <input type="text" id="transfer-target" class="form-control" placeholder="เช่น 0891234567 หรือ TC-992100">
+              </div>
+              <div class="form-group" style="margin-bottom:14px;">
+                <label>จำนวนคะแนน (TCP)</label>
+                <input type="number" id="transfer-amount" class="form-control" placeholder="เช่น 100" min="1" max="40000">
+              </div>
+              <button class="btn-search" style="width:100%; justify-content:center;" onclick="executeTokenTransfer()">
+                ยืนยันการโอนคะแนน
+              </button>
+            </div>
+          </div>
+
+          <!-- Blockchain Stats & Rules -->
+          <div style="background:#ffffff; border-radius:18px; border:1px solid var(--line); padding:24px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <span style="font-size:11px; font-weight:600; color:var(--teal); text-transform:uppercase;">Smart Contract & Tokenomics</span>
+              <h3 style="margin:2px 0 12px; font-size:18px; color:var(--navy);">กลไกโทเคนการท่องเที่ยวแห่งชาติ</h3>
+              <p style="font-size:13px; color:var(--muted); line-height:1.6; margin:0 0 16px;">
+                ระบบ Reward Token บนบล็อกเชนตามรายงาน depa จัดทำโดย บจก. ทราวิซโก เทคโนโลยี เป็นระบบที่สร้างแรงจูงใจและกระตุ้นการซื้อซ้ำ (Repeat Purchase) และเปิดโอกาสให้ผู้ประกอบการร่วมสร้างคุณค่า (Co-Creation)
+              </p>
+              
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+                <div style="background:#f8fafc; border:1px solid var(--line); border-radius:10px; padding:12px;">
+                  <div style="font-size:11px; color:var(--muted);">Total Token Supply</div>
+                  <div style="font-family:'Plus Jakarta Sans'; font-size:16px; font-weight:700; color:var(--navy);">561,380 TCN</div>
+                </div>
+                <div style="background:#f8fafc; border:1px solid var(--line); border-radius:10px; padding:12px;">
+                  <div style="font-size:11px; color:var(--muted);">Decimals</div>
+                  <div style="font-family:'Plus Jakarta Sans'; font-size:16px; font-weight:700; color:var(--navy);">18 Decimals</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--teal-light); border-left:4px solid var(--teal); border-radius:8px; padding:12px 14px; font-size:12px; color:#065f46;">
+              <b>ข้อแนะนำ:</b> คุณสามารถนำ Travel Token ไปใช้เป็นส่วนลดกับผู้ประกอบการโรงแรม ร้านอาหาร และแพ็กเกจทัวร์ที่ร่วมโครงการได้สูงสุด 100% ตามเงื่อนไขของแต่ละโปรโมชัน
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Transaction History Table (PDF Page 136-137, 148) -->
+        <div class="table-container">
+          <div class="table-toolbar">
+            <h3 class="table-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              ประวัติธุรกรรมโทเคน (Transaction Log)
+            </h3>
+            <div class="table-actions">
+              <button class="btn-export" onclick="exportTokenLogsCSV()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export Log CSV
+              </button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>วันที่และเวลา</th>
+                  <th>ประเภทธุรกรรม (Action)</th>
+                  <th>รายละเอียดรายการ</th>
+                  <th>จำนวน (Amount)</th>
+                  <th>ยอดคงเหลือ (Balance)</th>
+                  <th>Blockchain TxHash</th>
+                  <th>สถานะ</th>
+                </tr>
+              </thead>
+              <tbody id="token-tx-tbody">
+                <!-- Dynamically populated from PDF page 136 data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- VIEW 6: NATIONAL DATA DIRECTORY (PDF Page 175-242) -->
+      <!-- ============================================== -->
+      <section id="view-directory" class="view-panel">
+        <div class="section-head">
+          <div>
+            <h2>ฐานข้อมูลสินค้าและบริการท่องเที่ยวแห่งชาติ (National Tourism Data Bank)</h2>
+            <p>รวบรวมข้อมูลสินค้าและบริการจากผู้ประกอบการ 8 หมวดหมู่ (อ้างอิงรายงานสมบูรณ์ depa)</p>
+          </div>
+          <button class="btn-export" onclick="exportDirectoryCSV()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export รายการทั้งหมด
+          </button>
+        </div>
+
+        <div class="table-container">
+          <div class="table-toolbar">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <select id="dir-category-select" class="table-filter-select" onchange="filterDirectoryTable()">
+                <option value="all">ทุกหมวดหมู่ (201,764 รายการ)</option>
+                <option value="Accommodation">1. โรงแรมและที่พัก (143,035)</option>
+                <option value="Mobility">2. ขนส่งผู้โดยสาร (5,172)</option>
+                <option value="Attraction">3. แหล่งท่องเที่ยว (6,652)</option>
+                <option value="Wellness">4. สุขภาพและสปา (8,386)</option>
+                <option value="Tour">5. ตัวแทนท่องเที่ยวและไกด์ (30,948)</option>
+                <option value="Community">6. ชุมชนท่องเที่ยว (553)</option>
+                <option value="Food">7. ร้านอาหารและเครื่องดื่ม (6,044)</option>
+                <option value="Retail">8. ร้านค้าปลีกและของที่ระลึก (974)</option>
+              </select>
+              <input type="text" id="dir-search" class="table-search" placeholder="ค้นหาชื่อบริการ / ผู้ประกอบการ / จังหวัด..." oninput="filterDirectoryTable()">
+            </div>
+            <div style="font-size:12px; color:var(--muted);" id="dir-count-info">
+              แสดงข้อมูลตัวอย่างจากฐานข้อมูล Big Data ของโครงการ
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ลำดับ</th>
+                  <th>หมวดหมู่</th>
+                  <th>ชื่อผู้ประกอบการ (Supplier)</th>
+                  <th>ชื่อสินค้า / แพ็กเกจบริการ</th>
+                  <th>จังหวัด / พื้นที่</th>
+                  <th>ราคา (THB)</th>
+                  <th>โควตา Allotment</th>
+                  <th>การจอง</th>
+                </tr>
+              </thead>
+              <tbody id="directory-tbody">
+                <!-- Injected via JavaScript from report tables -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: BOOKING DETAIL (PDF Page 55, 95) -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="booking-detail-modal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>รายละเอียดการจอง (Reservation Details)</h3>
+        <button class="btn-close" onclick="closeModal('booking-detail-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="booking-modal-body">
+        <!-- Content inserted dynamically -->
+      </div>
+      <div class="modal-foot">
+        <button class="btn-export" onclick="closeModal('booking-detail-modal')">ปิดหน้าต่าง</button>
+        <button class="btn-book" onclick="printReservationSlip()">พิมพ์ใบยืนยันการจอง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: REDEEM VOUCHER & BARCODE (PDF Page 113) -->
+  <!-- ============================================== -->
+  <div class="modal-backdrop" id="voucher-code-modal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modal-coupon-title">บัตรคูปองของคุณ</h3>
+        <button class="btn-close" onclick="closeModal('voucher-code-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="ticket-display">
+          <div style="font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:4px;">ThailandCONNEX Digital Voucher</div>
+          <h4 style="margin:0 0 10px; font-size:16px; color:var(--navy);" id="modal-voucher-name">Voucher เข้าชมศูนย์อนุรักษ์ช้างไทย 1 รอบ</h4>
+          
+          <div class="qr-mock" id="modal-qr-container">
+            <!-- Simulated QR code SVG -->
+            <svg width="120" height="120" viewBox="0 0 24 24" fill="#083b7c">
+              <path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-5 0h2v3h-2v-3zm2 5h4v3h-4v-3zm3-3h3v2h-3v-2zm-8 3h2v3h-2v-3z"></path>
+            </svg>
+          </div>
+
+          <svg class="barcode-svg" viewBox="0 0 300 50">
+            <!-- Simulated Barcode Lines -->
+            <rect x="10" y="0" width="4" height="50" fill="#000"></rect>
+            <rect x="18" y="0" width="2" height="50" fill="#000"></rect>
+            <rect x="24" y="0" width="6" height="50" fill="#000"></rect>
+            <rect x="34" y="0" width="3" height="50" fill="#000"></rect>
+            <rect x="42" y="0" width="8" height="50" fill="#000"></rect>
+            <rect x="54" y="0" width="2" height="50" fill="#000"></rect>
+            <rect x="62" y="0" width="5" height="50" fill="#000"></rect>
+            <rect x="72" y="0" width="3" height="50" fill="#000"></rect>
+            <rect x="80" y="0" width="7" height="50" fill="#000"></rect>
+            <rect x="92" y="0" width="4" height="50" fill="#000"></rect>
+            <rect x="102" y="0" width="2" height="50" fill="#000"></rect>
+            <rect x="108" y="0" width="6" height="50" fill="#000"></rect>
+            <rect x="120" y="0" width="3" height="50" fill="#000"></rect>
+            <rect x="128" y="0" width="5" height="50" fill="#000"></rect>
+            <rect x="140" y="0" width="4" height="50" fill="#000"></rect>
+            <rect x="150" y="0" width="8" height="50" fill="#000"></rect>
+            <rect x="164" y="0" width="3" height="50" fill="#000"></rect>
+            <rect x="172" y="0" width="6" height="50" fill="#000"></rect>
+            <rect x="184" y="0" width="2" height="50" fill="#000"></rect>
+            <rect x="192" y="0" width="7" height="50" fill="#000"></rect>
+            <rect x="204" y="0" width="3" height="50" fill="#000"></rect>
+            <rect x="214" y="0" width="5" height="50" fill="#000"></rect>
+            <rect x="224" y="0" width="4" height="50" fill="#000"></rect>
+            <rect x="234" y="0" width="8" height="50" fill="#000"></rect>
+            <rect x="248" y="0" width="2" height="50" fill="#000"></rect>
+            <rect x="256" y="0" width="6" height="50" fill="#000"></rect>
+            <rect x="268" y="0" width="4" height="50" fill="#000"></rect>
+            <rect x="278" y="0" width="3" height="50" fill="#000"></rect>
+            <rect x="286" y="0" width="5" height="50" fill="#000"></rect>
+          </svg>
+          <div class="barcode-num" id="modal-barcode-num">4534 3452 235 56867 678</div>
+
+          <div style="font-size:12px; color:var(--muted); margin-top:14px;" id="modal-coupon-rules">
+            วันหมดอายุ: <b>20/05/2567</b> • ยื่นรหัสให้เจ้าหน้าที่สแกนก่อนรับบริการ
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-export" onclick="closeModal('voucher-code-modal')">เก็บไว้ใช้ภายหลัง</button>
+        <button class="btn-book" onclick="markCouponAsUsed()">ยืนยันการใช้คูปองเดี๋ยวนี้</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-box" id="toast-container"></div>
+
+  <!-- Interactive JavaScript Logic with Real PDF Dataset -->
   <script>
-    const titles={dashboard:'แดชบอร์ด',reservations:'การจอง',calendar:'ราคาและห้องว่าง',allotment:'จัดการ Allotment'};
-    function showView(id){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('.nav[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===id));document.getElementById('crumb').textContent=titles[id];}
-    document.querySelectorAll('.nav[data-view]').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.view)));
+    // State management
+    const state = {
+      user: {
+        name: 'อลิสา ใจดี',
+        id: 'TC-849204',
+        email: 'alisa.jaidee@thailandconnex.com',
+        phone: '082-340-1223',
+        walletAddress: '0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760',
+        tokenBalance: 41520.00
+      },
+      currentCategoryFilter: 'all',
+      selectedCouponId: null,
+      
+      // Services for booking (PDF Pages 91, 208-220)
+      services: [
+        {
+          id: 'SRV-01',
+          category: 'accommodation',
+          categoryName: 'โรงแรมและที่พัก',
+          title: 'Sukhumvit Park, Bangkok - Marriott Executive Apartments',
+          provider: 'Sukhumvit Park Hotel',
+          location: 'สุขุมวิท, กรุงเทพมหานคร',
+          rating: '4.9 ★',
+          features: ['SHA Plus', 'WiFi ฟรี', 'สระว่ายน้ำ', 'ใกล้ BTS'],
+          price: 28999,
+          unit: 'คืน',
+          image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80',
+          roomType: 'One Bedroom Suite',
+          allotment: 12
+        },
+        {
+          id: 'SRV-02',
+          category: 'accommodation',
+          categoryName: 'โรงแรมและที่พัก',
+          title: 'Cye 428 All Day Hostel @ Sukhumvit',
+          provider: 'Cye Hospitality Group',
+          location: 'คลองเตย, กรุงเทพมหานคร',
+          rating: '4.8 ★',
+          features: ['ฟรีอาหารเช้า', 'Co-working Space', 'WiFi ความเร็วสูง'],
+          price: 1850,
+          unit: 'คืน',
+          image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Deluxe Dormitory Room',
+          allotment: 24
+        },
+        {
+          id: 'SRV-03',
+          category: 'accommodation',
+          categoryName: 'โรงแรมและที่พัก',
+          title: 'เดอะ มยุ สกาย รีสอร์ท แมท หัวหิน (SHA Extra Plus)',
+          provider: 'บจก. สวนพักรักไทยโฮมสเตย์',
+          location: 'หัวหิน, ประจวบคีรีขันธ์',
+          rating: '4.9 ★',
+          features: ['วิวทะเลส่วนตัว', 'อาหารเช้า 2 ท่าน', 'สระว่ายน้ำอินฟินิตี้'],
+          price: 3994,
+          unit: 'คืน',
+          image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Deluxe With Breakfast',
+          allotment: 8
+        },
+        {
+          id: 'SRV-04',
+          category: 'attraction',
+          categoryName: 'แหล่งท่องเที่ยว',
+          title: 'บัตรเข้าชมวิว + ดินเนอร์บุฟเฟ่ต์ ตึกใบหยกสกาย',
+          provider: 'Bangkok Balcony Baiyoke',
+          location: 'ราชเทวี, กรุงเทพมหานคร',
+          rating: '4.7 ★',
+          features: ['ชมวิวชั้น 77 & 84', 'บุฟเฟ่ต์ซีฟู้ดพรีเมียม', 'Open Air Balcony'],
+          price: 1290,
+          unit: 'ท่าน',
+          image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Dinner Buffet Ticket',
+          allotment: 50
+        },
+        {
+          id: 'SRV-05',
+          category: 'wellness',
+          categoryName: 'สุขภาพและสปา',
+          title: '7 Spa Luxury Health & Wellness - Mud Wrap & Thai Herbal',
+          provider: '7 Spa Luxury Group',
+          location: 'บางละมุง, ชลบุรี',
+          rating: '4.9 ★',
+          features: ['นวด 120 นาที', 'อ่างแช่น้ำแร่สมุนไพร', 'Welcome Drink'],
+          price: 1400,
+          unit: 'คอร์ส',
+          image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Mud or Clay Body Wrap (120 Mins)',
+          allotment: 15
+        },
+        {
+          id: 'SRV-06',
+          category: 'tour',
+          categoryName: 'แพ็กเกจทัวร์',
+          title: 'ล่องเรือสำราญ Chao Phraya Princess Cruise ดินเนอร์ใต้แสงจันทร์',
+          provider: 'Chao Phraya Princess',
+          location: 'ท่าเรือเอเชียทีค, กรุงเทพมหานคร',
+          rating: '4.8 ★',
+          features: ['บุฟเฟ่ต์นานาชาติ', 'ดนตรีสด Live Band', 'ล่อง 2 ชั่วโมง'],
+          price: 1200,
+          unit: 'ท่าน',
+          image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Dinner Cruise Standard',
+          allotment: 40
+        },
+        {
+          id: 'SRV-07',
+          category: 'community',
+          categoryName: 'ชุมชนท่องเที่ยว',
+          title: 'วิถีชุมชนท่องเที่ยวบ้านช้างกลาง & การแสดงช้างแสนรู้',
+          provider: 'กลุ่มอนุรักษ์ช้างสุรินทร์',
+          location: 'ท่าตูม, สุรินทร์',
+          rating: '4.9 ★',
+          features: ['อาบน้ำช้าง', 'อาหารพื้นบ้านท้องถิ่น', 'เวิร์กช็อปหัตถกรรม'],
+          price: 450,
+          unit: 'ท่าน',
+          image: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Day Pass + Activity',
+          allotment: 30
+        },
+        {
+          id: 'SRV-08',
+          category: 'mobility',
+          categoryName: 'ขนส่งและยานพาหนะ',
+          title: 'Limousine Express รถตู้ VIP สุวรรณภูมิ - พัทยา',
+          provider: 'Limousine Express Thailand',
+          location: 'กรุงเทพฯ - พัทยา',
+          rating: '4.8 ★',
+          features: ['เบาะนวดปรับไฟฟ้า', 'คนขับมืออาชีพ', 'น้ำดื่มฟรี'],
+          price: 3570,
+          unit: 'เที่ยว',
+          image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
+          roomType: 'Toyota Commuter VIP 9 Seats',
+          allotment: 10
+        }
+      ],
+
+      // Vouchers catalog for redemption (PDF Page 108-112)
+      vouchers: [
+        {
+          id: 'VOUCH-01',
+          name: 'Voucher เข้าชมศูนย์อนุรักษ์ช้างไทย 1 รอบ',
+          category: 'บัตรเข้าชมและกิจกรรม',
+          points: 95,
+          rating: '4.9 ★★★★★',
+          validUntil: '12/03/2567',
+          remaining: 365,
+          desc: 'การแสดงของช้างในวันธรรมดา มี 2 รอบ เวลา 08.00 น. และ 11.00 น. วันหยุดนักขัตฤกษ์เพิ่มรอบ 13.30 น. มีบริการนั่งช้างรอบบริเวณ',
+          image: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=500&q=80'
+        },
+        {
+          id: 'VOUCH-02',
+          name: 'นวดน้ำมันอุ่นทองคำแบบไทยดั้งเดิม 120 นาที',
+          category: 'สุขภาพและสปา',
+          points: 70,
+          rating: '4.8 ★★★★★',
+          validUntil: '30/04/2567',
+          remaining: 120,
+          desc: 'ผ่อนคลายด้วยเทคนิคการนวดแบบไทยผสมผสานเข้ากับการนวดน้ำมันอุ่นกลิ่นอโรมาทองคำ ช่วยฟื้นฟูความเหนื่อยล้าจากการเดินทาง',
+          image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=500&q=80'
+        },
+        {
+          id: 'VOUCH-03',
+          name: 'เซ็ตอาหารไทยรสชาติดั้งเดิมสำหรับ 3 ท่าน พร้อมเครื่องดื่ม',
+          category: 'ร้านอาหาร',
+          points: 120,
+          rating: '4.9 ★★★★★',
+          validUntil: '02/07/2567',
+          remaining: 85,
+          desc: 'ชุดเซ็ตอาหารไทยสำรับเอก ประกอบด้วยต้มยำกุ้งแม่น้ำ แกงเขียวหวานเนื้อน่องลาย ปลากะพงทอดน้ำปลา เสิร์ฟพร้อมข้าวหอมมะลิและเครื่องดื่มสมุนไพร',
+          image: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=500&q=80'
+        },
+        {
+          id: 'VOUCH-04',
+          name: 'กิจกรรมไหว้พระ 9 วัด กรุงเทพมหานคร ใน 1 วัน',
+          category: 'ทัวร์และท่องเที่ยว',
+          points: 150,
+          rating: '4.7 ★★★★☆',
+          validUntil: '20/12/2567',
+          remaining: 200,
+          desc: 'เที่ยวชมและไหว้พระ 9 วัดดังของกรุงเทพฯ เสริมสิริมงคล พร้อมมัคคุเทศก์ผู้เชี่ยวชาญบรรยายประวัติศาสตร์และเรือรับส่งปรับอากาศ',
+          image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=500&q=80'
+        },
+        {
+          id: 'VOUCH-05',
+          name: 'แพ็กเกจที่พัก 3 วัน 2 คืน รีสอร์ทริมทะเลบรรยากาศเงียบสงบ',
+          category: 'ที่พักและโรงแรม',
+          points: 350,
+          rating: '5.0 ★★★★★',
+          validUntil: '30/09/2567',
+          remaining: 45,
+          desc: 'พักผ่อนริมทะเลหัวหิน ห้อง Deluxe Sea View พร้อมอาหารเช้า 2 ท่าน และกิจกรรมพายซับบอร์ดชมพระอาทิตย์ขึ้น',
+          image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=500&q=80'
+        },
+        {
+          id: 'VOUCH-06',
+          name: 'คูปองอาหารเช้าบุฟเฟต์นานาชาติ สำหรับ 2 ท่าน',
+          category: 'ร้านอาหาร',
+          points: 45,
+          rating: '4.6 ★★★★☆',
+          validUntil: '15/06/2567',
+          remaining: 300,
+          desc: 'อิ่มอร่อยกับบุฟเฟต์มื้อเช้า ณ โรงแรมเครือ ThailandCONNEX พรีเมียม ทั้งเมนูตะวันตก ติ่มซำ และอาหารไทยเลิศรส',
+          image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=500&q=80'
+        }
+      ],
+
+      // User's active coupons (PDF Page 113)
+      myCoupons: [
+        {
+          id: 'CPN-1001',
+          name: 'บัตรเข้าชมศูนย์อนุรักษ์ช้างไทย 1 วัน พร้อมคูปองอาหารกลางวัน',
+          detail: 'การแสดงของช้างในวันธรรมดา มี 2 รอบ เวลา 8.00 น. และ 11.00 น. สำหรับวันเสาร์-อาทิตย์ วันหยุดนักขัตฤกษ์ เพิ่มรอบ 13.30 น. บริการนั่งช้างรอบบริเวณ',
+          expDate: '20/05/2567',
+          barcode: '4534 3452 235 56867 678',
+          status: 'active',
+          image: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=400&q=80'
+        },
+        {
+          id: 'CPN-1002',
+          name: 'เซ็ตอาหารไทยสำหรับ 3 ท่าน พร้อมเครื่องดื่มสมุนไพร',
+          detail: 'ชุดเซ็ตอาหารไทยรสชาติดั้งเดิมเสิร์ฟพร้อมเครื่องดื่มชาไทย 3 ท่าน ณ ห้องอาหารเรือนขวัญ',
+          expDate: '02/07/2567',
+          barcode: '8852 9182 341 90283 119',
+          status: 'active',
+          image: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=400&q=80'
+        },
+        {
+          id: 'CPN-1003',
+          name: 'กิจกรรมไหว้พระ 9 วัด กรุงเทพมหานคร แบบ VIP เรือด่วนปรับอากาศ',
+          detail: 'เที่ยวชมและไหว้พระ 9 วัดดังของกรุงเทพฯ ด้วยเรือท่องเที่ยวและรถนำเที่ยวปรับอากาศ',
+          expDate: '20/12/2567',
+          barcode: '9182 1029 482 19283 401',
+          status: 'active',
+          image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=400&q=80'
+        },
+        {
+          id: 'CPN-1004',
+          name: 'ที่พัก 3 วัน 2 คืน รีสอร์ทริมทะเลบรรยากาศเงียบสงบ',
+          detail: 'แพ็กเกจที่พักพร้อมกิจกรรมดำน้ำชมปะการังสุดอลังการ 3 วัน 2 คืน',
+          expDate: '15/10/2566',
+          barcode: '1129 4829 384 10293 847',
+          status: 'used',
+          image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=400&q=80'
+        },
+        {
+          id: 'CPN-1005',
+          name: 'คูปองอาหารเช้าสำหรับ 2 ท่าน โรงแรมสวัสดี',
+          detail: 'อาหารเช้าสำหรับสองท่าน ข้าวต้ม กลิ่นหอมกรุ่น หรือชุดอเมริกันเบรคฟาสต์',
+          expDate: '01/09/2566',
+          barcode: '7721 9482 102 38472 918',
+          status: 'used',
+          image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=400&q=80'
+        }
+      ],
+
+      // Reservations table data (PDF Page 54, 56, 92, 94)
+      reservations: [
+        {
+          id: '100101',
+          guest: 'Hikikaya Hachiman',
+          email: 'hikikaya@traveler.com',
+          phone: '095-809-8123',
+          serviceName: 'Basic Room With Fan / Shared Bath',
+          property: 'Digital Valley Hotel',
+          checkin: '28/12/2022',
+          checkout: '03/01/2023',
+          bookedOn: '07/11/2022',
+          amount: 9000,
+          commission: 180,
+          status: 'Confirmed',
+          notes: 'ขอห้องชั้นบน ไม่สูบบุหรี่'
+        },
+        {
+          id: '100102',
+          guest: 'Hippo Potamus',
+          email: 'hippo.p@gmail.com',
+          phone: '081-234-5678',
+          serviceName: 'Basic Room Shared Bath room',
+          property: 'Digital Valley Hotel',
+          checkin: '01/12/2022',
+          checkout: '05/12/2022',
+          bookedOn: '08/11/2022',
+          amount: 6400,
+          commission: 120,
+          status: 'Cancelled',
+          notes: 'ยกเลิกเนื่องจากเที่ยวบินล่าช้า'
+        },
+        {
+          id: '100103',
+          guest: 'Cat Meow',
+          email: 'catmeow@yahoo.com',
+          phone: '089-987-6543',
+          serviceName: 'Basic Room Shared Bath room',
+          property: 'Digital Valley Hotel',
+          checkin: '02/12/2022',
+          checkout: '07/12/2022',
+          bookedOn: '08/11/2022',
+          amount: 7500,
+          commission: 150,
+          status: 'PendingConfirm',
+          notes: 'รอเอกสารยืนยันจากเอเจนต์'
+        },
+        {
+          id: '100104',
+          guest: 'Canabis Fly',
+          email: 'flycan@outlook.com',
+          phone: '084-555-0192',
+          serviceName: 'Basic Room Shared Bath room',
+          property: 'Digital Valley Hotel',
+          checkin: '10/12/2022',
+          checkout: '15/12/2022',
+          bookedOn: '23/11/2022',
+          amount: 8000,
+          commission: 160,
+          status: 'Completed',
+          notes: 'เช็คเอาท์เรียบร้อย'
+        },
+        {
+          id: '100105',
+          guest: 'Need Sleep',
+          email: 'sleepnow@gmail.com',
+          phone: '092-441-2300',
+          serviceName: 'Basic Room Shared Bath room',
+          property: 'Digital Valley Hotel',
+          checkin: '20/12/2022',
+          checkout: '24/12/2022',
+          bookedOn: '23/11/2022',
+          amount: 5600,
+          commission: 110,
+          status: 'Confirmed',
+          notes: 'ต้องการเตียงคู่'
+        },
+        {
+          id: '215983224',
+          guest: 'Snow Witch',
+          email: 'snow.witch@travizgo.com',
+          phone: '086-111-2233',
+          serviceName: 'Sealife Bangkok - SLBK Aquarium Admission',
+          property: 'Sea Life Bangkok Co., Ltd.',
+          checkin: '23/02/2023',
+          checkout: '23/02/2023',
+          bookedOn: '08/02/2023',
+          amount: 430,
+          commission: 30,
+          status: 'Completed',
+          notes: 'ตั๋วเด็กและผู้ใหญ่ รวม 2 ใบ'
+        }
+      ],
+
+      // Token Transaction logs (PDF Page 136-137, 148)
+      tokenLogs: [
+        {
+          time: '2023-02-15 14:20:10',
+          action: 'Burn (Redeem)',
+          actionCode: 'B',
+          detail: 'แลก Voucher ศูนย์อนุรักษ์ช้างไทย 1 รอบ',
+          amount: -95.00,
+          balance: 41520.00,
+          txHash: '0xc4a9ca7a1e8e1de87385e02bb4afc0d320f993bcfe665ad58f0f0dea',
+          status: 'Confirmed'
+        },
+        {
+          time: '2023-02-10 11:05:44',
+          action: 'Mint (Earn)',
+          actionCode: 'M',
+          detail: 'สะสมแต้มจากการจองที่พัก Sukhumvit Park',
+          amount: +1200.00,
+          balance: 41615.00,
+          txHash: '0x199693131908271dfccad417c162554e0761160e971022ea2284b3700c3c7',
+          status: 'Confirmed'
+        },
+        {
+          time: '2023-01-28 09:30:15',
+          action: 'Burn (Redeem)',
+          actionCode: 'B',
+          detail: 'แลกคูปองนวดแผนไทยอโรมา 120 นาที',
+          amount: -70.00,
+          balance: 40415.00,
+          txHash: '0x8f2d120938472910283948571029384756102938475610293847561029384756',
+          status: 'Confirmed'
+        },
+        {
+          time: '2023-01-15 18:45:00',
+          action: 'Transfer Out',
+          actionCode: 'T',
+          detail: 'โอนคะแนนให้ผู้ใช้ TC-990142 (สมชาย ใจดี)',
+          amount: -500.00,
+          balance: 40485.00,
+          txHash: '0x7e10293847561029384756102938475610293847561029384756102938475610',
+          status: 'Confirmed'
+        },
+        {
+          time: '2023-01-05 10:20:00',
+          action: 'Mint (Earn)',
+          actionCode: 'M',
+          detail: 'โบนัสต้อนรับสมาชิกใหม่ ThailandCONNEX',
+          amount: +5000.00,
+          balance: 40985.00,
+          txHash: '0x3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b',
+          status: 'Confirmed'
+        }
+      ],
+
+      // Directory of services (PDF Page 175-242)
+      directory: [
+        { no: 1, cat: 'Accommodation', supplier: 'DNA Resort & Spa', name: 'Deluxe Suite with Jacuzzi', province: 'นครราชสีมา (ปากช่อง)', price: 3990, allotment: 15 },
+        { no: 2, cat: 'Accommodation', supplier: 'เรือนศรีสิริ เกสท์เฮาส์', name: 'Standard Twin Room', province: 'สุโขทัย (เมือง)', price: 850, allotment: 8 },
+        { no: 3, cat: 'Accommodation', supplier: 'เดอะ เซเว่น กระบี่ (SHA Extra Plus)', name: 'Deluxe Sea View Balcony', province: 'กระบี่ (อ่าวนาง)', price: 2450, allotment: 20 },
+        { no: 4, cat: 'Accommodation', supplier: 'โรงแรมชลจันทร์ พัทยา รีสอร์ท', name: 'Superior Ocean Wing', province: 'ชลบุรี (พัทยา)', price: 1890, allotment: 35 },
+        { no: 5, cat: 'Mobility', supplier: 'Limousine Express Saraburi', name: 'Toyota Commuter BKK-Saraburi', province: 'กรุงเทพฯ - สระบุรี', price: 3570, allotment: 5 },
+        { no: 6, cat: 'Mobility', supplier: 'Thai Smile Airways', name: 'Round Trip BKK - CNX (Chiang Mai)', province: 'กรุงเทพฯ - เชียงใหม่', price: 9112, allotment: 12 },
+        { no: 7, cat: 'Mobility', supplier: 'Chic Car Rent Chiang Mai', name: 'Toyota Fortuner SUV 2.4 (Day)', province: 'เชียงใหม่ (สนามบิน)', price: 2273, allotment: 10 },
+        { no: 8, cat: 'Attraction', supplier: 'Chao Phraya Princess Cruise', name: 'Dinner Cruise Ticket at Asiatique', province: 'กรุงเทพฯ (แม่น้ำเจ้าพระยา)', price: 1200, allotment: 100 },
+        { no: 9, cat: 'Attraction', supplier: 'Escape Room Bangkok', name: 'Standard Escape 50 mins - 3 People', province: 'กรุงเทพฯ (สยามสแควร์)', price: 2370, allotment: 25 },
+        { no: 10, cat: 'Attraction', supplier: 'Siam Serpentarium', name: 'Ticket Foreigner / Thai (Children & Adult)', province: 'กรุงเทพฯ (ลาดกระบัง)', price: 250, allotment: 80 },
+        { no: 11, cat: 'Wellness', supplier: '7 Spa Luxury Health & Wellness', name: 'Mud or Clay Body Wrap (120 min)', province: 'ชลบุรี (พัทยา)', price: 1400, allotment: 15 },
+        { no: 12, cat: 'Wellness', supplier: 'ราชาธรา สปา แอนด์ มาสซาจ', name: 'นวดไทยโบราณคลายกล้ามเนื้อ 90 นาที', province: 'สงขลา (หาดใหญ่)', price: 350, allotment: 30 },
+        { no: 13, cat: 'Wellness', supplier: 'โอเอซิส บิวตี้ แอนด์ เวลเนส', name: 'Aromatherapy Massage Candle Experience', province: 'ชลบุรี (บางแสน)', price: 1350, allotment: 12 },
+        { no: 14, cat: 'Tour', supplier: 'Dave Malhotra Thailand Tour', name: 'Half Day (4-5 hrs) VIP Guide English', province: 'กรุงเทพฯ', price: 1700, allotment: 10 },
+        { no: 15, cat: 'Tour', supplier: 'สมพร แอนด์ ที ออลลิเดย์ ทัวร์', name: 'MICE Business Travel Package (Full Day)', province: 'กรุงเทพฯ / นนทบุรี', price: 6000, allotment: 8 },
+        { no: 16, cat: 'Community', supplier: 'กลุ่มท่องเที่ยวบ้านช้างกลาง', name: 'Elephant Show & Bathing Community Tour', province: 'สุรินทร์ (ท่าตูม)', price: 200, allotment: 40 },
+        { no: 17, cat: 'Community', supplier: 'ชุมชนท่องเที่ยวบ้านสันป่าเหียง', name: 'Art Therapy & Eco-Nature Workshop 2D1N', province: 'เชียงราย', price: 3420, allotment: 6 },
+        { no: 18, cat: 'Food', supplier: 'คาเฟ่ดำเนินสะดวก', name: 'เซ็ตอาหารไทยโบราณพร้อมเครื่องดื่มเย็น', province: 'ราชบุรี (ดำเนินสะดวก)', price: 280, allotment: 50 },
+        { no: 19, cat: 'Food', supplier: 'Benihana The Japanese Steakhouse', name: 'Teppanyaki Seafood & Beef Set', province: 'กรุงเทพฯ (เจริญนคร)', price: 2150, allotment: 20 },
+        { no: 20, cat: 'Retail', supplier: 'Ananya Koh Chang Coconut Oil', name: 'Pure Organic Virgin Coconut Oil 500ml', province: 'ตราด (เกาะช้าง)', price: 250, allotment: 100 },
+        { no: 21, cat: 'Retail', supplier: 'OTOP Outlet สระแก้ว', name: 'กระเป๋าผ้าไหมทอมือลายโบราณ', province: 'สระแก้ว', price: 750, allotment: 30 }
+      ]
+    };
+
+    // Initialize application
+    document.addEventListener('DOMContentLoaded', () => {
+      renderServices();
+      renderRewards();
+      renderCoupons();
+      renderReservations();
+      renderTokenLogs();
+      renderDirectory();
+      setupTabs();
+      updateHeaderBadges();
+    });
+
+    // Tab switcher
+    function setupTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.target;
+          switchTab(target);
+        });
+      });
+    }
+
+    function switchTab(viewId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === viewId));
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.toggle('active', p.id === viewId));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateHeaderBadges() {
+      document.getElementById('top-token-balance').textContent = state.user.tokenBalance.toLocaleString('th-TH') + ' TCP';
+      document.getElementById('rewards-balance-display').textContent = state.user.tokenBalance.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' TCP';
+      document.getElementById('wallet-big-balance').textContent = state.user.tokenBalance.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' TCP';
+      
+      const activeCount = state.myCoupons.filter(c => c.status === 'active').length;
+      document.getElementById('coupon-count-badge').textContent = activeCount;
+      document.getElementById('active-coupon-count').textContent = activeCount;
+      document.querySelectorAll('.coupon-pill-count').forEach(el => el.textContent = activeCount);
+    }
+
+    // Render Services
+    function renderServices() {
+      const container = document.getElementById('services-grid');
+      const filtered = state.services.filter(s => {
+        if (state.currentCategoryFilter !== 'all' && s.category !== state.currentCategoryFilter) return false;
+        return true;
+      });
+
+      document.getElementById('search-result-count').textContent = `พบ ${filtered.length} รายการแนะนำตรงตามมาตรฐาน ThailandCONNEX`;
+
+      container.innerHTML = filtered.map(item => `
+        <div class="service-card">
+          <div class="card-thumb" style="background-image: url('${item.image}')">
+            <span class="card-category-badge">${item.categoryName}</span>
+            <span class="card-rating-badge">${item.rating}</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${item.title}</h3>
+            <div class="card-loc">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              ${item.location} • โดย ${item.provider}
+            </div>
+            <div class="card-features">
+              ${item.features.map(f => `<span class="feat-tag">${f}</span>`).join('')}
+            </div>
+            <div class="card-foot">
+              <div class="price-wrap">
+                <span class="price-sub">เริ่มต้น / ${item.unit}</span>
+                <span class="price-val">฿${item.price.toLocaleString('th-TH')}</span>
+              </div>
+              <button class="btn-book" onclick="instantBook('${item.id}')">
+                จองทันที (Book)
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setCategoryFilter(cat, btn) {
+      state.currentCategoryFilter = cat;
+      document.querySelectorAll('.category-pills .cat-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      renderServices();
+    }
+
+    function filterServices() {
+      renderServices();
+      showToast('อัปเดตผลการค้นหาตามเงื่อนไขเรียบร้อย');
+    }
+
+    // Instant booking simulation
+    function instantBook(serviceId) {
+      const s = state.services.find(x => x.id === serviceId);
+      if (!s) return;
+
+      const newId = (100100 + state.reservations.length + 1).toString();
+      const today = new Date().toLocaleDateString('th-TH');
+      
+      const newBooking = {
+        id: newId,
+        guest: state.user.name,
+        email: state.user.email,
+        phone: state.user.phone,
+        serviceName: s.title,
+        property: s.provider,
+        checkin: '20/11/2026',
+        checkout: '22/11/2026',
+        bookedOn: today,
+        amount: s.price,
+        commission: Math.round(s.price * 0.05),
+        status: 'Confirmed',
+        notes: 'จองออนไลน์ผ่าน ThailandCONNEX Platform (Earn Points)'
+      };
+
+      state.reservations.unshift(newBooking);
+      
+      // Earn points (5% of booking value)
+      const earnedPoints = Math.round(s.price * 0.05);
+      state.user.tokenBalance += earnedPoints;
+
+      state.tokenLogs.unshift({
+        time: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        action: 'Mint (Earn)',
+        actionCode: 'M',
+        detail: `รับคะแนนจากการจอง ${s.title}`,
+        amount: +earnedPoints,
+        balance: state.user.tokenBalance,
+        txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+        status: 'Confirmed'
+      });
+
+      updateHeaderBadges();
+      renderReservations();
+      renderTokenLogs();
+
+      showToast(`🎉 ทำการจองสำเร็จ! รหัสการจอง: ${newId} (รับ +${earnedPoints} TCP)`);
+      setTimeout(() => switchTab('view-reservations'), 600);
+    }
+
+    // Render Rewards Catalog
+    function renderRewards() {
+      const container = document.getElementById('rewards-grid');
+      container.innerHTML = state.vouchers.map(v => `
+        <div class="voucher-card">
+          <div class="voucher-top" style="background-image: url('${v.image}')">
+            <span class="voucher-points-badge">${v.points} TCP</span>
+          </div>
+          <div class="voucher-body">
+            <h4 class="voucher-title">${v.name}</h4>
+            <div class="voucher-desc">${v.desc}</div>
+            <div class="voucher-meta">
+              <span>หมดอายุ: ${v.validUntil}</span>
+              <span>คงเหลือ: <b>${v.remaining} ใบ</b></span>
+            </div>
+            <button class="btn-redeem" onclick="redeemVoucher('${v.id}')">
+              แลกสิทธิ์ (${v.points} คะแนน)
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Redeem Voucher Action
+    function redeemVoucher(voucherId) {
+      const v = state.vouchers.find(x => x.id === voucherId);
+      if (!v) return;
+
+      if (state.user.tokenBalance < v.points) {
+        showToast('❌ คะแนน TCP ของคุณไม่เพียงพอสำหรับการแลกรายการนี้', true);
+        return;
+      }
+
+      state.user.tokenBalance -= v.points;
+      v.remaining -= 1;
+
+      // Add to myCoupons
+      const randomBarcode = Array.from({length: 16}, () => Math.floor(Math.random()*10)).join('').replace(/(\d{4})/g, '$1 ').trim();
+      const newCoupon = {
+        id: 'CPN-' + (1000 + state.myCoupons.length + 1),
+        name: v.name,
+        detail: v.desc,
+        expDate: v.validUntil,
+        barcode: randomBarcode,
+        status: 'active',
+        image: v.image
+      };
+      state.myCoupons.unshift(newCoupon);
+
+      // Add blockchain log
+      state.tokenLogs.unshift({
+        time: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        action: 'Burn (Redeem)',
+        actionCode: 'B',
+        detail: `แลกสิทธิ์ ${v.name}`,
+        amount: -v.points,
+        balance: state.user.tokenBalance,
+        txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+        status: 'Confirmed'
+      });
+
+      updateHeaderBadges();
+      renderRewards();
+      renderCoupons();
+      renderTokenLogs();
+
+      showToast(`✨ แลกคูปองสำเร็จ! ใช้ไป ${v.points} TCP ตรวจสอบที่เมนู "คูปองของฉัน"`);
+    }
+
+    // Render My Coupons
+    function renderCoupons(filter = 'active') {
+      const container = document.getElementById('coupons-list');
+      const filtered = state.myCoupons.filter(c => c.status === filter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="background:#fff; border-radius:14px; padding:40px; text-align:center; color:var(--muted); border:1px solid var(--line);">
+            ยังไม่มีคูปองในหมวดนี้ คุณสามารถใช้คะแนนแลกคูปองได้ที่แท็บ "แลกคะแนน TCP"
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => `
+        <div class="coupon-ticket">
+          <div class="coupon-img" style="background-image: url('${c.image}')"></div>
+          <div class="coupon-info">
+            <h3 class="coupon-title">${c.name}</h3>
+            <p class="coupon-detail">${c.detail}</p>
+            <div class="coupon-exp">⏰ หมดอายุ: ${c.expDate}</div>
+          </div>
+          <div class="coupon-side">
+            ${c.status === 'active' ? `
+              <button class="btn-use-coupon" onclick="openCouponModal('${c.id}')">
+                ดูบาร์โค้ด / ใช้สิทธิ์
+              </button>
+              <span style="font-size:11px; color:var(--teal); font-weight:600;">● พร้อมใช้งาน</span>
+            ` : `
+              <span style="color:var(--muted); font-size:13px; font-weight:600;">ใช้สิทธิ์แล้ว</span>
+              <span style="font-size:10px; color:#94a3b8;">รหัส ${c.barcode.substring(0, 9)}...</span>
+            `}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterCouponState(status, btn) {
+      document.querySelectorAll('#view-coupons .cat-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCoupons(status);
+    }
+
+    function openCouponModal(couponId) {
+      const c = state.myCoupons.find(x => x.id === couponId);
+      if (!c) return;
+
+      state.selectedCouponId = couponId;
+      document.getElementById('modal-voucher-name').textContent = c.name;
+      document.getElementById('modal-barcode-num').textContent = c.barcode;
+      document.getElementById('modal-coupon-rules').innerHTML = `วันหมดอายุ: <b>${c.expDate}</b> • ยื่นบาร์โค้ดนี้ให้ผู้ประกอบการเพื่อยืนยันการรับสิทธิ์`;
+      
+      openModal('voucher-code-modal');
+    }
+
+    function markCouponAsUsed() {
+      if (!state.selectedCouponId) return;
+      const c = state.myCoupons.find(x => x.id === state.selectedCouponId);
+      if (c) {
+        c.status = 'used';
+        closeModal('voucher-code-modal');
+        renderCoupons();
+        updateHeaderBadges();
+        showToast('✅ ยืนยันการใช้สิทธิ์คูปองเรียบร้อยแล้ว');
+      }
+    }
+
+    // Render Reservations Table
+    function renderReservations() {
+      const tbody = document.getElementById('reservations-tbody');
+      const search = (document.getElementById('res-search')?.value || '').toLowerCase();
+      const statusFilter = document.getElementById('res-status-filter')?.value || 'all';
+
+      const filtered = state.reservations.filter(r => {
+        if (statusFilter !== 'all' && r.status !== statusFilter) return false;
+        if (search && !r.id.toLowerCase().includes(search) && !r.guest.toLowerCase().includes(search) && !r.serviceName.toLowerCase().includes(search)) return false;
+        return true;
+      });
+
+      tbody.innerHTML = filtered.map(r => `
+        <tr>
+          <td><b style="color:var(--blue); font-family:monospace;">BK-${r.id}</b></td>
+          <td><b>${r.guest}</b><br><small style="color:var(--muted);">${r.phone}</small></td>
+          <td>${r.serviceName}<br><small style="color:var(--muted);">${r.property}</small></td>
+          <td>${r.checkin}</td>
+          <td>${r.checkout}</td>
+          <td><b style="font-family:'Plus Jakarta Sans';">฿${r.amount.toLocaleString('th-TH')}</b></td>
+          <td><small style="color:var(--muted);">${r.bookedOn}</small></td>
+          <td>
+            <span class="status-badge ${r.status.toLowerCase()}">
+              ${r.status === 'Confirmed' ? 'ยืนยันแล้ว' : r.status === 'PendingConfirm' ? 'รอตรวจสอบ' : r.status === 'Completed' ? 'เสร็จสิ้น' : 'ยกเลิก'}
+            </span>
+          </td>
+          <td style="text-align:right;">
+            <button class="btn-export" style="height:30px; padding:0 10px; font-size:11px;" onclick="viewBookingDetail('${r.id}')">
+              รายละเอียด
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      document.getElementById('res-table-summary').textContent = `แสดงรายการที่ 1 ถึง ${filtered.length} จากทั้งหมด ${state.reservations.length} รายการ`;
+    }
+
+    function filterReservationsTable() {
+      renderReservations();
+    }
+
+    function sortReservations(field) {
+      if (field === 'id') {
+        state.reservations.reverse();
+      } else if (field === 'amount') {
+        state.reservations.sort((a,b) => b.amount - a.amount);
+      }
+      renderReservations();
+    }
+
+    function viewBookingDetail(bookingId) {
+      const r = state.reservations.find(x => x.id === bookingId);
+      if (!r) return;
+
+      const body = document.getElementById('booking-modal-body');
+      body.innerHTML = `
+        <div style="background:#f8fafc; border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+              <span style="font-size:11px; color:var(--muted);">หมายเลขการจอง (Booking ID)</span>
+              <div style="font-size:20px; font-weight:800; color:var(--navy); font-family:monospace;">BK-${r.id}</div>
+            </div>
+            <span class="status-badge ${r.status.toLowerCase()}">${r.status}</span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px;">
+            <div><b>ผู้จอง:</b> ${r.guest}</div>
+            <div><b>เบอร์โทร:</b> ${r.phone}</div>
+            <div><b>อีเมล:</b> ${r.email}</div>
+            <div><b>วันที่ทำรายการ:</b> ${r.bookedOn}</div>
+          </div>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:18px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">ข้อมูลบริการ / ที่พัก</h4>
+          <div style="font-size:14px; font-weight:600; margin-bottom:4px;">${r.serviceName}</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:12px;">ผู้ให้บริการ: ${r.property}</div>
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f1f5f9; padding:10px; border-radius:8px; font-size:12px;">
+            <div>เช็คอิน: <b>${r.checkin}</b> (ตั้งแต่ 14:00 น.)</div>
+            <div>เช็คเอาท์: <b>${r.checkout}</b> (ก่อน 12:00 น.)</div>
+          </div>
+        </div>
+
+        <div style="border:1px solid var(--line); border-radius:12px; padding:16px;">
+          <h4 style="margin:0 0 10px; color:var(--navy);">สรุปยอดเงินและการชำระ</h4>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:13px;">
+            <span>ยอดชำระรวม (Total Price):</span>
+            <b>฿${r.amount.toLocaleString('th-TH')}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; color:var(--muted);">
+            <span>ค่าธรรมเนียมแพลตฟอร์ม (Included):</span>
+            <span>฿${r.commission.toLocaleString('th-TH')}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top:1px solid var(--line); padding-top:8px; font-size:15px; font-weight:700; color:var(--navy);">
+            <span>ยอดสุทธิ:</span>
+            <span>฿${r.amount.toLocaleString('th-TH')}</span>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; font-size:12px; color:var(--muted);">
+          <b>เงื่อนไขการยกเลิก:</b> ยกเลิกฟรีก่อนวันเข้าพัก 14 วัน หากยกเลิกหลังจากนั้นอาจมีค่าธรรมเนียมตามนโยบายของโรงแรม
+        </div>
+      `;
+
+      openModal('booking-detail-modal');
+    }
+
+    function printReservationSlip() {
+      window.print();
+    }
+
+    // Render Token Logs Table
+    function renderTokenLogs() {
+      const tbody = document.getElementById('token-tx-tbody');
+      tbody.innerHTML = state.tokenLogs.map(l => `
+        <tr>
+          <td><small style="color:var(--muted);">${l.time}</small></td>
+          <td>
+            <span class="status-badge ${l.actionCode === 'M' ? 'confirmed' : l.actionCode === 'B' ? 'pending' : 'completed'}">
+              ${l.action}
+            </span>
+          </td>
+          <td><b>${l.detail}</b></td>
+          <td>
+            <b style="font-family:'Plus Jakarta Sans'; color:${l.amount > 0 ? 'var(--teal)' : 'var(--orange)'};">
+              ${l.amount > 0 ? '+' : ''}${l.amount.toLocaleString('th-TH', {minimumFractionDigits: 2})} TCP
+            </b>
+          </td>
+          <td><span style="font-family:'Plus Jakarta Sans';">${l.balance.toLocaleString('th-TH', {minimumFractionDigits: 2})}</span></td>
+          <td><span style="font-family:monospace; font-size:11px; color:var(--muted);">${l.txHash.substring(0, 16)}...</span></td>
+          <td><span class="status-badge confirmed">สำเร็จ</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Execute Token Transfer
+    function executeTokenTransfer() {
+      const target = document.getElementById('transfer-target').value.trim();
+      const amount = parseFloat(document.getElementById('transfer-amount').value);
+
+      if (!target) {
+        showToast('กรุณาระบุหมายเลขโทรศัพท์หรือ ThailandCONNEX ID ปลายทาง', true);
+        return;
+      }
+      if (isNaN(amount) || amount <= 0) {
+        showToast('กรุณาระบุจำนวนคะแนนที่ถูกต้อง', true);
+        return;
+      }
+      if (amount > state.user.tokenBalance) {
+        showToast('ยอดคงเหลือของคุณไม่พอสำหรับการโอน', true);
+        return;
+      }
+
+      state.user.tokenBalance -= amount;
+      
+      state.tokenLogs.unshift({
+        time: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        action: 'Transfer Out',
+        actionCode: 'T',
+        detail: `โอนคะแนนให้ ${target}`,
+        amount: -amount,
+        balance: state.user.tokenBalance,
+        txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+        status: 'Confirmed'
+      });
+
+      document.getElementById('transfer-target').value = '';
+      document.getElementById('transfer-amount').value = '';
+
+      updateHeaderBadges();
+      renderTokenLogs();
+      showToast(`🚀 โอนสำเร็จ ${amount.toLocaleString('th-TH')} TCP ให้กับ ${target}`);
+    }
+
+    // Render National Services Directory Table
+    function renderDirectory() {
+      const tbody = document.getElementById('directory-tbody');
+      const cat = document.getElementById('dir-category-select').value;
+      const search = (document.getElementById('dir-search').value || '').toLowerCase();
+
+      const filtered = state.directory.filter(d => {
+        if (cat !== 'all' && d.cat !== cat) return false;
+        if (search && !d.supplier.toLowerCase().includes(search) && !d.name.toLowerCase().includes(search) && !d.province.toLowerCase().includes(search)) return false;
+        return true;
+      });
+
+      tbody.innerHTML = filtered.map(d => `
+        <tr>
+          <td>${d.no}</td>
+          <td><span class="feat-tag">${d.cat}</span></td>
+          <td><b>${d.supplier}</b></td>
+          <td>${d.name}</td>
+          <td>${d.province}</td>
+          <td><b style="font-family:'Plus Jakarta Sans';">฿${d.price.toLocaleString('th-TH')}</b></td>
+          <td><span style="color:var(--teal); font-weight:600;">${d.allotment} หน่วย</span></td>
+          <td>
+            <button class="btn-book" style="padding:4px 10px; font-size:11px;" onclick="bookFromDirectory('${d.name}', ${d.price}, '${d.supplier}')">
+              จองบริการ
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      document.getElementById('dir-count-info').textContent = `แสดง ${filtered.length} รายการ (จากสารบบผู้ประกอบการโครงการ)`;
+    }
+
+    function filterDirectoryTable() {
+      renderDirectory();
+    }
+
+    function bookFromDirectory(name, price, supplier) {
+      const newId = (100100 + state.reservations.length + 1).toString();
+      state.reservations.unshift({
+        id: newId,
+        guest: state.user.name,
+        email: state.user.email,
+        phone: state.user.phone,
+        serviceName: name,
+        property: supplier,
+        checkin: '25/11/2026',
+        checkout: '26/11/2026',
+        bookedOn: new Date().toLocaleDateString('th-TH'),
+        amount: price,
+        commission: Math.round(price * 0.05),
+        status: 'Confirmed',
+        notes: 'จองผ่าน Data Bank Directory'
+      });
+
+      const earned = Math.round(price * 0.05);
+      state.user.tokenBalance += earned;
+
+      updateHeaderBadges();
+      renderReservations();
+      showToast(`จองสำเร็จ: ${name} (BK-${newId}) ได้รับ +${earned} TCP`);
+      switchTab('view-reservations');
+    }
+
+    // Modal Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.add('show');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    function openProfileModal() {
+      alert(`บัญชีผู้ใช้งาน: ${state.user.name}\nอีเมล: ${state.user.email}\nเบอร์โทร: ${state.user.phone}\nรหัสสมาชิก: ${state.user.id}\nกระเป๋าเงิน ERC-20: ${state.user.walletAddress}\nยอดคะแนนสะสม: ${state.user.tokenBalance} TCP`);
+    }
+
+    // CSV Exporters
+    function exportReservationsCSV() {
+      const headers = ['Booking ID', 'Guest Name', 'Phone', 'Service', 'Property', 'CheckIn', 'CheckOut', 'Amount', 'Status'];
+      const rows = state.reservations.map(r => [
+        `BK-${r.id}`, `"${r.guest}"`, r.phone, `"${r.serviceName}"`, `"${r.property}"`, r.checkin, r.checkout, r.amount, r.status
+      ]);
+      downloadCSV('thailandconnex_reservations.csv', headers, rows);
+    }
+
+    function exportTokenLogsCSV() {
+      const headers = ['Timestamp', 'Action', 'Detail', 'Amount', 'Balance', 'TxHash'];
+      const rows = state.tokenLogs.map(l => [
+        l.time, l.action, `"${l.detail}"`, l.amount, l.balance, l.txHash
+      ]);
+      downloadCSV('thailandconnex_token_logs.csv', headers, rows);
+    }
+
+    function exportDirectoryCSV() {
+      const headers = ['No', 'Category', 'Supplier', 'Product/Service', 'Location', 'Price', 'Allotment'];
+      const rows = state.directory.map(d => [
+        d.no, d.cat, `"${d.supplier}"`, `"${d.name}"`, `"${d.province}"`, d.price, d.allotment
+      ]);
+      downloadCSV('thailandconnex_services_directory.csv', headers, rows);
+    }
+
+    function downloadCSV(filename, headers, rows) {
+      const bom = '\uFEFF';
+      const content = bom + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`ดาวน์โหลดไฟล์ ${filename} เรียบร้อยแล้ว`);
+    }
+
+    // Toast Messenger
+    function showToast(msg, isError = false) {
+      const container = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast-item' + (isError ? ' error' : '');
+      t.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${isError ? '#ef4444' : '#10b981'}" stroke-width="2">
+          ${isError ? '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>' : '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>'}
+        </svg>
+        <span>${msg}</span>
+      `;
+      container.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => t.remove(), 300);
+      }, 3500);
+    }
   </script>
 </body>
 </html>

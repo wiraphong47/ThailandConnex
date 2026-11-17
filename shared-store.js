@@ -14,10 +14,10 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const STORAGE_KEY = 'TC_DATA_STORE_V4';
+  const STORAGE_KEY = 'TC_DATA_STORE_V5';
 
   const DEFAULT_STATE = {
-    version: 4,
+    version: 5,
     lastUpdated: Date.now(),
     user: {
       name: 'อลิสา ใจดี',
@@ -1046,6 +1046,11 @@
     }
 
     // Reset Defaults
+    getServiceById(id) {
+      const state = this.getState();
+      return (state.services || []).find(s => s.id === id) || null;
+    }
+
     resetDefaults() {
       const fresh = JSON.parse(JSON.stringify(DEFAULT_STATE));
       this.save(fresh);

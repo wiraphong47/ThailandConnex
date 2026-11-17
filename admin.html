@@ -2015,49 +2015,65 @@
                   <th>ผู้ให้บริการ (Supplier)</th>
                   <th>หมวดหมู่</th>
                   <th>ราคาขาย</th>
-                  <th style="text-align: right;">สถานะ</th>
+                  <th>สถานะ</th>
+                  <th style="text-align: right;">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>1</td>
                   <td><b>Deluxe With Breakfast</b></td>
-                  <td>เดอะ มลุ สกาย รีสอร์ท แอท หัวหิน</td>
-                  <td>ที่พัก</td>
+                  <td>เดอะ มยุ สกาย รีสอร์ท แมท หัวหิน</td>
+                  <td><span class="badge" style="background:#dbeafe; color:#1e40af;">ที่พัก</span></td>
                   <td><b>฿3,994.27</b></td>
-                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                  <td><span class="badge badge-success">Available</span></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-03')">ดูรายละเอียดที่พัก 🏨</button>
+                  </td>
                 </tr>
                 <tr>
                   <td>2</td>
                   <td><b>Limousine Express - Bangkok-Saraburi</b></td>
                   <td>เจ วัน บิสซิเนส ทรานสปอร์ต</td>
-                  <td>ขนส่ง</td>
+                  <td><span class="badge" style="background:#f1f5f9; color:#475569;">ขนส่ง</span></td>
                   <td><b>฿3,570.00</b></td>
-                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                  <td><span class="badge badge-success">Available</span></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-08')">ดูรายละเอียด 👁️</button>
+                  </td>
                 </tr>
                 <tr>
                   <td>3</td>
                   <td><b>Dinner Cruise Ticket at Asiatique Pier</b></td>
                   <td>Chao Phraya Princess Cruise</td>
-                  <td>สถานที่ท่องเที่ยว</td>
+                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">สถานที่ท่องเที่ยว</span></td>
                   <td><b>฿1,200.00</b></td>
-                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                  <td><span class="badge badge-success">Available</span></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-06')">ดูรายละเอียด 👁️</button>
+                  </td>
                 </tr>
                 <tr>
                   <td>4</td>
                   <td><b>Mud or Clay Body Wrap (90 mins)</b></td>
                   <td>7 Spa Luxury - Health & Wellness</td>
-                  <td>สุขภาพ/สปา</td>
+                  <td><span class="badge" style="background:#fce7f3; color:#be185d;">สุขภาพ/สปา</span></td>
                   <td><b>฿1,400.00</b></td>
-                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                  <td><span class="badge badge-success">Available</span></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-05')">ดูรายละเอียด 👁️</button>
+                  </td>
                 </tr>
                 <tr>
                   <td>5</td>
-                  <td><b>Crispy Pork Larb Balls</b></td>
-                  <td>คาเฟ่ดำเนินสะดวก</td>
-                  <td>อาหาร/เครื่องดื่ม</td>
-                  <td><b>฿280.00</b></td>
-                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                  <td><b>Sukhumvit Park Executive Suite</b></td>
+                  <td>Sukhumvit Park Hotel</td>
+                  <td><span class="badge" style="background:#dbeafe; color:#1e40af;">ที่พัก</span></td>
+                  <td><b>฿28,999.00</b></td>
+                  <td><span class="badge badge-success">Available</span></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-01')">ดูรายละเอียดที่พัก 🏨</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -2164,6 +2180,106 @@
   </div>
 
   
+  
+  <!-- Modal Admin Hotel Detail (PDF Page 63-69, 208-220) -->
+  <div class="modal-overlay" id="modal-admin-hotel-detail" onclick="if(event.target===this) closeModal('modal-admin-hotel-detail')">
+    <div class="modal-card" style="max-width:760px; width:95%;">
+      <div class="modal-head" style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:22px;">🏨</span>
+            <h3 id="admin-hotel-title" style="margin:0; font-size:17px; color:var(--text-dark);">เดอะ มยุ สกาย รีสอร์ท แมท หัวหิน</h3>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
+            รหัสสินค้า: <code id="admin-hotel-sku" style="background:#e2e8f0; padding:1px 5px; border-radius:4px;">HTL-003994</code> • ทะเบียน ททท. 12/03291 • DBD Verified ✓
+          </div>
+        </div>
+        <button style="background:transparent; font-size:18px; border:none; cursor:pointer;" onclick="closeModal('modal-admin-hotel-detail')">✕</button>
+      </div>
+
+      <div class="modal-body" style="padding:18px 24px; max-height:75vh; overflow-y:auto;">
+        
+        <!-- Image & Basic Stats Grid -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
+          <div id="admin-hotel-img" style="height:200px; background-size:cover; background-position:center; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.06);"></div>
+          <div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; height:100%; box-sizing:border-box;">
+              <small style="color:var(--text-muted); font-size:11px; font-weight:700; text-transform:uppercase;">โครงสร้างราคาและการแบ่งกำไร (Pricing Breakdown)</small>
+              <div style="margin-top:10px; display:flex; justify-content:space-between; font-size:13px; padding-bottom:6px; border-bottom:1px dashed #e2e8f0;">
+                <span>ราคาต้นทุน B2B (Net Price):</span>
+                <b id="admin-hotel-net">฿3,794.00</b>
+              </div>
+              <div style="margin-top:6px; display:flex; justify-content:space-between; font-size:13px; padding-bottom:6px; border-bottom:1px dashed #e2e8f0;">
+                <span>ส่วนต่างกำไร (Markup standard A):</span>
+                <b id="admin-hotel-markup" style="color:#10b981;">+฿200.27</b>
+              </div>
+              <div style="margin-top:8px; display:flex; justify-content:space-between; font-size:15px; font-weight:700;">
+                <span>ราคาขายสุทธิ (Selling Price):</span>
+                <span id="admin-hotel-price" style="color:var(--primary-blue);">฿3,994.27</span>
+              </div>
+              <div style="margin-top:10px; font-size:12px; color:var(--text-muted);">
+                โควตารายวัน: <b id="admin-hotel-allotment" style="color:#059669;">8 ห้อง/วัน</b> (Allotment)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Specifications Table -->
+        <table class="clean-table" style="font-size:12.5px; margin-bottom:18px;">
+          <tbody>
+            <tr>
+              <td style="width:30%; font-weight:600; background:#f8fafc;">ประเภทห้องพัก / Room Type</td>
+              <td id="admin-hotel-roomtype">Deluxe Sea View With Breakfast</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600; background:#f8fafc;">ขนาดและเตียงนอน</td>
+              <td id="admin-hotel-size">48 ตร.ม. • 1 เตียงคิงไซส์ (King Bed)</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600; background:#f8fafc;">พิกัดที่ตั้ง</td>
+              <td id="admin-hotel-location">ชายหาดหัวหิน, อำเภอหัวหิน, ประจวบคีรีขันธ์</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600; background:#f8fafc;">ผู้ประกอบการ (Supplier)</td>
+              <td id="admin-hotel-provider">บจก. สวนพักรักไทยโฮมสเตย์ (DBD: 0125564001928)</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600; background:#f8fafc;">เวลาเช็คอิน / เช็คเอาต์</td>
+              <td>เช็คอิน 14:00 น. | เช็คเอาต์ 12:00 น.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Description -->
+        <div style="margin-bottom:16px;">
+          <h4 style="margin:0 0 6px; font-size:13px; font-weight:700; color:var(--text-dark);">คำอธิบายบริการและสิ่งอำนวยความสะดวก</h4>
+          <p id="admin-hotel-desc" style="margin:0; font-size:12.5px; color:#475569; line-height:1.6;">
+            รีสอร์ทติดริมชายหาดหัวหิน สัมผัสทิวทัศน์ทะเลอ่าวไทยแบบพาโนรามา ดื่มด่ำกับพระอาทิตย์ขึ้นจากระเบียงห้องพักส่วนตัว สระว่ายน้ำอินฟินิตี้พูลริมหาด พร้อมห้องอาหารซีฟู้ดสดใหม่
+          </p>
+        </div>
+
+        <!-- Amenities Badges -->
+        <div>
+          <h4 style="margin:0 0 8px; font-size:13px; font-weight:700; color:var(--text-dark);">สิ่งอำนวยความสะดวกที่ได้รับรอง</h4>
+          <div id="admin-hotel-amenities" style="display:flex; flex-wrap:wrap; gap:8px;">
+            <!-- inserted dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-foot" style="background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:#10b981; font-weight:600;">✓ สถานะในระบบ: พร้อมจำหน่าย (Active in Central Platform)</span>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-secondary" onclick="closeModal('modal-admin-hotel-detail')">ปิดหน้าต่าง</button>
+          <button class="btn-action" onclick="showToast('เปิดหน้าปรับแต่งโควตา Allotment เรียบร้อย', 'info'); closeModal('modal-admin-hotel-detail'); switchView('setting-allotment');">
+            ⚙️ ปรับแต่งโควตา (Manage Allotment)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container"></div>
 

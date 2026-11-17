@@ -1,0 +1,3158 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ThailandCONNEX | Admin & Merchant Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #168de1;
+      --primary-navy: #083b7c;
+      --primary-orange: #ff7834;
+      --teal: #08b99d;
+      --bg-wash: #f0f4f9;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-line: #e2e8f0;
+      --sidebar-width: 250px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text-main);
+      font: 13.5px 'IBM Plex Sans Thai', -apple-system, sans-serif;
+      background: var(--bg-wash);
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; border: 0; }
+
+    /* Layout */
+    .app-layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+    }
+
+    /* Sidebar (Exact match with screenshot) */
+    .sidebar {
+      background: #ffffff;
+      border-right: 1px solid var(--border-line);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 30;
+    }
+    .brand-section {
+      padding: 24px 20px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-logo {
+      font: 700 24px 'Plus Jakarta Sans', sans-serif;
+      color: var(--primary-navy);
+      letter-spacing: -1.2px;
+      line-height: 0.95;
+    }
+    .brand-logo span { color: var(--primary-orange); }
+    .brand-logo small {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: #94a3b8;
+      margin-top: 4px;
+      font-family: 'IBM Plex Sans Thai', sans-serif;
+    }
+    .sidebar-user {
+      padding: 12px 20px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-line);
+    }
+    .user-avatar-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      margin: 0 auto 8px;
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      border: 2px solid #bae6fd;
+      position: relative;
+    }
+    .user-avatar-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border: 2px solid #fff;
+      border-radius: 50%;
+    }
+    .user-name { font-size: 14px; font-weight: 600; color: #334155; }
+    .user-role-tag { font-size: 11px; color: var(--text-muted); }
+
+    /* Menu navigation */
+    .menu-group {
+      padding: 12px 0;
+      flex: 1;
+    }
+    .menu-item-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 20px;
+      background: transparent;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .menu-item-btn:hover {
+      background: #f8fafc;
+      color: var(--primary-blue);
+    }
+    .menu-item-btn.active {
+      background: #eff6ff;
+      color: var(--primary-blue);
+      font-weight: 600;
+      border-right: 3px solid var(--primary-blue);
+    }
+    .menu-label-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .menu-icon {
+      width: 18px;
+      text-align: center;
+      font-size: 15px;
+      opacity: 0.8;
+    }
+    .menu-arrow {
+      font-size: 11px;
+      color: #94a3b8;
+      transition: transform 0.2s ease;
+    }
+    .menu-arrow.open {
+      transform: rotate(90deg);
+    }
+
+    /* Submenus */
+    .submenu-list {
+      display: none;
+      background: #f8fafc;
+      padding: 4px 0 6px;
+      border-top: 1px solid #f1f5f9;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .submenu-list.open { display: block; }
+    .submenu-item-btn {
+      width: 100%;
+      padding: 8px 20px 8px 50px;
+      display: block;
+      background: transparent;
+      text-align: left;
+      color: #64748b;
+      font-size: 12.5px;
+      transition: all 0.15s ease;
+    }
+    .submenu-item-btn:hover {
+      color: var(--primary-blue);
+      background: rgba(22, 141, 225, 0.06);
+    }
+    .submenu-item-btn.active {
+      color: var(--primary-blue);
+      font-weight: 600;
+      background: rgba(22, 141, 225, 0.1);
+    }
+
+    /* Main Container */
+    .main-wrap {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-line);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+    .topbar-left b {
+      color: var(--primary-navy);
+      font-weight: 600;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .portal-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #eff6ff;
+      color: var(--primary-blue);
+      border: 1px solid #bfdbfe;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .portal-switcher:hover { background: #dbeafe; }
+
+    /* Views container */
+    .content-area {
+      padding: 28px 32px 60px;
+      max-width: 1400px;
+    }
+    .view-section {
+      display: none;
+      animation: fadeIn 0.15s ease-in-out;
+    }
+    .view-section.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Performance Dashboard Components */
+    .chart-card-exact {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border-line);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .chart-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .today-revenue h2 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 600;
+      color: #1e293b;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .today-revenue small {
+      color: var(--text-muted);
+      font-size: 13px;
+      display: block;
+      margin-top: 4px;
+    }
+    .chart-actions-right { text-align: right; }
+    .date-range-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: #334155;
+      font-weight: 500;
+    }
+    .total-range-val {
+      margin-top: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #334155;
+    }
+    .total-range-val b { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; }
+
+    .wave-chart-container {
+      position: relative;
+      width: 100%;
+      height: 230px;
+      margin: 10px 0 24px;
+    }
+    .chart-grid-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .kpi-row-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .kpi-box {
+      background: #ffffff;
+      border: 1px solid var(--border-line);
+      border-radius: 10px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .kpi-box small { color: var(--text-muted); font-size: 12.5px; }
+    .kpi-box strong {
+      display: block;
+      font: 700 28px 'Plus Jakarta Sans', sans-serif;
+      color: #0f172a;
+      margin: 10px 0 6px;
+    }
+    .kpi-box a {
+      color: var(--primary-blue);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Common Table Card */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--border-line);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      margin-bottom: 24px;
+    }
+    .table-card-head {
+      font-weight: 700;
+      font-size: 15px;
+      color: #1e293b;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .clean-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .clean-table th {
+      text-align: left;
+      padding: 12px 14px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-line);
+      font-weight: 600;
+      font-size: 12px;
+      background: #f8fafc;
+    }
+    .clean-table td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border-line);
+      color: #334155;
+    }
+    .clean-table tr:hover td { background: #f8fafc; }
+    .clean-table tr:last-child td { border-bottom: 0; }
+
+    /* Buttons & Inputs */
+    .btn-action {
+      background: var(--primary-blue);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: #fff;
+      border: 1px solid var(--border-line);
+      color: #475569;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    .btn-secondary:hover { background: #f8fafc; }
+    .input-clean {
+      height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--border-line);
+      border-radius: 6px;
+      background: #fff;
+      font-size: 13px;
+    }
+    .input-clean:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-success { background: #dcfce7; color: #166534; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-info { background: #e0f2fe; color: #075985; }
+
+    /* Switch */
+    .switch-ui {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+    }
+    .switch-ui input { opacity: 0; width: 0; height: 0; }
+    .switch-slider {
+      position: absolute;
+      inset: 0;
+      background: #cbd5e1;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .switch-slider:before {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+    input:checked + .switch-slider { background: var(--primary-blue); }
+    input:checked + .switch-slider:before { transform: translateX(16px); }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: grid; }
+    .modal-card {
+      background: #fff;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .modal-head {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-head h3 { margin: 0; font-size: 16px; color: var(--primary-navy); }
+    .modal-body { padding: 20px 24px; max-height: 70vh; overflow-y: auto; }
+    .modal-foot {
+      padding: 14px 24px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout { grid-template-columns: 70px 1fr; }
+      .brand-section, .sidebar-user, .menu-item-btn span, .menu-arrow, .submenu-list { display: none; }
+      .brand-logo { font-size: 0; }
+      .brand-logo:after { content: "TC"; font-size: 20px; color: var(--primary-navy); }
+      .menu-item-btn { justify-content: center; padding: 14px 0; }
+      .kpi-row-3 { grid-template-columns: 1fr; }
+      .content-area { padding: 20px 16px; }
+    }
+  
+    /* Interactive Toast Notification */
+    #toast-container {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9999999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .toast-item {
+      pointer-events: auto;
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 5px solid #10b981;
+      animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: all 0.3s ease;
+      min-width: 280px;
+      max-width: 420px;
+    }
+    .toast-item.info { border-left-color: #2563eb; }
+    .toast-item.warning { border-left-color: #f59e0b; }
+    .toast-item.error { border-left-color: #ef4444; }
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateX(50px) scale(0.95); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    .toast-fadeout {
+      opacity: 0;
+      transform: translateY(-12px) scale(0.95);
+    }
+
+    /* Date range dropdown in dashboard */
+    .date-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      border: 1px solid #e2e8f0;
+      width: 260px;
+      z-index: 50;
+      overflow: hidden;
+    }
+    .date-dropdown-menu.show { display: block; }
+    .date-dropdown-item {
+      padding: 10px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      color: #334155;
+      transition: background 0.15s ease;
+    }
+    .date-dropdown-item:hover { background: #f1f5f9; color: var(--primary-blue); }
+    .date-dropdown-item.active { background: #eff6ff; color: var(--primary-blue); font-weight: 700; }
+
+    /* Interactive row hover */
+    .clean-table tbody tr {
+      transition: background 0.15s ease;
+    }
+    .clean-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Clickable action tags */
+    .btn-action:active, .btn-secondary:active {
+      transform: scale(0.97);
+    }
+    .badge-btn {
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.1s ease, filter 0.15s ease;
+    }
+    .badge-btn:hover {
+      filter: brightness(0.92);
+      transform: translateY(-1px);
+    }
+    
+</style>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar matching EXACT structure from user screenshot -->
+    <aside class="sidebar">
+      <div class="brand-section">
+        <div class="brand-logo">
+          Thailand<br><span>CONNEX</span>
+          <small>Admin & Merchant Suite</small>
+        </div>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="user-avatar-wrap">
+          <span>👦</span>
+          <div class="user-avatar-badge"></div>
+        </div>
+        <div class="user-name">Demo</div>
+        <div class="user-role-tag">Operator / Administrator</div>
+      </div>
+
+      <nav class="menu-group">
+        <!-- 1. Performance Dashboard (Exact screen from user photo) -->
+        <button class="menu-item-btn active" id="btn-dashboard" onclick="switchView('dashboard', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">▦</span>
+            <span>Performance Dashboard</span>
+          </div>
+        </button>
+
+        <!-- 2. User > -->
+        <button class="menu-item-btn" id="btn-user" onclick="toggleSubmenu('sub-user', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">👥</span>
+            <span>User</span>
+          </div>
+          <span class="menu-arrow">›</span>
+        </button>
+        <div class="submenu-list" id="sub-user">
+          <button class="submenu-item-btn" onclick="switchView('activity-users', this)">List Activity User</button>
+          <button class="submenu-item-btn" onclick="switchView('admin-users', this)">Admin User List (ส่วนกลาง)</button>
+          <button class="submenu-item-btn" onclick="switchView('admin-roles', this)">Admin Role & Permission</button>
+        </div>
+
+        <!-- 3. Manage > -->
+        <button class="menu-item-btn" id="btn-manage" onclick="toggleSubmenu('sub-manage', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">📝</span>
+            <span>Manage</span>
+          </div>
+          <span class="menu-arrow">›</span>
+        </button>
+        <div class="submenu-list" id="sub-manage">
+          <button class="submenu-item-btn" onclick="switchView('manage-profile', this)">Profile & Information</button>
+          <button class="submenu-item-btn" onclick="switchView('manage-products', this)">List Product (สินค้า/บริการ)</button>
+          <button class="submenu-item-btn" onclick="switchView('manage-contracts', this)">Contract Agreement List</button>
+        </div>
+
+        <!-- 4. Manage Allotment > -->
+        <button class="menu-item-btn" id="btn-allotment" onclick="toggleSubmenu('sub-allotment', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">●</span>
+            <span>Manage Allotment</span>
+          </div>
+          <span class="menu-arrow">›</span>
+        </button>
+        <div class="submenu-list" id="sub-allotment">
+          <button class="submenu-item-btn" onclick="switchView('setting-allotment', this)">Setting Allotment</button>
+          <button class="submenu-item-btn" onclick="switchView('enabled-allotment', this)">Enabled Allotment</button>
+          <button class="submenu-item-btn" onclick="switchView('allotment-report', this)">Allotment Report</button>
+        </div>
+
+        <!-- 5. Manage Sale Channel > -->
+        <button class="menu-item-btn" id="btn-channel" onclick="toggleSubmenu('sub-channel', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">●</span>
+            <span>Manage Sale Channel</span>
+          </div>
+          <span class="menu-arrow">›</span>
+        </button>
+        <div class="submenu-list" id="sub-channel">
+          <button class="submenu-item-btn" onclick="switchView('price-tier', this)">Price Tier</button>
+          <button class="submenu-item-btn" onclick="switchView('partner-price-tier', this)">Partner Price Tier</button>
+          <button class="submenu-item-btn" onclick="switchView('specific-markup', this)">Specific markup</button>
+        </div>
+
+        <!-- 6. Manage Booking > -->
+        <button class="menu-item-btn" id="btn-booking" onclick="toggleSubmenu('sub-booking', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">▤</span>
+            <span>Manage Booking</span>
+          </div>
+          <span class="menu-arrow">›</span>
+        </button>
+        <div class="submenu-list" id="sub-booking">
+          <button class="submenu-item-btn" onclick="switchView('booking-list', this)">Booking List</button>
+        </div>
+
+        <!-- 7. API Management > -->
+        <button class="menu-item-btn" id="btn-api" onclick="toggleSubmenu('sub-api', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">●</span>
+            <span>API management</span>
+          </div>
+          <span class="menu-arrow">›</span>
+        </button>
+        <div class="submenu-list" id="sub-api">
+          <button class="submenu-item-btn" onclick="switchView('api-keys', this)">API Key & Integration</button>
+        </div>
+
+        <!-- 8. Master Data -->
+        <button class="menu-item-btn" id="btn-databank" onclick="switchView('databank-kpi', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">🗄️</span>
+            <span>Master Data (Data Bank 108k)</span>
+          </div>
+        </button>
+
+        <!-- 9. Log -->
+        <button class="menu-item-btn" id="btn-log" onclick="switchView('token-log', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">📄</span>
+            <span>Log (Blockchain / Audit)</span>
+          </div>
+        </button>
+
+        <!-- 10. Thailand Packages -->
+        <button class="menu-item-btn" id="btn-packages" onclick="switchView('thailand-packages', this)">
+          <div class="menu-label-wrap">
+            <span class="menu-icon">●</span>
+            <span>Thailand Packages</span>
+          </div>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrap">
+      <header class="topbar">
+        <div class="topbar-left">
+          <span>ThailandCONNEX Admin</span>
+          <span>/</span>
+          <b id="crumb-nav">Performance Dashboard (ภาพรวมผลการดำเนินงาน)</b>
+        </div>
+        <div class="topbar-right">
+          <a href="index.html" class="portal-switcher">
+            <span>🏨 สลับไปหน้า Supplier Portal</span>
+            <span>➔</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="content-area">
+
+        <!-- ======================================================== -->
+        <!-- VIEW 1: PERFORMANCE DASHBOARD (หน้า 100 / PDF 102) -->
+        <!-- ======================================================== -->
+        <div class="view-section active" id="view-dashboard">
+          <div class="chart-card-exact">
+            <div class="chart-card-top">
+              <div class="today-revenue">
+                <h2>Today ฿ 0.00</h2>
+                <small>Yesterday ฿ 0.00</small>
+              </div>
+              <div class="chart-actions-right" style="position:relative;">
+                <div class="date-range-badge" onclick="toggleDateRangeMenu(event)" style="cursor:pointer;" title="คลิกเพื่อเลือกช่วงเวลา">
+                  <span>📅</span>
+                  <span id="dash-date-label">January 23, 2023 - February 7, 2023</span>
+                  <span style="font-size:10px;">▼</span>
+                </div>
+                <div class="total-range-val">
+                  Total <b id="dash-total-revenue">฿ 96,430.00</b>
+                </div>
+
+                <!-- Dropdown selection -->
+                <div class="date-dropdown-menu" id="dash-date-menu">
+                  <div class="date-dropdown-item active" onclick="selectDateRange('default')">
+                    <span>23 Jan - 7 Feb 2023</span>
+                    <small style="color:var(--text-muted)">Default</small>
+                  </div>
+                  <div class="date-dropdown-item" onclick="selectDateRange('last7')">
+                    <span>Last 7 Days</span>
+                    <small style="color:var(--text-muted)">1 Feb - 7 Feb</small>
+                  </div>
+                  <div class="date-dropdown-item" onclick="selectDateRange('last30')">
+                    <span>Last 30 Days</span>
+                    <small style="color:var(--text-muted)">9 Jan - 7 Feb</small>
+                  </div>
+                  <div class="date-dropdown-item" onclick="selectDateRange('ytd')">
+                    <span>Year 2023 (YTD)</span>
+                    <small style="color:var(--text-muted)">1 Jan - 7 Feb</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Wave Area Graph -->
+            <div class="wave-chart-container">
+              <svg class="chart-grid-svg" viewBox="0 0 1000 230" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#168de1" stop-opacity="0.38"/>
+                    <stop offset="100%" stop-color="#168de1" stop-opacity="0.02"/>
+                  </linearGradient>
+                </defs>
+
+                <line x1="50" y1="20" x2="980" y2="20" stroke="#f1f5f9" stroke-width="1"/>
+                <text x="40" y="24" fill="#94a3b8" font-size="10.5" text-anchor="end">24000</text>
+                <line x1="50" y1="65" x2="980" y2="65" stroke="#f1f5f9" stroke-width="1"/>
+                <text x="40" y="69" fill="#94a3b8" font-size="10.5" text-anchor="end">18000</text>
+                <line x1="50" y1="110" x2="980" y2="110" stroke="#f1f5f9" stroke-width="1"/>
+                <text x="40" y="114" fill="#94a3b8" font-size="10.5" text-anchor="end">12000</text>
+                <line x1="50" y1="155" x2="980" y2="155" stroke="#f1f5f9" stroke-width="1"/>
+                <text x="40" y="159" fill="#94a3b8" font-size="10.5" text-anchor="end">6000</text>
+                <line x1="50" y1="200" x2="980" y2="200" stroke="#cbd5e1" stroke-width="1.2"/>
+                <text x="40" y="204" fill="#94a3b8" font-size="10.5" text-anchor="end">0</text>
+
+                <path d="M 60 200 L 120 200 C 140 200, 160 85, 200 85 L 250 82 C 270 82, 280 200, 310 200 L 340 200 C 370 200, 385 160, 420 160 C 455 160, 465 175, 490 170 C 520 160, 530 115, 550 100 C 575 80, 585 30, 620 30 C 655 30, 675 75, 710 165 C 730 200, 750 200, 770 200 L 810 200 C 840 200, 860 190, 890 190 C 920 190, 940 200, 970 200 L 970 200 Z" fill="url(#areaGrad)"/>
+                <path d="M 60 200 L 120 200 C 140 200, 160 85, 200 85 L 250 82 C 270 82, 280 200, 310 200 L 340 200 C 370 200, 385 160, 420 160 C 455 160, 465 175, 490 170 C 520 160, 530 115, 550 100 C 575 80, 585 30, 620 30 C 655 30, 675 75, 710 165 C 730 200, 750 200, 770 200 L 810 200 C 840 200, 860 190, 890 190 C 920 190, 940 200, 970 200" fill="none" stroke="#168de1" stroke-width="2.5" stroke-linecap="round"/>
+
+                <text x="60" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">23 Jan</text>
+                <text x="120" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">24 Jan</text>
+                <text x="180" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">25 Jan</text>
+                <text x="240" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">26 Jan</text>
+                <text x="300" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">27 Jan</text>
+                <text x="360" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">28 Jan</text>
+                <text x="420" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">29 Jan</text>
+                <text x="480" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">30 Jan</text>
+                <text x="540" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">31 Jan</text>
+                <text x="600" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">1 Feb</text>
+                <text x="660" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">2 Feb</text>
+                <text x="720" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">3 Feb</text>
+                <text x="780" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">4 Feb</text>
+                <text x="840" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">5 Feb</text>
+                <text x="900" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">6 Feb</text>
+                <text x="960" y="218" fill="#94a3b8" font-size="10.5" text-anchor="middle">7 Feb</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="kpi-row-3">
+            <div class="kpi-box" style="cursor:pointer;" onclick="switchView('booking-list')">
+              <small>Bookings (ยอดการจอง)</small>
+              <strong id="dash-kpi-bookings">80</strong>
+              <a href="javascript:void(0)" onclick="switchView('booking-list')">View all ➔</a>
+            </div>
+            <div class="kpi-box">
+              <small>Bookings today (การจองวันนี้)</small>
+              <strong id="dash-kpi-today-count">0</strong>
+              <span style="display:block; height:18px; color:var(--text-muted); font-size:11px;">อัปเดตเรียลไทม์</span>
+            </div>
+            <div class="kpi-box">
+              <small>Grand total today (ยอดขายวันนี้)</small>
+              <strong id="dash-kpi-today-rev">฿ 0.00</strong>
+              <span style="display:block; height:18px; color:var(--text-muted); font-size:11px;">THB</span>
+            </div>
+          </div>
+
+          <div class="table-card">
+            <div class="table-card-head"><span>LASTEST BOOKING</span></div>
+            <table class="clean-table" id="table-dashboard-bookings">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">#</th>
+                  <th>Date & Time</th>
+                  <th>Booking No.</th>
+                  <th>Agent</th>
+                  <th style="text-align: right;">Status</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="cursor:pointer;" onclick="openBookingDetail('128669226', 'TVG', '430 THB', '2023-02-06 15:12:08', 'Sealife Bangkok', 'SLBK Aquarium Admission Only')">
+                  <td>1</td>
+                  <td>2023-02-06 15:12:08</td>
+                  <td><b style="color:var(--primary-blue);">128669226</b></td>
+                  <td><span class="badge badge-info">TVG</span></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Confirmed</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" style="font-size:11px; padding:4px 8px;">ดูรายละเอียด 👁️</button></td>
+                </tr>
+                <tr style="cursor:pointer;" onclick="openBookingDetail('215983224', 'TVG', '860 THB', '2023-02-06 13:33:36', 'ตึกใบหยกสกาย', 'บัตรเข้าชมวิว + บุฟเฟ่ต์มื้อค่ำ Bangkok Balcony')">
+                  <td>2</td>
+                  <td>2023-02-06 13:33:36</td>
+                  <td><b style="color:var(--primary-blue);">215983224</b></td>
+                  <td><span class="badge badge-info">TVG</span></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Confirmed</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" style="font-size:11px; padding:4px 8px;">ดูรายละเอียด 👁️</button></td>
+                </tr>
+                <tr style="cursor:pointer;" onclick="openBookingDetail('999071223', 'TVG', '1,200 THB', '2023-02-05 18:40:12', 'Chao Phraya Princess Cruise', 'Dinner Cruise Ticket at Asiatique')">
+                  <td>3</td>
+                  <td>2023-02-05 18:40:12</td>
+                  <td><b style="color:var(--primary-blue);">999071223</b></td>
+                  <td><span class="badge badge-info">TVG</span></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Confirmed</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" style="font-size:11px; padding:4px 8px;">ดูรายละเอียด 👁️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 2: User > List Activity User (หน้า 63 / PDF 65) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-activity-users">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>List Activity user (รายชื่อผู้ใช้งานระบบกิจกรรมท่องเที่ยว)</span>
+              <button class="btn-action" onclick="openModal('modal-new-activity-user')">+ Add New User</button>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+              <input type="text" id="search-activity-users" class="input-clean" placeholder="🔍 ค้นหาด้วยชื่อหรืออีเมล..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-activity-users', 'table-activity-users')">
+              <input type="date" class="input-clean" value="2023-02-01">
+              <button class="btn-action" onclick="filterTable('search-activity-users', 'table-activity-users')">Search</button>
+              <button class="btn-secondary" onclick="resetActivityUsers()">Reset</button>
+              <button class="btn-secondary" onclick="exportTableToCSV('table-activity-users', 'ThailandConnex_Activity_Users.csv')">Export CSV 📥</button>
+            </div>
+            <table class="clean-table" id="table-activity-users">
+              <thead>
+                <tr>
+                  <th>Fullname</th>
+                  <th>Email</th>
+                  <th>Profile</th>
+                  <th>Disabled</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-activity-users">
+                <tr>
+                  <td><b>Panop Api</b></td>
+                  <td>admin@inrum</td>
+                  <td><span style="font-size:18px;">👤</span></td>
+                  <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, 'Panop Api')"><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" onclick="editActivityUser('Panop Api', 'admin@inrum')">✏️ แก้ไข</button>
+                    <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, 'Panop Api')">🗑️</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Ahibal Lahiri</b></td>
+                  <td>ahibal@thailandconnex.com</td>
+                  <td><span style="font-size:18px;">👤</span></td>
+                  <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, 'Ahibal Lahiri')"><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" onclick="editActivityUser('Ahibal Lahiri', 'ahibal@thailandconnex.com')">✏️ แก้ไข</button>
+                    <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, 'Ahibal Lahiri')">🗑️</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Somchai Jaidee</b></td>
+                  <td>somchai@phuket-tour.co.th</td>
+                  <td><span style="font-size:18px;">👤</span></td>
+                  <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, 'Somchai Jaidee')"><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" onclick="editActivityUser('Somchai Jaidee', 'somchai@phuket-tour.co.th')">✏️ แก้ไข</button>
+                    <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, 'Somchai Jaidee')">🗑️</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 3: User > Admin User List ส่วนกลาง (หน้า 34 / PDF 36) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-admin-users">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Admin List (ระบบส่วนกลาง ThailandCONNEX)</span>
+              <button class="btn-action" onclick="openModal('modal-new-admin')">+ Create admin</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; gap:8px; flex:1; max-width:400px;">
+                <input type="text" id="search-admin-users" class="input-clean" placeholder="🔍 ค้นหาด้วยชื่อหรืออีเมลผู้ดูแล..." style="width:100%;" onkeyup="filterTable('search-admin-users', 'table-admin-users', 'admin-result-count')">
+                <button class="btn-action" onclick="filterTable('search-admin-users', 'table-admin-users', 'admin-result-count')">Search</button>
+              </div>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="admin-result-count">5</b></span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-admin-users', 'ThailandConnex_Admin_Users.csv')">Export CSV 📥</button>
+              </div>
+            </div>
+            <table class="clean-table" id="table-admin-users">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Active</th>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Verified</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Thapakorn Santichatsak</b><br><small style="color:var(--text-muted)">thapakorn.s@depa.or.th</small></td>
+                  <td><span class="badge badge-info">Administrator</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Chanaphat Suzuki</b><br><small style="color:var(--text-muted)">chanaphat.s@travizgo.com</small></td>
+                  <td><span class="badge" style="background:#f1f5f9; color:#475569;">Staff</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Boonyarit Ritdet</b><br><small style="color:var(--text-muted)">boonyarit.r@travizgo.com</small></td>
+                  <td><span class="badge badge-info">Administrator and other 1</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Supakron Siw</b><br><small style="color:var(--text-muted)">supakron.s@travizgo.com</small></td>
+                  <td><span class="badge badge-info">Administrator</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Kittichon Phi</b><br><small style="color:var(--text-muted)">kittichon.p@travizgo.com</small></td>
+                  <td><span class="badge badge-info">Administrator and other 1</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 4: User > Admin Role List & Screen Permission (หน้า 35 / PDF 37) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-admin-roles">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Admin Role List (บทบาทผู้ดูแลระบบส่วนกลาง)</span>
+              <button class="btn-action" onclick="showToast('เปิดแบบฟอร์มสร้างบทบาทใหม่', 'info')">+ Create Role</button>
+            </div>
+            <table class="clean-table" id="table-admin-roles" style="margin-bottom: 24px;">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Active</th>
+                  <th>Role Name</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Administrator</b></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Staff</b></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>General Manager</b></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="table-card-head" style="margin-top:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <span>Screen Permission (ตั้งค่าสิทธิ์การเข้าถึงระดับหน้าจอ)</span>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <label style="font-size:12px; font-weight:600;">เลือกเทมเพลตสิทธิ์:</label>
+                <select id="role-preset-select" class="input-clean" onchange="applyRolePreset(this.value)" style="padding:4px 8px; font-size:12px;">
+                  <option value="admin">Administrator (Super Admin - ทุกสิทธิ์)</option>
+                  <option value="operator">Operator (จัดการสินค้าและการจอง)</option>
+                  <option value="finance">Finance (การเงินและ Price Tier)</option>
+                  <option value="auditor">Auditor (อ่านอย่างเดียว Read-only)</option>
+                </select>
+                <button class="btn-secondary" style="font-size:11px;" onclick="toggleAllScreenPerms(true)">เลือกทั้งหมด</button>
+                <button class="btn-secondary" style="font-size:11px;" onclick="toggleAllScreenPerms(false)">ล้างทั้งหมด</button>
+                <button class="btn-action" style="font-size:11px;" onclick="savePermissions()">💾 บันทึกสิทธิ์</button>
+              </div>
+            </div>
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th>Screen Name</th>
+                  <th style="text-align:center;">Read</th>
+                  <th style="text-align:center;">Create</th>
+                  <th style="text-align:center;">Update</th>
+                  <th style="text-align:center;">Delete</th>
+                  <th style="text-align:center;">Special</th>
+                  <th style="text-align:center;">Export</th>
+                  <th style="text-align:center;">Print</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Admin's Role</td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                </tr>
+                <tr>
+                  <td>Admin Management</td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                </tr>
+                <tr>
+                  <td>Hotel Staff's Role</td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                </tr>
+                <tr>
+                  <td>Property List & Application</td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                </tr>
+                <tr>
+                  <td>Contract Agreement</td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                  <td style="text-align:center;"><input type="checkbox" checked></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 5: Manage > Profile & Information (หน้า 63-64 / PDF 65-66) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-manage-profile">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Manage Profile & Merchant Information (ข้อมูลนิติบุคคลและผู้ประกอบการ)</span>
+              <button class="btn-action" onclick="saveProfile()">💾 บันทึกข้อมูล (Save Changes)</button>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Company Name</label>
+                <input type="text" class="input-clean" value="บริษัท ใบหยกสกาย จำกัด" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Service / Activity Name</label>
+                <input type="text" class="input-clean" value="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Country</label>
+                <input type="text" class="input-clean" value="Thailand" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Province</label>
+                <input type="text" class="input-clean" value="กรุงเทพมหานคร" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">City / District</label>
+                <input type="text" class="input-clean" value="เขตราชเทวี" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Tax ID no.</label>
+                <input type="text" class="input-clean" value="0105536181307" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Contact Person</label>
+                <input type="text" class="input-clean" value="Panop Api" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Contact Email</label>
+                <input type="text" class="input-clean" value="panop.api@travizgotech.com" style="width:100%; margin-top:4px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 6: Manage > List Product (หน้า 67 / PDF 69) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-manage-products">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>List Product (รายการสินค้าและบริการของผู้ประกอบการ)</span>
+              <button class="btn-action" onclick="openModal('modal-new-product')">+ Add New Product</button>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+              <input type="text" id="search-products" class="input-clean" placeholder="🔍 ค้นหาชื่อสินค้า หรือ Product code..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-products', 'table-products', 'product-count')">
+              <select id="filter-product-cat" class="input-clean" onchange="filterProductCategory(this.value)">
+                <option value="all">ทุกหมวดหมู่สินค้า</option>
+                <option value="ชมวิว">ดินเนอร์ & ชมวิว</option>
+                <option value="บัตร">บัตรเข้าชม (Aquarium & Ticket)</option>
+              </select>
+              <button class="btn-secondary" onclick="exportTableToCSV('table-products', 'ThailandConnex_Products.csv')">Export CSV 📥</button>
+              <span style="font-size:12.5px; color:var(--text-muted);">Total Records: <b id="product-count">3</b></span>
+            </div>
+            <table class="clean-table" id="table-products">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">Drag</th>
+                  <th>Product name</th>
+                  <th>Product code</th>
+                  <th>Book before service</th>
+                  <th>Enabled</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color:#94a3b8; cursor:grab;">☰</td>
+                  <td><b>อาหารค่ำมื้อพิเศษพร้อมชมวิวมุมสูง ตึกใบหยกสกาย</b></td>
+                  <td><span class="badge badge-info">ACT004040</span></td>
+                  <td>24 hours</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><span class="badge badge-success">Approved</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td style="color:#94a3b8; cursor:grab;">☰</td>
+                  <td><b>ดินเนอร์ชมวิว + บุฟเฟ่ต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony</b></td>
+                  <td><span class="badge badge-info">ACT004047</span></td>
+                  <td>1 day</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><span class="badge badge-success">Approved</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td style="color:#94a3b8; cursor:grab;">☰</td>
+                  <td><b>บัตรเข้าชม Sealife Bangkok Aquarium Admission</b></td>
+                  <td><span class="badge badge-info">ACT008102</span></td>
+                  <td>3 hours</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><span class="badge badge-success">Approved</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 7: Manage > Contract Agreement List (หน้า 37 / PDF 39) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-manage-contracts">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Contract Agreement List (สัญญาและเงื่อนไขการให้บริการ)</span>
+              <button class="btn-action" onclick="openModal('modal-new-contract')">+ New Contract</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; gap:8px; flex:1; max-width:400px;">
+                <input type="text" id="search-contracts" class="input-clean" placeholder="🔍 ค้นหาสัญญาตามชื่อ หรือรหัส..." style="width:100%;" onkeyup="filterTable('search-contracts', 'table-contracts', 'contract-count')">
+                <button class="btn-action" onclick="filterTable('search-contracts', 'table-contracts', 'contract-count')">Search</button>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="contract-count">4</b></span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-contracts', 'ThailandConnex_Contracts.csv')">Export CSV 📥</button>
+              </div>
+            </div>
+            <table class="clean-table" id="table-contracts">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">No</th>
+                  <th>Name (id)</th>
+                  <th style="text-align:center;">Require to sign</th>
+                  <th style="text-align:center;">Published</th>
+                  <th style="text-align:center;">Required</th>
+                  <th>Published at</th>
+                  <th style="text-align:center;">Cancelled</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1.</td>
+                  <td><b>ThailandCONNEX Terms & Conditions (1)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>01/01/2023</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>2.</td>
+                  <td><b>Albedo Agreement (2)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>15/02/2023</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>3.</td>
+                  <td><b>Zao Activities Term (5)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>12/09/2022</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>4.</td>
+                  <td><b>Iowa Partner Agreement (6)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center;">-</td>
+                  <td>13/09/2022</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 8: Manage Allotment > Setting Allotment (หน้า 98 / PDF 100) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-setting-allotment">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Setting Allotment (กำหนดจำนวนโควตาที่เปิดรับจองรายวัน)</span>
+              <button class="btn-action" onclick="openModal('modal-new-allotment')">+ กำหนดโควตาใหม่</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; background:#f8fafc; padding:12px; border-radius:8px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:12.5px; font-weight:600;">⚡ ปรับโควตาแบบเร็ว (Bulk Update ทุกรายการ):</span>
+                <input type="number" id="bulk-allotment-qty" value="30" class="input-clean" style="width:70px; text-align:center;">
+                <button class="btn-action" style="font-size:11px;" onclick="applyBulkAllotment()">บันทึกทุกรายการ (Apply)</button>
+              </div>
+              <button class="btn-secondary" onclick="exportTableToCSV('table-setting-allotment', 'ThailandConnex_Setting_Allotment.csv')">Export CSV 📥</button>
+            </div>
+            <table class="clean-table" id="table-setting-allotment">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>No. of allotment</th>
+                  <th>Book before time</th>
+                  <th>Set Period</th>
+                  <th>Enabled</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>บัตรเข้าชมวิว + บุฟเฟ่ต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony</b></td>
+                  <td><b>25</b></td>
+                  <td>13:00</td>
+                  <td>-</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>บัตรเข้าชมวิว + บุฟเฟต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony</b></td>
+                  <td><b>15</b></td>
+                  <td>12:00</td>
+                  <td>-</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>SLBK Aquarium Admission Only</b></td>
+                  <td><b>50</b></td>
+                  <td>15:00</td>
+                  <td>2023-02-01 - 2023-02-28</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>อาหารค่ำมื้อพิเศษพร้อมชมวิวมุมสูง ตึกใบหยกสกาย</b></td>
+                  <td><b>50</b></td>
+                  <td>15:00</td>
+                  <td>2023-01-01 - 2023-02-21</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 9: Manage Allotment > Enabled Allotment (หน้า 98 / PDF 100) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-enabled-allotment">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Enabled Allotment List (เปิด-ปิดการจองโควตาแยกรายผู้ให้บริการ)</span>
+              <button class="btn-action" onclick="showToast('เปิดแบบฟอร์มกำหนดสถานะโควตาใหม่', 'info')">+ Add Supplier Allotment</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <input type="text" id="search-enabled-allot" class="input-clean" placeholder="🔍 ค้นหาชื่อ Supplier code..." style="max-width:300px;" onkeyup="filterTable('search-enabled-allot', 'table-enabled-allot', 'enabled-allot-count')">
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="enabled-allot-count">4</b></span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-enabled-allot', 'ThailandConnex_Enabled_Allotment.csv')">Export CSV 📥</button>
+              </div>
+            </div>
+            <table class="clean-table" id="table-enabled-allot">
+              <thead>
+                <tr>
+                  <th>Last Updated</th>
+                  <th>Supplier code</th>
+                  <th>Enabled</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2023-01-26 15:39:29</td>
+                  <td><b>Alcazar show</b></td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td>2023-01-03 11:09:47</td>
+                  <td><b>Sealife Bangkok</b></td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td>2023-01-03 18:02:20</td>
+                  <td><b>ACT083</b></td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td>2023-02-21 11:02:21</td>
+                  <td><b>ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ</b></td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 10: Manage Allotment > Allotment Report (หน้า 99 / PDF 101) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-allotment-report">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Allotment Report (รายงานโควตาคงเหลือและการซื้อขาย)</span>
+              <button class="btn-action" onclick="exportTableToCSV('table-allotment-report', 'ThailandConnex_Allotment_Report.csv')">Export CSV / Excel 📥</button>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+              <input type="text" id="search-allot-report" class="input-clean" placeholder="🔍 ค้นหาตามกิจกรรมหรือสินค้า..." style="flex:1; min-width:200px;" onkeyup="filterTable('search-allot-report', 'table-allotment-report')">
+              <input type="date" class="input-clean" value="2023-02-24">
+              <button class="btn-action" onclick="showToast('อัปเดตข้อมูลรายงานประจำวันที่ 24/02/2023 แล้ว')">Search</button>
+              <button class="btn-secondary" onclick="document.getElementById('search-allot-report').value=''; filterTable('search-allot-report', 'table-allotment-report')">Reset</button>
+            </div>
+            <table class="clean-table" id="table-allotment-report">
+              <thead>
+                <tr>
+                  <th>Activities</th>
+                  <th>Product</th>
+                  <th>No. of allotment</th>
+                  <th>Remaining</th>
+                  <th>Book before time</th>
+                  <th style="text-align: right;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ</b></td>
+                  <td>บัตรเข้าชมวิว + บุฟเฟ่ต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony<br><small style="color:var(--text-muted)">Show time : Monday, Tuesday, Wednesday, Thursday, Friday 20:00</small></td>
+                  <td><b>25</b></td>
+                  <td><b style="color:#059669;">25</b></td>
+                  <td>13:00</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Enabled</span></td>
+                </tr>
+                <tr>
+                  <td><b>ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ</b></td>
+                  <td>อาหารค่ำมื้อพิเศษพร้อมชมวิวมุมสูง ตึกใบหยกสกาย<br><small style="color:var(--text-muted)">Show time : Friday, Saturday 21:00</small></td>
+                  <td><b>0</b></td>
+                  <td><b style="color:#dc2626;">0</b></td>
+                  <td>15:00</td>
+                  <td style="text-align: right;"><span class="badge badge-warning">No Service</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 11: Manage Sale Channel > Price Tier (หน้า 95 / PDF 97) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-price-tier">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Price Tier List (การกำหนดขั้นกำไรมาตรฐาน)</span>
+              <button class="btn-action" onclick="openModal('modal-new-tier')">+ Add New Tier</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <input type="text" id="search-tier" class="input-clean" placeholder="🔍 ค้นหาขั้นราคา (Tier)..." style="max-width:300px;" onkeyup="filterTable('search-tier', 'table-price-tier')">
+              <button class="btn-secondary" onclick="exportTableToCSV('table-price-tier', 'ThailandConnex_Price_Tiers.csv')">Export CSV 📥</button>
+            </div>
+            <table class="clean-table" id="table-price-tier">
+              <thead>
+                <tr>
+                  <th>Tier name</th>
+                  <th>Markup</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>standard D</b></td>
+                  <td><b>20</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>Standard C</b></td>
+                  <td><b>30</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>Standard B</b></td>
+                  <td><b>50</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>standard A</b></td>
+                  <td><b>100</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 12: Manage Sale Channel > Partner Price Tier (หน้า 95 / PDF 97) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-partner-price-tier">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Partner Price Tier List (การกำหนดขั้นราคาให้กับ Agent / OTAs)</span>
+              <button class="btn-action" onclick="openModal('modal-new-partner-tier')">+ Assign Partner Tier</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <input type="text" id="search-partner-tier" class="input-clean" placeholder="🔍 ค้นหาคู่ค้า (Partner)..." style="max-width:300px;" onkeyup="filterTable('search-partner-tier', 'table-partner-tier')">
+              <button class="btn-secondary" onclick="exportTableToCSV('table-partner-tier', 'ThailandConnex_Partner_Price_Tiers.csv')">Export CSV 📥</button>
+            </div>
+            <table class="clean-table" id="table-partner-tier">
+              <thead>
+                <tr>
+                  <th>Created</th>
+                  <th>Partner account</th>
+                  <th>Price tier</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2023-01-26 15:43:24</td>
+                  <td><b>Demo</b></td>
+                  <td><span class="badge badge-info">standard A</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td>2023-01-17 13:45:04</td>
+                  <td><b>TVG</b></td>
+                  <td><span class="badge badge-info">Standard C</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 13: Manage Sale Channel > Specific markup (หน้า 96 / PDF 98) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-specific-markup">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Specific markup List (การปรับราคาเฉพาะบางกิจกรรม)</span>
+              <button class="btn-action" onclick="openModal('modal-new-markup')">+ Add Specific Markup</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <input type="text" id="search-specific-markup" class="input-clean" placeholder="🔍 ค้นหา Partner หรือ Supplier..." style="max-width:300px;" onkeyup="filterTable('search-specific-markup', 'table-specific-markup')">
+              <button class="btn-secondary" onclick="exportTableToCSV('table-specific-markup', 'ThailandConnex_Specific_Markups.csv')">Export CSV 📥</button>
+            </div>
+            <table class="clean-table" id="table-specific-markup">
+              <thead>
+                <tr>
+                  <th>Partner account</th>
+                  <th>Supplier</th>
+                  <th>Markup</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Gianttick</b></td>
+                  <td>เมืองโบราณ</td>
+                  <td><b>35</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>TVG</b></td>
+                  <td>Sea Angel Cruise</td>
+                  <td><b>50</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>TVG</b></td>
+                  <td>ชมวิวตึกใบหยกพร้อมอาหารค่ำ</td>
+                  <td><b>20</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+                <tr>
+                  <td><b>TVG</b></td>
+                  <td>ซาฟารีเวิลด์</td>
+                  <td><b>50</b> THB</td>
+                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 14: Manage Booking > Booking List (หน้า 101 / PDF 103) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-booking-list">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Booking List (รายการคำสั่งซื้อและการจองทั้งหมด)</span>
+              <button class="btn-action" onclick="openModal('modal-new-booking')">+ สร้างการจองใหม่ (Manual Booking)</button>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+              <input type="text" id="search-bookings" class="input-clean" placeholder="🔍 ค้นหาด้วย Booking No., Ref No. หรือ Agent..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-bookings', 'table-bookings', 'booking-count')">
+              <select id="filter-booking-status" class="input-clean" onchange="filterBookingStatus(this.value)">
+                <option value="all">ทุกสถานะการจอง</option>
+                <option value="confirmed">Confirmed (ยืนยันแล้ว)</option>
+                <option value="pending">Pending (รอชำระเงิน)</option>
+              </select>
+              <button class="btn-action" onclick="filterTable('search-bookings', 'table-bookings', 'booking-count')">Search</button>
+              <button class="btn-secondary" onclick="exportTableToCSV('table-bookings', 'ThailandConnex_Bookings.csv')">Export to Excel / CSV 📥</button>
+              <span style="font-size:12.5px; color:var(--text-muted)">Total Bookings: <b id="booking-count">3</b></span>
+            </div>
+            <table class="clean-table" id="table-bookings">
+              <thead>
+                <tr>
+                  <th>Booking date</th>
+                  <th>Booking no.</th>
+                  <th>Reference no.</th>
+                  <th>Agent</th>
+                  <th>Total amount</th>
+                  <th>Confirm</th>
+                  <th style="text-align: right;">Detail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2023-02-06 15:12:08</td>
+                  <td><b>128669226</b></td>
+                  <td>1675671128669657</td>
+                  <td><span class="badge badge-info">TVG</span></td>
+                  <td><b>280</b> THB</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('128669226')">View 👁️</button></td>
+                </tr>
+                <tr>
+                  <td>2023-02-06 15:00:36</td>
+                  <td><b>436181225</b></td>
+                  <td>1675670436181950</td>
+                  <td><span class="badge badge-info">TVG</span></td>
+                  <td><b>430</b> THB</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('436181225')">View 👁️</button></td>
+                </tr>
+                <tr>
+                  <td>2023-02-06 13:33:35</td>
+                  <td><b>215983224</b></td>
+                  <td>1675665215983302</td>
+                  <td><span class="badge badge-info">TVG</span></td>
+                  <td><b>430</b> THB</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('215983224')">View 👁️</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 15: API Management > API Key & Integration (หน้า 163 / PDF 165) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-api-keys">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>API Gateway Management & Open API Endpoints (การจัดการ API สำหรับนักพัฒนา)</span>
+              <button class="btn-action" onclick="openModal('modal-new-apikey')">+ Generate New API Key</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <input type="text" id="search-api-keys" class="input-clean" placeholder="🔍 ค้นหา Client / Service..." style="max-width:300px;" onkeyup="filterTable('search-api-keys', 'table-api-keys')">
+              <button class="btn-secondary" onclick="exportTableToCSV('table-api-keys', 'ThailandConnex_API_Keys.csv')">Export CSV 📥</button>
+            </div>
+            <table class="clean-table" id="table-api-keys">
+              <thead>
+                <tr>
+                  <th>Client / Service</th>
+                  <th>API Key</th>
+                  <th>Rate Limit</th>
+                  <th>Whitelisted IP</th>
+                  <th style="text-align: right;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>TVG Global OTA Service</b></td>
+                  <td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">tk_live_9a71bf08d4...</code> <button class="btn-secondary" style="font-size:11px; padding:2px 6px; margin-left:6px;" onclick="copyApiKey('tk_live_9a71bf08d4924c5bb980d908271dfcc891')">📋 Copy</button></td>
+                  <td>10,000 req/min</td>
+                  <td>203.144.144.22</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Active</span></td>
+                </tr>
+                <tr>
+                  <td><b>Gianttick Channel Service</b></td>
+                  <td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">tk_live_38bf8c99e1...</code> <button class="btn-secondary" style="font-size:11px; padding:2px 6px; margin-left:6px;" onclick="copyApiKey('tk_live_38bf8c99e19a4d8aa71f02847128669226')">📋 Copy</button></td>
+                  <td>5,000 req/min</td>
+                  <td>128.199.200.15</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 16: Master Data > Data Bank 108k (หน้า 175 / PDF 177) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-databank-kpi">
+          <div class="table-card">
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <span>National Tourism Data Bank (ธนาคารข้อมูลกลาง 108,659 ผู้ประกอบการ)</span>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="badge badge-success">depa Certified Data</span>
+                <button class="btn-action" style="font-size:11px;" onclick="exportTableToCSV('table-databank', 'ThailandConnex_DataBank_Summary.csv')">Export Data Bank CSV 📥</button>
+              </div>
+            </div>
+            <!-- Interactive Province Filter -->
+            <div style="background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:13px; font-weight:700; color:var(--text-dark);">📍 กรองตามพื้นที่ / จังหวัด:</span>
+                <select id="databank-prov-filter" class="input-clean" onchange="filterDataBankProvince(this.value)" style="font-weight:600;">
+                  <option value="all">ทั่วประเทศไทย (77 จังหวัด - 108,659 ราย)</option>
+                  <option value="bkk">กรุงเทพมหานคร (Bangkok - 28,450 ราย)</option>
+                  <option value="phuket">ภูเก็ต (Phuket - 18,420 ราย)</option>
+                  <option value="cm">เชียงใหม่ (Chiang Mai - 14,890 ราย)</option>
+                  <option value="chonburi">ชลบุรี / พัทยา (Chonburi - 12,310 ราย)</option>
+                  <option value="surat">สุราษฎร์ธานี / เกาะสมุย (Surat Thani - 8,950 ราย)</option>
+                </select>
+              </div>
+              <span style="font-size:12px; color:var(--text-muted)">ข้อมูลสถิติยืนยันโดยสำนักงานส่งเสริมเศรษฐกิจดิจิทัล</span>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin: 16px 0 24px;">
+              <div style="background:#e0f2fe; padding:16px; border-radius:10px;">
+                <small style="color:#0369a1;">โรงแรมและที่พัก</small>
+                <h3 id="db-kpi-hotel" style="margin:6px 0 0; color:#0c4a6e; font-size:22px;">35,962</h3>
+              </div>
+              <div style="background:#fce7f3; padding:16px; border-radius:10px;">
+                <small style="color:#be185d;">ร้านอาหารและเครื่องดื่ม</small>
+                <h3 id="db-kpi-food" style="margin:6px 0 0; color:#831843; font-size:22px;">23,783</h3>
+              </div>
+              <div style="background:#dbeafe; padding:16px; border-radius:10px;">
+                <small style="color:#1d4ed8;">ตัวแทนนำเที่ยว (Agencies)</small>
+                <h3 id="db-kpi-agent" style="margin:6px 0 0; color:#1e3a8a; font-size:22px;">22,439</h3>
+              </div>
+              <div style="background:#dcfce7; padding:16px; border-radius:10px;">
+                <small style="color:#15803d;">สุขภาพและสันทนาการ</small>
+                <h3 id="db-kpi-wellness" style="margin:6px 0 0; color:#14532d; font-size:22px;">10,059</h3>
+              </div>
+            </div>
+
+            <table class="clean-table" id="table-databank">
+              <thead>
+                <tr>
+                  <th>หมวดหมู่อุตสาหกรรมท่องเที่ยว</th>
+                  <th>จำนวนผู้ประกอบการ</th>
+                  <th>สัดส่วน</th>
+                  <th style="text-align: right;">สถานะการเชื่อมโยงระบบ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>ผู้ประกอบการโรงแรมและที่พัก (Accommodation)</b></td>
+                  <td>35,962.00 ราย</td>
+                  <td>33.10%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr>
+                  <td><b>ผู้ประกอบการร้านอาหารและเครื่องดื่ม (Food and Beverage)</b></td>
+                  <td>23,783.00 ราย</td>
+                  <td>21.89%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr>
+                  <td><b>ผู้ประกอบการตัวแทนการท่องเที่ยว (Tour Service & Guide)</b></td>
+                  <td>22,439.00 ราย</td>
+                  <td>20.65%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr>
+                  <td><b>ผู้ประกอบการด้านสุขภาพ และสันทนาการ (Wellness & Recreation)</b></td>
+                  <td>10,059.00 ราย</td>
+                  <td>9.26%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr>
+                  <td><b>ผู้ประกอบการร้านค้าปลีก (Retails Shop)</b></td>
+                  <td>7,673.00 ราย</td>
+                  <td>7.06%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr>
+                  <td><b>ผู้ประกอบการสถานที่ท่องเที่ยว (Attraction)</b></td>
+                  <td>3,647.00 ราย</td>
+                  <td>3.36%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr>
+                  <td><b>ผู้ประกอบการขนส่งผู้โดยสาร (Mobility Service Provider)</b></td>
+                  <td>3,445.00 ราย</td>
+                  <td>3.17%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr>
+                  <td><b>ชุมชนท่องเที่ยวท้องถิ่น (Local Tourism Community)</b></td>
+                  <td>1,651.00 ราย</td>
+                  <td>1.52%</td>
+                  <td style="text-align: right;"><span class="badge badge-success">พร้อมให้บริการ</span></td>
+                </tr>
+                <tr style="background:#f8fafc; font-weight:700;">
+                  <td>รวมทั้งสิ้น (Total Ecosystem)</td>
+                  <td>108,659.00 ราย</td>
+                  <td>100.00%</td>
+                  <td style="text-align: right; color:#10b981;">100% บรรลุตามเกณฑ์</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 17: Log > Blockchain & Audit (หน้า 148 / PDF 150) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-token-log">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Token Transaction & Audit Log (GBEX Blockchain)</span>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="badge badge-info">Smart Contract: 0x5E2D25...9733760</span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-token-log', 'ThailandConnex_Token_Logs.csv')">Export Log CSV 📥</button>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <input type="text" id="search-token-log" class="input-clean" placeholder="🔍 ค้นหา Tx Hash หรือประเภท Action..." style="max-width:320px;" onkeyup="filterTable('search-token-log', 'table-token-log')">
+              <span style="font-size:12.5px; color:var(--text-muted)">Consensus: <b>Proof of Authority (PoA)</b></span>
+            </div>
+            <table class="clean-table" id="table-token-log">
+              <thead>
+                <tr>
+                  <th>Tx Hash</th>
+                  <th>Action</th>
+                  <th>Amount</th>
+                  <th>From / To</th>
+                  <th>Datetime</th>
+                  <th style="text-align: right;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x19969313908271dfcc89100293847a98b', '8481515', 'Token Minting', '50 TCN', 'Earned from booking #128669226')">0x19969313908271dfcc... 🔍</td>
+                  <td><span class="badge badge-success">Token Minting</span></td>
+                  <td><b>50 TCN</b></td>
+                  <td>Earned from booking #128669226</td>
+                  <td>2023-02-06 15:12:08</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Block #8481515</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x0c4a9cea7a1efde4e8194017583920194', '8481443', 'Token Burning', '10 TCN', 'Redeemed for voucher discount')">0x0c4a9cea7a1efde4e8... 🔍</td>
+                  <td><span class="badge badge-warning">Token Burning</span></td>
+                  <td><b>10 TCN</b></td>
+                  <td>Redeemed for voucher discount</td>
+                  <td>2023-02-06 13:33:36</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Block #8481443</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- VIEW 18: Thailand Packages (หน้า 208-242) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-thailand-packages">
+          <div class="table-card">
+            <div class="table-card-head">
+              <span>Thailand Packages (รายการแพ็กเกจท่องเที่ยวทั่วไทย 201,764 รายการ)</span>
+              <button class="btn-action" onclick="openModal('modal-new-package')">+ เพิ่มแพ็กเกจใหม่</button>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+              <input type="text" id="search-packages" class="input-clean" placeholder="🔍 ค้นหาชื่อแพ็กเกจ หรือผู้ให้บริการ..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-packages', 'table-packages', 'package-count')">
+              <select id="filter-package-cat" class="input-clean" onchange="filterPkgCategory(this.value)">
+                <option value="all">ทุกหมวดหมู่ (ที่พัก, ขนส่ง, ท่องเที่ยว, สปา, อาหาร)</option>
+                <option value="ที่พัก">เฉพาะ ที่พัก (Hotels & Resorts)</option>
+                <option value="ขนส่ง">เฉพาะ ขนส่ง (Transfers & Mobility)</option>
+                <option value="สถานที่ท่องเที่ยว">เฉพาะ สถานที่ท่องเที่ยว (Attractions & Cruises)</option>
+                <option value="สุขภาพ">เฉพาะ สุขภาพ/สปา (Wellness & Spa)</option>
+                <option value="อาหาร">เฉพาะ อาหาร/เครื่องดื่ม (Dining & Buffets)</option>
+              </select>
+              <button class="btn-secondary" onclick="exportTableToCSV('table-packages', 'ThailandConnex_Packages.csv')">Export CSV 📥</button>
+              <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="package-count">5</b></span>
+            </div>
+            <table class="clean-table" id="table-packages">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>ชื่อแพ็กเกจ (Package Name)</th>
+                  <th>ผู้ให้บริการ (Supplier)</th>
+                  <th>หมวดหมู่</th>
+                  <th>ราคาขาย</th>
+                  <th style="text-align: right;">สถานะ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><b>Deluxe With Breakfast</b></td>
+                  <td>เดอะ มลุ สกาย รีสอร์ท แอท หัวหิน</td>
+                  <td>ที่พัก</td>
+                  <td><b>฿3,994.27</b></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><b>Limousine Express - Bangkok-Saraburi</b></td>
+                  <td>เจ วัน บิสซิเนส ทรานสปอร์ต</td>
+                  <td>ขนส่ง</td>
+                  <td><b>฿3,570.00</b></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><b>Dinner Cruise Ticket at Asiatique Pier</b></td>
+                  <td>Chao Phraya Princess Cruise</td>
+                  <td>สถานที่ท่องเที่ยว</td>
+                  <td><b>฿1,200.00</b></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><b>Mud or Clay Body Wrap (90 mins)</b></td>
+                  <td>7 Spa Luxury - Health & Wellness</td>
+                  <td>สุขภาพ/สปา</td>
+                  <td><b>฿1,400.00</b></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td><b>Crispy Pork Larb Balls</b></td>
+                  <td>คาเฟ่ดำเนินสะดวก</td>
+                  <td>อาหาร/เครื่องดื่ม</td>
+                  <td><b>฿280.00</b></td>
+                  <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Booking Detail (หน้า 101 / PDF 103) -->
+  <div class="modal-overlay" id="modal-booking-detail" onclick="if(event.target===this) closeModal('modal-booking-detail')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Booking Detail</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-booking-detail')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#f8fafc; padding:14px; border-radius:8px; margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <span>Booking no. <b id="detail-bno">215983224211</b></span>
+            <span style="color:var(--text-muted)">Service date: <b>Thu 23, Feb 2023</b></span>
+          </div>
+          <div style="font-size:12.5px; color:#475569;">
+            Service provider: <b>Sealife Bangkok</b><br>
+            Package: <b>SLBK Aquarium Admission Only</b>
+          </div>
+        </div>
+
+        <table class="clean-table" style="font-size:12px;">
+          <thead>
+            <tr>
+              <th>Pax type</th>
+              <th>Net</th>
+              <th>Markup</th>
+              <th>Profit</th>
+              <th>Pax</th>
+              <th>Total</th>
+              <th>Total Profit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ADULT</td>
+              <td>400</td>
+              <td>430</td>
+              <td>30</td>
+              <td>1</td>
+              <td><b>430</b></td>
+              <td><b style="color:#10b981;">30</b></td>
+            </tr>
+            <tr style="font-weight:700; background:#f8fafc;">
+              <td colspan="5">Grand Total</td>
+              <td style="color:var(--primary-blue)">430 THB</td>
+              <td style="color:#10b981;">30 THB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-foot" style="justify-content:space-between;">
+        <div style="display:flex; gap:8px;">
+          <button class="btn-secondary" onclick="printBookingVoucher()">🖨️ พิมพ์บัตร Voucher</button>
+          <button class="btn-secondary" style="color:#ef4444;" onclick="refundBookingAction()">❌ ขอคืนเงิน / Refund</button>
+        </div>
+        <button class="btn-action" onclick="closeModal('modal-booking-detail')">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Admin (หน้า 34 / PDF 36) -->
+  <div class="modal-overlay" id="modal-new-admin" onclick="if(event.target===this) closeModal('modal-new-admin')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Admin New (สร้างผู้ดูแลระบบใหม่)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-admin')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">First name (ชื่อจริง) *</label>
+          <input type="text" id="new-admin-fname" class="input-clean" placeholder="เช่น กิตติพงษ์" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Last name (นามสกุล) *</label>
+          <input type="text" id="new-admin-lname" class="input-clean" placeholder="เช่น รัตนเดชา" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Email address (อีเมลหน่วยงาน) *</label>
+          <input type="email" id="new-admin-email" class="input-clean" placeholder="kittipong.r@depa.or.th" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Admin Role *</label>
+          <select id="new-admin-role" class="input-clean" style="width:100%; margin-top:4px;">
+            <option value="Administrator">Administrator (ผู้ดูแลระบบหลัก)</option>
+            <option value="Staff">Staff (เจ้าหน้าที่ปฏิบัติงาน)</option>
+            <option value="Auditor">Auditor (ผู้ตรวจสอบระบบ)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-admin')">Cancel</button>
+        <button class="btn-action" onclick="saveNewAdmin()">Save Admin User</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Modal View Contract Agreement -->
+  <div class="modal-overlay" id="modal-contract-view" onclick="if(event.target===this) closeModal('modal-contract-view')">
+    <div class="modal-card" style="max-width:650px;">
+      <div class="modal-head">
+        <h3 id="contract-view-title">ThailandCONNEX Terms & Conditions (1)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-contract-view')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; max-height:280px; overflow-y:auto; font-size:12.5px; line-height:1.6; color:#334155;">
+          <b>ข้อกำหนดและเงื่อนไขการใช้บริการแพลตฟอร์มกลาง ThailandCONNEX</b><br><br>
+          1. วัตถุประสงค์: แพลตฟอร์มกลาง ThailandCONNEX ดำเนินงานโดยสำนักงานส่งเสริมเศรษฐกิจดิจิทัล (depa) เพื่อเป็นช่องทางเชื่อมโยงผู้ประกอบการท่องเที่ยวไทยกับตลาดสากล<br>
+          2. ความถูกต้องของข้อมูล: ผู้ประกอบการตกลงให้ข้อมูลใบอนุญาตประกอบธุรกิจนำเที่ยว และข้อมูลภาษีอากร DBD ที่เป็นจริง<br>
+          3. โควตาและการจอง (Allotment): ให้ถือสัญญาการจัดสรรโควตารายวันเป็นไปตามที่ระบุในระบบบริหารจัดการ Allotment<br>
+          4. ระบบชำระเงินและโทเคน: การใช้งาน Travel Token ต้องเป็นไปตามมาตรฐาน Smart Contract ที่กระทรวงดิจิทัลฯ กำหนด<br>
+          5. สัญญาและลายมือชื่ออิเล็กทรอนิกส์: การกดยอมรับสัญญาฉบับนี้มีผลผูกพันตามพระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544
+        </div>
+        <div style="margin-top:14px; font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between;">
+          <span>Effective Date: <b id="contract-view-date">01/01/2023</b></span>
+          <span style="color:#10b981;">✓ มีผลบังคับใช้ (Active)</span>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-contract-view')">ปิดหน้าต่าง</button>
+        <button class="btn-action" onclick="downloadContractPDF()">ดาวน์โหลด PDF สัญญา 📥</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Contract -->
+  <div class="modal-overlay" id="modal-new-contract" onclick="if(event.target===this) closeModal('modal-new-contract')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>สร้างสัญญาข้อตกลงใหม่ (New Contract Agreement)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-contract')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">ชื่อสัญญา / Agreement Name *</label>
+          <input type="text" id="new-contract-name" class="input-clean" placeholder="เช่น Phuket Partner Agreement 2023" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">คู่สัญญา / Partner Name *</label>
+          <input type="text" id="new-contract-partner" class="input-clean" placeholder="เช่น Travizgo Tech Co., Ltd." style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">วันที่มีผลบังคับใช้ *</label>
+          <input type="date" id="new-contract-date" class="input-clean" value="2023-03-01" style="width:100%; margin-top:4px;">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-contract')">Cancel</button>
+        <button class="btn-action" onclick="saveNewContract()">บันทึกสัญญา (Save)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Activity User -->
+  <div class="modal-overlay" id="modal-new-activity-user" onclick="if(event.target===this) closeModal('modal-new-activity-user')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>เพิ่มผู้ใช้งานกิจกรรมใหม่ (New Activity User)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-activity-user')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Fullname (ชื่อ-นามสกุล) *</label>
+          <input type="text" id="new-act-fullname" class="input-clean" placeholder="ชื่อ-นามสกุล" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Email address *</label>
+          <input type="email" id="new-act-email" class="input-clean" placeholder="user@company.com" style="width:100%; margin-top:4px;">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-activity-user')">Cancel</button>
+        <button class="btn-action" onclick="saveNewActivityUser()">Save User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Product -->
+  <div class="modal-overlay" id="modal-new-product" onclick="if(event.target===this) closeModal('modal-new-product')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>เพิ่มสินค้า/บริการใหม่ (Add New Product)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-product')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Product Name (ชื่อสินค้าหรือบริการ) *</label>
+          <input type="text" id="new-prod-name" class="input-clean" placeholder="เช่น ล่องเรือดินเนอร์เจ้าพระยา Princess Cruise" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Product Code *</label>
+            <input type="text" id="new-prod-code" class="input-clean" placeholder="ACT009999" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">จองล่วงหน้า (Book before)</label>
+            <input type="text" id="new-prod-time" class="input-clean" placeholder="12 hours" value="24 hours" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">หมวดหมู่</label>
+          <select id="new-prod-cat" class="input-clean" style="width:100%; margin-top:4px;">
+            <option value="ชมวิว">ดินเนอร์ & ชมวิว</option>
+            <option value="บัตร">บัตรเข้าชม (Aquarium & Ticket)</option>
+            <option value="ทัวร์">เดย์ทัวร์ (Day Tour)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-product')">Cancel</button>
+        <button class="btn-action" onclick="saveNewProduct()">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Allotment -->
+  <div class="modal-overlay" id="modal-new-allotment" onclick="if(event.target===this) closeModal('modal-new-allotment')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>กำหนดโควตาใหม่ (Setting New Allotment)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-allotment')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">ชื่อสินค้า/บริการ *</label>
+          <input type="text" id="new-allot-prod" class="input-clean" placeholder="ชื่อกิจกรรมหรือบัตรบริการ" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">จำนวนโควตาต่อวัน (Slots) *</label>
+            <input type="number" id="new-allot-qty" class="input-clean" value="40" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">จองล่วงหน้าก่อนเวลา</label>
+            <input type="text" id="new-allot-time" class="input-clean" value="14:00" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-allotment')">Cancel</button>
+        <button class="btn-action" onclick="saveNewAllotment()">บันทึกโควตา</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Price Tier -->
+  <div class="modal-overlay" id="modal-new-tier" onclick="if(event.target===this) closeModal('modal-new-tier')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>เพิ่มระดับราคาใหม่ (Add Price Tier)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-tier')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Tier Name (เช่น Standard VIP) *</label>
+          <input type="text" id="new-tier-name" class="input-clean" placeholder="Standard VIP" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Markup (THB) *</label>
+          <input type="number" id="new-tier-markup" class="input-clean" placeholder="70" value="70" style="width:100%; margin-top:4px;">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-tier')">Cancel</button>
+        <button class="btn-action" onclick="saveNewPriceTier()">Save Tier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Partner Price Tier -->
+  <div class="modal-overlay" id="modal-new-partner-tier" onclick="if(event.target===this) closeModal('modal-new-partner-tier')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>ผูกระดับราคากับคู่ค้า (Assign Partner Price Tier)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-partner-tier')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Partner Account Name *</label>
+          <input type="text" id="new-pt-account" class="input-clean" placeholder="เช่น Agoda Partner / Klook" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Price Tier *</label>
+          <select id="new-pt-tier" class="input-clean" style="width:100%; margin-top:4px;">
+            <option value="standard A">standard A (+100 THB)</option>
+            <option value="Standard B">Standard B (+50 THB)</option>
+            <option value="Standard C">Standard C (+30 THB)</option>
+            <option value="standard D">standard D (+20 THB)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-partner-tier')">Cancel</button>
+        <button class="btn-action" onclick="saveNewPartnerTier()">บันทึกคู่ค้า</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Specific Markup -->
+  <div class="modal-overlay" id="modal-new-markup" onclick="if(event.target===this) closeModal('modal-new-markup')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>เพิ่ม Specific Markup รายกิจกรรม</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-markup')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Partner Account *</label>
+          <input type="text" id="new-sm-partner" class="input-clean" placeholder="TVG / Gianttick" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Supplier / กิจกรรม *</label>
+          <input type="text" id="new-sm-supplier" class="input-clean" placeholder="เช่น สยามอะเมซิ่งพาร์ค" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Markup (THB) *</label>
+          <input type="number" id="new-sm-markup" class="input-clean" value="45" style="width:100%; margin-top:4px;">
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-markup')">Cancel</button>
+        <button class="btn-action" onclick="saveNewSpecificMarkup()">Save Markup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New API Key -->
+  <div class="modal-overlay" id="modal-new-apikey" onclick="if(event.target===this) closeModal('modal-new-apikey')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Generate API Key (สร้างคีย์เชื่อมต่อระบบใหม่)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-apikey')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Client / Service Name *</label>
+          <input type="text" id="new-api-client" class="input-clean" placeholder="เช่น TAT Tourism Open Gateway" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Whitelisted IP Address</label>
+          <input type="text" id="new-api-ip" class="input-clean" placeholder="เช่น 128.199.100.55" value="128.199.100.55" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Rate Limit</label>
+          <select id="new-api-ratelimit" class="input-clean" style="width:100%; margin-top:4px;">
+            <option value="5,000 req/min">5,000 req/min (Standard)</option>
+            <option value="10,000 req/min">10,000 req/min (High Capacity)</option>
+            <option value="20,000 req/min">20,000 req/min (Enterprise OTA)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-apikey')">Cancel</button>
+        <button class="btn-action" onclick="saveNewApiKey()">Generate Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Token Blockchain Verification -->
+  <div class="modal-overlay" id="modal-token-verify" onclick="if(event.target===this) closeModal('modal-token-verify')">
+    <div class="modal-card" style="max-width:600px;">
+      <div class="modal-head">
+        <h3>GBEX Blockchain Explorer - Transaction Verification</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-token-verify')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#0f172a; color:#38bdf8; padding:16px; border-radius:8px; font-family:monospace; font-size:12px; margin-bottom:16px; line-height:1.7;">
+          <div style="color:#94a3b8;">TRANSACTION HASH:</div>
+          <div style="word-break:break-all; color:#ffffff; font-weight:bold;" id="verify-tx-hash">0x19969313908271dfcc89100293847a98b</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+            <div><span style="color:#94a3b8;">Block Height:</span> <span id="verify-block-no" style="color:#34d399;">#8481515</span></div>
+            <div><span style="color:#94a3b8;">Status:</span> <span style="color:#34d399;">Success (Confirmed)</span></div>
+            <div><span style="color:#94a3b8;">Token Standard:</span> <span style="color:#ffffff;">ERC-20 (TCN Token)</span></div>
+            <div><span style="color:#94a3b8;">Gas Used:</span> <span style="color:#ffffff;">21,000 Gwei</span></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px; color:#334155; line-height:1.6;">
+          <b>Transaction Details:</b><br>
+          Action: <span class="badge badge-success" id="verify-action-badge">Token Minting</span><br>
+          Amount: <b id="verify-amount-val" style="color:var(--primary-blue);">50 TCN</b><br>
+          Description: <span id="verify-desc-val" style="color:var(--text-muted);">Earned from booking #128669226</span><br>
+          Smart Contract Address: <code style="background:#f1f5f9; padding:2px 4px;">0x5E2D25...9733760</code>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-token-verify')">Close</button>
+        <button class="btn-action" onclick="showToast('คัดลอก Transaction Hash แล้ว!')">คัดลอก Tx Hash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Thailand Package -->
+  <div class="modal-overlay" id="modal-new-package" onclick="if(event.target===this) closeModal('modal-new-package')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>เพิ่มแพ็กเกจท่องเที่ยวใหม่ (Add Thailand Package)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-package')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">ชื่อแพ็กเกจ (Package Name) *</label>
+          <input type="text" id="new-pkg-name" class="input-clean" placeholder="เช่น เดย์ทัวร์เกาะพีพี อ่าวมาหยา เรือคาตามารัน" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">ผู้ให้บริการ (Supplier) *</label>
+          <input type="text" id="new-pkg-supplier" class="input-clean" placeholder="เช่น อันดามัน เวฟ มาสเตอร์" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">หมวดหมู่ *</label>
+            <select id="new-pkg-cat" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="สถานที่ท่องเที่ยว">สถานที่ท่องเที่ยว</option>
+              <option value="ที่พัก">ที่พัก</option>
+              <option value="ขนส่ง">ขนส่ง</option>
+              <option value="สุขภาพ/สปา">สุขภาพ/สปา</option>
+              <option value="อาหาร/เครื่องดื่ม">อาหาร/เครื่องดื่ม</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">ราคาขาย (THB) *</label>
+            <input type="text" id="new-pkg-price" class="input-clean" value="฿2,500.00" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-package')">Cancel</button>
+        <button class="btn-action" onclick="saveNewPackage()">บันทึกแพ็กเกจ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Manual Booking -->
+  <div class="modal-overlay" id="modal-new-booking" onclick="if(event.target===this) closeModal('modal-new-booking')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>สร้างคำสั่งจองใหม่ (Create Manual Booking)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-booking')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Agent / Partner *</label>
+          <select id="new-bk-agent" class="input-clean" style="width:100%; margin-top:4px;">
+            <option value="TVG">TVG Global OTA</option>
+            <option value="Gianttick">Gianttick</option>
+            <option value="Direct">Direct Guest</option>
+          </select>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">กิจกรรม / แพ็กเกจที่จอง *</label>
+          <input type="text" id="new-bk-package" class="input-clean" placeholder="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" value="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">จำนวนผู้โดยสาร (Pax) *</label>
+            <input type="number" id="new-bk-pax" class="input-clean" value="2" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">ยอดรวม (Total THB) *</label>
+            <input type="text" id="new-bk-total" class="input-clean" value="860" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-booking')">Cancel</button>
+        <button class="btn-action" onclick="saveNewBooking()">สร้างการจอง</button>
+      </div>
+    </div>
+  </div>
+
+    <script>
+    const navTitles = {
+      'dashboard': 'Performance Dashboard (ภาพรวมผลการดำเนินงาน)',
+      'activity-users': 'User > List Activity user',
+      'admin-users': 'User > Admin User List (ส่วนกลาง)',
+      'admin-roles': 'User > Admin Role & Screen Permissions',
+      'manage-profile': 'Manage > Profile & Information',
+      'manage-products': 'Manage > List Product (สินค้า/บริการ)',
+      'manage-contracts': 'Manage > Contract Agreement List',
+      'setting-allotment': 'Manage Allotment > Setting Allotment',
+      'enabled-allotment': 'Manage Allotment > Enabled Allotment',
+      'allotment-report': 'Manage Allotment > Report',
+      'price-tier': 'Manage Sale Channel > Price Tier',
+      'partner-price-tier': 'Manage Sale Channel > Partner Price Tier',
+      'specific-markup': 'Manage Sale Channel > Specific markup',
+      'booking-list': 'Manage Booking > Booking List',
+      'api-keys': 'API management > API Key & Integration',
+      'databank-kpi': 'Master Data > National Tourism Data Bank (108k)',
+      'token-log': 'Log > Travel Token & Audit Log',
+      'thailand-packages': 'Thailand Packages > Product Packages'
+    };
+
+    function switchView(viewId, triggerBtn) {
+      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById('view-' + viewId);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      document.querySelectorAll('.menu-item-btn, .submenu-item-btn').forEach(b => b.classList.remove('active'));
+
+      if (triggerBtn) {
+        triggerBtn.classList.add('active');
+        const parentSub = triggerBtn.closest('.submenu-list');
+        if (parentSub) {
+          const parentBtn = parentSub.previousElementSibling;
+          if (parentBtn) parentBtn.classList.add('active');
+        }
+      }
+
+      const title = navTitles[viewId] || viewId;
+      const crumb = document.getElementById('crumb-nav');
+      if (crumb) crumb.textContent = title;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleSubmenu(subId, btn) {
+      const sub = document.getElementById(subId);
+      const arrow = btn.querySelector('.menu-arrow');
+      if (sub) {
+        const isOpen = sub.classList.contains('open');
+        document.querySelectorAll('.submenu-list').forEach(s => s.classList.remove('open'));
+        document.querySelectorAll('.menu-arrow').forEach(a => a.classList.remove('open'));
+        if (!isOpen) {
+          sub.classList.add('open');
+          if (arrow) arrow.classList.add('open');
+        }
+      }
+    }
+
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.add('open');
+    }
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.remove('open');
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `toast-item ${type}`;
+
+      let icon = '✓';
+      if (type === 'info') icon = 'ℹ️';
+      if (type === 'warning') icon = '⚠️';
+      if (type === 'error') icon = '✕';
+
+      toast.innerHTML = `<span style="font-size:16px;">${icon}</span> <span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('toast-fadeout');
+        setTimeout(() => toast.remove(), 350);
+      }, 3000);
+    }
+
+    function exportTableToCSV(tableId, filename) {
+      const table = document.getElementById(tableId);
+      if (!table) {
+        showToast('ไม่พบตารางข้อมูลสำหรับการส่งออก', 'error');
+        return;
+      }
+
+      let csv = [];
+      const rows = table.querySelectorAll('tr');
+
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].style.display === 'none') continue;
+        let row = [];
+        const cols = rows[i].querySelectorAll('td, th');
+        for (let j = 0; j < cols.length; j++) {
+          let text = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, ' ').replace(/"/g, '""').trim();
+          row.push('"' + text + '"');
+        }
+        if (row.length > 0) csv.push(row.join(','));
+      }
+
+      const csvContent = '\uFEFF' + csv.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`ส่งออกไฟล์ ${filename} เรียบร้อยแล้ว!`, 'success');
+    }
+
+    function filterTable(inputId, tableId, countSpanId = null) {
+      const input = document.getElementById(inputId);
+      const filter = input ? input.value.toLowerCase() : '';
+      const table = document.getElementById(tableId);
+      if (!table) return;
+
+      const rows = table.querySelectorAll('tbody tr');
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        if (text.includes(filter)) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      if (countSpanId) {
+        const countEl = document.getElementById(countSpanId);
+        if (countEl) countEl.textContent = visibleCount;
+      }
+    }
+
+    function toggleDateRangeMenu(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('dash-date-menu');
+      if (menu) menu.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('dash-date-menu');
+      if (menu && !menu.contains(e.target)) {
+        menu.classList.remove('show');
+      }
+    });
+
+    function selectDateRange(rangeKey) {
+      const label = document.getElementById('dash-date-label');
+      const totalRev = document.getElementById('dash-total-revenue');
+      const kpiBookings = document.getElementById('dash-kpi-bookings');
+      const todayRev = document.getElementById('dash-kpi-today-rev');
+      const todayCount = document.getElementById('dash-kpi-today-count');
+
+      document.querySelectorAll('.date-dropdown-item').forEach(i => i.classList.remove('active'));
+
+      if (rangeKey === 'default') {
+        label.textContent = 'January 23, 2023 - February 7, 2023';
+        totalRev.textContent = '฿ 96,430.00';
+        kpiBookings.textContent = '80';
+        todayRev.textContent = '฿ 0.00';
+        todayCount.textContent = '0';
+      } else if (rangeKey === 'last7') {
+        label.textContent = 'Last 7 Days (1 Feb - 7 Feb 2023)';
+        totalRev.textContent = '฿ 42,850.00';
+        kpiBookings.textContent = '36';
+        todayRev.textContent = '฿ 2,580.00';
+        todayCount.textContent = '4';
+      } else if (rangeKey === 'last30') {
+        label.textContent = 'Last 30 Days (9 Jan - 7 Feb 2023)';
+        totalRev.textContent = '฿ 185,620.00';
+        kpiBookings.textContent = '154';
+        todayRev.textContent = '฿ 2,580.00';
+        todayCount.textContent = '4';
+      } else if (rangeKey === 'ytd') {
+        label.textContent = 'Year 2023 to Date (1 Jan - 7 Feb 2023)';
+        totalRev.textContent = '฿ 428,900.00';
+        kpiBookings.textContent = '362';
+        todayRev.textContent = '฿ 2,580.00';
+        todayCount.textContent = '4';
+      }
+
+      const menu = document.getElementById('dash-date-menu');
+      if (menu) menu.classList.remove('show');
+      showToast(`อัปเดตสถิติช่วงเวลา: ${label.textContent}`, 'info');
+    }
+
+    function openBookingDetail(bno, agent = 'TVG', amount = '430 THB', date = '2023-02-06 15:12:08', supplier = 'Sealife Bangkok', pkg = 'SLBK Aquarium Admission Only') {
+      const bnoEl = document.getElementById('detail-bno');
+      if (bnoEl) bnoEl.textContent = bno;
+      openModal('modal-booking-detail');
+    }
+
+    function printBookingVoucher() {
+      showToast('กำลังพิมพ์บัตร Voucher การจอง...', 'info');
+      setTimeout(() => {
+        window.print();
+      }, 400);
+    }
+
+    function refundBookingAction() {
+      const bno = document.getElementById('detail-bno').textContent;
+      if (confirm(`คุณต้องการยืนยันการคืนเงิน (Refund) สำหรับคำสั่งจอง #${bno} ใช่หรือไม่?`)) {
+        closeModal('modal-booking-detail');
+        showToast(`ดำเนินการคืนเงินคำสั่งจอง #${bno} เรียบร้อยแล้ว`, 'success');
+      }
+    }
+
+    function saveNewAdmin() {
+      const fname = document.getElementById('new-admin-fname') ? document.getElementById('new-admin-fname').value : 'New';
+      const lname = document.getElementById('new-admin-lname') ? document.getElementById('new-admin-lname').value : 'Admin';
+      const email = document.getElementById('new-admin-email') ? document.getElementById('new-admin-email').value : 'admin@depa.or.th';
+
+      const table = document.getElementById('table-admin-users');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><label class="switch-ui"><input type="checkbox" checked onchange="toggleAdminStatus(this, '${fname} ${lname}')"><span class="switch-slider"></span></label></td>
+          <td><b>${fname} ${lname}</b><br><small style="color:var(--text-muted)">${email}</small></td>
+          <td><span class="badge badge-info">Administrator</span></td>
+          <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+          <td style="text-align: right;"><button class="btn-secondary" onclick="showToast('แก้ไขข้อมูล ${fname}')">✏️</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+
+        const countEl = document.getElementById('admin-result-count');
+        if (countEl) countEl.textContent = parseInt(countEl.textContent || '0') + 1;
+      }
+
+      closeModal('modal-new-admin');
+      showToast(`สร้างผู้ดูแลระบบ ${fname} ${lname} เรียบร้อยแล้ว!`, 'success');
+    }
+
+    function saveNewActivityUser() {
+      const name = document.getElementById('new-act-fullname').value || 'New User';
+      const email = document.getElementById('new-act-email').value || 'user@example.com';
+
+      const tbody = document.getElementById('tbody-activity-users');
+      if (tbody) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${name}</b></td>
+          <td>${email}</td>
+          <td><span style="font-size:18px;">👤</span></td>
+          <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, '${name}')"><span class="switch-slider"></span></label></td>
+          <td style="text-align: right;">
+            <button class="btn-secondary" onclick="editActivityUser('${name}', '${email}')">✏️ แก้ไข</button>
+            <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, '${name}')">🗑️</button>
+          </td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+      closeModal('modal-new-activity-user');
+      showToast(`เพิ่มผู้ใช้งาน ${name} สำเร็จ!`, 'success');
+    }
+
+    function toggleUserStatus(checkbox, name) {
+      const status = checkbox.checked ? 'ปิดการใช้งาน (Disabled)' : 'เปิดการใช้งาน (Active)';
+      showToast(`เปลี่ยนสถานะผู้ใช้ ${name}: ${status}`, checkbox.checked ? 'warning' : 'success');
+    }
+
+    function toggleAdminStatus(checkbox, name) {
+      const status = checkbox.checked ? 'เปิดใช้งาน (Active)' : 'ระงับการใช้งาน (Suspended)';
+      showToast(`สถานะผู้ดูแล ${name}: ${status}`, checkbox.checked ? 'success' : 'warning');
+    }
+
+    function editActivityUser(name, email) {
+      const newEmail = prompt(`แก้ไขอีเมลสำหรับ ${name}:`, email);
+      if (newEmail) {
+        showToast(`บันทึกการแก้ไขผู้ใช้ ${name} สำเร็จ`, 'success');
+      }
+    }
+
+    function deleteTableRow(btn, name) {
+      if (confirm(`คุณต้องการลบรายการ ${name} ใช่หรือไม่?`)) {
+        const tr = btn.closest('tr');
+        if (tr) tr.remove();
+        showToast(`ลบรายการ ${name} เรียบร้อยแล้ว`, 'info');
+      }
+    }
+
+    function resetActivityUsers() {
+      const input = document.getElementById('search-activity-users');
+      if (input) input.value = '';
+      filterTable('search-activity-users', 'table-activity-users');
+      showToast('รีเซ็ตการค้นหาเรียบร้อย', 'info');
+    }
+
+    function applyRolePreset(role) {
+      const checkboxes = document.querySelectorAll('#view-admin-roles table input[type="checkbox"]');
+      if (role === 'admin') {
+        checkboxes.forEach(cb => cb.checked = true);
+        showToast('ใช้เทมเพลตสิทธิ์: Super Admin (เข้าถึงได้ทุกสิทธิ์)', 'success');
+      } else if (role === 'operator') {
+        checkboxes.forEach((cb, idx) => cb.checked = (idx % 2 === 0));
+        showToast('ใช้เทมเพลตสิทธิ์: Operator (จัดการสินค้า/บริการ)', 'info');
+      } else if (role === 'finance') {
+        checkboxes.forEach((cb, idx) => cb.checked = (idx % 3 !== 0));
+        showToast('ใช้เทมเพลตสิทธิ์: Finance (การเงินและ Price Tier)', 'info');
+      } else if (role === 'auditor') {
+        checkboxes.forEach(cb => cb.checked = false);
+        document.querySelectorAll('#view-admin-roles tbody tr td:nth-child(2) input').forEach(cb => cb.checked = true);
+        showToast('ใช้เทมเพลตสิทธิ์: Auditor (อ่านอย่างเดียว Read-Only)', 'warning');
+      }
+    }
+
+    function toggleAllScreenPerms(check) {
+      const checkboxes = document.querySelectorAll('#view-admin-roles table input[type="checkbox"]');
+      checkboxes.forEach(cb => cb.checked = check);
+      showToast(check ? 'เลือกทุกสิทธิ์การเข้าถึงแล้ว' : 'ล้างสิทธิ์ทั้งหมดแล้ว', 'info');
+    }
+
+    function savePermissions() {
+      showToast('บันทึกการกำหนดสิทธิ์ระดับหน้าจอสำเร็จ (Permissions Saved)', 'success');
+    }
+
+    function saveProfile() {
+      showToast('บันทึกข้อมูลนิติบุคคลและโปรไฟล์ผู้ประกอบการเรียบร้อยแล้ว!', 'success');
+    }
+
+    function saveNewProduct() {
+      const name = document.getElementById('new-prod-name').value || 'แพ็กเกจนำเที่ยวใหม่';
+      const code = document.getElementById('new-prod-code').value || 'ACT008888';
+      const time = document.getElementById('new-prod-time').value || '24 hours';
+
+      const table = document.getElementById('table-products');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color:#94a3b8; cursor:grab;">☰</td>
+          <td><b>${name}</b></td>
+          <td><span class="badge badge-info">${code}</span></td>
+          <td>${time}</td>
+          <td><label class="switch-ui"><input type="checkbox" checked onchange="toggleProductEnabled(this, '${code}')"><span class="switch-slider"></span></label></td>
+          <td><span class="badge badge-success">Approved</span></td>
+          <td style="text-align: right;"><button class="btn-secondary" onclick="showToast('แก้ไข ${code}')">✏️</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+
+        const count = document.getElementById('product-count');
+        if (count) count.textContent = parseInt(count.textContent || '0') + 1;
+      }
+
+      closeModal('modal-new-product');
+      showToast(`เพิ่มสินค้า ${name} สำเร็จ!`, 'success');
+    }
+
+    function filterProductCategory(cat) {
+      const table = document.getElementById('table-products');
+      if (!table) return;
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        if (cat === 'all' || row.innerText.includes(cat)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function toggleProductEnabled(checkbox, code) {
+      showToast(`อัปเดตสถานะการจำหน่ายรหัส ${code}: ${checkbox.checked ? 'เปิดขาย (Active)' : 'พักการขาย (Suspended)'}`, checkbox.checked ? 'success' : 'warning');
+    }
+
+    function viewContractModal(btn) {
+      const tr = btn.closest('tr');
+      const name = tr ? tr.querySelector('td:nth-child(2)').innerText : 'Terms & Conditions';
+      const date = tr ? tr.querySelector('td:nth-child(6)').innerText : '01/01/2023';
+
+      document.getElementById('contract-view-title').textContent = name;
+      document.getElementById('contract-view-date').textContent = date;
+      openModal('modal-contract-view');
+    }
+
+    function downloadContractPDF() {
+      const title = document.getElementById('contract-view-title').textContent;
+      showToast(`กำลังเตรียมดาวน์โหลดไฟล์ PDF: ${title}...`, 'info');
+      setTimeout(() => {
+        showToast('ดาวน์โหลดเอกสารสัญญาเสร็จสมบูรณ์', 'success');
+        closeModal('modal-contract-view');
+      }, 1000);
+    }
+
+    function saveNewContract() {
+      const name = document.getElementById('new-contract-name').value || 'New Agreement';
+      const date = document.getElementById('new-contract-date').value || '2023-03-01';
+
+      const table = document.getElementById('table-contracts');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>5.</td>
+          <td><b>${name}</b></td>
+          <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+          <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+          <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+          <td>${date}</td>
+          <td style="text-align:center;">-</td>
+          <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+      closeModal('modal-new-contract');
+      showToast(`บันทึกสัญญา ${name} สำเร็จ!`, 'success');
+    }
+
+    function applyBulkAllotment() {
+      const qty = document.getElementById('bulk-allotment-qty').value || '30';
+      const rows = document.querySelectorAll('#table-setting-allotment tbody tr');
+      rows.forEach(row => {
+        const qtyCol = row.querySelector('td:nth-child(2)');
+        if (qtyCol) qtyCol.innerHTML = `<b>${qty}</b>`;
+      });
+      showToast(`ปรับจำนวนโควตาทุกรายการเป็น ${qty} ที่นั่งเรียบร้อย!`, 'success');
+    }
+
+    function saveNewAllotment() {
+      const prod = document.getElementById('new-allot-prod').value || 'บัตรกิจกรรมใหม่';
+      const qty = document.getElementById('new-allot-qty').value || '30';
+      const time = document.getElementById('new-allot-time').value || '14:00';
+
+      const table = document.getElementById('table-setting-allotment');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${prod}</b></td>
+          <td><b>${qty}</b></td>
+          <td>${time}</td>
+          <td>-</td>
+          <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+          <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+      closeModal('modal-new-allotment');
+      showToast(`บันทึกโควตา ${prod} จำนวน ${qty} สิทธิ์สำเร็จ!`, 'success');
+    }
+
+    function saveNewPriceTier() {
+      const name = document.getElementById('new-tier-name').value || 'Standard Plus';
+      const markup = document.getElementById('new-tier-markup').value || '60';
+
+      const table = document.getElementById('table-price-tier');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${name}</b></td>
+          <td><b>${markup}</b> THB</td>
+          <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+      closeModal('modal-new-tier');
+      showToast(`สร้างระดับราคา ${name} (+${markup} THB) สำเร็จ!`, 'success');
+    }
+
+    function saveNewPartnerTier() {
+      const partner = document.getElementById('new-pt-account').value || 'Partner';
+      const tier = document.getElementById('new-pt-tier').value || 'standard A';
+
+      const table = document.getElementById('table-partner-tier');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>2023-02-15 10:00:00</td>
+          <td><b>${partner}</b></td>
+          <td><span class="badge badge-info">${tier}</span></td>
+          <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+      closeModal('modal-new-partner-tier');
+      showToast(`กำหนดขั้นราคาคู่ค้า ${partner} เป็น ${tier} สำเร็จ!`, 'success');
+    }
+
+    function saveNewSpecificMarkup() {
+      const partner = document.getElementById('new-sm-partner').value || 'TVG';
+      const supplier = document.getElementById('new-sm-supplier').value || 'Supplier';
+      const markup = document.getElementById('new-sm-markup').value || '45';
+
+      const table = document.getElementById('table-specific-markup');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${partner}</b></td>
+          <td>${supplier}</td>
+          <td><b>${markup}</b> THB</td>
+          <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+      closeModal('modal-new-markup');
+      showToast(`บันทึก Specific Markup ${partner} สำหรับ ${supplier} เรียบร้อย!`, 'success');
+    }
+
+    function saveNewBooking() {
+      const agent = document.getElementById('new-bk-agent').value || 'TVG';
+      const bno = '128' + Math.floor(100000 + Math.random() * 900000);
+      const total = document.getElementById('new-bk-total').value || '860';
+
+      const table = document.getElementById('table-bookings');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>2023-02-07 10:15:00</td>
+          <td><b>${bno}</b></td>
+          <td>167576${bno}</td>
+          <td><span class="badge badge-info">${agent}</span></td>
+          <td><b>${total}</b> THB</td>
+          <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+          <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('${bno}', '${agent}', '${total} THB')">View 👁️</button></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+
+        const count = document.getElementById('booking-count');
+        if (count) count.textContent = parseInt(count.textContent || '0') + 1;
+      }
+      closeModal('modal-new-booking');
+      showToast(`สร้างคำสั่งจอง #${bno} ยอด ${total} THB สำเร็จ!`, 'success');
+    }
+
+    function filterBookingStatus(status) {
+      const table = document.getElementById('table-bookings');
+      if (!table) return;
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        if (status === 'all') {
+          row.style.display = '';
+        } else if (status === 'confirmed') {
+          row.style.display = row.querySelector('input[type="checkbox"]').checked ? '' : 'none';
+        } else {
+          row.style.display = '';
+        }
+      });
+    }
+
+    function copyApiKey(key) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(key).then(() => {
+          showToast('คัดลอก API Key ลงในคลิปบอร์ดแล้ว!', 'success');
+        }).catch(() => {
+          prompt('คัดลอก API Key:', key);
+        });
+      } else {
+        prompt('คัดลอก API Key:', key);
+      }
+    }
+
+    function saveNewApiKey() {
+      const client = document.getElementById('new-api-client').value || 'New Client App';
+      const ip = document.getElementById('new-api-ip').value || '203.144.10.1';
+      const ratelimit = document.getElementById('new-api-ratelimit').value || '5,000 req/min';
+      const keyShort = 'tk_live_' + Math.random().toString(36).substring(2, 12) + '...';
+      const fullKey = 'tk_live_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+      const table = document.getElementById('table-api-keys');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${client}</b></td>
+          <td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">${keyShort}</code> <button class="btn-secondary" style="font-size:11px; padding:2px 6px; margin-left:6px;" onclick="copyApiKey('${fullKey}')">📋 Copy</button></td>
+          <td>${ratelimit}</td>
+          <td>${ip}</td>
+          <td style="text-align: right;"><span class="badge badge-success">Active</span></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+      }
+      closeModal('modal-new-apikey');
+      showToast(`สร้าง API Key สำหรับ ${client} เรียบร้อยแล้ว!`, 'success');
+    }
+
+    function filterDataBankProvince(prov) {
+      const hotel = document.getElementById('db-kpi-hotel');
+      const food = document.getElementById('db-kpi-food');
+      const agent = document.getElementById('db-kpi-agent');
+      const wellness = document.getElementById('db-kpi-wellness');
+
+      if (prov === 'all') {
+        if (hotel) hotel.textContent = '35,962';
+        if (food) food.textContent = '23,783';
+        if (agent) agent.textContent = '22,439';
+        if (wellness) wellness.textContent = '10,059';
+        showToast('แสดงฐานข้อมูลผู้ประกอบการทั่วประเทศ (108,659 ราย)', 'info');
+      } else if (prov === 'bkk') {
+        if (hotel) hotel.textContent = '8,420';
+        if (food) food.textContent = '7,890';
+        if (agent) agent.textContent = '6,940';
+        if (wellness) wellness.textContent = '5,200';
+        showToast('แสดงฐานข้อมูล: กรุงเทพมหานคร (28,450 ราย)', 'info');
+      } else if (prov === 'phuket') {
+        if (hotel) hotel.textContent = '7,150';
+        if (food) food.textContent = '4,210';
+        if (agent) agent.textContent = '4,890';
+        if (wellness) wellness.textContent = '2,170';
+        showToast('แสดงฐานข้อมูล: จังหวัดภูเก็ต (18,420 ราย)', 'info');
+      } else if (prov === 'cm') {
+        if (hotel) hotel.textContent = '5,210';
+        if (food) food.textContent = '3,840';
+        if (agent) agent.textContent = '3,650';
+        if (wellness) wellness.textContent = '2,190';
+        showToast('แสดงฐานข้อมูล: จังหวัดเชียงใหม่ (14,890 ราย)', 'info');
+      } else if (prov === 'chonburi') {
+        if (hotel) hotel.textContent = '4,820';
+        if (food) food.textContent = '3,110';
+        if (agent) agent.textContent = '2,780';
+        if (wellness) wellness.textContent = '1,600';
+        showToast('แสดงฐานข้อมูล: จังหวัดชลบุรี / พัทยา (12,310 ราย)', 'info');
+      } else if (prov === 'surat') {
+        if (hotel) hotel.textContent = '3,950';
+        if (food) food.textContent = '2,100';
+        if (agent) agent.textContent = '1,850';
+        if (wellness) wellness.textContent = '1,050';
+        showToast('แสดงฐานข้อมูล: จังหวัดสุราษฎร์ธานี / เกาะสมุย (8,950 ราย)', 'info');
+      }
+    }
+
+    function verifyTokenTx(hash, block, action, amount, desc) {
+      document.getElementById('verify-tx-hash').textContent = hash;
+      document.getElementById('verify-block-no').textContent = '#' + block;
+      document.getElementById('verify-action-badge').textContent = action;
+      document.getElementById('verify-amount-val').textContent = amount;
+      document.getElementById('verify-desc-val').textContent = desc || 'Blockchain Travel Token Audit';
+      openModal('modal-token-verify');
+    }
+
+    function saveNewPackage() {
+      const name = document.getElementById('new-pkg-name').value || 'แพ็กเกจใหม่';
+      const supplier = document.getElementById('new-pkg-supplier').value || 'Supplier';
+      const cat = document.getElementById('new-pkg-cat').value || 'สถานที่ท่องเที่ยว';
+      const price = document.getElementById('new-pkg-price').value || '฿1,500.00';
+
+      const table = document.getElementById('table-packages');
+      if (table) {
+        const tbody = table.querySelector('tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>6</td>
+          <td><b>${name}</b></td>
+          <td>${supplier}</td>
+          <td>${cat}</td>
+          <td><b>${price}</b></td>
+          <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+        `;
+        tbody.insertBefore(tr, tbody.firstChild);
+
+        const count = document.getElementById('package-count');
+        if (count) count.textContent = parseInt(count.textContent || '0') + 1;
+      }
+      closeModal('modal-new-package');
+      showToast(`เพิ่มแพ็กเกจ ${name} สำเร็จ!`, 'success');
+    }
+
+    function filterPkgCategory(cat) {
+      const table = document.getElementById('table-packages');
+      if (!table) return;
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        if (cat === 'all' || row.innerText.includes(cat)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

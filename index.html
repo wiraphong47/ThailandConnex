@@ -1663,14 +1663,16 @@
           </div>
         </button>
 
-        <button class="side-nav-item" data-target="view-directory" onclick="handleMenuClick('view-directory', 'ฐานข้อมูลบริการ (Data Bank)', this)">
-          <div class="side-item-left">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-            <span>ฐานข้อมูลบริการ (Data Bank)</span>
-          </div>
-        </button>
+        
 
-        <div class="menu-group-label" style="margin-top: 14px;">ระบบผู้ดูแล (Administration)</div>
+        <div class="menu-group-label" style="margin-top: 14px;">ระบบส่วนกลางและฐานข้อมูล (Administration)</div>
+        <a href="admin.html#databank" class="side-nav-item" style="text-decoration: none;" title="เปิดดูฐานข้อมูลบริการและการท่องเที่ยวแห่งชาติ (National Tourism Data Bank 108k/201k)">
+          <div class="side-item-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            <span>ฐานข้อมูลท่องเที่ยวแห่งชาติ (Data Bank)</span>
+          </div>
+          <span style="font-size:11px; color:var(--teal); font-weight:700;">108k ➔</span>
+        </a>
         <a href="admin.html" class="side-nav-item side-nav-admin" style="text-decoration: none;" title="กลับไปยังหน้า Central Admin Portal">
           <div class="side-item-left">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1795,6 +1797,28 @@
         <!-- Service Cards Grid -->
         <div class="grid-3" id="services-grid">
           <!-- Dynamically populated via JS from PDF exact dataset -->
+        </div>
+
+        <!-- National Digital Tourism Data Bank Gateway Card -->
+        <div style="background: linear-gradient(135deg, #083b7c, #0c4a6e); border-radius: 14px; padding: 22px 26px; color: #fff; margin-top: 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; box-shadow: 0 4px 18px rgba(8,59,124,0.18);">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 26px;">
+              🗄️
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                <span>ฐานข้อมูลสินค้าและบริการท่องเที่ยวแห่งชาติ (National Tourism Data Bank)</span>
+                <span style="font-size: 11px; background: #08b99d; color: #fff; padding: 2px 8px; border-radius: 20px; font-weight:600;">ศูนย์ข้อมูลกลาง depa</span>
+              </div>
+              <div style="font-size: 12.5px; color: #bae6fd; max-width: 680px; line-height: 1.5;">
+                ศูนย์กลาง Big Data รวบรวมผู้ประกอบการท่องเที่ยว <b>108,659 ราย</b> และสินค้า/บริการ <b>201,764 รายการ</b> ทั่วประเทศ 77 จังหวัด ได้รับการย้ายไปบริหารจัดการและวิเคราะห์ข้อมูลผ่านระบบส่วนกลางที่ <b>Admin Portal</b>
+              </div>
+            </div>
+          </div>
+          <a href="admin.html#databank" style="display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #083b7c; font-weight: 700; font-size: 13px; padding: 10px 20px; border-radius: 8px; text-decoration: none; transition: transform 0.2s; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+            <span>เข้าสู่ระบบ Data Bank ที่ Admin Portal</span>
+            <span>➔</span>
+          </a>
         </div>
       </section>
 
@@ -2027,63 +2051,7 @@
         </div>
       </section>
 
-      <!-- ============================================== -->
-      <!-- VIEW 6: NATIONAL DATA DIRECTORY (PDF Page 175-242) -->
-      <!-- ============================================== -->
-      <section id="view-directory" class="view-panel">
-        <div class="section-head">
-          <div>
-            <h2>ฐานข้อมูลสินค้าและบริการท่องเที่ยวแห่งชาติ (National Tourism Data Bank)</h2>
-            <p>รวบรวมข้อมูลสินค้าและบริการจากผู้ประกอบการ 8 หมวดหมู่ (อ้างอิงรายงานสมบูรณ์ depa)</p>
-          </div>
-          <button class="btn-export" onclick="exportDirectoryCSV()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            Export รายการทั้งหมด
-          </button>
-        </div>
-
-        <div class="table-container">
-          <div class="table-toolbar">
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <select id="dir-category-select" class="table-filter-select" onchange="filterDirectoryTable()">
-                <option value="all">ทุกหมวดหมู่ (201,764 รายการ)</option>
-                <option value="Accommodation">1. โรงแรมและที่พัก (143,035)</option>
-                <option value="Mobility">2. ขนส่งผู้โดยสาร (5,172)</option>
-                <option value="Attraction">3. แหล่งท่องเที่ยว (6,652)</option>
-                <option value="Wellness">4. สุขภาพและสปา (8,386)</option>
-                <option value="Tour">5. ตัวแทนท่องเที่ยวและไกด์ (30,948)</option>
-                <option value="Community">6. ชุมชนท่องเที่ยว (553)</option>
-                <option value="Food">7. ร้านอาหารและเครื่องดื่ม (6,044)</option>
-                <option value="Retail">8. ร้านค้าปลีกและของที่ระลึก (974)</option>
-              </select>
-              <input type="text" id="dir-search" class="table-search" placeholder="ค้นหาชื่อบริการ / ผู้ประกอบการ / จังหวัด..." oninput="filterDirectoryTable()">
-            </div>
-            <div style="font-size:12px; color:var(--muted);" id="dir-count-info">
-              แสดงข้อมูลตัวอย่างจากฐานข้อมูล Big Data ของโครงการ
-            </div>
-          </div>
-
-          <div style="overflow-x:auto;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ลำดับ</th>
-                  <th>หมวดหมู่</th>
-                  <th>ชื่อผู้ประกอบการ (Supplier)</th>
-                  <th>ชื่อสินค้า / แพ็กเกจบริการ</th>
-                  <th>จังหวัด / พื้นที่</th>
-                  <th>ราคา (THB)</th>
-                  <th>โควตา Allotment</th>
-                  <th>การจอง</th>
-                </tr>
-              </thead>
-              <tbody id="directory-tbody">
-                <!-- Injected via JavaScript from report tables -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      <!-- VIEW 6: MOVED TO ADMIN PORTAL (National Tourism Data Bank) -->
 
     </main>
   </div>
@@ -4043,6 +4011,7 @@
     // Render National Services Directory Table
     function renderDirectory() {
       const tbody = document.getElementById('directory-tbody');
+      if (!tbody) return;
       const cat = document.getElementById('dir-category-select').value;
       const search = (document.getElementById('dir-search').value || '').toLowerCase();
 

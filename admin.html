@@ -980,6 +980,17 @@
                 </tr>
               </thead>
               <tbody id="tbody-activity-users">
+                <tr style="background: rgba(22, 141, 225, 0.06); font-weight:600;">
+                  <td><b>คุณอลิสา ใจดี</b> <span class="badge badge-info" style="font-size:10.5px; margin-left:6px;">Current User (Portal)</span></td>
+                  <td>alisa.jaidee@thailandconnex.com</td>
+                  <td><span style="font-size:18px;">👤</span> <span style="font-size:11px; color:var(--text-muted);">TC-849204</span></td>
+                  <td><label class="switch-ui" title="ปิดกั้นการเข้าถึง"><input type="checkbox" onchange="toggleUserStatus(this, 'อลิสา ใจดี')"><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;">
+                    <button class="btn-secondary" onclick="editActivityUser('อลิสา ใจดี', 'alisa.jaidee@thailandconnex.com')">✏️ แก้ไข</button>
+                    <span class="badge badge-success" style="margin-left:4px;">Active</span>
+                  </td>
+                </tr>
+
                 <tr>
                   <td><b>Panop Api</b></td>
                   <td>admin@inrum</td>
@@ -2537,6 +2548,7 @@
 
       const reservations = data.reservations || [];
       const tokenLogs = data.tokenLogs || [];
+      const services = data.services || [];
 
       // Update KPI
       const kpiBookings = document.getElementById('dash-kpi-bookings');
@@ -2561,12 +2573,12 @@
       if (dashTable) {
         const tbody = dashTable.querySelector('tbody');
         if (tbody) {
-          const latest5 = reservations.slice(0, 5);
+          const latest5 = reservations.slice(0, 6);
           tbody.innerHTML = latest5.map((r, idx) => `
             <tr style="cursor:pointer;" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">
               <td>${idx + 1}</td>
               <td>${r.bookedOn}</td>
-              <td><b style="color:var(--primary-blue);">${r.id}</b></td>
+              <td><b style="color:var(--primary-blue);">BK-${r.id.replace('BK-', '')}</b></td>
               <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
               <td style="text-align: right;">
                 <span class="badge ${r.status === 'Confirmed' ? 'badge-success' : (r.status === 'Cancelled' ? 'badge-danger' : 'badge-warning')}">${r.status}</span>
@@ -2587,10 +2599,10 @@
           tbody.innerHTML = reservations.map(r => `
             <tr>
               <td>${r.bookedOn}</td>
-              <td><b>${r.id}</b></td>
+              <td><b>BK-${r.id.replace('BK-', '')}</b></td>
               <td>${r.refNo || ('1675' + r.id)}</td>
               <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
-              <td><b>${Number(r.amount).toLocaleString()}</b> THB</td>
+              <td><b>฿${Number(r.amount).toLocaleString()}</b></td>
               <td>
                 <label class="switch-ui" title="เปิด/ปิดการยืนยันคำสั่งจอง">
                   <input type="checkbox" ${r.status === 'Confirmed' ? 'checked' : ''} onchange="adminToggleBookingStatus('${r.id}', this.checked)">
@@ -2622,6 +2634,47 @@
               <td style="text-align: right;"><span class="badge badge-success">Block #${l.block || '8481515'}</span></td>
             </tr>
           `).join('');
+        }
+      }
+
+      // Render List Product in View 6 from shared services
+      const prodTable = document.getElementById('table-products');
+      if (prodTable && services.length > 0) {
+        const tbody = prodTable.querySelector('tbody');
+        if (tbody) {
+          tbody.innerHTML = services.map((s, idx) => `
+            <tr>
+              <td style="color:#94a3b8; cursor:grab;">☰</td>
+              <td><b>${s.title}</b><br><small style="color:var(--text-muted)">โดย ${s.provider} (${s.location})</small></td>
+              <td><span class="badge badge-info">ACT00${1000 + idx + 1}</span></td>
+              <td>${s.unit === 'คืน' ? '24 hours' : 'Same day'}</td>
+              <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+              <td><span class="badge badge-success">Approved</span></td>
+              <td style="text-align: right;"><b style="color:var(--primary-navy)">฿${s.price.toLocaleString()}</b></td>
+            </tr>
+          `).join('');
+          const pCount = document.getElementById('product-count');
+          if (pCount) pCount.textContent = services.length;
+        }
+      }
+
+      // Render Thailand Packages in View 18 from shared services
+      const pkgTable = document.getElementById('table-packages');
+      if (pkgTable && services.length > 0) {
+        const tbody = pkgTable.querySelector('tbody');
+        if (tbody) {
+          tbody.innerHTML = services.map((s, idx) => `
+            <tr>
+              <td>${idx + 1}</td>
+              <td><b>${s.title}</b></td>
+              <td>${s.provider}</td>
+              <td><span class="feat-tag" style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px;">${s.categoryName}</span></td>
+              <td><b>฿${s.price.toLocaleString()}.00</b></td>
+              <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
+            </tr>
+          `).join('');
+          const pkgCount = document.getElementById('package-count');
+          if (pkgCount) pkgCount.textContent = services.length;
         }
       }
     }

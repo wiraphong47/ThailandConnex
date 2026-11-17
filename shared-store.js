@@ -1,7 +1,6 @@
 /**
- * ThailandCONNEX - Shared Real-time Data Store
- * Provides bi-directional live data synchronization between Admin Portal (admin.html)
- * and User/Traveler Portal (index.html) using Web Storage and Storage Events.
+ * ThailandCONNEX - Shared Real-time Data Store (V3)
+ * Full Bi-directional Synchronized Store between Admin and User Portals
  */
 
 (function (root, factory) {
@@ -15,10 +14,10 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const STORAGE_KEY = 'TC_DATA_STORE_V2';
+  const STORAGE_KEY = 'TC_DATA_STORE_V3';
 
   const DEFAULT_STATE = {
-    version: 2,
+    version: 3,
     lastUpdated: Date.now(),
     user: {
       name: 'อลิสา ใจดี',
@@ -28,6 +27,218 @@
       walletAddress: '0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760',
       tokenBalance: 41520.00
     },
+    services: [
+      {
+        id: 'SRV-01',
+        category: 'accommodation',
+        categoryName: 'โรงแรมและที่พัก',
+        title: 'Sukhumvit Park, Bangkok - Marriott Executive Apartments',
+        provider: 'Sukhumvit Park Hotel',
+        location: 'สุขุมวิท, กรุงเทพมหานคร',
+        rating: '4.9 ★',
+        features: ['SHA Plus', 'WiFi ฟรี', 'สระว่ายน้ำ', 'ใกล้ BTS'],
+        price: 28999,
+        unit: 'คืน',
+        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80',
+        roomType: 'One Bedroom Suite',
+        allotment: 12
+      },
+      {
+        id: 'SRV-02',
+        category: 'accommodation',
+        categoryName: 'โรงแรมและที่พัก',
+        title: 'Cye 428 All Day Hostel @ Sukhumvit',
+        provider: 'Cye Hospitality Group',
+        location: 'คลองเตย, กรุงเทพมหานคร',
+        rating: '4.8 ★',
+        features: ['ฟรีอาหารเช้า', 'Co-working Space', 'WiFi ความเร็วสูง'],
+        price: 1850,
+        unit: 'คืน',
+        image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Deluxe Dormitory Room',
+        allotment: 24
+      },
+      {
+        id: 'SRV-03',
+        category: 'accommodation',
+        categoryName: 'โรงแรมและที่พัก',
+        title: 'เดอะ มยุ สกาย รีสอร์ท แมท หัวหิน (SHA Extra Plus)',
+        provider: 'บจก. สวนพักรักไทยโฮมสเตย์',
+        location: 'หัวหิน, ประจวบคีรีขันธ์',
+        rating: '4.9 ★',
+        features: ['วิวทะเลส่วนตัว', 'อาหารเช้า 2 ท่าน', 'สระว่ายน้ำอินฟินิตี้'],
+        price: 3994,
+        unit: 'คืน',
+        image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Deluxe With Breakfast',
+        allotment: 8
+      },
+      {
+        id: 'SRV-04',
+        category: 'attraction',
+        categoryName: 'แหล่งท่องเที่ยว',
+        title: 'บัตรเข้าชมวิว + ดินเนอร์บุฟเฟ่ต์ ตึกใบหยกสกาย',
+        provider: 'Bangkok Balcony Baiyoke',
+        location: 'ราชเทวี, กรุงเทพมหานคร',
+        rating: '4.7 ★',
+        features: ['ชมวิวชั้น 77 & 84', 'บุฟเฟ่ต์ซีฟู้ดพรีเมียม', 'Open Air Balcony'],
+        price: 1290,
+        unit: 'ท่าน',
+        image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Dinner Buffet Ticket',
+        allotment: 50
+      },
+      {
+        id: 'SRV-05',
+        category: 'wellness',
+        categoryName: 'สุขภาพและสปา',
+        title: '7 Spa Luxury Health & Wellness - Mud Wrap & Thai Herbal',
+        provider: '7 Spa Luxury Group',
+        location: 'บางละมุง, ชลบุรี',
+        rating: '4.9 ★',
+        features: ['นวด 120 นาที', 'อ่างแช่น้ำแร่สมุนไพร', 'Welcome Drink'],
+        price: 1400,
+        unit: 'คอร์ส',
+        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Mud or Clay Body Wrap (120 Mins)',
+        allotment: 15
+      },
+      {
+        id: 'SRV-06',
+        category: 'tour',
+        categoryName: 'แพ็กเกจทัวร์',
+        title: 'ล่องเรือสำราญ Chao Phraya Princess Cruise ดินเนอร์ใต้แสงจันทร์',
+        provider: 'Chao Phraya Princess',
+        location: 'ท่าเรือเอเชียทีค, กรุงเทพมหานคร',
+        rating: '4.8 ★',
+        features: ['บุฟเฟ่ต์นานาชาติ', 'ดนตรีสด Live Band', 'ล่อง 2 ชั่วโมง'],
+        price: 1200,
+        unit: 'ท่าน',
+        image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Dinner Cruise Standard',
+        allotment: 40
+      },
+      {
+        id: 'SRV-07',
+        category: 'community',
+        categoryName: 'ชุมชนท่องเที่ยว',
+        title: 'วิถีชุมชนท่องเที่ยวบ้านช้างกลาง & การแสดงช้างแสนรู้',
+        provider: 'กลุ่มอนุรักษ์ช้างสุรินทร์',
+        location: 'ท่าตูม, สุรินทร์',
+        rating: '4.9 ★',
+        features: ['อาบน้ำช้าง', 'อาหารพื้นบ้านท้องถิ่น', 'เวิร์กช็อปหัตถกรรม'],
+        price: 450,
+        unit: 'ท่าน',
+        image: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Day Pass + Activity',
+        allotment: 30
+      },
+      {
+        id: 'SRV-08',
+        category: 'mobility',
+        categoryName: 'ขนส่งและยานพาหนะ',
+        title: 'Limousine Express รถตู้ VIP สุวรรณภูมิ - พัทยา',
+        provider: 'Limousine Express Thailand',
+        location: 'กรุงเทพฯ - พัทยา',
+        rating: '4.8 ★',
+        features: ['เบาะนวดปรับไฟฟ้า', 'คนขับมืออาชีพ', 'น้ำดื่มฟรี'],
+        price: 3570,
+        unit: 'เที่ยว',
+        image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Toyota Commuter VIP 9 Seats',
+        allotment: 10
+      },
+      {
+        id: 'SRV-09',
+        category: 'accommodation',
+        categoryName: 'โรงแรมและที่พัก',
+        title: 'Andaman Seaview Resort Kata Beach (SHA Extra Plus)',
+        provider: 'บจก. กะตะ ซีวิว ภูเก็ต',
+        location: 'กะตะ, ภูเก็ต',
+        rating: '4.9 ★',
+        features: ['ติดหาดกะตะ', 'สระว่ายน้ำ 2 สระ', 'ฟรีอาหารเช้าบุฟเฟ่ต์'],
+        price: 2450,
+        unit: 'คืน',
+        image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Deluxe Ocean View Room',
+        allotment: 14
+      },
+      {
+        id: 'SRV-10',
+        category: 'tour',
+        categoryName: 'แพ็กเกจทัวร์',
+        title: 'One Day Trip ดำน้ำเกาะพีพี - อ่าวมาหยา Speedboat คาตามารัน',
+        provider: 'Phuket Marine Tour Co., Ltd.',
+        location: 'ท่าเรือรัษฎา, ภูเก็ต',
+        rating: '4.9 ★',
+        features: ['อุปกรณ์ดำน้ำครบชุด', 'อาหารกลางวันบุฟเฟ่ต์', 'ประกันอุบัติเหตุ'],
+        price: 1890,
+        unit: 'ท่าน',
+        image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Catamaran Speedboat Day Tour',
+        allotment: 35
+      },
+      {
+        id: 'SRV-11',
+        category: 'accommodation',
+        categoryName: 'โรงแรมและที่พัก',
+        title: 'Chiang Mai Heritage Boutique Hotel & Lanna Spa',
+        provider: 'เฮอริเทจ ลานนา กรุ๊ป',
+        location: 'คูเมือง, เชียงใหม่',
+        rating: '4.8 ★',
+        features: ['สถาปัตยกรรมล้านนา', 'สระน้ำเกลือ', 'ใกล้ถนนคนเดินท่าแพ'],
+        price: 1950,
+        unit: 'คืน',
+        image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Lanna Heritage Superior',
+        allotment: 9
+      },
+      {
+        id: 'SRV-12',
+        category: 'tour',
+        categoryName: 'แพ็กเกจทัวร์',
+        title: 'ทัวร์ดอยอินทนนท์ เส้นทางศึกษาธรรมชาติกิ่วแม่ปาน + ไกด์ท้องถิ่น',
+        provider: 'เชียงใหม่ อีโค่ ทัวร์ริซึ่ม',
+        location: 'จอมทอง, เชียงใหม่',
+        rating: '4.9 ★',
+        features: ['รถตู้ VIP รับส่งโรงแรม', 'ไกด์ม้งท้องถิ่น', 'ชมพระมหาธาตุเจดีย์'],
+        price: 1350,
+        unit: 'ท่าน',
+        image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Full Day Eco Tour',
+        allotment: 20
+      },
+      {
+        id: 'SRV-13',
+        category: 'attraction',
+        categoryName: 'แหล่งท่องเที่ยว',
+        title: 'บัตรสวนน้ำ Columbia Pictures Aquaverse Pattaya',
+        provider: 'Aquaverse Management Ltd.',
+        location: 'นาจอมเทียน, ชลบุรี',
+        rating: '4.7 ★',
+        features: ['เล่นได้ไม่จำกัดเครื่องเล่น', 'โซนเด็กและครอบครัว', 'Cabana ส่วนตัว'],
+        price: 990,
+        unit: 'ท่าน',
+        image: 'https://images.unsplash.com/photo-1582650625119-3a31f841807d?auto=format&fit=crop&w=600&q=80',
+        roomType: 'All-Day Pass Ticket',
+        allotment: 60
+      },
+      {
+        id: 'SRV-14',
+        category: 'accommodation',
+        categoryName: 'โรงแรมและที่พัก',
+        title: 'Samui Sunset Bay Private Pool Villa',
+        provider: 'สมุย ซันเซ็ท รีสอร์ท กรุ๊ป',
+        location: 'บ่อผุด, สุราษฎร์ธานี',
+        rating: '4.9 ★',
+        features: ['วิลล่าพร้อมสระส่วนตัว', 'วิวทะเลพาโนรามา', 'Floating Breakfast'],
+        price: 4890,
+        unit: 'คืน',
+        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80',
+        roomType: 'Oceanfront Pool Villa',
+        allotment: 6
+      }
+    ],
     reservations: [
       {
         id: '128669226',
@@ -130,6 +341,23 @@
         commission: 375,
         status: 'PendingConfirm',
         notes: 'รอเอกสารยืนยันจากเอเจนต์'
+      },
+      {
+        id: '100104',
+        refNo: '1675670100104882',
+        guest: 'Need Sleep',
+        email: 'sleepnow@gmail.com',
+        phone: '092-441-2300',
+        agent: 'User Direct',
+        serviceName: 'Basic Room Shared Bath room',
+        property: 'Digital Valley Hotel',
+        checkin: '2026-12-20',
+        checkout: '2026-12-24',
+        bookedOn: '2026-11-12 16:30:00',
+        amount: 5600,
+        commission: 280,
+        status: 'Confirmed',
+        notes: 'ต้องการเตียงคู่'
       }
     ],
     tokenLogs: [
@@ -342,7 +570,7 @@
             return this._memoryCache;
           }
         } catch (e) {
-          // fallback to memory cache
+          // fallback
         }
       }
       if (!this._memoryCache) {
@@ -455,7 +683,8 @@
 
     updateReservationStatus(id, newStatus) {
       const state = this.getState();
-      const res = state.reservations.find(r => String(r.id) === String(id));
+      const cleanId = String(id).replace('BK-', '');
+      const res = state.reservations.find(r => String(r.id).replace('BK-', '') === cleanId);
       if (res) {
         res.status = newStatus;
         this.save(state);

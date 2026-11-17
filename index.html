@@ -3033,28 +3033,39 @@
 
     function bookFromDirectory(name, price, supplier) {
       const newId = (100100 + state.reservations.length + 1).toString();
-      state.reservations.unshift({
+      const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
+
+      const newBooking = {
         id: newId,
+        refNo: '1675' + Math.floor(100000000000 + Math.random() * 900000000000),
         guest: state.user.name,
         email: state.user.email,
         phone: state.user.phone,
+        agent: 'User Direct (Data Bank)',
         serviceName: name,
         property: supplier,
         checkin: '25/11/2026',
         checkout: '26/11/2026',
-        bookedOn: new Date().toLocaleDateString('th-TH'),
+        bookedOn: nowStr,
         amount: price,
         commission: Math.round(price * 0.05),
         status: 'Confirmed',
         notes: 'จองผ่าน Data Bank Directory'
-      });
+      };
 
-      const earned = Math.round(price * 0.05);
-      state.user.tokenBalance += earned;
+      if (typeof TCStore !== 'undefined') {
+        TCStore.addReservation(newBooking);
+        syncStateFromStore();
+      } else {
+        state.reservations.unshift(newBooking);
+        state.user.tokenBalance += Math.round(price * 0.05);
+      }
 
       updateHeaderBadges();
       renderReservations();
-      showToast(`จองสำเร็จ: ${name} (BK-${newId}) ได้รับ +${earned} TCP`);
+      renderTokenLogs();
+
+      showToast(`🎉 จองสำเร็จ: ${name} (BK-${newId}) ได้รับ +${Math.round(price * 0.05)} TCP ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
       switchTab('view-reservations', 'ประวัติการจอง');
     }
 

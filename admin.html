@@ -218,6 +218,54 @@
       align-items: center;
       gap: 14px;
     }
+
+    .sync-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      background: #16a34a;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+      animation: pulseSync 2s infinite;
+    }
+    @keyframes pulseSync {
+      0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6); }
+      70% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    }
+    .btn-reset-data {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #ffffff;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-reset-data:hover {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
     .portal-switcher {
       display: inline-flex;
       align-items: center;
@@ -740,6 +788,15 @@
           <b id="crumb-nav">Performance Dashboard (ภาพรวมผลการดำเนินงาน)</b>
         </div>
         <div class="topbar-right">
+          <div class="sync-status-pill" title="ระบบซิงค์ข้อมูลสด Real-time สองทางกับ User Portal">
+            <span class="sync-dot"></span>
+            <span class="sync-text">Live Sync (Admin ⇄ User)</span>
+          </div>
+
+          <button class="btn-reset-data" onclick="if(confirm('ต้องการรีเซ็ตข้อมูลการจองและโทเคนทั้งหมดกลับเป็นค่าเริ่มต้นตามรายงาน PDF ใช่หรือไม่?')) { TCStore.resetDefaults(); showToast('รีเซ็ตข้อมูลจำลองกลับเป็นค่าเริ่มต้นเรียบร้อย'); }" title="รีเซ็ตข้อมูลจำลองทั้งหมดกลับเป็นค่าเริ่มต้นตามรายงาน PDF">
+            🔄 รีเซ็ตข้อมูล
+          </button>
+
           <a href="index.html" class="portal-switcher" title="สลับไปยังหน้า User / Traveler Portal">
             <span>👤 สลับไปหน้า User Portal</span>
             <span>➔</span>
@@ -2470,7 +2527,170 @@
     </div>
   </div>
 
-    <script>
+    <script src="shared-store.js"></script>
+  <script>
+
+    // Live Admin Data Synchronization with TCStore
+    function renderAdminFromStore(data) {
+      if (!data) data = (typeof TCStore !== 'undefined') ? TCStore.getState() : null;
+      if (!data) return;
+
+      const reservations = data.reservations || [];
+      const tokenLogs = data.tokenLogs || [];
+
+      // Update KPI
+      const kpiBookings = document.getElementById('dash-kpi-bookings');
+      if (kpiBookings) kpiBookings.textContent = reservations.length;
+
+      const bCount = document.getElementById('booking-count');
+      if (bCount) bCount.textContent = reservations.length;
+
+      // Calculate today's bookings
+      const todayCountEl = document.getElementById('dash-kpi-today-count');
+      const todayRevEl = document.getElementById('dash-kpi-today-rev');
+      
+      const todayStr = new Date().toISOString().substring(0, 10);
+      const todayBookings = reservations.filter(r => (r.bookedOn || '').includes(todayStr) || (r.bookedOn || '').includes('2026-11-17') || (r.bookedOn || '').includes('2023-02-06'));
+      const todayRev = todayBookings.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
+
+      if (todayCountEl) todayCountEl.textContent = todayBookings.length;
+      if (todayRevEl) todayRevEl.textContent = '฿ ' + todayRev.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+
+      // Render Dashboard "LASTEST BOOKING" table (#table-dashboard-bookings)
+      const dashTable = document.getElementById('table-dashboard-bookings');
+      if (dashTable) {
+        const tbody = dashTable.querySelector('tbody');
+        if (tbody) {
+          const latest5 = reservations.slice(0, 5);
+          tbody.innerHTML = latest5.map((r, idx) => `
+            <tr style="cursor:pointer;" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">
+              <td>${idx + 1}</td>
+              <td>${r.bookedOn}</td>
+              <td><b style="color:var(--primary-blue);">${r.id}</b></td>
+              <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
+              <td style="text-align: right;">
+                <span class="badge ${r.status === 'Confirmed' ? 'badge-success' : (r.status === 'Cancelled' ? 'badge-danger' : 'badge-warning')}">${r.status}</span>
+              </td>
+              <td style="text-align: right;">
+                <button class="btn-secondary" style="font-size:11px; padding:4px 8px;">ดูรายละเอียด 👁️</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      // Render Booking Management view table (#table-bookings)
+      const bookTable = document.getElementById('table-bookings');
+      if (bookTable) {
+        const tbody = bookTable.querySelector('tbody');
+        if (tbody) {
+          tbody.innerHTML = reservations.map(r => `
+            <tr>
+              <td>${r.bookedOn}</td>
+              <td><b>${r.id}</b></td>
+              <td>${r.refNo || ('1675' + r.id)}</td>
+              <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
+              <td><b>${Number(r.amount).toLocaleString()}</b> THB</td>
+              <td>
+                <label class="switch-ui" title="เปิด/ปิดการยืนยันคำสั่งจอง">
+                  <input type="checkbox" ${r.status === 'Confirmed' ? 'checked' : ''} onchange="adminToggleBookingStatus('${r.id}', this.checked)">
+                  <span class="switch-slider"></span>
+                </label>
+              </td>
+              <td style="text-align: right;">
+                <button class="btn-secondary" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">View 👁️</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      // Render Travel Token & Blockchain Log table (#table-token-log)
+      const tokenTable = document.getElementById('table-token-log');
+      if (tokenTable) {
+        const tbody = tokenTable.querySelector('tbody');
+        if (tbody) {
+          tbody.innerHTML = tokenLogs.map(l => `
+            <tr>
+              <td style="color:var(--primary-blue); cursor:pointer; font-weight:600;" onclick="verifyTokenTx('${l.txHash}', '${l.block || '8481515'}', '${l.action}', '${l.amount > 0 ? '+' : ''}${l.amount} TCP', '${l.detail}')">
+                ${l.txHash ? l.txHash.substring(0, 18) + '...' : '0x1996931390...'} 🔍
+              </td>
+              <td><span class="badge ${l.action.includes('Mint') ? 'badge-success' : (l.action.includes('Burn') ? 'badge-warning' : 'badge-info')}">${l.action}</span></td>
+              <td><b>${l.amount > 0 ? '+' : ''}${Number(l.amount).toLocaleString()} TCP</b></td>
+              <td>${l.detail}</td>
+              <td>${l.time}</td>
+              <td style="text-align: right;"><span class="badge badge-success">Block #${l.block || '8481515'}</span></td>
+            </tr>
+          `).join('');
+        }
+      }
+    }
+
+    function adminToggleBookingStatus(id, isChecked) {
+      const newStatus = isChecked ? 'Confirmed' : 'Cancelled';
+      if (typeof TCStore !== 'undefined') {
+        TCStore.updateReservationStatus(id, newStatus);
+      }
+      showToast(`อัปเดตสถานะการจอง #${id} เป็น ${newStatus} (ส่งข้อมูลสดไปยัง User Portal เรียบร้อย)`);
+    }
+
+    // Dynamic openBookingDetail with full Store lookup
+    function openBookingDetail(bno, agent = 'TVG', amount = '430 THB', date = '2026-11-17 10:15:00', supplier = 'Sealife Bangkok', pkg = 'SLBK Aquarium Admission Only') {
+      const bnoEl = document.getElementById('detail-bno');
+      if (bnoEl) bnoEl.textContent = bno;
+
+      if (typeof TCStore !== 'undefined') {
+        const r = TCStore.getState().reservations.find(x => String(x.id) === String(bno));
+        if (r) {
+          agent = r.agent || agent;
+          amount = r.amount + ' THB';
+          date = r.bookedOn || date;
+          supplier = r.property || supplier;
+          pkg = r.serviceName || pkg;
+        }
+      }
+
+      const dateEl = document.getElementById('detail-date');
+      if (dateEl) dateEl.textContent = date;
+      const provEl = document.getElementById('detail-provider');
+      if (provEl) provEl.textContent = supplier;
+      const pkgEl = document.getElementById('detail-package');
+      if (pkgEl) pkgEl.textContent = pkg;
+
+      openModal('modal-booking-detail');
+    }
+
+    function refundBookingAction() {
+      const bno = document.getElementById('detail-bno').textContent;
+      if (confirm(`คุณต้องการยืนยันการคืนเงิน (Refund) สำหรับคำสั่งจอง #${bno} ใช่หรือไม่?`)) {
+        if (typeof TCStore !== 'undefined') {
+          TCStore.updateReservationStatus(bno, 'Cancelled');
+        }
+        closeModal('modal-booking-detail');
+        showToast(`ดำเนินการคืนเงินและยกเลิกคำสั่งจอง #${bno} เรียบร้อยแล้ว (อัปเดตสดไปยัง User Portal)`, 'success');
+      }
+    }
+
+    function saveNewBooking() {
+      const agent = document.getElementById('new-bk-agent').value || 'TVG';
+      const bno = '128' + Math.floor(100000 + Math.random() * 900000);
+      const total = parseFloat(document.getElementById('new-bk-total').value) || 860;
+
+      if (typeof TCStore !== 'undefined') {
+        TCStore.addReservation({
+          id: bno,
+          agent: agent,
+          amount: total,
+          serviceName: 'Admin Direct Booking Package',
+          property: 'ThailandCONNEX Central Supplier',
+          status: 'Confirmed'
+        });
+      }
+
+      closeModal('modal-new-booking');
+      showToast(`สร้างคำสั่งจอง #${bno} ยอด ${total} THB สำเร็จ! (ส่งข้อมูลสดไปยัง User Portal เรียบร้อย)`, 'success');
+    }
+
     const navTitles = {
       'dashboard': 'Performance Dashboard (ภาพรวมผลการดำเนินงาน)',
       'activity-users': 'User > List Activity user',
@@ -2671,11 +2891,7 @@
       showToast(`อัปเดตสถิติช่วงเวลา: ${label.textContent}`, 'info');
     }
 
-    function openBookingDetail(bno, agent = 'TVG', amount = '430 THB', date = '2023-02-06 15:12:08', supplier = 'Sealife Bangkok', pkg = 'SLBK Aquarium Admission Only') {
-      const bnoEl = document.getElementById('detail-bno');
-      if (bnoEl) bnoEl.textContent = bno;
-      openModal('modal-booking-detail');
-    }
+    
 
     function printBookingVoucher() {
       showToast('กำลังพิมพ์บัตร Voucher การจอง...', 'info');
@@ -2684,13 +2900,7 @@
       }, 400);
     }
 
-    function refundBookingAction() {
-      const bno = document.getElementById('detail-bno').textContent;
-      if (confirm(`คุณต้องการยืนยันการคืนเงิน (Refund) สำหรับคำสั่งจอง #${bno} ใช่หรือไม่?`)) {
-        closeModal('modal-booking-detail');
-        showToast(`ดำเนินการคืนเงินคำสั่งจอง #${bno} เรียบร้อยแล้ว`, 'success');
-      }
-    }
+    
 
     function saveNewAdmin() {
       const fname = document.getElementById('new-admin-fname') ? document.getElementById('new-admin-fname').value : 'New';
@@ -2986,32 +3196,7 @@
       showToast(`บันทึก Specific Markup ${partner} สำหรับ ${supplier} เรียบร้อย!`, 'success');
     }
 
-    function saveNewBooking() {
-      const agent = document.getElementById('new-bk-agent').value || 'TVG';
-      const bno = '128' + Math.floor(100000 + Math.random() * 900000);
-      const total = document.getElementById('new-bk-total').value || '860';
-
-      const table = document.getElementById('table-bookings');
-      if (table) {
-        const tbody = table.querySelector('tbody');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>2023-02-07 10:15:00</td>
-          <td><b>${bno}</b></td>
-          <td>167576${bno}</td>
-          <td><span class="badge badge-info">${agent}</span></td>
-          <td><b>${total}</b> THB</td>
-          <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-          <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('${bno}', '${agent}', '${total} THB')">View 👁️</button></td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
-
-        const count = document.getElementById('booking-count');
-        if (count) count.textContent = parseInt(count.textContent || '0') + 1;
-      }
-      closeModal('modal-new-booking');
-      showToast(`สร้างคำสั่งจอง #${bno} ยอด ${total} THB สำเร็จ!`, 'success');
-    }
+    
 
     function filterBookingStatus(status) {
       const table = document.getElementById('table-bookings');
@@ -3157,6 +3342,20 @@
         }
       });
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAdminFromStore();
+
+      if (typeof TCStore !== 'undefined') {
+        TCStore.subscribe((freshData, source) => {
+          renderAdminFromStore(freshData);
+          if (source === 'storage') {
+            showToast('🔔 ได้รับข้อมูลสดจาก User Portal (มีการจองใหม่ / เปลี่ยนแปลงโทเคน)', 'info');
+          }
+        });
+      }
+    });
+
   </script>
 </body>
 </html>

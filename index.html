@@ -152,6 +152,34 @@
       font-size: 15px;
     }
 
+
+    .sync-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      background: #16a34a;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+      animation: pulseSync 2s infinite;
+    }
+    @keyframes pulseSync {
+      0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6); }
+      70% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    }
     .user-actions {
       display: flex;
       align-items: center;
@@ -1305,8 +1333,12 @@
           <b id="current-view-name">จองบริการท่องเที่ยว</b>
         </div>
 
-        <!-- Right: Admin Switch, Token Pill & User Profile -->
+        <!-- Right: Live Sync, Admin Switch, Token Pill & User Profile -->
         <div class="user-actions">
+          <div class="sync-status-pill" title="ระบบซิงค์ข้อมูล Real-time สองทางกับ Admin Portal">
+            <span class="sync-dot"></span>
+            <span class="sync-text">Live Sync (Admin ⇄ User)</span>
+          </div>
           <a href="admin.html" class="btn-admin-switch" title="สลับไปยังระบบผู้ดูแลระบบ (Central Admin Portal)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -1919,8 +1951,22 @@
   <!-- Toast Container -->
   <div class="toast-box" id="toast-container"></div>
 
+  <script src="shared-store.js"></script>
   <!-- Interactive JavaScript Logic with Real PDF Dataset -->
   <script>
+
+    // Synchronize local state with shared TCStore
+    function syncStateFromStore() {
+      if (typeof TCStore !== 'undefined') {
+        const storeData = TCStore.getState();
+        if (storeData.user) state.user = storeData.user;
+        if (storeData.reservations) state.reservations = storeData.reservations;
+        if (storeData.tokenLogs) state.tokenLogs = storeData.tokenLogs;
+        if (storeData.vouchers) state.vouchers = storeData.vouchers;
+        if (storeData.myCoupons) state.myCoupons = storeData.myCoupons;
+      }
+    }
+
     // State management
     const state = {
       user: {
@@ -2617,46 +2663,39 @@
       if (!s) return;
 
       const newId = (100100 + state.reservations.length + 1).toString();
-      const today = new Date().toLocaleDateString('th-TH');
-      
+      const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
+
       const newBooking = {
         id: newId,
+        refNo: '1675' + Math.floor(100000000000 + Math.random() * 900000000000),
         guest: state.user.name,
         email: state.user.email,
         phone: state.user.phone,
+        agent: 'User Direct (Web Portal)',
         serviceName: s.title,
         property: s.provider,
-        checkin: '20/11/2026',
-        checkout: '22/11/2026',
-        bookedOn: today,
+        checkin: '2026-11-20',
+        checkout: '2026-11-22',
+        bookedOn: nowStr,
         amount: s.price,
         commission: Math.round(s.price * 0.05),
         status: 'Confirmed',
         notes: 'จองออนไลน์ผ่าน ThailandCONNEX Platform (Earn Points)'
       };
 
-      state.reservations.unshift(newBooking);
-      
-      // Earn points (5% of booking value)
-      const earnedPoints = Math.round(s.price * 0.05);
-      state.user.tokenBalance += earnedPoints;
-
-      state.tokenLogs.unshift({
-        time: new Date().toISOString().replace('T', ' ').substring(0, 19),
-        action: 'Mint (Earn)',
-        actionCode: 'M',
-        detail: `รับคะแนนจากการจอง ${s.title}`,
-        amount: +earnedPoints,
-        balance: state.user.tokenBalance,
-        txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
-        status: 'Confirmed'
-      });
+      if (typeof TCStore !== 'undefined') {
+        TCStore.addReservation(newBooking);
+        syncStateFromStore();
+      } else {
+        state.reservations.unshift(newBooking);
+        state.user.tokenBalance += Math.round(s.price * 0.05);
+      }
 
       updateHeaderBadges();
       renderReservations();
       renderTokenLogs();
 
-      showToast(`🎉 ทำการจองสำเร็จ! รหัสการจอง: ${newId} (รับ +${earnedPoints} TCP)`);
+      showToast(`🎉 ทำการจองสำเร็จ! รหัสการจอง: BK-${newId} (รับ +${Math.round(s.price * 0.05)} TCP) ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
       setTimeout(() => switchTab('view-reservations', 'ประวัติการจอง'), 600);
     }
 
@@ -2685,48 +2724,31 @@
 
     // Redeem Voucher Action
     function redeemVoucher(voucherId) {
-      const v = state.vouchers.find(x => x.id === voucherId);
-      if (!v) return;
-
-      if (state.user.tokenBalance < v.points) {
-        showToast('❌ คะแนน TCP ของคุณไม่เพียงพอสำหรับการแลกรายการนี้', true);
-        return;
+      if (typeof TCStore !== 'undefined') {
+        const res = TCStore.redeemVoucher(voucherId);
+        if (!res.success) {
+          showToast(`❌ ${res.message}`, true);
+          return;
+        }
+        syncStateFromStore();
+        updateHeaderBadges();
+        renderRewards();
+        renderCoupons();
+        renderTokenLogs();
+        showToast('✨ แลกคูปองสำเร็จ! ส่งธุรกรรม Token Burning ไปยัง Admin Ledger เรียบร้อย');
+      } else {
+        const v = state.vouchers.find(x => x.id === voucherId);
+        if (!v) return;
+        if (state.user.tokenBalance < v.points) {
+          showToast('❌ คะแนน TCP ของคุณไม่เพียงพอสำหรับการแลกรายการนี้', true);
+          return;
+        }
+        state.user.tokenBalance -= v.points;
+        v.remaining -= 1;
+        updateHeaderBadges();
+        renderRewards();
+        showToast('แลกคูปองสำเร็จ');
       }
-
-      state.user.tokenBalance -= v.points;
-      v.remaining -= 1;
-
-      // Add to myCoupons
-      const randomBarcode = Array.from({length: 16}, () => Math.floor(Math.random()*10)).join('').replace(/(\d{4})/g, '$1 ').trim();
-      const newCoupon = {
-        id: 'CPN-' + (1000 + state.myCoupons.length + 1),
-        name: v.name,
-        detail: v.desc,
-        expDate: v.validUntil,
-        barcode: randomBarcode,
-        status: 'active',
-        image: v.image
-      };
-      state.myCoupons.unshift(newCoupon);
-
-      // Add blockchain log
-      state.tokenLogs.unshift({
-        time: new Date().toISOString().replace('T', ' ').substring(0, 19),
-        action: 'Burn (Redeem)',
-        actionCode: 'B',
-        detail: `แลกสิทธิ์ ${v.name}`,
-        amount: -v.points,
-        balance: state.user.tokenBalance,
-        txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
-        status: 'Confirmed'
-      });
-
-      updateHeaderBadges();
-      renderRewards();
-      renderCoupons();
-      renderTokenLogs();
-
-      showToast(`✨ แลกคูปองสำเร็จ! ใช้ไป ${v.points} TCP ตรวจสอบที่เมนู "คูปองของฉัน"`);
     }
 
     // Render My Coupons
@@ -2786,14 +2808,17 @@
 
     function markCouponAsUsed() {
       if (!state.selectedCouponId) return;
-      const c = state.myCoupons.find(x => x.id === state.selectedCouponId);
-      if (c) {
-        c.status = 'used';
-        closeModal('voucher-code-modal');
-        renderCoupons();
-        updateHeaderBadges();
-        showToast('✅ ยืนยันการใช้สิทธิ์คูปองเรียบร้อยแล้ว');
+      if (typeof TCStore !== 'undefined') {
+        TCStore.useCoupon(state.selectedCouponId);
+        syncStateFromStore();
+      } else {
+        const c = state.myCoupons.find(x => x.id === state.selectedCouponId);
+        if (c) c.status = 'used';
       }
+      closeModal('voucher-code-modal');
+      renderCoupons();
+      updateHeaderBadges();
+      showToast('✅ ยืนยันการใช้สิทธิ์คูปองเรียบร้อยแล้ว (อัปเดตไปยัง Admin Portal)');
     }
 
     // Render Reservations Table

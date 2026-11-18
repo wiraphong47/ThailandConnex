@@ -14,10 +14,10 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const STORAGE_KEY = 'TC_DATA_STORE_V7';
+  const STORAGE_KEY = 'TC_DATA_STORE_V8';
 
   const DEFAULT_STATE = {
-    version: 7,
+    version: 8,
     lastUpdated: Date.now(),
     user: {
       name: 'อลิสา ใจดี',
@@ -138,9 +138,11 @@
         }
       ]
     },
-    services: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices && DEPA_REAL_DATA.featuredServices.length > 0)
-      ? DEPA_REAL_DATA.featuredServices
-      : [
+    services: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.allServices && DEPA_REAL_DATA.allServices.length > 0)
+      ? DEPA_REAL_DATA.allServices
+      : ((typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices && DEPA_REAL_DATA.featuredServices.length > 0)
+        ? DEPA_REAL_DATA.featuredServices
+        : [
       {
             "id": "SRV-01",
             "category": "accommodation",
@@ -668,7 +670,7 @@
             "image": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&auto=format&fit=crop&q=80",
             "allotment": 15
       }
-],
+    ]),
     reservations: [
       {
         id: '128669226',
@@ -975,7 +977,10 @@
         status: 'active',
         image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=400&q=80'
       }
-    ]
+    ],
+    directory: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.directory && DEPA_REAL_DATA.directory.length > 0)
+      ? DEPA_REAL_DATA.directory
+      : []
   };
 
   const getStorage = () => {
@@ -1022,13 +1027,19 @@
           this.save(DEFAULT_STATE, false);
         } else {
           const parsed = JSON.parse(raw);
-          if (!parsed.version || parsed.version < DEFAULT_STATE.version) {
+          if (!parsed.version || parsed.version < DEFAULT_STATE.version || !parsed.services || parsed.services.length < 50) {
             this.save(DEFAULT_STATE, false);
           } else {
-            if (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices) {
-              parsed.services = DEPA_REAL_DATA.featuredServices;
+            if (typeof DEPA_REAL_DATA !== 'undefined') {
+              if (DEPA_REAL_DATA.allServices && (!parsed.services || parsed.services.length < 100)) {
+                parsed.services = DEPA_REAL_DATA.allServices;
+              }
+              if (DEPA_REAL_DATA.directory && (!parsed.directory || parsed.directory.length < 100)) {
+                parsed.directory = DEPA_REAL_DATA.directory;
+              }
             }
             this._memoryCache = parsed;
+            this.save(parsed, false);
           }
         }
       } catch (e) {

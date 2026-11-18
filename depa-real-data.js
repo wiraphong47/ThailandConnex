@@ -16,7 +16,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  return {
+  const data = {
   "updatedAt": "2025-01-26",
   "source": "DEPA Official Excel Files (Package_list & Supplier_list)",
   "stats": {
@@ -18359,4 +18359,88 @@
     }
   ]
 };
+
+  // Generate all 1,190 services with rich metadata, images, and category tagging
+  data.getAllServices = function () {
+    const categoryImages = {
+      accommodation: [
+        'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop&q=80'
+      ],
+      tour: [
+        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&auto=format&fit=crop&q=80'
+      ],
+      wellness: [
+        'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800&auto=format&fit=crop&q=80'
+      ],
+      mobility: [
+        'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&auto=format&fit=crop&q=80'
+      ],
+      food: [
+        'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1552611052-33e04de081de?w=800&auto=format&fit=crop&q=80'
+      ],
+      attraction: [
+        'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1569154941061-e231b4725ef1?w=800&auto=format&fit=crop&q=80'
+      ],
+      retail: [
+        'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1526178613552-2b45c6c302f0?w=800&auto=format&fit=crop&q=80'
+      ],
+      community: [
+        'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&auto=format&fit=crop&q=80'
+      ]
+    };
+
+    return data.directory.map((item, idx) => {
+      const catCode = item.catCode || (item.cat ? item.cat.toLowerCase() : 'accommodation');
+      const imgList = categoryImages[catCode] || categoryImages.accommodation;
+      const img = imgList[idx % imgList.length];
+      const rating = (4.6 + ((idx % 5) * 0.08)).toFixed(1);
+
+      let defaultFeatures = ['SHA Plus', 'มาตรฐาน depa', 'ยืนยันทันที'];
+      if (catCode === 'accommodation') defaultFeatures = ['SHA Plus', 'WiFi ฟรี', 'ที่จอดรถ', 'ใกล้แหล่งท่องเที่ยว'];
+      else if (catCode === 'tour') defaultFeatures = ['มัคคุเทศก์ชำนาญการ', 'ประกันอุบัติเหตุ', 'รวมค่าเข้าชม'];
+      else if (catCode === 'wellness') defaultFeatures = ['สมุนไพรธรรมชาติ', 'ห้องทรีตเมนต์ส่วนตัว', 'ผู้เชี่ยวชาญ'];
+      else if (catCode === 'mobility') defaultFeatures = ['คนขับมืออาชีพ', 'ประกันภัยชั้น 1', 'รับส่งถึงที่'];
+      else if (catCode === 'food') defaultFeatures = ['วัตถุดิบท้องถิ่น', 'เชฟมืออาชีพ', 'วิวสวย'];
+      else if (catCode === 'attraction') defaultFeatures = ['ตั๋วอิเล็กทรอนิกส์', 'เข้าชมได้ทันที', 'ไม่มีคิว'];
+      else if (catCode === 'retail') defaultFeatures = ['สินค้า OTOP', 'ของแท้ 100%', 'งานฝีมือชุมชน'];
+      else if (catCode === 'community') defaultFeatures = ['วิถีชุมชนแท้', 'Workshop ท้องถิ่น', 'กระจายรายได้'];
+
+      return {
+        id: 'DEP-' + String(item.no).padStart(4, '0'),
+        category: catCode,
+        categoryName: item.catName || item.cat,
+        title: item.supplier ? `${item.supplier} - ${item.name}` : item.name,
+        provider: item.supplier,
+        location: item.location || (item.province ? `${item.province}, ประเทศไทย` : 'ประเทศไทย'),
+        rating: `${rating} ★`,
+        features: defaultFeatures,
+        price: Math.round(item.price),
+        unit: item.unit || 'รายการ',
+        image: img,
+        roomType: item.name,
+        allotment: item.allotment || 10
+      };
+    });
+  };
+
+  data.allServices = data.getAllServices();
+  return data;
 });

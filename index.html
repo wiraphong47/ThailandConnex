@@ -1798,6 +1798,9 @@
           <!-- Dynamically populated via JS from PDF exact dataset -->
         </div>
 
+        <!-- Services Pagination Controls Container -->
+        <div id="services-pagination" style="margin-top: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;"></div>
+
         <!-- National Digital Tourism Data Bank Gateway Card -->
         <div style="background: linear-gradient(135deg, #083b7c, #0c4a6e); border-radius: 14px; padding: 22px 26px; color: #fff; margin-top: 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; box-shadow: 0 4px 18px rgba(8,59,124,0.18);">
           <div style="display: flex; align-items: center; gap: 16px;">
@@ -2484,8 +2487,16 @@
         if (storeData.tokenLogs) state.tokenLogs = storeData.tokenLogs;
         if (storeData.vouchers) state.vouchers = storeData.vouchers;
         if (storeData.myCoupons) state.myCoupons = storeData.myCoupons;
-        if (storeData.services) state.services = storeData.services;
-        if (storeData.directory) state.directory = storeData.directory;
+        if (storeData.services && storeData.services.length > 0) {
+          state.services = storeData.services;
+        } else if (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.allServices) {
+          state.services = DEPA_REAL_DATA.allServices;
+        }
+        if (storeData.directory && storeData.directory.length > 0) {
+          state.directory = storeData.directory;
+        } else if (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.directory) {
+          state.directory = DEPA_REAL_DATA.directory;
+        }
       }
     }
 
@@ -2504,8 +2515,10 @@
       pendingBooking: null,
       activeConfirmBooking: null,
       
-      // Services for booking from Real DEPA Excel Dataset
-      services: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices) ? DEPA_REAL_DATA.featuredServices : [
+      // Services for booking from Real DEPA Excel Dataset (1,190 packages)
+      services: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.allServices && DEPA_REAL_DATA.allServices.length > 0)
+        ? DEPA_REAL_DATA.allServices
+        : ((typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices) ? DEPA_REAL_DATA.featuredServices : [
         {
           id: 'SRV-01',
           category: 'accommodation',
@@ -2716,7 +2729,7 @@
           roomType: 'Oceanfront Pool Villa',
           allotment: 6
         }
-      ],
+      ]),
 
       // Vouchers catalog for redemption (PDF Page 108-112)
       vouchers: [
@@ -2985,8 +2998,10 @@
         }
       ],
 
-      // Directory of services (PDF Page 175-242)
-      directory: [
+      // Directory of services from Real DEPA Excel Dataset (1,190 items)
+      directory: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.directory && DEPA_REAL_DATA.directory.length > 0)
+        ? DEPA_REAL_DATA.directory
+        : [
         { no: 1, cat: 'Accommodation', supplier: 'DNA Resort & Spa', name: 'Deluxe Suite with Jacuzzi', province: 'นครราชสีมา (ปากช่อง)', price: 3990, allotment: 15 },
         { no: 2, cat: 'Accommodation', supplier: 'เรือนศรีสิริ เกสท์เฮาส์', name: 'Standard Twin Room', province: 'สุโขทัย (เมือง)', price: 850, allotment: 8 },
         { no: 3, cat: 'Accommodation', supplier: 'เดอะ เซเว่น กระบี่ (SHA Extra Plus)', name: 'Deluxe Sea View Balcony', province: 'กระบี่ (อ่าวนาง)', price: 2450, allotment: 20 },
@@ -3131,8 +3146,12 @@
       document.querySelectorAll('.coupon-pill-count').forEach(el => el.textContent = activeCount);
     }
 
-    // Render Services
-    function renderServices() {
+    // Render Services with real Excel dataset (1,190 packages) & Pagination
+    let servicesCurrentPage = 1;
+    const servicesPerPage = 12;
+
+    function renderServices(page) {
+      if (typeof page === 'number') servicesCurrentPage = page;
       const container = document.getElementById('services-grid');
       const destSelect = document.getElementById('service-search-input');
       const selectedDest = destSelect ? destSelect.value : 'all';
@@ -3167,17 +3186,29 @@
         return true;
       });
 
+      const totalItems = filtered.length;
+      const totalPages = Math.ceil(totalItems / servicesPerPage) || 1;
+      if (servicesCurrentPage > totalPages) servicesCurrentPage = 1;
+
+      const startIndex = (servicesCurrentPage - 1) * servicesPerPage;
+      const endIndex = Math.min(startIndex + servicesPerPage, totalItems);
+      const pageItems = filtered.slice(startIndex, endIndex);
+
       const countEl = document.getElementById('search-result-count');
       if (countEl) {
         let destText = '';
-        if (destSelect && destSelect.selectedIndex >= 0) {
-          const optText = destSelect.options[destSelect.selectedIndex].text.replace('📍 ', '');
-          destText = selectedDest !== 'all' ? `ในพื้นที่ ${optText}` : 'ทั่วประเทศไทย';
+        if (selectedDest && selectedDest !== 'all' && selectedDest.trim() !== '' && !selectedDest.includes('ทั้งหมด')) {
+          destText = ` ในพื้นที่ "${selectedDest}"`;
         }
-        countEl.textContent = `พบ ${filtered.length} รายการแนะนำ${destText} ตรงตามมาตรฐาน ThailandCONNEX`;
+        let catText = '';
+        if (state.currentCategoryFilter !== 'all') {
+          const catPill = document.querySelector('.category-pills .cat-pill.active');
+          catText = catPill ? ` • หมวด ${catPill.textContent.trim()}` : '';
+        }
+        countEl.innerHTML = `พบ <b style="color:var(--navy); font-size:15px;">${totalItems.toLocaleString('th-TH')}</b> รายการจริงจากฐานข้อมูล .xlsx${catText}${destText} • แสดงหน้า ${servicesCurrentPage} / ${totalPages} (รายการที่ ${totalItems > 0 ? startIndex + 1 : 0} - ${endIndex})`;
       }
 
-      if (filtered.length === 0) {
+      if (totalItems === 0) {
         container.innerHTML = `
           <div style="grid-column: 1/-1; text-align: center; padding: 48px 20px; background: #ffffff; border-radius: 16px; border: 1px dashed #cbd5e1;">
             <div style="font-size: 40px; margin-bottom: 10px;">🏝️</div>
@@ -3188,11 +3219,12 @@
             </button>
           </div>
         `;
+        renderServicesPagination(0, 1, 1);
         return;
       }
 
-      container.innerHTML = filtered.map(item => `
-        <div class="service-card" onclick="openAccommodationDetail('${item.id}')" style="cursor:pointer;" title="คลิกเพื่อดูรายละเอียดที่พัก">
+      container.innerHTML = pageItems.map(item => `
+        <div class="service-card" onclick="openAccommodationDetail('${item.id}')" style="cursor:pointer;" title="คลิกเพื่อดูรายละเอียด">
           <div class="card-thumb" style="background-image: url('${item.image}')">
             <span class="card-category-badge">${item.categoryName}</span>
             <span class="card-rating-badge">${item.rating}</span>
@@ -3204,7 +3236,7 @@
               ${item.location} • โดย ${item.provider}
             </div>
             <div class="card-features">
-              ${item.features.map(f => `<span class="feat-tag">${f}</span>`).join('')}
+              ${(item.features || []).map(f => `<span class="feat-tag">${f}</span>`).join('')}
             </div>
             <div class="card-foot">
               <div class="price-wrap">
@@ -3212,7 +3244,7 @@
                 <span class="price-val">฿${item.price.toLocaleString('th-TH')}</span>
               </div>
               <div style="display:flex; gap:6px;">
-                <button class="btn-detail" onclick="event.stopPropagation(); openAccommodationDetail('${item.id}')" style="background:#f1f5f9; color:var(--navy); border:1px solid #cbd5e1; border-radius:8px; padding:7px 11px; font-size:12px; font-weight:600; cursor:pointer;" title="ดูข้อมูลและรายละเอียดที่พัก">
+                <button class="btn-detail" onclick="event.stopPropagation(); openAccommodationDetail('${item.id}')" style="background:#f1f5f9; color:var(--navy); border:1px solid #cbd5e1; border-radius:8px; padding:7px 11px; font-size:12px; font-weight:600; cursor:pointer;" title="ดูข้อมูลและรายละเอียด">
                   ดูรายละเอียด
                 </button>
                 <button class="btn-book" onclick="event.stopPropagation(); instantBook('${item.id}')">
@@ -3223,6 +3255,62 @@
           </div>
         </div>
       `).join('');
+
+      renderServicesPagination(totalItems, servicesCurrentPage, totalPages);
+    }
+
+    function renderServicesPagination(totalItems, currentPage, totalPages) {
+      const pagEl = document.getElementById('services-pagination');
+      if (!pagEl) return;
+      if (totalItems <= servicesPerPage) {
+        pagEl.innerHTML = '';
+        return;
+      }
+
+      let pagesHtml = '';
+      const maxButtons = 5;
+      let startP = Math.max(1, currentPage - 2);
+      let endP = Math.min(totalPages, startP + maxButtons - 1);
+      if (endP - startP < maxButtons - 1) {
+        startP = Math.max(1, endP - maxButtons + 1);
+      }
+
+      pagesHtml += `<button onclick="changeServicesPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} style="padding:7px 14px; border-radius:8px; border:1px solid #cbd5e1; background:#fff; font-size:13px; font-weight:600; cursor:pointer;">◀ หน้าก่อนหน้า</button>`;
+
+      if (startP > 1) {
+        pagesHtml += `<button onclick="changeServicesPage(1)" style="padding:7px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#fff; font-size:13px; cursor:pointer;">1</button>`;
+        if (startP > 2) pagesHtml += `<span style="padding:0 4px; color:#94a3b8;">...</span>`;
+      }
+
+      for (let p = startP; p <= endP; p++) {
+        const isActive = p === currentPage;
+        pagesHtml += `<button onclick="changeServicesPage(${p})" style="padding:7px 12px; border-radius:8px; border:1px solid ${isActive ? 'var(--blue)' : '#cbd5e1'}; background:${isActive ? 'var(--blue)' : '#fff'}; color:${isActive ? '#fff' : 'var(--navy)'}; font-size:13px; font-weight:${isActive ? '700' : '500'}; cursor:pointer;">${p}</button>`;
+      }
+
+      if (endP < totalPages) {
+        if (endP < totalPages - 1) pagesHtml += `<span style="padding:0 4px; color:#94a3b8;">...</span>`;
+        pagesHtml += `<button onclick="changeServicesPage(${totalPages})" style="padding:7px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#fff; font-size:13px; cursor:pointer;">${totalPages}</button>`;
+      }
+
+      pagesHtml += `<button onclick="changeServicesPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} style="padding:7px 14px; border-radius:8px; border:1px solid #cbd5e1; background:#fff; font-size:13px; font-weight:600; cursor:pointer;">หน้าถัดไป ▶</button>`;
+
+      pagEl.innerHTML = `
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;">
+          ${pagesHtml}
+        </div>
+        <div style="font-size:12px; color:var(--muted); text-align:center;">
+          กำลังแสดงรายการที่ <b>${(currentPage - 1) * servicesPerPage + 1} - ${Math.min(currentPage * servicesPerPage, totalItems)}</b> จากทั้งหมด <b>${totalItems.toLocaleString('th-TH')}</b> รายการจริงในระบบ ThailandCONNEX
+        </div>
+      `;
+    }
+
+    function changeServicesPage(p) {
+      servicesCurrentPage = p;
+      renderServices();
+      const grid = document.getElementById('services-grid');
+      if (grid) {
+        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     function resetSearchFilters() {
@@ -3231,23 +3319,25 @@
       const priceFilter = document.getElementById('price-filter');
       if (priceFilter) priceFilter.value = 'all';
       state.currentCategoryFilter = 'all';
+      servicesCurrentPage = 1;
       document.querySelectorAll('.category-pills .cat-pill').forEach(p => p.classList.remove('active'));
       const allPill = document.querySelector('.category-pills .cat-pill');
       if (allPill) allPill.classList.add('active');
-      renderServices();
+      renderServices(1);
       showToast('รีเซ็ตเงื่อนไข แสดงบริการทุกจุดหมายปลายทางแล้ว');
     }
 
     function setCategoryFilter(cat, btn) {
       state.currentCategoryFilter = cat;
+      servicesCurrentPage = 1;
       document.querySelectorAll('.category-pills .cat-pill').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      renderServices();
+      renderServices(1);
     }
 
     function filterServices() {
-      renderServices();
-      showToast('อัปเดตผลการค้นหาตามเงื่อนไขเรียบร้อย');
+      servicesCurrentPage = 1;
+      renderServices(1);
     }
 
 

@@ -1122,6 +1122,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="dashboard-bookings-pagination-container"></div>
           </div>
         </div>
 
@@ -1181,9 +1182,9 @@
 
             <!-- Filters -->
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-activity-users" class="input-clean" placeholder="🔍 ค้นหาด้วยชื่อ อีเมล หรือ User ID..." style="flex:1; min-width:240px;" onkeyup="filterTable('search-activity-users', 'table-activity-users')">
+              <input type="text" id="search-activity-users" class="input-clean" placeholder="🔍 ค้นหาด้วยชื่อ อีเมล หรือ User ID..." style="flex:1; min-width:240px;" onkeyup="handleActUserSearch(this.value)">
               <input type="date" class="input-clean" value="2023-02-01">
-              <button class="btn-action" onclick="filterTable('search-activity-users', 'table-activity-users')">Search</button>
+              <button class="btn-action" onclick="handleActUserSearch(document.getElementById('search-activity-users').value)">Search</button>
               <button class="btn-secondary" onclick="resetActivityUsers()">Reset</button>
               <button class="btn-secondary" onclick="exportTableToCSV('table-activity-users', 'ThailandConnex_Activity_Users.csv')">Export CSV 📥</button>
             </div>
@@ -1206,6 +1207,7 @@
                 </tbody>
               </table>
             </div>
+            <div class="table-pagination-footer" id="activity-users-pagination-container"></div>
           </div>
         </div>
 
@@ -1294,6 +1296,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="admin-users-pagination-container"></div>
           </div>
         </div>
 
@@ -1350,6 +1353,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="admin-roles-pagination-container"></div>
 
             <div class="table-card-head" style="margin-top:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
               <span>Screen Permission (ตั้งค่าสิทธิ์การเข้าถึงระดับหน้าจอ)</span>
@@ -1491,57 +1495,40 @@
               <button class="btn-action" onclick="openModal('modal-new-product')">+ Add New Product</button>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-products" class="input-clean" placeholder="🔍 ค้นหาชื่อสินค้า หรือ Product code..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-products', 'table-products', 'product-count')">
-              <select id="filter-product-cat" class="input-clean" onchange="filterProductCategory(this.value)">
+              <input type="text" id="search-products" class="input-clean" placeholder="🔍 ค้นหาชื่อสินค้า หรือ Product code..." style="flex:1; min-width:220px;" onkeyup="handleProdSearch(this.value)">
+              <select id="filter-product-cat" class="input-clean" onchange="handleProdCategory(this.value)">
                 <option value="all">ทุกหมวดหมู่สินค้า</option>
-                <option value="ชมวิว">ดินเนอร์ & ชมวิว</option>
-                <option value="บัตร">บัตรเข้าชม (Aquarium & Ticket)</option>
+                <option value="hotel">ที่พักและโรงแรม (Hotels & Resorts)</option>
+                <option value="transport">ยานพาหนะและรถรับส่ง (Transfers & Mobility)</option>
+                <option value="attraction">แหล่งท่องเที่ยวและบัตรเข้าชม (Attraction & Tickets)</option>
+                <option value="spa">สุขภาพและสปา (Wellness & Spa)</option>
+                <option value="food">ร้านอาหารและเครื่องดื่ม (Food & Dining)</option>
+                <option value="souvenir">ร้านค้าปลีกและของที่ระลึก (Souvenirs)</option>
               </select>
-              <button class="btn-secondary" onclick="exportTableToCSV('table-products', 'ThailandConnex_Products.csv')">Export CSV 📥</button>
-              <span style="font-size:12.5px; color:var(--text-muted);">Total Records: <b id="product-count">3</b></span>
+              <button class="btn-secondary" onclick="exportAllProductsToCSV()">Export CSV 📥</button>
+              <span style="font-size:12.5px; color:var(--text-muted);">Total Records: <b id="product-count">1,190</b></span>
             </div>
-            <table class="clean-table" id="table-products">
-              <thead>
-                <tr>
-                  <th style="width: 40px;">Drag</th>
-                  <th>Product name</th>
-                  <th>Product code</th>
-                  <th>Book before service</th>
-                  <th>Enabled</th>
-                  <th>Status</th>
-                  <th style="text-align: right;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="color:#94a3b8; cursor:grab;">☰</td>
-                  <td><b>อาหารค่ำมื้อพิเศษพร้อมชมวิวมุมสูง ตึกใบหยกสกาย</b></td>
-                  <td><span class="badge badge-info">ACT004040</span></td>
-                  <td>24 hours</td>
-                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td><span class="badge badge-success">Approved</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
-                </tr>
-                <tr>
-                  <td style="color:#94a3b8; cursor:grab;">☰</td>
-                  <td><b>ดินเนอร์ชมวิว + บุฟเฟ่ต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony</b></td>
-                  <td><span class="badge badge-info">ACT004047</span></td>
-                  <td>1 day</td>
-                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td><span class="badge badge-success">Approved</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
-                </tr>
-                <tr>
-                  <td style="color:#94a3b8; cursor:grab;">☰</td>
-                  <td><b>บัตรเข้าชม Sealife Bangkok Aquarium Admission</b></td>
-                  <td><span class="badge badge-info">ACT008102</span></td>
-                  <td>3 hours</td>
-                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td><span class="badge badge-success">Approved</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
-                </tr>
-              </tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="clean-table" id="table-products">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;">Drag</th>
+                    <th>Product name</th>
+                    <th>Product code</th>
+                    <th>Book before service</th>
+                    <th>Enabled</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-products">
+                  <!-- Dynamically rendered 10 items per page -->
+                </tbody>
+              </table>
+            </div>
+            <div class="table-pagination-footer" id="products-pagination-container">
+              <!-- Dynamically populated via renderProductsTableWithPagination -->
+            </div>
           </div>
         </div>
 
@@ -1620,6 +1607,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="contracts-pagination-container"></div>
           </div>
         </div>
 
@@ -1686,6 +1674,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="setting-allotment-pagination-container"></div>
           </div>
         </div>
 
@@ -1741,6 +1730,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="enabled-allotment-pagination-container"></div>
           </div>
         </div>
 
@@ -1789,6 +1779,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="allotment-report-pagination-container"></div>
           </div>
         </div>
 
@@ -1836,6 +1827,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="price-tier-pagination-container"></div>
           </div>
         </div>
 
@@ -1876,6 +1868,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="partner-tier-pagination-container"></div>
           </div>
         </div>
 
@@ -1928,6 +1921,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="specific-markup-pagination-container"></div>
           </div>
         </div>
 
@@ -1941,58 +1935,38 @@
               <button class="btn-action" onclick="openModal('modal-new-booking')">+ สร้างการจองใหม่ (Manual Booking)</button>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-bookings" class="input-clean" placeholder="🔍 ค้นหาด้วย Booking No., Ref No. หรือ Agent..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-bookings', 'table-bookings', 'booking-count')">
-              <select id="filter-booking-status" class="input-clean" onchange="filterBookingStatus(this.value)">
+              <input type="text" id="search-bookings" class="input-clean" placeholder="🔍 ค้นหาด้วย Booking No., Ref No. หรือ Agent..." style="flex:1; min-width:220px;" onkeyup="handleBkSearch(this.value)">
+              <select id="filter-booking-status" class="input-clean" onchange="handleBkStatus(this.value)">
                 <option value="all">ทุกสถานะการจอง</option>
-                <option value="confirmed">Confirmed (ยืนยันแล้ว)</option>
-                <option value="pending">Pending (รอชำระเงิน)</option>
+                <option value="Confirmed">Confirmed (ยืนยันแล้ว)</option>
+                <option value="Cancelled">Cancelled (ยกเลิกแล้ว)</option>
+                <option value="Pending">Pending (รอชำระเงิน)</option>
               </select>
-              <button class="btn-action" onclick="filterTable('search-bookings', 'table-bookings', 'booking-count')">Search</button>
-              <button class="btn-secondary" onclick="exportTableToCSV('table-bookings', 'ThailandConnex_Bookings.csv')">Export to Excel / CSV 📥</button>
-              <span style="font-size:12.5px; color:var(--text-muted)">Total Bookings: <b id="booking-count">3</b></span>
+              <button class="btn-action" onclick="handleBkSearch(document.getElementById('search-bookings').value)">Search</button>
+              <button class="btn-secondary" onclick="exportBookingsToCSV()">Export to Excel / CSV 📥</button>
+              <span style="font-size:12.5px; color:var(--text-muted)">Total Bookings: <b id="booking-count">11</b></span>
             </div>
-            <table class="clean-table" id="table-bookings">
-              <thead>
-                <tr>
-                  <th>Booking date</th>
-                  <th>Booking no.</th>
-                  <th>Reference no.</th>
-                  <th>Agent</th>
-                  <th>Total amount</th>
-                  <th>Confirm</th>
-                  <th style="text-align: right;">Detail</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>2023-02-06 15:12:08</td>
-                  <td><b>128669226</b></td>
-                  <td>1675671128669657</td>
-                  <td><span class="badge badge-info">TVG</span></td>
-                  <td><b>280</b> THB</td>
-                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('128669226')">View 👁️</button></td>
-                </tr>
-                <tr>
-                  <td>2023-02-06 15:00:36</td>
-                  <td><b>436181225</b></td>
-                  <td>1675670436181950</td>
-                  <td><span class="badge badge-info">TVG</span></td>
-                  <td><b>430</b> THB</td>
-                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('436181225')">View 👁️</button></td>
-                </tr>
-                <tr>
-                  <td>2023-02-06 13:33:35</td>
-                  <td><b>215983224</b></td>
-                  <td>1675665215983302</td>
-                  <td><span class="badge badge-info">TVG</span></td>
-                  <td><b>430</b> THB</td>
-                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;"><button class="btn-secondary" onclick="openBookingDetail('215983224')">View 👁️</button></td>
-                </tr>
-              </tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="clean-table" id="table-bookings">
+                <thead>
+                  <tr>
+                    <th>Booking date</th>
+                    <th>Booking no.</th>
+                    <th>Reference no.</th>
+                    <th>Agent</th>
+                    <th>Total amount</th>
+                    <th>Confirm</th>
+                    <th style="text-align: right;">Detail</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-bookings">
+                  <!-- Dynamically rendered 10 items per page -->
+                </tbody>
+              </table>
+            </div>
+            <div class="table-pagination-footer" id="bookings-pagination-container">
+              <!-- Dynamically populated via renderBookingsTableWithPagination -->
+            </div>
           </div>
         </div>
 
@@ -2051,7 +2025,7 @@
               </div>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <input type="text" id="search-api-keys" class="input-clean" placeholder="🔍 ค้นหา Client, Partner หรือ Key..." style="max-width:320px; flex:1;" onkeyup="filterTable('search-api-keys', 'table-api-keys')">
+              <input type="text" id="search-api-keys" class="input-clean" placeholder="🔍 ค้นหา Client, Partner หรือ Key..." style="max-width:320px; flex:1;" onkeyup="handleApiKeysSearch(this.value)">
               <span style="font-size:12px; color:var(--text-muted);">คีย์ทั้งหมดเชื่อมต่อไปยังสภาพแวดล้อมจริงของระบบ ThailandCONNEX</span>
             </div>
             <div style="overflow-x:auto;">
@@ -2072,6 +2046,7 @@
                 </tbody>
               </table>
             </div>
+            <div class="table-pagination-footer" id="api-keys-pagination-container"></div>
           </div>
 
           <!-- Section 2: Interactive Live API Console (Swagger / Postman Playground) -->
@@ -2341,6 +2316,7 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="table-pagination-footer" id="databank-pagination-container"></div>
             </div>
           </div>
 
@@ -2429,6 +2405,7 @@
                   <!-- Dynamically populated via JavaScript -->
                 </tbody>
               </table>
+              <div class="table-pagination-footer" id="admin-directory-pagination-container"></div>
             </div>
           </div>
 
@@ -2500,7 +2477,7 @@
               </div>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <input type="text" id="search-token-log" class="input-clean" placeholder="🔍 ค้นหา Tx Hash หรือประเภท Action..." style="max-width:320px;" onkeyup="filterTable('search-token-log', 'table-token-log')">
+              <input type="text" id="search-token-log" class="input-clean" placeholder="🔍 ค้นหา Tx Hash หรือประเภท Action..." style="max-width:320px;" onkeyup="handleTokenLogSearch(this.value)">
               <span style="font-size:12.5px; color:var(--text-muted)">Consensus: <b>Proof of Authority (PoA)</b></span>
             </div>
             <table class="clean-table" id="table-token-log">
@@ -2533,6 +2510,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-pagination-footer" id="token-log-pagination-container"></div>
           </div>
         </div>
 
@@ -3452,187 +3430,31 @@
           if (userTokenKpi) userTokenKpi.textContent = `${totalTokens.toLocaleString('th-TH')} TCP`;
           if (userPillCount) userPillCount.textContent = users.length;
 
-          actTable.innerHTML = users.map(u => {
-            const isOnline = (currentUser.id === u.id || currentUser.email === u.email) && currentUser.isLoggedIn !== false;
-            const isWelcome = u.tier && u.tier.includes('Welcome Bonus');
-            const tokenFormatted = (parseFloat(u.tokenBalance) || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 });
-            const walletTruncated = u.walletAddress ? (u.walletAddress.substring(0, 8) + '...' + u.walletAddress.substring(u.walletAddress.length - 4)) : 'N/A';
-
-            return `
-              <tr style="${isOnline ? 'background: rgba(22, 141, 225, 0.08); font-weight:600;' : ''}">
-                <td>
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="display:inline-flex; width:32px; height:32px; border-radius:50%; background:#e0f2fe; color:var(--primary-blue); font-weight:700; align-items:center; justify-content:center; font-size:12px;">${u.avatar || 'TC'}</span>
-                    <div>
-                      <b>${u.name}</b>
-                      ${isOnline ? '<span class="badge badge-info" style="font-size:9.5px; margin-left:4px;">🟢 Online</span>' : ''}
-                      ${isWelcome ? '<span class="badge badge-success" style="font-size:9.5px; margin-left:4px;">✨ New</span>' : ''}
-                      <div style="font-size:11px; color:var(--text-muted); font-family:monospace;">ID: ${u.id}</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div>${u.email}</div>
-                  <small style="color:var(--text-muted); font-size:11px;">📞 ${u.phone || '08x-xxx-xxxx'}</small>
-                </td>
-                <td>
-                  <span class="badge badge-info" style="font-size:10.5px;">${u.tier || 'Member'}</span>
-                  <div style="font-size:10.5px; color:var(--text-muted); font-family:monospace; margin-top:2px;" title="${u.walletAddress}">
-                    🔑 ${walletTruncated}
-                  </div>
-                </td>
-                <td>
-                  <b style="color:#b45309; font-size:13px;">${tokenFormatted}</b> <small style="color:#d97706; font-weight:600;">TCP</small>
-                </td>
-                <td>
-                  <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'ปิดกั้นการเข้าถึง'}">
-                    <input type="checkbox" ${u.status === 'Disabled' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="toggleUserStatus(this, '${u.id}', '${u.name}')">
-                    <span class="switch-slider"></span>
-                  </label>
-                </td>
-                <td style="text-align: right;">
-                  <span class="badge ${u.status === 'Active' ? 'badge-success' : 'badge-danger'}" style="margin-right:4px;">${u.status || 'Active'}</span>
-                  ${isAuditor ? '<span class="badge badge-warning">Audit Record</span>' : `<button class="btn-secondary" style="font-size:11px;" onclick="editActivityUser('${u.name}', '${u.email}')">✏️ แก้ไข</button>`}
-                </td>
-              </tr>
-            `;
-          }).join('');
-          if (actCountEl) actCountEl.textContent = isAuditor ? `${users.length} (โหมดตรวจสอบ)` : users.length;
+          renderActivityUsersWithPagination(users);
         }
       }
 
-      // 7. Render Dashboard Latest Bookings Table
-      const dashTable = document.getElementById('table-dashboard-bookings');
-      if (dashTable) {
-        const tbody = dashTable.querySelector('tbody');
-        if (tbody) {
-          const latest5 = reservations.slice(0, 6);
-          tbody.innerHTML = latest5.map((r, idx) => `
-            <tr style="cursor:pointer;" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">
-              <td>${idx + 1}</td>
-              <td>${r.bookedOn}</td>
-              <td><b style="color:var(--primary-blue);">BK-${r.id.replace('BK-', '')}</b></td>
-              <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
-              <td style="text-align: right;">
-                <span class="badge ${r.status === 'Confirmed' ? 'badge-success' : (r.status === 'Cancelled' ? 'badge-danger' : 'badge-warning')}">${r.status}</span>
-              </td>
-              <td style="text-align: right;">
-                <button class="btn-secondary" style="font-size:11px; padding:4px 8px;">ดูรายละเอียด 👁️</button>
-              </td>
-            </tr>
-          `).join('');
-        }
-      }
+      // 7. Render Dashboard Latest Bookings Table (Paginated 10 items per page)
+      renderDashboardBookingsTableWithPagination(reservations);
 
-      // 8. Render Booking Management Table
-      const bookTable = document.getElementById('table-bookings');
-      if (bookTable) {
-        const tbody = bookTable.querySelector('tbody');
-        if (tbody) {
-          tbody.innerHTML = reservations.map(r => `
-            <tr>
-              <td>${r.bookedOn}</td>
-              <td><b>BK-${r.id.replace('BK-', '')}</b></td>
-              <td>${r.refNo || ('1675' + r.id)}</td>
-              <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
-              <td><b>฿${Number(r.amount).toLocaleString()}</b></td>
-              <td>
-                <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'เปิด/ปิดการยืนยันคำสั่งจอง'}">
-                  <input type="checkbox" ${r.status === 'Confirmed' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="adminToggleBookingStatus('${r.id}', this.checked)">
-                  <span class="switch-slider"></span>
-                </label>
-              </td>
-              <td style="text-align: right;">
-                <button class="btn-secondary" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">${isAuditor ? 'Audit 👁️' : 'View 👁️'}</button>
-              </td>
-            </tr>
-          `).join('');
-        }
-      }
+      // 8. Render Booking Management Table (Paginated 10 items per page)
+      renderBookingsTableWithPagination(reservations);
 
-      // 9. Render Blockchain Token Logs Table
-      const tokenTable = document.getElementById('table-token-log');
-      if (tokenTable) {
-        const tbody = tokenTable.querySelector('tbody');
-        if (tbody) {
-          tbody.innerHTML = tokenLogs.map(l => `
-            <tr>
-              <td style="color:var(--primary-blue); cursor:pointer; font-weight:600;" onclick="verifyTokenTx('${l.txHash}', '${l.block || '8481515'}', '${l.action}', '${l.amount > 0 ? '+' : ''}${l.amount} TCP', '${l.detail}')">
-                ${l.txHash ? l.txHash.substring(0, 18) + '...' : '0x1996931390...'} 🔍
-              </td>
-              <td><span class="badge ${l.action.includes('Mint') ? 'badge-success' : (l.action.includes('Burn') ? 'badge-warning' : 'badge-info')}">${l.action}</span></td>
-              <td><b>${l.amount > 0 ? '+' : ''}${Number(l.amount).toLocaleString()} TCP</b></td>
-              <td>${l.detail}</td>
-              <td>${l.time}</td>
-              <td style="text-align: right;"><span class="badge badge-success">Block #${l.block || '8481515'}</span></td>
-            </tr>
-          `).join('');
-        }
-      }
+      // 9. Render Blockchain Token Logs Table (Paginated 10 items per page)
+      renderTokenLogsTableWithPagination(tokenLogs);
 
-      // 10. Render Products & Packages Tables
-      const prodTable = document.getElementById('table-products');
-      if (prodTable && services.length > 0) {
-        const tbody = prodTable.querySelector('tbody');
-        if (tbody) {
-          tbody.innerHTML = services.map((s, idx) => `
-            <tr>
-              <td style="color:#94a3b8; cursor:grab;">☰</td>
-              <td><b>${s.title}</b><br><small style="color:var(--text-muted)">โดย ${s.provider} (${s.location})</small></td>
-              <td><span class="badge badge-info">ACT00${1000 + idx + 1}</span></td>
-              <td>${s.unit === 'คืน' ? '24 hours' : 'Same day'}</td>
-              <td><label class="switch-ui"><input type="checkbox" checked ${isAuditor ? 'disabled' : ''}><span class="switch-slider"></span></label></td>
-              <td><span class="badge badge-success">${isAuditor ? 'Verified' : 'Approved'}</span></td>
-              <td style="text-align: right;"><b style="color:var(--primary-navy)">฿${s.price.toLocaleString()}</b></td>
-            </tr>
-          `).join('');
-          const pCount = document.getElementById('product-count');
-          if (pCount) pCount.textContent = isPartner ? `${services.length} (สินค้าของฉัน)` : services.length;
-        }
-      }
-
-      // Render Packages Table with 10 items per page pagination
+      // 10. Render Products & Packages Tables (Paginated 10 items per page)
+      renderProductsTableWithPagination(services);
       renderPackagesTableWithPagination(services);
 
-      // 11. Render API Management Keys
-      const apiTbody = document.getElementById('tbody-api-keys');
+      // 11. Render API Management Keys (Paginated 10 items per page)
       const apiKeysList = data.apiKeys || (typeof TCStore !== 'undefined' && TCStore.getApiKeys ? TCStore.getApiKeys() : []);
       const kpiApiActive = document.getElementById('kpi-api-active-keys');
       if (kpiApiActive) kpiApiActive.textContent = `${apiKeysList.filter(k => k.status === 'Active').length} Services`;
+      renderApiKeysTableWithPagination(apiKeysList);
 
-      if (apiTbody && apiKeysList.length > 0) {
-        apiTbody.innerHTML = apiKeysList.map(k => {
-          const isActive = k.status === 'Active';
-          return `
-            <tr>
-              <td>
-                <b>${k.client}</b>
-                ${k.org ? `<br><small style="color:var(--text-muted); font-size:11px;">🏢 ${k.org}</small>` : ''}
-              </td>
-              <td>
-                <span class="badge ${k.environment && k.environment.includes('Prod') ? 'badge-info' : 'badge-warning'}" style="font-size:10.5px;">${k.environment || 'Production'}</span>
-              </td>
-              <td>
-                <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11.5px; font-family:monospace;">${k.keyPrefix || (k.fullKey ? k.fullKey.substring(0, 18) + '...' : 'tk_live_...')}</code>
-                <button class="btn-secondary" style="font-size:10.5px; padding:2px 6px; margin-left:4px;" onclick="copyApiKey('${k.fullKey || ''}')" title="คัดลอก Full API Key">📋</button>
-              </td>
-              <td><span style="font-size:12px; font-family:monospace; color:#475569;">${k.rateLimit || '10,000 req/min'}</span></td>
-              <td><span style="font-size:11.5px; color:#64748b;">${k.whitelistedIps || 'Any'}</span></td>
-              <td>
-                <label class="switch-ui" title="${isActive ? 'ปิดการใช้งาน Key' : 'เปิดการใช้งาน Key'}">
-                  <input type="checkbox" ${isActive ? 'checked' : ''} onchange="toggleApiKeyStatus('${k.id}')">
-                  <span class="switch-slider"></span>
-                </label>
-                <span class="badge ${isActive ? 'badge-success' : 'badge-danger'}" style="margin-left:6px; font-size:10.5px;">${k.status || 'Active'}</span>
-              </td>
-              <td style="text-align: right;">
-                <button class="btn-secondary" style="font-size:11px; padding:3px 8px;" onclick="prefillApiConsole('${k.client}', '${k.fullKey || ''}')">🧪 Test</button>
-                <button class="btn-secondary" style="font-size:11px; padding:3px 8px; color:#ef4444;" onclick="deleteApiKeyRow('${k.id}', '${k.client}')">🗑️</button>
-              </td>
-            </tr>
-          `;
-        }).join('');
-      }
+      // 12. Initialize DOM Tables Pagination (10 items per page across all sidebar views)
+      initAllDomTablesPagination();
     }
 
     function adminToggleBookingStatus(id, isChecked) {
@@ -3861,6 +3683,20 @@
     function filterTable(inputId, tableId, countSpanId = null) {
       const input = document.getElementById(inputId);
       const filter = input ? input.value.toLowerCase() : '';
+
+      // Check if managed by domTableState
+      if (typeof domTableState !== 'undefined' && domTableState[tableId]) {
+        domTableState[tableId].filterText = filter;
+        domTableState[tableId].currentPage = 1;
+        renderDomTablePagination(tableId);
+        if (countSpanId) {
+          const countEl = document.getElementById(countSpanId);
+          const matched = domTableState[tableId].allRows.filter(r => r.innerText.toLowerCase().includes(filter));
+          if (countEl) countEl.textContent = matched.length;
+        }
+        return;
+      }
+
       const table = document.getElementById(tableId);
       if (!table) return;
 
@@ -4656,13 +4492,12 @@
       renderPkgPaginationFooter(filtered.length, pkgCurrentPage, totalPages, startIdx, endIdx);
     }
 
-    function renderPkgPaginationFooter(totalItems, currentPage, totalPages, startIdx, endIdx) {
-      const container = document.getElementById('packages-pagination-container');
+    function renderGenericPaginationFooter(container, currentPage, totalPages, totalItems, startIdx, endIdx, goToPageFnPrefix) {
       if (!container) return;
 
       if (totalItems === 0) {
         container.innerHTML = `
-          <div style="color:var(--text-muted); font-size:12.5px;">ไม่มีรายการข้อมูล</div>
+          <div style="color:var(--text-muted); font-size:12.5px; padding:6px 0;">ไม่มีรายการข้อมูล</div>
         `;
         return;
       }
@@ -4677,24 +4512,22 @@
 
       let pagesHtml = '';
 
-      // First page if window starts after page 1
       if (startP > 1) {
-        pagesHtml += `<button class="page-nav-btn" onclick="goToPkgPage(1)">1</button>`;
+        pagesHtml += `<button class="page-nav-btn" onclick="${goToPageFnPrefix}1)">1</button>`;
         if (startP > 2) {
           pagesHtml += `<span class="page-nav-ellipsis">...</span>`;
         }
       }
 
       for (let p = startP; p <= endP; p++) {
-        pagesHtml += `<button class="page-nav-btn ${p === currentPage ? 'active' : ''}" onclick="goToPkgPage(${p})">${p}</button>`;
+        pagesHtml += `<button class="page-nav-btn ${p === currentPage ? 'active' : ''}" onclick="${goToPageFnPrefix}${p})">${p}</button>`;
       }
 
-      // Last page if window ends before totalPages
       if (endP < totalPages) {
         if (endP < totalPages - 1) {
           pagesHtml += `<span class="page-nav-ellipsis">...</span>`;
         }
-        pagesHtml += `<button class="page-nav-btn" onclick="goToPkgPage(${totalPages})">${totalPages}</button>`;
+        pagesHtml += `<button class="page-nav-btn" onclick="${goToPageFnPrefix}${totalPages})">${totalPages}</button>`;
       }
 
       container.innerHTML = `
@@ -4706,22 +4539,27 @@
 
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <div class="pagination-controls">
-            <button class="page-nav-btn" title="หน้าแรก" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPkgPage(1)">«</button>
-            <button class="page-nav-btn" title="ก่อนหน้า" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPkgPage(${currentPage - 1})">‹</button>
+            <button class="page-nav-btn" title="หน้าแรก" ${currentPage === 1 ? 'disabled' : ''} onclick="${goToPageFnPrefix}1)">«</button>
+            <button class="page-nav-btn" title="ก่อนหน้า" ${currentPage === 1 ? 'disabled' : ''} onclick="${goToPageFnPrefix}${currentPage - 1})">‹</button>
             ${pagesHtml}
-            <button class="page-nav-btn" title="ถัดไป" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPkgPage(${currentPage + 1})">›</button>
-            <button class="page-nav-btn" title="หน้าสุดท้าย" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPkgPage(${totalPages})">»</button>
+            <button class="page-nav-btn" title="ถัดไป" ${currentPage === totalPages ? 'disabled' : ''} onclick="${goToPageFnPrefix}${currentPage + 1})">›</button>
+            <button class="page-nav-btn" title="หน้าสุดท้าย" ${currentPage === totalPages ? 'disabled' : ''} onclick="${goToPageFnPrefix}${totalPages})">»</button>
           </div>
 
           <div style="display:flex; align-items:center; gap:5px; font-size:12px; color:#64748b; margin-left:8px;">
             <span>ไปที่หน้า:</span>
             <input type="number" min="1" max="${totalPages}" value="${currentPage}" 
               style="width:52px; padding:4px 6px; text-align:center; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; font-weight:600;" 
-              onkeydown="if(event.key==='Enter') goToPkgPage(this.value)" 
-              onchange="goToPkgPage(this.value)">
+              onkeydown="if(event.key==='Enter') ${goToPageFnPrefix}this.value)" 
+              onchange="${goToPageFnPrefix}this.value)">
           </div>
         </div>
       `;
+    }
+
+    function renderPkgPaginationFooter(totalItems, currentPage, totalPages, startIdx, endIdx) {
+      const container = document.getElementById('packages-pagination-container');
+      renderGenericPaginationFooter(container, currentPage, totalPages, totalItems, startIdx, endIdx, 'goToPkgPage(');
     }
 
     function goToPkgPage(p) {
@@ -4940,6 +4778,723 @@
       }
     }
 
+    // ========================================================
+    // DOM TABLES PAGINATOR (Static / Semi-static tables)
+    // ========================================================
+    const domTableState = {};
+
+    function initDomTablePagination(tableId, containerId, perPage = 10) {
+      const table = document.getElementById(tableId);
+      const container = document.getElementById(containerId);
+      if (!table || !container) return;
+
+      const tbody = table.querySelector('tbody');
+      if (!tbody) return;
+
+      if (!domTableState[tableId]) {
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        domTableState[tableId] = {
+          allRows: rows,
+          currentPage: 1,
+          perPage: perPage,
+          containerId: containerId,
+          filterText: ''
+        };
+      }
+
+      renderDomTablePagination(tableId);
+    }
+
+    function renderDomTablePagination(tableId) {
+      const state = domTableState[tableId];
+      if (!state) return;
+
+      const table = document.getElementById(tableId);
+      const container = document.getElementById(state.containerId);
+      if (!table || !container) return;
+      const tbody = table.querySelector('tbody');
+      if (!tbody) return;
+
+      const filter = (state.filterText || '').toLowerCase();
+      const matched = state.allRows.filter(r => {
+        if (!filter) return true;
+        return r.innerText.toLowerCase().includes(filter);
+      });
+
+      const totalItems = matched.length;
+      const totalPages = Math.max(1, Math.ceil(totalItems / state.perPage));
+      if (state.currentPage > totalPages) state.currentPage = totalPages;
+      if (state.currentPage < 1) state.currentPage = 1;
+
+      const startIdx = (state.currentPage - 1) * state.perPage;
+      const endIdx = Math.min(startIdx + state.perPage, totalItems);
+
+      tbody.innerHTML = '';
+      if (totalItems === 0) {
+        const cols = table.querySelectorAll('thead th').length || 4;
+        tbody.innerHTML = `<tr><td colspan="${cols}" style="text-align:center; padding:24px; color:#64748b;">ไม่พบข้อมูล</td></tr>`;
+      } else {
+        for (let i = startIdx; i < endIdx; i++) {
+          tbody.appendChild(matched[i].cloneNode(true));
+        }
+      }
+
+      renderGenericPaginationFooter(container, state.currentPage, totalPages, totalItems, startIdx, endIdx, `goToDomPage('${tableId}', `);
+    }
+
+    function goToDomPage(tableId, page) {
+      const state = domTableState[tableId];
+      if (!state) return;
+      const p = parseInt(page, 10);
+      if (isNaN(p) || p < 1) return;
+      state.currentPage = p;
+      renderDomTablePagination(tableId);
+      const el = document.getElementById(tableId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function initAllDomTablesPagination() {
+      const domTables = [
+        { tableId: 'table-admin-users', containerId: 'admin-users-pagination-container' },
+        { tableId: 'table-admin-roles', containerId: 'admin-roles-pagination-container' },
+        { tableId: 'table-contracts', containerId: 'contracts-pagination-container' },
+        { tableId: 'table-setting-allotment', containerId: 'setting-allotment-pagination-container' },
+        { tableId: 'table-enabled-allot', containerId: 'enabled-allotment-pagination-container' },
+        { tableId: 'table-allotment-report', containerId: 'allotment-report-pagination-container' },
+        { tableId: 'table-price-tier', containerId: 'price-tier-pagination-container' },
+        { tableId: 'table-partner-tier', containerId: 'partner-tier-pagination-container' },
+        { tableId: 'table-specific-markup', containerId: 'specific-markup-pagination-container' },
+        { tableId: 'table-databank', containerId: 'databank-pagination-container' }
+      ];
+
+      domTables.forEach(t => {
+        initDomTablePagination(t.tableId, t.containerId, 10);
+      });
+    }
+
+    // ========================================================
+    // 1. MANAGE PRODUCTS (10 Items per Page)
+    // ========================================================
+    let prodMasterList = [];
+    let prodCurrentPage = 1;
+    const PROD_PER_PAGE = 10;
+    let prodSearchQuery = '';
+    let prodCategoryFilter = 'all';
+
+    function renderProductsTableWithPagination(servicesList) {
+      if (servicesList && Array.isArray(servicesList) && servicesList.length > 0) {
+        prodMasterList = servicesList;
+      } else if (!prodMasterList || prodMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined') prodMasterList = TCStore.getState().services || [];
+        if ((!prodMasterList || prodMasterList.length === 0) && typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.allServices) {
+          prodMasterList = DEPA_REAL_DATA.allServices;
+        }
+      }
+
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin) || {};
+      const isPartner = (currentAdmin.email || '').toLowerCase().includes('somchai') || (currentAdmin.email || '').toLowerCase().includes('phuket');
+      const isAuditor = (currentAdmin.email || '').toLowerCase().includes('auditor') || (currentAdmin.email || '').toLowerCase().includes('tat');
+
+      let dataToUse = prodMasterList;
+      if (isPartner) {
+        dataToUse = prodMasterList.filter(s => {
+          const loc = (s.location || '').toLowerCase();
+          const prov = (s.provider || '').toLowerCase();
+          const tit = (s.title || '').toLowerCase();
+          return loc.includes('ภูเก็ต') || loc.includes('phuket') || loc.includes('พังงา') || loc.includes('กระบี่') || prov.includes('phuket') || prov.includes('สมชาย') || prov.includes('andaman') || tit.includes('phuket');
+        });
+        if (dataToUse.length === 0) dataToUse = prodMasterList.slice(0, 15);
+      }
+
+      const q = (prodSearchQuery || '').trim().toLowerCase();
+      const cat = (prodCategoryFilter || 'all').trim();
+
+      const filtered = dataToUse.filter(s => {
+        if (cat !== 'all') {
+          const cName = (s.categoryName || '').toLowerCase();
+          const cCode = (s.category || '').toLowerCase();
+          if (!cName.includes(cat.toLowerCase()) && !cCode.includes(cat.toLowerCase())) return false;
+        }
+        if (q) {
+          const t = (s.title || '').toLowerCase();
+          const p = (s.provider || '').toLowerCase();
+          const l = (s.location || '').toLowerCase();
+          const id = String(s.id || '').toLowerCase();
+          if (!t.includes(q) && !p.includes(q) && !l.includes(q) && !id.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const countEl = document.getElementById('product-count');
+      if (countEl) countEl.textContent = isPartner ? `${filtered.length} (สินค้าของฉัน)` : filtered.length.toLocaleString('th-TH');
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PROD_PER_PAGE));
+      if (prodCurrentPage > totalPages) prodCurrentPage = totalPages;
+      if (prodCurrentPage < 1) prodCurrentPage = 1;
+
+      const startIdx = (prodCurrentPage - 1) * PROD_PER_PAGE;
+      const endIdx = Math.min(startIdx + PROD_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      const tbody = document.getElementById('tbody-products') || document.querySelector('#table-products tbody');
+      if (tbody) {
+        if (currentSlice.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b;">ไม่พบข้อมูลสินค้าที่ตรงกับเงื่อนไข</td></tr>`;
+        } else {
+          tbody.innerHTML = currentSlice.map((s, idx) => `
+            <tr>
+              <td style="color:#94a3b8; cursor:grab;">☰</td>
+              <td><b>${s.title}</b><br><small style="color:var(--text-muted)">โดย ${s.provider} (${s.location})</small></td>
+              <td><span class="badge badge-info">ACT00${1000 + (startIdx + idx) + 1}</span></td>
+              <td>${s.unit === 'คืน' ? '24 hours' : 'Same day'}</td>
+              <td><label class="switch-ui"><input type="checkbox" checked ${isAuditor ? 'disabled' : ''}><span class="switch-slider"></span></label></td>
+              <td><span class="badge badge-success">${isAuditor ? 'Verified' : 'Approved'}</span></td>
+              <td style="text-align: right;"><b style="color:var(--primary-navy)">฿${Number(s.price).toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</b></td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      const container = document.getElementById('products-pagination-container');
+      renderGenericPaginationFooter(container, prodCurrentPage, totalPages, filtered.length, startIdx, endIdx, 'goToProdPage(');
+    }
+
+    function goToProdPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      prodCurrentPage = pageNum;
+      renderProductsTableWithPagination();
+      const el = document.getElementById('table-products');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function handleProdSearch(val) {
+      prodSearchQuery = val || '';
+      prodCurrentPage = 1;
+      renderProductsTableWithPagination();
+    }
+
+    function handleProdCategory(cat) {
+      prodCategoryFilter = cat || 'all';
+      prodCurrentPage = 1;
+      renderProductsTableWithPagination();
+    }
+
+    function exportAllProductsToCSV() {
+      const headers = ['ลำดับ', 'ชื่อสินค้า', 'ผู้ให้บริการ', 'หมวดหมู่', 'สถานที่', 'ราคา', 'สถานะ'];
+      const rows = (prodMasterList || []).map((s, idx) => [
+        idx + 1, `"${(s.title || '').replace(/"/g, '""')}"`, `"${(s.provider || '').replace(/"/g, '""')}"`,
+        s.categoryName || s.category, `"${(s.location || '').replace(/"/g, '""')}"`, s.price, 'Approved'
+      ]);
+      const bom = '\uFEFF';
+      const content = bom + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ThailandConnex_Products_List.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 ดาวน์โหลดรายการสินค้าทั้งหมดเรียบร้อยแล้ว');
+    }
+
+    // ========================================================
+    // 2. MANAGE BOOKINGS (10 Items per Page)
+    // ========================================================
+    let bkMasterList = [];
+    let bkCurrentPage = 1;
+    const BK_PER_PAGE = 10;
+    let bkSearchQuery = '';
+    let bkStatusFilter = 'all';
+
+    function renderBookingsTableWithPagination(reservationsList) {
+      if (reservationsList && Array.isArray(reservationsList)) bkMasterList = reservationsList;
+      if (!bkMasterList || bkMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined') bkMasterList = TCStore.getState().reservations || [];
+      }
+
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin) || {};
+      const isPartner = (currentAdmin.email || '').toLowerCase().includes('somchai') || (currentAdmin.email || '').toLowerCase().includes('phuket');
+      const isAuditor = (currentAdmin.email || '').toLowerCase().includes('auditor') || (currentAdmin.email || '').toLowerCase().includes('tat');
+
+      let dataToUse = bkMasterList;
+      if (isPartner) {
+        dataToUse = bkMasterList.filter(r => {
+          const p = (r.property || '').toLowerCase();
+          const s = (r.serviceName || '').toLowerCase();
+          const a = (r.agent || '').toLowerCase();
+          return p.includes('phuket') || p.includes('ภูเก็ต') || p.includes('สมชาย') || p.includes('andaman') || p.includes('tour') || p.includes('sealife') || s.includes('phuket') || s.includes('ภูเก็ต') || s.includes('sealife') || a.includes('gianttick');
+        });
+      }
+
+      const filtered = dataToUse.filter(r => {
+        if (bkStatusFilter !== 'all' && r.status !== bkStatusFilter) return false;
+        if (bkSearchQuery) {
+          const q = bkSearchQuery.toLowerCase();
+          const id = String(r.id || '').toLowerCase();
+          const ref = String(r.refNo || '').toLowerCase();
+          const ag = (r.agent || '').toLowerCase();
+          const prop = (r.property || '').toLowerCase();
+          const serv = (r.serviceName || '').toLowerCase();
+          if (!id.includes(q) && !ref.includes(q) && !ag.includes(q) && !prop.includes(q) && !serv.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const bCount = document.getElementById('booking-count');
+      if (bCount) bCount.textContent = isPartner ? `${filtered.length} (การจองของคุณ)` : filtered.length;
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / BK_PER_PAGE));
+      if (bkCurrentPage > totalPages) bkCurrentPage = totalPages;
+      if (bkCurrentPage < 1) bkCurrentPage = 1;
+
+      const startIdx = (bkCurrentPage - 1) * BK_PER_PAGE;
+      const endIdx = Math.min(startIdx + BK_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      const tbody = document.getElementById('tbody-bookings') || document.querySelector('#table-bookings tbody');
+      if (tbody) {
+        if (currentSlice.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#64748b;">ไม่พบข้อมูลการจอง</td></tr>`;
+        } else {
+          tbody.innerHTML = currentSlice.map(r => `
+            <tr>
+              <td>${r.bookedOn}</td>
+              <td><b>BK-${r.id.replace('BK-', '')}</b></td>
+              <td>${r.refNo || ('1675' + r.id)}</td>
+              <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
+              <td><b>฿${Number(r.amount).toLocaleString()}</b></td>
+              <td>
+                <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'เปิด/ปิดการยืนยันคำสั่งจอง'}">
+                  <input type="checkbox" ${r.status === 'Confirmed' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="adminToggleBookingStatus('${r.id}', this.checked)">
+                  <span class="switch-slider"></span>
+                </label>
+              </td>
+              <td style="text-align: right;">
+                <button class="btn-secondary" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">${isAuditor ? 'Audit 👁️' : 'View 👁️'}</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      const container = document.getElementById('bookings-pagination-container');
+      renderGenericPaginationFooter(container, bkCurrentPage, totalPages, filtered.length, startIdx, endIdx, 'goToBkPage(');
+    }
+
+    function goToBkPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      bkCurrentPage = pageNum;
+      renderBookingsTableWithPagination();
+      const el = document.getElementById('table-bookings');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function handleBkSearch(val) {
+      bkSearchQuery = val || '';
+      bkCurrentPage = 1;
+      renderBookingsTableWithPagination();
+    }
+
+    function handleBkStatus(status) {
+      bkStatusFilter = status || 'all';
+      bkCurrentPage = 1;
+      renderBookingsTableWithPagination();
+    }
+
+    function exportBookingsToCSV() {
+      const headers = ['Booking Date', 'Booking No', 'Reference No', 'Agent', 'Property / Service', 'Amount', 'Status'];
+      const rows = (bkMasterList || []).map(r => [
+        r.bookedOn, `BK-${r.id.replace('BK-', '')}`, r.refNo || ('1675' + r.id), `"${r.agent || 'User Direct'}"`, `"${r.property || ''} - ${r.serviceName || ''}"`, r.amount, r.status
+      ]);
+      const bom = '\uFEFF';
+      const content = bom + [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ThailandConnex_Bookings_List.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 ดาวน์โหลดรายการคำสั่งจองเรียบร้อยแล้ว');
+    }
+
+    // ========================================================
+    // 3. USER MANAGEMENT: ACTIVITY USERS (10 Items per Page)
+    // ========================================================
+    let actUserMasterList = [];
+    let actUserCurrentPage = 1;
+    const ACT_USER_PER_PAGE = 10;
+    let actUserSearchQuery = '';
+
+    function renderActivityUsersWithPagination(usersList) {
+      if (usersList && Array.isArray(usersList)) actUserMasterList = usersList;
+      if (!actUserMasterList || actUserMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined' && TCStore.getState().auth) {
+          actUserMasterList = TCStore.getState().auth.registeredUsers || [];
+        }
+      }
+
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin) || {};
+      const isPartner = (currentAdmin.email || '').toLowerCase().includes('somchai') || (currentAdmin.email || '').toLowerCase().includes('phuket');
+      const isAuditor = (currentAdmin.email || '').toLowerCase().includes('auditor') || (currentAdmin.email || '').toLowerCase().includes('tat');
+
+      const actTable = document.getElementById('tbody-activity-users');
+      const actCountEl = document.getElementById('activity-user-count');
+      const container = document.getElementById('activity-users-pagination-container');
+
+      if (isPartner) {
+        if (actTable) {
+          actTable.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align:center; padding:40px 20px; color:#64748b; font-size:13px;">
+                <div style="font-size:32px; margin-bottom:10px;">🔒</div>
+                <b style="font-size:15px; color:#1e293b;">การเข้าถึงถูกจำกัดตามมาตรฐานคุ้มครองข้อมูลส่วนบุคคล (PDPA)</b>
+                <p style="margin-top:6px; color:#64748b;">ผู้ประกอบการสามารถดูข้อมูลได้เฉพาะลูกค้าที่ทำการจองบริการของท่านในเมนู Manage Booking เท่านั้น</p>
+              </td>
+            </tr>
+          `;
+        }
+        if (actCountEl) actCountEl.textContent = '🔒 จำกัดสิทธิ์';
+        if (container) container.innerHTML = `<div style="color:var(--text-muted); font-size:12.5px;">การเข้าถึงข้อมูลผู้ใช้ถูกจำกัดสำหรับ Partner</div>`;
+        return;
+      }
+
+      const filtered = actUserMasterList.filter(u => {
+        if (actUserSearchQuery) {
+          const q = actUserSearchQuery.toLowerCase();
+          const n = (u.name || '').toLowerCase();
+          const e = (u.email || '').toLowerCase();
+          const id = String(u.id || '').toLowerCase();
+          const p = (u.phone || '').toLowerCase();
+          const w = (u.walletAddress || '').toLowerCase();
+          if (!n.includes(q) && !e.includes(q) && !id.includes(q) && !p.includes(q) && !w.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (actCountEl) actCountEl.textContent = isAuditor ? `${filtered.length} (โหมดตรวจสอบ)` : filtered.length;
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / ACT_USER_PER_PAGE));
+      if (actUserCurrentPage > totalPages) actUserCurrentPage = totalPages;
+      if (actUserCurrentPage < 1) actUserCurrentPage = 1;
+
+      const startIdx = (actUserCurrentPage - 1) * ACT_USER_PER_PAGE;
+      const endIdx = Math.min(startIdx + ACT_USER_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      const currentUser = (typeof TCStore !== 'undefined' && TCStore.getState().auth) ? (TCStore.getState().auth.currentUser || {}) : {};
+
+      if (actTable) {
+        if (currentSlice.length === 0) {
+          actTable.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#64748b;">ไม่พบรายชื่อผู้ใช้งาน</td></tr>`;
+        } else {
+          actTable.innerHTML = currentSlice.map(u => {
+            const isOnline = (currentUser.id === u.id || currentUser.email === u.email) && currentUser.isLoggedIn !== false;
+            const isWelcome = u.tier && u.tier.includes('Welcome Bonus');
+            const tokenFormatted = (parseFloat(u.tokenBalance) || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 });
+            const walletTruncated = u.walletAddress ? (u.walletAddress.substring(0, 8) + '...' + u.walletAddress.substring(u.walletAddress.length - 4)) : 'N/A';
+
+            return `
+              <tr style="${isOnline ? 'background: rgba(22, 141, 225, 0.08); font-weight:600;' : ''}">
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="display:inline-flex; width:32px; height:32px; border-radius:50%; background:#e0f2fe; color:var(--primary-blue); font-weight:700; align-items:center; justify-content:center; font-size:12px;">${u.avatar || 'TC'}</span>
+                    <div>
+                      <b>${u.name}</b>
+                      ${isOnline ? '<span class="badge badge-info" style="font-size:9.5px; margin-left:4px;">🟢 Online</span>' : ''}
+                      ${isWelcome ? '<span class="badge badge-success" style="font-size:9.5px; margin-left:4px;">✨ New</span>' : ''}
+                      <div style="font-size:11px; color:var(--text-muted); font-family:monospace;">ID: ${u.id}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>${u.email}</div>
+                  <small style="color:var(--text-muted); font-size:11px;">📞 ${u.phone || '08x-xxx-xxxx'}</small>
+                </td>
+                <td>
+                  <span class="badge badge-info" style="font-size:10.5px;">${u.tier || 'Member'}</span>
+                  <div style="font-size:10.5px; color:var(--text-muted); font-family:monospace; margin-top:2px;" title="${u.walletAddress}">
+                    🔑 ${walletTruncated}
+                  </div>
+                </td>
+                <td>
+                  <b style="color:#b45309; font-size:13px;">${tokenFormatted}</b> <small style="color:#d97706; font-weight:600;">TCP</small>
+                </td>
+                <td>
+                  <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'ปิดกั้นการเข้าถึง'}">
+                    <input type="checkbox" ${u.status === 'Disabled' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="toggleUserStatus(this, '${u.id}', '${u.name}')">
+                    <span class="switch-slider"></span>
+                  </label>
+                </td>
+                <td style="text-align: right;">
+                  <span class="badge ${u.status === 'Active' ? 'badge-success' : 'badge-danger'}" style="margin-right:4px;">${u.status || 'Active'}</span>
+                  ${isAuditor ? '<span class="badge badge-warning">Audit Record</span>' : `<button class="btn-secondary" style="font-size:11px;" onclick="editActivityUser('${u.name}', '${u.email}')">✏️ แก้ไข</button>`}
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      renderGenericPaginationFooter(container, actUserCurrentPage, totalPages, filtered.length, startIdx, endIdx, 'goToActUserPage(');
+    }
+
+    function goToActUserPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      actUserCurrentPage = pageNum;
+      renderActivityUsersWithPagination();
+      const el = document.getElementById('table-activity-users');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function handleActUserSearch(val) {
+      actUserSearchQuery = val || '';
+      actUserCurrentPage = 1;
+      renderActivityUsersWithPagination();
+    }
+
+    // ========================================================
+    // 4. BLOCKCHAIN TOKEN LOGS (10 Items per Page)
+    // ========================================================
+    let tokenLogMasterList = [];
+    let tokenLogCurrentPage = 1;
+    const TOKEN_PER_PAGE = 10;
+    let tokenLogSearchQuery = '';
+
+    function renderTokenLogsTableWithPagination(tokenLogsList) {
+      if (tokenLogsList && Array.isArray(tokenLogsList)) tokenLogMasterList = tokenLogsList;
+      if (!tokenLogMasterList || tokenLogMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined') tokenLogMasterList = TCStore.getState().tokenLogs || [];
+      }
+
+      const filtered = tokenLogMasterList.filter(l => {
+        if (tokenLogSearchQuery) {
+          const q = tokenLogSearchQuery.toLowerCase();
+          const h = (l.txHash || '').toLowerCase();
+          const a = (l.action || '').toLowerCase();
+          const d = (l.detail || '').toLowerCase();
+          const b = String(l.block || '').toLowerCase();
+          if (!h.includes(q) && !a.includes(q) && !d.includes(q) && !b.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / TOKEN_PER_PAGE));
+      if (tokenLogCurrentPage > totalPages) tokenLogCurrentPage = totalPages;
+      if (tokenLogCurrentPage < 1) tokenLogCurrentPage = 1;
+
+      const startIdx = (tokenLogCurrentPage - 1) * TOKEN_PER_PAGE;
+      const endIdx = Math.min(startIdx + TOKEN_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      const tbody = document.querySelector('#table-token-log tbody');
+      if (tbody) {
+        if (currentSlice.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#64748b;">ไม่พบบันทึกธุรกรรม Token</td></tr>`;
+        } else {
+          tbody.innerHTML = currentSlice.map(l => `
+            <tr>
+              <td style="color:var(--primary-blue); cursor:pointer; font-weight:600;" onclick="verifyTokenTx('${l.txHash}', '${l.block || '8481515'}', '${l.action}', '${l.amount > 0 ? '+' : ''}${l.amount} TCP', '${l.detail}')">
+                ${l.txHash ? l.txHash.substring(0, 18) + '...' : '0x1996931390...'} 🔍
+              </td>
+              <td><span class="badge ${l.action.includes('Mint') ? 'badge-success' : (l.action.includes('Burn') ? 'badge-warning' : 'badge-info')}">${l.action}</span></td>
+              <td><b>${l.amount > 0 ? '+' : ''}${Number(l.amount).toLocaleString()} TCP</b></td>
+              <td>${l.detail}</td>
+              <td>${l.time}</td>
+              <td style="text-align: right;"><span class="badge badge-success">Block #${l.block || '8481515'}</span></td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      const container = document.getElementById('token-log-pagination-container');
+      renderGenericPaginationFooter(container, tokenLogCurrentPage, totalPages, filtered.length, startIdx, endIdx, 'goToTokenLogPage(');
+    }
+
+    function goToTokenLogPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      tokenLogCurrentPage = pageNum;
+      renderTokenLogsTableWithPagination();
+      const el = document.getElementById('table-token-log');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function handleTokenLogSearch(val) {
+      tokenLogSearchQuery = val || '';
+      tokenLogCurrentPage = 1;
+      renderTokenLogsTableWithPagination();
+    }
+
+    // ========================================================
+    // 5. API KEYS (10 Items per Page)
+    // ========================================================
+    let apiKeysMasterList = [];
+    let apiKeysCurrentPage = 1;
+    const API_PER_PAGE = 10;
+    let apiKeysSearchQuery = '';
+
+    function renderApiKeysTableWithPagination(apiKeysList) {
+      if (apiKeysList && Array.isArray(apiKeysList)) apiKeysMasterList = apiKeysList;
+      if (!apiKeysMasterList || apiKeysMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined') apiKeysMasterList = TCStore.getApiKeys ? TCStore.getApiKeys() : (TCStore.getState().apiKeys || []);
+      }
+
+      const filtered = apiKeysMasterList.filter(k => {
+        if (apiKeysSearchQuery) {
+          const q = apiKeysSearchQuery.toLowerCase();
+          const c = (k.client || '').toLowerCase();
+          const o = (k.org || '').toLowerCase();
+          const p = (k.keyPrefix || '').toLowerCase();
+          if (!c.includes(q) && !o.includes(q) && !p.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / API_PER_PAGE));
+      if (apiKeysCurrentPage > totalPages) apiKeysCurrentPage = totalPages;
+      if (apiKeysCurrentPage < 1) apiKeysCurrentPage = 1;
+
+      const startIdx = (apiKeysCurrentPage - 1) * API_PER_PAGE;
+      const endIdx = Math.min(startIdx + API_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      const apiTbody = document.getElementById('tbody-api-keys');
+      if (apiTbody) {
+        if (currentSlice.length === 0) {
+          apiTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#64748b;">ไม่พบ API Key</td></tr>`;
+        } else {
+          apiTbody.innerHTML = currentSlice.map(k => {
+            const isActive = k.status === 'Active';
+            return `
+              <tr>
+                <td>
+                  <b>${k.client}</b>
+                  ${k.org ? `<br><small style="color:var(--text-muted); font-size:11px;">🏢 ${k.org}</small>` : ''}
+                </td>
+                <td>
+                  <span class="badge ${k.environment && k.environment.includes('Prod') ? 'badge-info' : 'badge-warning'}" style="font-size:10.5px;">${k.environment || 'Production'}</span>
+                </td>
+                <td>
+                  <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11.5px; font-family:monospace;">${k.keyPrefix || (k.fullKey ? k.fullKey.substring(0, 18) + '...' : 'tk_live_...')}</code>
+                  <button class="btn-secondary" style="font-size:10.5px; padding:2px 6px; margin-left:4px;" onclick="copyApiKey('${k.fullKey || ''}')" title="คัดลอก Full API Key">📋</button>
+                </td>
+                <td><span style="font-size:12px; font-family:monospace; color:#475569;">${k.rateLimit || '10,000 req/min'}</span></td>
+                <td><span style="font-size:11.5px; color:#64748b;">${k.whitelistedIps || 'Any'}</span></td>
+                <td>
+                  <label class="switch-ui" title="${isActive ? 'ปิดการใช้งาน Key' : 'เปิดการใช้งาน Key'}">
+                    <input type="checkbox" ${isActive ? 'checked' : ''} onchange="toggleApiKeyStatus('${k.id}')">
+                    <span class="switch-slider"></span>
+                  </label>
+                  <span class="badge ${isActive ? 'badge-success' : 'badge-danger'}" style="margin-left:6px; font-size:10.5px;">${k.status || 'Active'}</span>
+                </td>
+                <td style="text-align: right;">
+                  <button class="btn-secondary" style="font-size:11px; padding:3px 8px;" onclick="prefillApiConsole('${k.client}', '${k.fullKey || ''}')">🧪 Test</button>
+                  <button class="btn-secondary" style="font-size:11px; padding:3px 8px; color:#ef4444;" onclick="deleteApiKeyRow('${k.id}', '${k.client}')">🗑️</button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      const container = document.getElementById('api-keys-pagination-container');
+      renderGenericPaginationFooter(container, apiKeysCurrentPage, totalPages, filtered.length, startIdx, endIdx, 'goToApiKeysPage(');
+    }
+
+    function goToApiKeysPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      apiKeysCurrentPage = pageNum;
+      renderApiKeysTableWithPagination();
+      const el = document.getElementById('table-api-keys');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function handleApiKeysSearch(val) {
+      apiKeysSearchQuery = val || '';
+      apiKeysCurrentPage = 1;
+      renderApiKeysTableWithPagination();
+    }
+
+    // ========================================================
+    // 6. DASHBOARD BOOKINGS (10 Items per Page)
+    // ========================================================
+    let dashBkMasterList = [];
+    let dashBkCurrentPage = 1;
+    const DASH_BK_PER_PAGE = 10;
+
+    function renderDashboardBookingsTableWithPagination(reservationsList) {
+      if (reservationsList && Array.isArray(reservationsList)) dashBkMasterList = reservationsList;
+      if (!dashBkMasterList || dashBkMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined') dashBkMasterList = TCStore.getState().reservations || [];
+      }
+
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin) || {};
+      const isPartner = (currentAdmin.email || '').toLowerCase().includes('somchai') || (currentAdmin.email || '').toLowerCase().includes('phuket');
+
+      let dataToUse = dashBkMasterList;
+      if (isPartner) {
+        dataToUse = dashBkMasterList.filter(r => {
+          const p = (r.property || '').toLowerCase();
+          const s = (r.serviceName || '').toLowerCase();
+          const a = (r.agent || '').toLowerCase();
+          return p.includes('phuket') || p.includes('ภูเก็ต') || p.includes('สมชาย') || p.includes('andaman') || p.includes('tour') || p.includes('sealife') || s.includes('phuket') || s.includes('ภูเก็ต') || s.includes('sealife') || a.includes('gianttick');
+        });
+      }
+
+      const totalPages = Math.max(1, Math.ceil(dataToUse.length / DASH_BK_PER_PAGE));
+      if (dashBkCurrentPage > totalPages) dashBkCurrentPage = totalPages;
+      if (dashBkCurrentPage < 1) dashBkCurrentPage = 1;
+
+      const startIdx = (dashBkCurrentPage - 1) * DASH_BK_PER_PAGE;
+      const endIdx = Math.min(startIdx + DASH_BK_PER_PAGE, dataToUse.length);
+      const currentSlice = dataToUse.slice(startIdx, endIdx);
+
+      const tbody = document.querySelector('#table-dashboard-bookings tbody');
+      if (tbody) {
+        if (currentSlice.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px; color:#64748b;">ไม่มีรายการจองล่าสุด</td></tr>`;
+        } else {
+          tbody.innerHTML = currentSlice.map((r, idx) => `
+            <tr style="cursor:pointer;" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">
+              <td>${startIdx + idx + 1}</td>
+              <td>${r.bookedOn}</td>
+              <td><b style="color:var(--primary-blue);">BK-${r.id.replace('BK-', '')}</b></td>
+              <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
+              <td style="text-align: right;">
+                <span class="badge ${r.status === 'Confirmed' ? 'badge-success' : (r.status === 'Cancelled' ? 'badge-danger' : 'badge-warning')}">${r.status}</span>
+              </td>
+              <td style="text-align: right;">
+                <button class="btn-secondary" style="font-size:11px; padding:4px 8px;">ดูรายละเอียด 👁️</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      const container = document.getElementById('dashboard-bookings-pagination-container');
+      renderGenericPaginationFooter(container, dashBkCurrentPage, totalPages, dataToUse.length, startIdx, endIdx, 'goToDashBkPage(');
+    }
+
+    function goToDashBkPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      dashBkCurrentPage = pageNum;
+      renderDashboardBookingsTableWithPagination();
+      const el = document.getElementById('table-dashboard-bookings');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ========================================================
+    // 7. NATIONAL DATA BANK: DIRECTORY (10 Items per Page)
+    // ========================================================
+    let adminDirCurrentPage = 1;
+    const ADMIN_DIR_PER_PAGE = 10;
+
     function renderAdminDirectory() {
       const tbody = document.getElementById('admin-directory-tbody');
       if (!tbody) return;
@@ -4961,26 +5516,51 @@
         return true;
       });
 
-      tbody.innerHTML = filtered.map(d => `
-        <tr>
-          <td>${d.no}</td>
-          <td><span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:600;">${d.cat}</span></td>
-          <td><b>${d.supplier}</b></td>
-          <td>${d.name}</td>
-          <td>${d.province}</td>
-          <td><b style="font-family:'IBM Plex Sans Thai'; color:#0f172a;">฿${d.price.toLocaleString('th-TH')}</b></td>
-          <td><span style="color:#08b99d; font-weight:700;">${d.allotment} หน่วย</span></td>
-          <td style="text-align: right;"><span class="badge badge-success">พร้อมจำหน่าย</span></td>
-        </tr>
-      `).join('');
+      const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_DIR_PER_PAGE));
+      if (adminDirCurrentPage > totalPages) adminDirCurrentPage = totalPages;
+      if (adminDirCurrentPage < 1) adminDirCurrentPage = 1;
+
+      const startIdx = (adminDirCurrentPage - 1) * ADMIN_DIR_PER_PAGE;
+      const endIdx = Math.min(startIdx + ADMIN_DIR_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      if (currentSlice.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#64748b;">ไม่พบข้อมูลสินค้าตรงตามเงื่อนไข</td></tr>`;
+      } else {
+        tbody.innerHTML = currentSlice.map(d => `
+          <tr>
+            <td>${d.no}</td>
+            <td><span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:600;">${d.cat}</span></td>
+            <td><b>${d.supplier}</b></td>
+            <td>${d.name}</td>
+            <td>${d.province}</td>
+            <td><b style="font-family:'IBM Plex Sans Thai'; color:#0f172a;">฿${d.price.toLocaleString('th-TH')}</b></td>
+            <td><span style="color:#08b99d; font-weight:700;">${d.allotment} หน่วย</span></td>
+            <td style="text-align: right;"><span class="badge badge-success">พร้อมจำหน่าย</span></td>
+          </tr>
+        `).join('');
+      }
 
       const countEl = document.getElementById('admin-dir-count');
       if (countEl) countEl.textContent = isPartner
         ? `แสดง ${filtered.length} รายการ (เฉพาะสินค้าในเครือข่ายคู่ค้าภูเก็ต)`
         : `แสดง ${filtered.length} รายการ (จากสารบบสินค้าโครงการ 201,764 รายการ)`;
+
+      const container = document.getElementById('admin-directory-pagination-container');
+      renderGenericPaginationFooter(container, adminDirCurrentPage, totalPages, filtered.length, startIdx, endIdx, 'goToAdminDirPage(');
+    }
+
+    function goToAdminDirPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      adminDirCurrentPage = pageNum;
+      renderAdminDirectory();
+      const el = document.getElementById('table-admin-directory');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function filterAdminDirectoryTable() {
+      adminDirCurrentPage = 1;
       renderAdminDirectory();
     }
 
@@ -5001,25 +5581,6 @@
       showToast('📥 ดาวน์โหลดสารบบสินค้า Data Bank เรียบร้อยแล้ว');
     }
 
-    function renderAdminProductsTable() {
-      const tbody = document.querySelector('#table-products tbody');
-      if (!tbody || typeof DEPA_REAL_DATA === 'undefined' || !DEPA_REAL_DATA.directory) return;
-      const realItems = DEPA_REAL_DATA.directory.slice(0, 15);
-      tbody.innerHTML = realItems.map((p, idx) => `
-        <tr>
-          <td style="color:#94a3b8; cursor:grab;">☰</td>
-          <td><b>${p.name}</b> <small style="color:#64748b; font-weight:normal;">(${p.supplier})</small></td>
-          <td><span class="badge badge-info">PRD-${(1000 + idx)}</span></td>
-          <td>24 hours</td>
-          <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-          <td><span class="badge badge-success">Approved</span></td>
-          <td style="text-align: right;"><button class="btn-secondary" onclick="showToast('ดูรายละเอียดสินค้า: ${p.name}', 'info')">✏️</button></td>
-        </tr>
-      `).join('');
-      const countEl = document.getElementById('product-count');
-      if (countEl) countEl.textContent = `${realItems.length} (เชื่อมต่อข้อมูลจริง .xlsx)`;
-    }
-
     function renderAdminPackagesTable() {
       renderPackagesTableWithPagination();
     }
@@ -5030,8 +5591,8 @@
         switchView('databank-kpi', document.getElementById('btn-databank'));
       }
       renderAdminDirectory();
-      renderAdminProductsTable();
-      renderAdminPackagesTable();
+      renderProductsTableWithPagination();
+      renderPackagesTableWithPagination();
 
       renderAdminFromStore();
 

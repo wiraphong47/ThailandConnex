@@ -2390,6 +2390,11 @@
           </button>
         </div>
 
+        <!-- Personal Booking & Monthly Spending Analytics Dashboard -->
+        <div id="user-booking-analytics-wrap" style="margin-bottom: 24px;">
+          <!-- Populated dynamically by renderUserBookingDashboard() -->
+        </div>
+
         <div class="table-container">
           <div class="table-toolbar">
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
@@ -4756,6 +4761,7 @@
           </tr>
         `;
         if (summaryEl) summaryEl.textContent = 'กรุณาเข้าสู่ระบบเพื่อดูประวัติการจองส่วนตัวของคุณ';
+        const w = document.getElementById('user-booking-analytics-wrap'); if (w) w.innerHTML = '';
         return;
       }
 
@@ -4780,8 +4786,16 @@
         return false;
       });
 
-      // 3. Apply search and status filters to user's reservations
+      renderUserBookingDashboard(userReservations);
+
+      // 3. Apply search, status, and month filters to user's reservations
       const filtered = userReservations.filter(r => {
+        if (typeof userSelectedBookingMonth !== 'undefined' && userSelectedBookingMonth !== 'all') {
+          const dStr = (r.checkin || r.bookedOn || '').trim();
+          const mMatch = dStr.match(/\d{4}-(\d{2})/);
+          const mIdx = mMatch ? Math.max(0, Math.min(11, parseInt(mMatch[1], 10) - 1)) : 10;
+          if (mIdx !== userSelectedBookingMonth) return false;
+        }
         if (statusFilter !== 'all' && r.status !== statusFilter) return false;
         if (search) {
           const matchId = (r.id || '').toLowerCase().includes(search);
@@ -4854,6 +4868,118 @@
       if (summaryEl) {
         summaryEl.textContent = `แสดงรายการที่ 1 ถึง ${filtered.length} จากประวัติการจองของคุณทั้งหมด ${userReservations.length} รายการ`;
       }
+      renderUserBookingDashboard(userReservations);
+    }
+
+    let userSelectedBookingMonth = 'all';
+
+    function filterUserBookingsByMonth(mIdx) {
+      if (mIdx === 'all' || userSelectedBookingMonth === mIdx) {
+        userSelectedBookingMonth = 'all';
+      } else {
+        userSelectedBookingMonth = mIdx;
+      }
+      renderReservations();
+    }
+
+    function renderUserBookingDashboard(userReservations) {
+      const wrap = document.getElementById('user-booking-analytics-wrap');
+      if (!wrap) return;
+
+      if (!isUserLoggedIn() || !userReservations || userReservations.length === 0) {
+        wrap.innerHTML = '';
+        return;
+      }
+
+      const monthsShort = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      const monthlyTotals = new Array(12).fill(0);
+      const monthlyCounts = new Array(12).fill(0);
+
+      let totalSpent = 0;
+      let confirmedCount = 0;
+      const catCounts = { '🏨 ที่พัก/โรงแรม': 0, '🎡 แหล่งท่องเที่ยว/ล่องเรือ': 0, '💆 สปา/เวลเนส': 0 };
+
+      userReservations.forEach(r => {
+        const amt = parseFloat(r.amount) || 0;
+        if (r.status !== 'Cancelled') {
+          totalSpent += amt;
+        }
+        if (r.status === 'Confirmed' || r.status === 'Completed') {
+          confirmedCount++;
+        }
+        const dStr = (r.checkin || r.bookedOn || '').trim();
+        const mMatch = dStr.match(/\d{4}-(\d{2})/);
+        const mIdx = mMatch ? Math.max(0, Math.min(11, parseInt(mMatch[1], 10) - 1)) : 10;
+        if (r.status !== 'Cancelled') {
+          monthlyTotals[mIdx] += amt;
+          monthlyCounts[mIdx] += 1;
+        }
+
+        const txt = ((r.serviceName || '') + ' ' + (r.property || '')).toLowerCase();
+        if (txt.includes('spa') || txt.includes('สปา')) catCounts['💆 สปา/เวลเนส'] += amt;
+        else if (txt.includes('cruise') || txt.includes('ล่องเรือ') || txt.includes('sealife') || txt.includes('ใบหยก')) catCounts['🎡 แหล่งท่องเที่ยว/ล่องเรือ'] += amt;
+        else catCounts['🏨 ที่พัก/โรงแรม'] += amt;
+      });
+
+      const totalEarnedTCP = Math.round(totalSpent * 0.05);
+      const maxMonthSpent = Math.max(...monthlyTotals, 1000);
+
+      const barsHtml = monthsShort.map((mName, idx) => {
+        const val = monthlyTotals[idx];
+        const cnt = monthlyCounts[idx];
+        const hPx = val > 0 ? Math.max(14, Math.round((val / maxMonthSpent) * 110)) : 4;
+        const isSel = userSelectedBookingMonth === idx;
+        return `
+          <div onclick="filterUserBookingsByMonth(${idx})" style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:155px; cursor:pointer; padding:4px; border-radius:8px; background:${isSel ? '#e0f2fe' : 'transparent'}; transition:all 0.15s;" title="เดือน${mName}: ฿${val.toLocaleString('th-TH')} (${cnt} รายการ)">
+            ${cnt > 0 ? `<span style="font-size:10px; font-weight:700; color:#0369a1; background:#e0f2fe; padding:1px 6px; border-radius:99px; margin-bottom:3px;">${cnt} จอง</span>` : ''}
+            <span style="font-size:10px; font-weight:700; color:${val > 0 ? '#0f172a' : '#94a3b8'}; margin-bottom:4px;">${val > 0 ? '฿' + val.toLocaleString('th-TH') : '-'}</span>
+            <div style="width:100%; max-width:32px; height:${hPx}px; background:${val > 0 ? (isSel ? '#0d9488' : 'linear-gradient(180deg, #0284c7, #083b7c)') : '#e2e8f0'}; border-radius:6px 6px 0 0; transition:height 0.3s;"></div>
+            <span style="font-size:11.5px; font-weight:700; color:${isSel ? '#0d9488' : '#475569'}; margin-top:6px;">${mName}</span>
+          </div>
+        `;
+      }).join('');
+
+      wrap.innerHTML = `
+        <div style="background:#ffffff; border:1px solid var(--line); border-radius:16px; padding:20px 22px; box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+            <div>
+              <h3 style="margin:0 0 4px; font-size:16px; color:var(--navy); display:flex; align-items:center; gap:8px;">
+                <span>📊 สรุปภาพรวมการจองและยอดใช้จ่ายรายเดือนของคุณ (${state.user.name})</span>
+              </h3>
+              <p style="margin:0; font-size:12px; color:var(--muted);">แสดงข้อมูลสถิติการเดินทางและยอดเงินแต่ละเดือนเฉพาะบัญชีของคุณ (คลิกที่เดือนเพื่อกรองตารางด้านล่าง)</p>
+            </div>
+            ${userSelectedBookingMonth !== 'all' ? `
+              <button type="button" class="btn-export" style="height:32px; font-size:12px; color:#0284c7; border-color:#7dd3fc; background:#f0f9ff;" onclick="filterUserBookingsByMonth('all')">
+                ✕ แสดงครบทุกเดือน
+              </button>
+            ` : ''}
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:12px; margin-bottom:18px;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #0284c7; border-radius:10px; padding:12px 14px;">
+              <div style="font-size:11.5px; color:#64748b; font-weight:600;">📋 รายการจองของฉันทั้งหมด</div>
+              <div style="font-size:22px; font-weight:800; color:var(--navy); margin-top:4px;">${userReservations.length} <small style="font-size:12px; font-weight:600;">รายการ</small></div>
+              <div style="font-size:11px; color:#059669; font-weight:600;">ยืนยันแล้ว ${confirmedCount} รายการ</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #0d9488; border-radius:10px; padding:12px 14px;">
+              <div style="font-size:11.5px; color:#64748b; font-weight:600;">💰 ยอดใช้จ่ายรวมสุทธิ</div>
+              <div style="font-size:22px; font-weight:800; color:#0d9488; margin-top:4px;">฿${totalSpent.toLocaleString('th-TH')}</div>
+              <div style="font-size:11px; color:#64748b;">เฉลี่ย ฿${Math.round(totalSpent / Math.max(userReservations.length, 1)).toLocaleString('th-TH')} / การจอง</div>
+            </div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #f59e0b; border-radius:10px; padding:12px 14px;">
+              <div style="font-size:11.5px; color:#64748b; font-weight:600;">🪙 แต้มสะสมที่ได้รับ (Cashback 5%)</div>
+              <div style="font-size:22px; font-weight:800; color:#d97706; margin-top:4px;">+${totalEarnedTCP.toLocaleString('th-TH')} TCP</div>
+              <div style="font-size:11px; color:#b45309; font-weight:600;">เข้ากระเป๋า ERC-20 อัตโนมัติ</div>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px;">
+            <div style="display:grid; grid-template-columns:repeat(12, minmax(52px, 1fr)); gap:8px; min-width:640px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+              ${barsHtml}
+            </div>
+          </div>
+        </div>
+      `;
     }
 
     function filterReservationsTable() {

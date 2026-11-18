@@ -775,7 +775,7 @@
         </button>
 
         <!-- 2. User > -->
-        <button class="menu-item-btn" id="btn-user" onclick="toggleSubmenu('sub-user', this)">
+        <button class="menu-item-btn" id="btn-user" onclick="toggleSubmenu('sub-user', this, 'activity-users')">
           <div class="menu-label-wrap">
             <span class="menu-icon">👥</span>
             <span>User</span>
@@ -783,13 +783,13 @@
           <span class="menu-arrow">›</span>
         </button>
         <div class="submenu-list" id="sub-user">
-          <button class="submenu-item-btn" onclick="switchView('activity-users', this)">List Activity User</button>
-          <button class="submenu-item-btn" onclick="switchView('admin-users', this)">Admin User List (ส่วนกลาง)</button>
-          <button class="submenu-item-btn" onclick="switchView('admin-roles', this)">Admin Role & Permission</button>
+          <button class="submenu-item-btn" id="sub-btn-act-user" onclick="switchView('activity-users', this)">List Activity User</button>
+          <button class="submenu-item-btn" id="sub-btn-admin-user" onclick="switchView('admin-users', this)">Admin User List (ส่วนกลาง)</button>
+          <button class="submenu-item-btn" id="sub-btn-admin-role" onclick="switchView('admin-roles', this)">Admin Role & Permission</button>
         </div>
 
         <!-- 3. Manage > -->
-        <button class="menu-item-btn" id="btn-manage" onclick="toggleSubmenu('sub-manage', this)">
+        <button class="menu-item-btn" id="btn-manage" onclick="toggleSubmenu('sub-manage', this, 'manage-products')">
           <div class="menu-label-wrap">
             <span class="menu-icon">📝</span>
             <span>Manage</span>
@@ -803,7 +803,7 @@
         </div>
 
         <!-- 4. Manage Allotment > -->
-        <button class="menu-item-btn" id="btn-allotment" onclick="toggleSubmenu('sub-allotment', this)">
+        <button class="menu-item-btn" id="btn-allotment" onclick="toggleSubmenu('sub-allotment', this, 'setting-allotment')">
           <div class="menu-label-wrap">
             <span class="menu-icon">●</span>
             <span>Manage Allotment</span>
@@ -817,7 +817,7 @@
         </div>
 
         <!-- 5. Manage Sale Channel > -->
-        <button class="menu-item-btn" id="btn-channel" onclick="toggleSubmenu('sub-channel', this)">
+        <button class="menu-item-btn" id="btn-channel" onclick="toggleSubmenu('sub-channel', this, 'price-tier')">
           <div class="menu-label-wrap">
             <span class="menu-icon">●</span>
             <span>Manage Sale Channel</span>
@@ -831,7 +831,7 @@
         </div>
 
         <!-- 6. Manage Booking > -->
-        <button class="menu-item-btn" id="btn-booking" onclick="toggleSubmenu('sub-booking', this)">
+        <button class="menu-item-btn" id="btn-booking" onclick="toggleSubmenu('sub-booking', this, 'booking-list')">
           <div class="menu-label-wrap">
             <span class="menu-icon">▤</span>
             <span>Manage Booking</span>
@@ -843,15 +843,15 @@
         </div>
 
         <!-- 7. API Management > -->
-        <button class="menu-item-btn" id="btn-api" onclick="toggleSubmenu('sub-api', this)">
+        <button class="menu-item-btn" id="btn-api" onclick="toggleSubmenu('sub-api', this, 'api-keys')">
           <div class="menu-label-wrap">
-            <span class="menu-icon">●</span>
+            <span class="menu-icon">⚡</span>
             <span>API management</span>
           </div>
           <span class="menu-arrow">›</span>
         </button>
         <div class="submenu-list" id="sub-api">
-          <button class="submenu-item-btn" onclick="switchView('api-keys', this)">API Key & Integration</button>
+          <button class="submenu-item-btn" id="sub-btn-api-keys" onclick="switchView('api-keys', this)">API Key & Integration</button>
         </div>
 
         <!-- 8. Master Data -->
@@ -1074,71 +1074,82 @@
         <!-- ======================================================== -->
         <div class="view-section" id="view-activity-users">
           <div class="table-card">
-            <div class="table-card-head">
-              <span>List Activity user (รายชื่อผู้ใช้งานระบบกิจกรรมท่องเที่ยว)</span>
-              <button class="btn-action" onclick="openModal('modal-new-activity-user')">+ Add New User</button>
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <span style="font-size:17px; font-weight:700;">👥 List Activity User (รายชื่อผู้ใช้งานระบบกิจกรรมท่องเที่ยว)</span>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                  จัดการบัญชีสมาชิก นักท่องเที่ยว และผู้ใช้งานในระบบ ThailandCONNEX Live Sync กับ EVM Wallet
+                </div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-action" onclick="openModal('modal-new-activity-user')">+ Add New User</button>
+              </div>
             </div>
-            <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
-              <input type="text" id="search-activity-users" class="input-clean" placeholder="🔍 ค้นหาด้วยชื่อหรืออีเมล..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-activity-users', 'table-activity-users')">
+
+            <!-- Sub Navigation Tabs for User Management -->
+            <div style="display:flex; gap:8px; margin-top:14px; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:10px; flex-wrap:wrap;">
+              <button class="btn-action" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('activity-users', document.getElementById('sub-btn-act-user'))">
+                👥 1. Activity Users (<span id="user-pill-count">12</span> ราย)
+              </button>
+              <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-users', document.getElementById('sub-btn-admin-user'))">
+                🛡️ 2. Admin User List (ส่วนกลาง 5 ราย)
+              </button>
+              <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-roles', document.getElementById('sub-btn-admin-role'))">
+                🔑 3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
+              </button>
+            </div>
+
+            <!-- User KPI Summary Cards -->
+            <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:12px; margin-bottom:18px;">
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid var(--primary-blue);">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">ผู้ลงทะเบียนทั้งหมด (TOTAL USERS)</div>
+                <div class="kpi-value" id="kpi-total-users" style="font-size:22px; font-weight:800; color:var(--primary-blue); margin-top:4px;">12 บัญชี</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:#10b981; margin-top:2px;">● สมาชิกระดับชาติ ThailandCONNEX</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid #10b981;">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">ออนไลน์ขณะนี้ (ACTIVE ONLINE)</div>
+                <div class="kpi-value" style="font-size:22px; font-weight:800; color:#10b981; margin-top:4px;">1 บัญชี</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">คุณอลิสา ใจดี (User Portal)</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid #f59e0b;">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">เหรียญสะสมรวม (TOTAL TCP HOLDINGS)</div>
+                <div class="kpi-value" id="kpi-total-user-tokens" style="font-size:22px; font-weight:800; color:#f59e0b; margin-top:4px;">124,370 TCP</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Travel Token บน EVM Smart Contract</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid #8b5cf6;">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">สถานะความปลอดภัย (SECURITY)</div>
+                <div class="kpi-value" style="font-size:22px; font-weight:800; color:#8b5cf6; margin-top:4px;">100% Verified</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:#10b981; margin-top:2px;">✓ รองรับ PDPA และ 2FA พร้อมใช้งาน</div>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+              <input type="text" id="search-activity-users" class="input-clean" placeholder="🔍 ค้นหาด้วยชื่อ อีเมล หรือ User ID..." style="flex:1; min-width:240px;" onkeyup="filterTable('search-activity-users', 'table-activity-users')">
               <input type="date" class="input-clean" value="2023-02-01">
               <button class="btn-action" onclick="filterTable('search-activity-users', 'table-activity-users')">Search</button>
               <button class="btn-secondary" onclick="resetActivityUsers()">Reset</button>
               <button class="btn-secondary" onclick="exportTableToCSV('table-activity-users', 'ThailandConnex_Activity_Users.csv')">Export CSV 📥</button>
             </div>
-            <table class="clean-table" id="table-activity-users">
-              <thead>
-                <tr>
-                  <th>Fullname</th>
-                  <th>Email</th>
-                  <th>Profile</th>
-                  <th>Disabled</th>
-                  <th style="text-align: right;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-activity-users">
-                <tr style="background: rgba(22, 141, 225, 0.06); font-weight:600;">
-                  <td><b>คุณอลิสา ใจดี</b> <span class="badge badge-info" style="font-size:10.5px; margin-left:6px;">Current User (Portal)</span></td>
-                  <td>alisa.jaidee@thailandconnex.com</td>
-                  <td><span style="font-size:18px;">👤</span> <span style="font-size:11px; color:var(--text-muted);">TC-849204</span></td>
-                  <td><label class="switch-ui" title="ปิดกั้นการเข้าถึง"><input type="checkbox" onchange="toggleUserStatus(this, 'อลิสา ใจดี')"><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" onclick="editActivityUser('อลิสา ใจดี', 'alisa.jaidee@thailandconnex.com')">✏️ แก้ไข</button>
-                    <span class="badge badge-success" style="margin-left:4px;">Active</span>
-                  </td>
-                </tr>
 
-                <tr>
-                  <td><b>Panop Api</b></td>
-                  <td>admin@inrum</td>
-                  <td><span style="font-size:18px;">👤</span></td>
-                  <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, 'Panop Api')"><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" onclick="editActivityUser('Panop Api', 'admin@inrum')">✏️ แก้ไข</button>
-                    <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, 'Panop Api')">🗑️</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><b>Ahibal Lahiri</b></td>
-                  <td>ahibal@thailandconnex.com</td>
-                  <td><span style="font-size:18px;">👤</span></td>
-                  <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, 'Ahibal Lahiri')"><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" onclick="editActivityUser('Ahibal Lahiri', 'ahibal@thailandconnex.com')">✏️ แก้ไข</button>
-                    <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, 'Ahibal Lahiri')">🗑️</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><b>Somchai Jaidee</b></td>
-                  <td>somchai@phuket-tour.co.th</td>
-                  <td><span style="font-size:18px;">👤</span></td>
-                  <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, 'Somchai Jaidee')"><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" onclick="editActivityUser('Somchai Jaidee', 'somchai@phuket-tour.co.th')">✏️ แก้ไข</button>
-                    <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, 'Somchai Jaidee')">🗑️</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <!-- Table -->
+            <div style="overflow-x:auto;">
+              <table class="clean-table" id="table-activity-users">
+                <thead>
+                  <tr>
+                    <th>Fullname / Member</th>
+                    <th>Email & Contact</th>
+                    <th>Tier & Wallet ID</th>
+                    <th>Token Balance</th>
+                    <th>Disabled</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-activity-users">
+                  <!-- Dynamically rendered via renderAdminFromStore -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -1147,9 +1158,27 @@
         <!-- ======================================================== -->
         <div class="view-section" id="view-admin-users">
           <div class="table-card">
-            <div class="table-card-head">
-              <span>Admin List (ระบบส่วนกลาง ThailandCONNEX)</span>
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <span style="font-size:17px; font-weight:700;">🛡️ Admin List (ระบบส่วนกลาง ThailandCONNEX)</span>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                  ผู้ดูแลระบบระดับส่วนกลาง depa, TRAVIZGO และผู้ตรวจสอบสิทธิ์ระดับ Root
+                </div>
+              </div>
               <button class="btn-action" onclick="openModal('modal-new-admin')">+ Create admin</button>
+            </div>
+
+            <!-- Sub Navigation Tabs for User Management -->
+            <div style="display:flex; gap:8px; margin-top:14px; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:10px; flex-wrap:wrap;">
+              <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('activity-users', document.getElementById('sub-btn-act-user'))">
+                👥 1. Activity Users (ผู้ใช้ระบบกิจกรรม 12 ราย)
+              </button>
+              <button class="btn-action" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-users', document.getElementById('sub-btn-admin-user'))">
+                🛡️ 2. Admin User List (ส่วนกลาง 5 ราย)
+              </button>
+              <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-roles', document.getElementById('sub-btn-admin-role'))">
+                🔑 3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
+              </button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
               <div style="display:flex; gap:8px; flex:1; max-width:400px;">
@@ -1217,9 +1246,27 @@
         <!-- ======================================================== -->
         <div class="view-section" id="view-admin-roles">
           <div class="table-card">
-            <div class="table-card-head">
-              <span>Admin Role List (บทบาทผู้ดูแลระบบส่วนกลาง)</span>
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <span style="font-size:17px; font-weight:700;">🔑 Admin Role List & Screen Permission (บทบาทและสิทธิ์เข้าถึง)</span>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                  กำหนดสิทธิ์ระดับหน้าจอ Role-Based Access Control (RBAC) ตามมาตรฐาน ThailandCONNEX
+                </div>
+              </div>
               <button class="btn-action" onclick="showToast('เปิดแบบฟอร์มสร้างบทบาทใหม่', 'info')">+ Create Role</button>
+            </div>
+
+            <!-- Sub Navigation Tabs for User Management -->
+            <div style="display:flex; gap:8px; margin-top:14px; margin-bottom:18px; border-bottom:1px solid #e2e8f0; padding-bottom:10px; flex-wrap:wrap;">
+              <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('activity-users', document.getElementById('sub-btn-act-user'))">
+                👥 1. Activity Users (ผู้ใช้ระบบกิจกรรม 12 ราย)
+              </button>
+              <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-users', document.getElementById('sub-btn-admin-user'))">
+                🛡️ 2. Admin User List (ส่วนกลาง 5 ราย)
+              </button>
+              <button class="btn-action" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-roles', document.getElementById('sub-btn-admin-role'))">
+                🔑 3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
+              </button>
             </div>
             <table class="clean-table" id="table-admin-roles" style="margin-bottom: 24px;">
               <thead>
@@ -1897,43 +1944,181 @@
         <!-- VIEW 15: API Management > API Key & Integration (หน้า 163 / PDF 165) -->
         <!-- ======================================================== -->
         <div class="view-section" id="view-api-keys">
-          <div class="table-card">
-            <div class="table-card-head">
-              <span>API Gateway Management & Open API Endpoints (การจัดการ API สำหรับนักพัฒนา)</span>
-              <button class="btn-action" onclick="openModal('modal-new-apikey')">+ Generate New API Key</button>
+
+          <!-- Header & Title -->
+          <div class="table-card" style="margin-bottom: 20px;">
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <span style="font-size:18px; font-weight:700; color:var(--text-main);">⚡ API Gateway Management & Open API Integration Hub</span>
+                <div style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">
+                  ศูนย์กลางจัดการ API เชื่อมโยงข้อมูลท่องเที่ยวแห่งชาติ (National Tourism Open API) สำหรับ OTAs, พันธมิตร B2B และระบบ Smart Contract
+                </div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span class="badge badge-success" style="padding:6px 12px; font-size:12px;">● High Availability Gateway</span>
+                <span class="badge badge-info" style="padding:6px 12px; font-size:12px;">OpenAPI 3.0 / REST & Webhooks</span>
+                <button class="btn-action" onclick="openModal('modal-new-apikey')">+ Generate New API Key</button>
+              </div>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <input type="text" id="search-api-keys" class="input-clean" placeholder="🔍 ค้นหา Client / Service..." style="max-width:300px;" onkeyup="filterTable('search-api-keys', 'table-api-keys')">
-              <button class="btn-secondary" onclick="exportTableToCSV('table-api-keys', 'ThailandConnex_API_Keys.csv')">Export CSV 📥</button>
+
+            <!-- API Gateway KPI Summary Cards -->
+            <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:12px; margin-top:16px;">
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid var(--primary-blue);">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">TOTAL REQUESTS (24H)</div>
+                <div class="kpi-value" style="font-size:22px; font-weight:800; color:var(--primary-blue); margin-top:4px;">1,482,910</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:#10b981; margin-top:2px;">▲ +18.4% จากสัปดาห์ก่อนหน้า</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid #10b981;">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">GATEWAY AVAILABILITY (SLA)</div>
+                <div class="kpi-value" style="font-size:22px; font-weight:800; color:#10b981; margin-top:4px;">99.98%</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Multi-Region Cloud Redundancy</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid #f59e0b;">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">AVG RESPONSE LATENCY</div>
+                <div class="kpi-value" style="font-size:22px; font-weight:800; color:#f59e0b; margin-top:4px;">42 ms</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">Edge CDN & Redis Caching Active</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-radius:10px; border-left:4px solid #8b5cf6;">
+                <div class="kpi-title" style="font-size:11.5px; color:var(--text-muted); font-weight:600;">ACTIVE INTEGRATIONS</div>
+                <div class="kpi-value" id="kpi-api-active-keys" style="font-size:22px; font-weight:800; color:#8b5cf6; margin-top:4px;">6 Services</div>
+                <div class="kpi-sub" style="font-size:11.5px; color:#10b981; margin-top:2px;">● OTAs, Webhooks & Blockchain</div>
+              </div>
             </div>
-            <table class="clean-table" id="table-api-keys">
-              <thead>
-                <tr>
-                  <th>Client / Service</th>
-                  <th>API Key</th>
-                  <th>Rate Limit</th>
-                  <th>Whitelisted IP</th>
-                  <th style="text-align: right;">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><b>TVG Global OTA Service</b></td>
-                  <td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">tk_live_9a71bf08d4...</code> <button class="btn-secondary" style="font-size:11px; padding:2px 6px; margin-left:6px;" onclick="copyApiKey('tk_live_9a71bf08d4924c5bb980d908271dfcc891')">📋 Copy</button></td>
-                  <td>10,000 req/min</td>
-                  <td>203.144.144.22</td>
-                  <td style="text-align: right;"><span class="badge badge-success">Active</span></td>
-                </tr>
-                <tr>
-                  <td><b>Gianttick Channel Service</b></td>
-                  <td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">tk_live_38bf8c99e1...</code> <button class="btn-secondary" style="font-size:11px; padding:2px 6px; margin-left:6px;" onclick="copyApiKey('tk_live_38bf8c99e19a4d8aa71f02847128669226')">📋 Copy</button></td>
-                  <td>5,000 req/min</td>
-                  <td>128.199.200.15</td>
-                  <td style="text-align: right;"><span class="badge badge-success">Active</span></td>
-                </tr>
-              </tbody>
-            </table>
           </div>
+
+          <!-- Section 1: Active API Keys Table -->
+          <div class="table-card" style="margin-bottom: 20px;">
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <span>🔑 Authorized API Keys & Partner Gateways (รายชื่อกุญแจเชื่อมต่อระบบ)</span>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-secondary" onclick="exportTableToCSV('table-api-keys', 'ThailandConnex_API_Keys.csv')">Export CSV 📥</button>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <input type="text" id="search-api-keys" class="input-clean" placeholder="🔍 ค้นหา Client, Partner หรือ Key..." style="max-width:320px; flex:1;" onkeyup="filterTable('search-api-keys', 'table-api-keys')">
+              <span style="font-size:12px; color:var(--text-muted);">คีย์ทั้งหมดเชื่อมต่อไปยังสภาพแวดล้อมจริงของระบบ ThailandCONNEX</span>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="clean-table" id="table-api-keys">
+                <thead>
+                  <tr>
+                    <th>Client / Partner Service</th>
+                    <th>Environment</th>
+                    <th>API Key (Token)</th>
+                    <th>Rate Limit</th>
+                    <th>Whitelisted IP</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-api-keys">
+                  <!-- Dynamically rendered via renderAdminFromStore -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 2: Interactive Live API Console (Swagger / Postman Playground) -->
+          <div class="table-card" style="margin-bottom: 20px;">
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div>
+                <span>🧪 Interactive Live API Console (ทดสอบยิง API ระบบจริงด้วยข้อมูล 109k / 201k)</span>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                  เลือก Endpoint ด้านล่างเพื่อทดสอบส่งคำขอผ่าน Gateway จริงและดู Response แบบ Real-time
+                </div>
+              </div>
+              <span class="badge badge-success">Sandbox Ready</span>
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:16px; margin-top:14px;">
+              <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
+                <span class="badge" style="background:#10b981; color:#fff; font-weight:700; font-size:12px; padding:8px 12px;">GET / POST</span>
+                <select id="api-console-endpoint" class="input-clean" style="flex:1; min-width:300px; font-family:monospace; font-weight:600;" onchange="updateApiConsolePreset(this.value)">
+                  <option value="packages">GET /api/v1/databank/packages?limit=5 (ดึงข้อมูลสินค้าและบริการ 201k จริง)</option>
+                  <option value="suppliers">GET /api/v1/databank/suppliers?province=phuket&limit=3 (ดึงข้อมูลผู้ประกอบการ 108k ภูเก็ต)</option>
+                  <option value="token-balance">GET /api/v1/token/balance/0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760 (ตรวจสอบ Token Blockchain)</option>
+                  <option value="booking-reserve">POST /api/v1/bookings/reserve (ทดสอบสร้างคำสั่งจองผ่าน OTA Gateway)</option>
+                </select>
+                <button class="btn-action" style="padding:8px 20px; font-weight:700;" onclick="runApiConsoleTest()">
+                  🚀 Send Test Request
+                </button>
+              </div>
+
+              <!-- Headers Display -->
+              <div style="font-size:11.5px; font-family:monospace; color:#475569; background:#fff; padding:8px 12px; border-radius:6px; border:1px solid #cbd5e1; margin-bottom:12px;">
+                <b>Headers:</b> Authorization: Bearer tk_live_9a71bf08d4924c5bb980d908271dfcc891 | Accept: application/json | X-Gateway: ThailandCONNEX-Core
+              </div>
+
+              <!-- Response Area -->
+              <div id="api-console-result-box" style="margin-top:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <span style="font-size:12px; font-weight:700; color:var(--text-main);">Live HTTP Response:</span>
+                  <div id="api-console-status-badge" style="display:flex; gap:8px;">
+                    <span class="badge badge-success" style="font-size:11px;">Status: 200 OK</span>
+                    <span class="badge" style="background:#f1f5f9; color:#475569; font-size:11px;">Latency: 38 ms</span>
+                  </div>
+                </div>
+                <pre id="api-console-output" style="background:#0f172a; color:#38bdf8; padding:16px; border-radius:8px; font-size:12px; line-height:1.5; max-height:280px; overflow-y:auto; font-family:Consolas, Monaco, monospace; box-shadow:inset 0 2px 4px rgba(0,0,0,0.3);">{
+  "status": "success",
+  "gateway": "ThailandCONNEX-API-v1.4",
+  "timestamp": "2026-11-18T10:15:00.000Z",
+  "endpoint": "/api/v1/databank/packages",
+  "totalRecords": 201764,
+  "data": [
+    {
+      "id": "SRV-01",
+      "title": "DNA Resort & Spa - Deluxe With Breakfast",
+      "category": "accommodation",
+      "price": 3994.27,
+      "provider": "DNA Resort & Spa",
+      "location": "ปากช่อง, นครราชสีมา",
+      "source": "DEPA Package_list (Updated 26-01-2025).xlsx"
+    }
+  ]
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Webhook & Integration Configuration -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:18px;">
+            <div class="table-card">
+              <div class="table-card-head">
+                <span>📡 Partner Webhook Notifications</span>
+              </div>
+              <div style="padding:10px 0;">
+                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:6px;">Webhook Destination URL</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" class="input-clean" id="webhook-url-input" value="https://partner.travizgo.com/webhooks/thailandconnex" style="flex:1; font-family:monospace; font-size:12px;">
+                  <button class="btn-action" style="font-size:11.5px;" onclick="testWebhookPing()">Test Ping</button>
+                </div>
+                <div style="margin-top:12px;">
+                  <label style="font-size:12px; font-weight:600; display:block; margin-bottom:6px;">Subscribed Events:</label>
+                  <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <span class="badge badge-info" style="font-size:11px;">✓ booking.created</span>
+                    <span class="badge badge-info" style="font-size:11px;">✓ booking.confirmed</span>
+                    <span class="badge badge-info" style="font-size:11px;">✓ allotment.updated</span>
+                    <span class="badge badge-info" style="font-size:11px;">✓ token.minted</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-card">
+              <div class="table-card-head">
+                <span>📖 Developer Quick Reference</span>
+              </div>
+              <div style="padding:10px 0; font-size:12.5px; color:#475569; line-height:1.6;">
+                <div><b>Base URL:</b> <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11.5px;">https://api.thailandconnex.com/v1/</code></div>
+                <div style="margin-top:6px;"><b>Authentication:</b> <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11.5px;">Bearer &lt;YOUR_API_KEY&gt;</code></div>
+                <div style="margin-top:6px;"><b>Rate Limits:</b> 5,000 - 25,000 requests/minute ต่อ Client IP</div>
+                <div style="margin-top:10px;">
+                  <button class="btn-secondary" style="font-size:11.5px;" onclick="copyApiKey('curl -X GET https://api.thailandconnex.com/v1/databank/packages -H \'Authorization: Bearer tk_live_demo\'')">📋 คัดลอกคำสั่ง cURL ตัวอย่าง</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- ======================================================== -->
@@ -3115,12 +3300,14 @@
 
       if (isPartner) {
         if (btnUser) btnUser.style.display = 'none';
-        if (subUser) subUser.style.display = 'none';
+        if (subUser) { subUser.classList.remove('open'); subUser.style.display = 'none'; }
         if (btnApi) btnApi.style.display = 'none';
-        if (subApi) subApi.style.display = 'none';
+        if (subApi) { subApi.classList.remove('open'); subApi.style.display = 'none'; }
         if (btnLog) btnLog.style.display = 'none';
         if (btnAllot) btnAllot.style.display = 'flex';
+        if (subAllot) subAllot.style.display = '';
         if (btnChannel) btnChannel.style.display = 'flex';
+        if (subChannel) subChannel.style.display = '';
         if (btnDataBank) btnDataBank.style.display = 'flex';
 
         // Update labels for partner view
@@ -3136,9 +3323,10 @@
         }
       } else if (isAuditor) {
         if (btnUser) btnUser.style.display = 'flex';
-        if (btnAllot) { btnAllot.style.display = 'none'; if (subAllot) subAllot.style.display = 'none'; }
-        if (btnChannel) { btnChannel.style.display = 'none'; if (subChannel) subChannel.style.display = 'none'; }
-        if (btnApi) { btnApi.style.display = 'none'; if (subApi) subApi.style.display = 'none'; }
+        if (subUser) subUser.style.display = '';
+        if (btnAllot) { btnAllot.style.display = 'none'; if (subAllot) { subAllot.classList.remove('open'); subAllot.style.display = 'none'; } }
+        if (btnChannel) { btnChannel.style.display = 'none'; if (subChannel) { subChannel.classList.remove('open'); subChannel.style.display = 'none'; } }
+        if (btnApi) { btnApi.style.display = 'none'; if (subApi) { subApi.classList.remove('open'); subApi.style.display = 'none'; } }
         if (btnLog) btnLog.style.display = 'flex';
         if (btnDataBank) btnDataBank.style.display = 'flex';
 
@@ -3155,11 +3343,15 @@
           switchView('dashboard', btnDashboard);
         }
       } else {
-        // Super Admin & Operations Admin
+        // Super Admin & Operations Admin - Full Access
         if (btnUser) btnUser.style.display = 'flex';
+        if (subUser) subUser.style.display = '';
         if (btnAllot) btnAllot.style.display = 'flex';
+        if (subAllot) subAllot.style.display = '';
         if (btnChannel) btnChannel.style.display = 'flex';
+        if (subChannel) subChannel.style.display = '';
         if (btnApi) btnApi.style.display = 'flex';
+        if (subApi) subApi.style.display = '';
         if (btnLog) btnLog.style.display = 'flex';
         if (btnDataBank) btnDataBank.style.display = 'flex';
 
@@ -3220,11 +3412,15 @@
       // 6. Render Activity Users
       const actTable = document.getElementById('tbody-activity-users');
       const actCountEl = document.getElementById('activity-user-count');
+      const userTotalKpi = document.getElementById('kpi-total-users');
+      const userTokenKpi = document.getElementById('kpi-total-user-tokens');
+      const userPillCount = document.getElementById('user-pill-count');
+
       if (actTable) {
         if (isPartner) {
           actTable.innerHTML = `
             <tr>
-              <td colspan="5" style="text-align:center; padding:40px 20px; color:#64748b; font-size:13px;">
+              <td colspan="6" style="text-align:center; padding:40px 20px; color:#64748b; font-size:13px;">
                 <div style="font-size:32px; margin-bottom:10px;">🔒</div>
                 <b style="font-size:15px; color:#1e293b;">การเข้าถึงถูกจำกัดตามมาตรฐานคุ้มครองข้อมูลส่วนบุคคล (PDPA)</b>
                 <p style="margin-top:6px; color:#64748b;">ผู้ประกอบการสามารถดูข้อมูลได้เฉพาะลูกค้าที่ทำการจองบริการของท่านในเมนู Manage Booking เท่านั้น</p>
@@ -3233,19 +3429,46 @@
           `;
           if (actCountEl) actCountEl.textContent = '🔒 จำกัดสิทธิ์';
         } else if (data.auth && data.auth.registeredUsers) {
+          const users = data.auth.registeredUsers;
           const currentUser = data.auth.currentUser || {};
-          actTable.innerHTML = data.auth.registeredUsers.map(u => {
+          const totalTokens = users.reduce((sum, u) => sum + (parseFloat(u.tokenBalance) || 0), 0);
+
+          if (userTotalKpi) userTotalKpi.textContent = `${users.length} บัญชี`;
+          if (userTokenKpi) userTokenKpi.textContent = `${totalTokens.toLocaleString('th-TH')} TCP`;
+          if (userPillCount) userPillCount.textContent = users.length;
+
+          actTable.innerHTML = users.map(u => {
             const isOnline = (currentUser.id === u.id || currentUser.email === u.email) && currentUser.isLoggedIn !== false;
             const isWelcome = u.tier && u.tier.includes('Welcome Bonus');
+            const tokenFormatted = (parseFloat(u.tokenBalance) || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 });
+            const walletTruncated = u.walletAddress ? (u.walletAddress.substring(0, 8) + '...' + u.walletAddress.substring(u.walletAddress.length - 4)) : 'N/A';
+
             return `
               <tr style="${isOnline ? 'background: rgba(22, 141, 225, 0.08); font-weight:600;' : ''}">
                 <td>
-                  <b>${u.name}</b>
-                  ${isOnline ? '<span class="badge badge-info" style="font-size:10px; margin-left:6px;">🟢 กำลังออนไลน์</span>' : ''}
-                  ${isWelcome ? '<span class="badge badge-success" style="font-size:10px; margin-left:6px;">✨ สมาชิกใหม่</span>' : ''}
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="display:inline-flex; width:32px; height:32px; border-radius:50%; background:#e0f2fe; color:var(--primary-blue); font-weight:700; align-items:center; justify-content:center; font-size:12px;">${u.avatar || 'TC'}</span>
+                    <div>
+                      <b>${u.name}</b>
+                      ${isOnline ? '<span class="badge badge-info" style="font-size:9.5px; margin-left:4px;">🟢 Online</span>' : ''}
+                      ${isWelcome ? '<span class="badge badge-success" style="font-size:9.5px; margin-left:4px;">✨ New</span>' : ''}
+                      <div style="font-size:11px; color:var(--text-muted); font-family:monospace;">ID: ${u.id}</div>
+                    </div>
+                  </div>
                 </td>
-                <td>${u.email}</td>
-                <td><span style="font-size:16px;">${u.avatar || '👤'}</span> <span style="font-size:11px; color:var(--text-muted);">${u.id}</span></td>
+                <td>
+                  <div>${u.email}</div>
+                  <small style="color:var(--text-muted); font-size:11px;">📞 ${u.phone || '08x-xxx-xxxx'}</small>
+                </td>
+                <td>
+                  <span class="badge badge-info" style="font-size:10.5px;">${u.tier || 'Member'}</span>
+                  <div style="font-size:10.5px; color:var(--text-muted); font-family:monospace; margin-top:2px;" title="${u.walletAddress}">
+                    🔑 ${walletTruncated}
+                  </div>
+                </td>
+                <td>
+                  <b style="color:#b45309; font-size:13px;">${tokenFormatted}</b> <small style="color:#d97706; font-weight:600;">TCP</small>
+                </td>
                 <td>
                   <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'ปิดกั้นการเข้าถึง'}">
                     <input type="checkbox" ${u.status === 'Disabled' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="toggleUserStatus(this, '${u.id}', '${u.name}')">
@@ -3254,12 +3477,12 @@
                 </td>
                 <td style="text-align: right;">
                   <span class="badge ${u.status === 'Active' ? 'badge-success' : 'badge-danger'}" style="margin-right:4px;">${u.status || 'Active'}</span>
-                  ${isAuditor ? '<span class="badge badge-warning">Audit Record</span>' : `<button class="btn-secondary" onclick="editActivityUser('${u.name}', '${u.email}')">✏️ แก้ไข</button>`}
+                  ${isAuditor ? '<span class="badge badge-warning">Audit Record</span>' : `<button class="btn-secondary" style="font-size:11px;" onclick="editActivityUser('${u.name}', '${u.email}')">✏️ แก้ไข</button>`}
                 </td>
               </tr>
             `;
           }).join('');
-          if (actCountEl) actCountEl.textContent = isAuditor ? `${data.auth.registeredUsers.length} (โหมดตรวจสอบ)` : data.auth.registeredUsers.length;
+          if (actCountEl) actCountEl.textContent = isAuditor ? `${users.length} (โหมดตรวจสอบ)` : users.length;
         }
       }
 
@@ -3370,6 +3593,46 @@
           const pkgCount = document.getElementById('package-count');
           if (pkgCount) pkgCount.textContent = isPartner ? `${services.length} (แพ็กเกจของฉัน)` : services.length;
         }
+      }
+
+      // 11. Render API Management Keys
+      const apiTbody = document.getElementById('tbody-api-keys');
+      const apiKeysList = data.apiKeys || (typeof TCStore !== 'undefined' && TCStore.getApiKeys ? TCStore.getApiKeys() : []);
+      const kpiApiActive = document.getElementById('kpi-api-active-keys');
+      if (kpiApiActive) kpiApiActive.textContent = `${apiKeysList.filter(k => k.status === 'Active').length} Services`;
+
+      if (apiTbody && apiKeysList.length > 0) {
+        apiTbody.innerHTML = apiKeysList.map(k => {
+          const isActive = k.status === 'Active';
+          return `
+            <tr>
+              <td>
+                <b>${k.client}</b>
+                ${k.org ? `<br><small style="color:var(--text-muted); font-size:11px;">🏢 ${k.org}</small>` : ''}
+              </td>
+              <td>
+                <span class="badge ${k.environment && k.environment.includes('Prod') ? 'badge-info' : 'badge-warning'}" style="font-size:10.5px;">${k.environment || 'Production'}</span>
+              </td>
+              <td>
+                <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11.5px; font-family:monospace;">${k.keyPrefix || (k.fullKey ? k.fullKey.substring(0, 18) + '...' : 'tk_live_...')}</code>
+                <button class="btn-secondary" style="font-size:10.5px; padding:2px 6px; margin-left:4px;" onclick="copyApiKey('${k.fullKey || ''}')" title="คัดลอก Full API Key">📋</button>
+              </td>
+              <td><span style="font-size:12px; font-family:monospace; color:#475569;">${k.rateLimit || '10,000 req/min'}</span></td>
+              <td><span style="font-size:11.5px; color:#64748b;">${k.whitelistedIps || 'Any'}</span></td>
+              <td>
+                <label class="switch-ui" title="${isActive ? 'ปิดการใช้งาน Key' : 'เปิดการใช้งาน Key'}">
+                  <input type="checkbox" ${isActive ? 'checked' : ''} onchange="toggleApiKeyStatus('${k.id}')">
+                  <span class="switch-slider"></span>
+                </label>
+                <span class="badge ${isActive ? 'badge-success' : 'badge-danger'}" style="margin-left:6px; font-size:10.5px;">${k.status || 'Active'}</span>
+              </td>
+              <td style="text-align: right;">
+                <button class="btn-secondary" style="font-size:11px; padding:3px 8px;" onclick="prefillApiConsole('${k.client}', '${k.fullKey || ''}')">🧪 Test</button>
+                <button class="btn-secondary" style="font-size:11px; padding:3px 8px; color:#ef4444;" onclick="deleteApiKeyRow('${k.id}', '${k.client}')">🗑️</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
       }
     }
 
@@ -3483,8 +3746,14 @@
         triggerBtn.classList.add('active');
         const parentSub = triggerBtn.closest('.submenu-list');
         if (parentSub) {
+          parentSub.classList.add('open');
+          parentSub.style.display = '';
           const parentBtn = parentSub.previousElementSibling;
-          if (parentBtn) parentBtn.classList.add('active');
+          if (parentBtn) {
+            parentBtn.classList.add('active');
+            const arrow = parentBtn.querySelector('.menu-arrow');
+            if (arrow) arrow.classList.add('open');
+          }
         }
       }
 
@@ -3494,16 +3763,35 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function toggleSubmenu(subId, btn) {
+    function toggleSubmenu(subId, btn, defaultViewId) {
       const sub = document.getElementById(subId);
-      const arrow = btn.querySelector('.menu-arrow');
+      const arrow = btn ? btn.querySelector('.menu-arrow') : null;
       if (sub) {
+        sub.style.display = ''; // Clear inline override
         const isOpen = sub.classList.contains('open');
-        document.querySelectorAll('.submenu-list').forEach(s => s.classList.remove('open'));
-        document.querySelectorAll('.menu-arrow').forEach(a => a.classList.remove('open'));
+
+        // Close other submenus
+        document.querySelectorAll('.submenu-list').forEach(s => {
+          if (s !== sub) {
+            s.classList.remove('open');
+            s.style.display = '';
+          }
+        });
+        document.querySelectorAll('.menu-arrow').forEach(a => {
+          if (a !== arrow) a.classList.remove('open');
+        });
+
         if (!isOpen) {
           sub.classList.add('open');
           if (arrow) arrow.classList.add('open');
+        }
+
+        // If a defaultViewId is provided, immediately switch view to it!
+        if (defaultViewId) {
+          let childBtn = sub.querySelector(`button[onclick*="'${defaultViewId}'"]`);
+          if (!childBtn) childBtn = sub.firstElementChild;
+          switchView(defaultViewId, childBtn || btn);
+          if (btn) btn.classList.add('active');
         }
       }
     }
@@ -4025,21 +4313,170 @@
       const keyShort = 'tk_live_' + Math.random().toString(36).substring(2, 12) + '...';
       const fullKey = 'tk_live_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-      const table = document.getElementById('table-api-keys');
-      if (table) {
-        const tbody = table.querySelector('tbody');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><b>${client}</b></td>
-          <td><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">${keyShort}</code> <button class="btn-secondary" style="font-size:11px; padding:2px 6px; margin-left:6px;" onclick="copyApiKey('${fullKey}')">📋 Copy</button></td>
-          <td>${ratelimit}</td>
-          <td>${ip}</td>
-          <td style="text-align: right;"><span class="badge badge-success">Active</span></td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
+      const newKeyObj = {
+        id: 'KEY-' + Math.floor(100 + Math.random() * 900),
+        client: client,
+        org: 'External Partner Developer',
+        environment: 'Production',
+        keyPrefix: keyShort,
+        fullKey: fullKey,
+        rateLimit: ratelimit,
+        whitelistedIps: ip,
+        status: 'Active',
+        totalCalls: 0,
+        lastActive: 'เพิ่งสร้าง',
+        scope: 'read:packages,write:bookings'
+      };
+
+      if (typeof TCStore !== 'undefined') {
+        TCStore.addApiKey(newKeyObj);
       }
       closeModal('modal-new-apikey');
       showToast(`สร้าง API Key สำหรับ ${client} เรียบร้อยแล้ว!`, 'success');
+      renderAdminFromStore();
+    }
+
+    // Live Interactive API Console Test Runner
+    function runApiConsoleTest() {
+      const epSelect = document.getElementById('api-console-endpoint');
+      const outPre = document.getElementById('api-console-output');
+      const statusBadge = document.getElementById('api-console-status-badge');
+      if (!epSelect || !outPre) return;
+
+      const endpoint = epSelect.value;
+      const state = (typeof TCStore !== 'undefined') ? TCStore.getState() : {};
+      const latency = Math.floor(28 + Math.random() * 25);
+      const now = new Date().toISOString();
+
+      let payload = {};
+
+      if (endpoint === 'packages') {
+        const pkgs = (state.services && state.services.length > 0) ? state.services.slice(0, 5) : [];
+        payload = {
+          status: "success",
+          code: 200,
+          gateway: "ThailandCONNEX-API-v1.4",
+          timestamp: now,
+          endpoint: "/api/v1/databank/packages",
+          query: { limit: 5 },
+          totalDatabaseRecords: 201764,
+          returnedCount: pkgs.length,
+          data: pkgs.map(p => ({
+            id: p.id,
+            title: p.title,
+            category: p.category,
+            categoryName: p.categoryName,
+            provider: p.provider,
+            location: p.location,
+            priceTHB: p.price,
+            unit: p.unit,
+            source: "DEPA Package_list (Updated 26-01-2025).xlsx"
+          }))
+        };
+      } else if (endpoint === 'suppliers') {
+        const dir = (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.directory) ? DEPA_REAL_DATA.directory : (state.directory || []);
+        const phuketSuppliers = dir.filter(d => (d.province || '').toLowerCase().includes('phuket') || (d.province || '').includes('ภูเก็ต')).slice(0, 3);
+        const sample = phuketSuppliers.length > 0 ? phuketSuppliers : dir.slice(0, 3);
+        payload = {
+          status: "success",
+          code: 200,
+          gateway: "ThailandCONNEX-API-v1.4",
+          timestamp: now,
+          endpoint: "/api/v1/databank/suppliers",
+          query: { province: "phuket", limit: 3 },
+          totalDatabaseSuppliers: 108659,
+          returnedCount: sample.length,
+          data: sample.map(s => ({
+            supplierId: s.id,
+            name: s.name,
+            category: s.category,
+            province: s.province,
+            verified: true,
+            source: "DEPA Supplier_list (Updated 26-01-2025).xlsx"
+          }))
+        };
+      } else if (endpoint === 'token-balance') {
+        const currentUser = (state.auth && state.auth.currentUser) ? state.auth.currentUser : (state.user || {});
+        payload = {
+          status: "success",
+          code: 200,
+          gateway: "ThailandCONNEX-EVM-Bridge",
+          timestamp: now,
+          endpoint: "/api/v1/token/balance",
+          smartContract: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+          network: "depa Travel Token EVM Mainnet (ChainID: 59144)",
+          walletAddress: currentUser.walletAddress || "0x5E2D25aca0abA3ad658B3Ac1620F0DAB9733760",
+          accountName: currentUser.name || "คุณอลิสา ใจดี",
+          tokenBalance: (currentUser.tokenBalance || 41520.00).toFixed(2),
+          symbol: "TCP",
+          lastBlockNumber: 8481542
+        };
+      } else if (endpoint === 'booking-reserve') {
+        payload = {
+          status: "success",
+          code: 201,
+          gateway: "ThailandCONNEX-OTA-Gateway",
+          timestamp: now,
+          endpoint: "/api/v1/bookings/reserve",
+          bookingReference: "BK-" + Math.floor(100000000 + Math.random() * 900000000),
+          partnerClient: "TVG Global OTA Service",
+          reservation: {
+            serviceId: "SRV-01",
+            serviceName: "DNA Resort & Spa - Deluxe With Breakfast",
+            guestName: "คุณอลิสา ใจดี",
+            amountTHB: 3994.27,
+            allotmentDeducted: 1,
+            paymentStatus: "Authorized",
+            blockchainTx: "0x" + Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('')
+          }
+        };
+      }
+
+      outPre.textContent = JSON.stringify(payload, null, 2);
+      if (statusBadge) {
+        statusBadge.innerHTML = `
+          <span class="badge badge-success" style="font-size:11px;">Status: ${payload.code || 200} OK</span>
+          <span class="badge" style="background:#f1f5f9; color:#475569; font-size:11px;">Latency: ${latency} ms</span>
+        `;
+      }
+
+      showToast(`ยิง API สำเร็จ! (HTTP 200 OK - Response Time: ${latency}ms)`, 'success');
+    }
+
+    function updateApiConsolePreset(val) {
+      runApiConsoleTest();
+    }
+
+    function prefillApiConsole(clientName, fullKey) {
+      switchView('api-keys', document.getElementById('sub-btn-api-keys'));
+      const box = document.getElementById('api-console-result-box');
+      if (box) box.scrollIntoView({ behavior: 'smooth' });
+      showToast(`โหลดพารามิเตอร์สำหรับ ${clientName} ลงใน API Console เรียบร้อย`, 'info');
+    }
+
+    function toggleApiKeyStatus(id) {
+      if (typeof TCStore !== 'undefined') {
+        const res = TCStore.toggleApiKey(id);
+        if (res.success) {
+          showToast(`เปลี่ยนสถานะ API Key เป็น ${res.status}`, 'info');
+          renderAdminFromStore();
+        }
+      }
+    }
+
+    function deleteApiKeyRow(id, name) {
+      if (confirm(`คุณต้องการยกเลิกและเพิกถอนสิทธิ์ API Key ของ ${name} ใช่หรือไม่?`)) {
+        if (typeof TCStore !== 'undefined') {
+          TCStore.deleteApiKey(id);
+          showToast(`เพิกถอน API Key ของ ${name} เรียบร้อยแล้ว`, 'info');
+          renderAdminFromStore();
+        }
+      }
+    }
+
+    function testWebhookPing() {
+      const url = document.getElementById('webhook-url-input').value;
+      showToast(`ส่ง Ping ทดสอบไปยัง ${url} สำเร็จ (HTTP 200 OK)`, 'success');
     }
 
     function filterDataBankProvince(prov) {

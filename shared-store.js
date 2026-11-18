@@ -14,10 +14,10 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const STORAGE_KEY = 'TC_DATA_STORE_V8';
+  const STORAGE_KEY = 'TC_DATA_STORE_V9';
 
   const DEFAULT_STATE = {
-    version: 8,
+    version: 9,
     lastUpdated: Date.now(),
     user: {
       name: 'อลิสา ใจดี',
@@ -103,6 +103,110 @@
           tier: 'Explorer',
           status: 'Active',
           registeredDate: '2023-02-06'
+        },
+        {
+          id: 'TC-718293',
+          name: 'ธนภัทร สุวรรณภูมิ',
+          email: 'thanapat.s@outlook.com',
+          password: 'password123',
+          phone: '085-112-9900',
+          walletAddress: '0x88F1B3cA1099bE5A33D72091eE2b014F9B3aC711',
+          tokenBalance: 28900.00,
+          avatar: 'TS',
+          tier: 'VIP Platinum Traveler',
+          status: 'Active',
+          registeredDate: '2023-01-20'
+        },
+        {
+          id: 'TC-829104',
+          name: 'วรัญญา รัตนากุล',
+          email: 'waranya.r@gmail.com',
+          password: 'password123',
+          phone: '086-455-7812',
+          walletAddress: '0x22Da4901Fec8A69931bC2038749aB3410f9921E9',
+          tokenBalance: 9400.00,
+          avatar: 'WR',
+          tier: 'Gold Traveler',
+          status: 'Active',
+          registeredDate: '2023-01-28'
+        },
+        {
+          id: 'TC-904128',
+          name: 'Johnathan Davis',
+          email: 'j.davis@globaltravel.com',
+          password: 'password123',
+          phone: '+1-415-555-0199',
+          walletAddress: '0x6198F0D3a72BbE20199fA5104E90B0F3aC789012',
+          tokenBalance: 15200.00,
+          avatar: 'JD',
+          tier: 'VIP International',
+          status: 'Active',
+          registeredDate: '2023-02-02'
+        },
+        {
+          id: 'TC-194820',
+          name: 'Lin Wei (林伟)',
+          email: 'lin.wei@ctrip-partner.cn',
+          password: 'password123',
+          phone: '+86-138-0013-8000',
+          walletAddress: '0x448aB091fCe89A1209B039aB271F8890A9811C90',
+          tokenBalance: 8600.00,
+          avatar: 'LW',
+          tier: 'Inbound Traveler',
+          status: 'Active',
+          registeredDate: '2023-02-03'
+        },
+        {
+          id: 'TC-302918',
+          name: 'กิตติพงษ์ เกียรติสกุล',
+          email: 'kittipong.k@thai-tourist.or.th',
+          password: 'password123',
+          phone: '081-332-9011',
+          walletAddress: '0x992B16c3182b8F6aF4f98Da3f9468F635d87bB62',
+          tokenBalance: 1500.00,
+          avatar: 'KK',
+          tier: 'Explorer',
+          status: 'Active',
+          registeredDate: '2023-02-04'
+        },
+        {
+          id: 'TC-483920',
+          name: 'ชลิตา ว่องไว',
+          email: 'chalita.w@hotmail.com',
+          password: 'password123',
+          phone: '089-771-2299',
+          walletAddress: '0x772Bca90192eA988B310f882190BbA901F099201',
+          tokenBalance: 6700.00,
+          avatar: 'CW',
+          tier: 'Silver Explorer',
+          status: 'Active',
+          registeredDate: '2023-02-05'
+        },
+        {
+          id: 'TC-592019',
+          name: 'David Miller',
+          email: 'david.miller@bkk-expat.com',
+          password: 'password123',
+          phone: '082-901-4433',
+          walletAddress: '0x103BaF89201e89bF41029cBA789120BbF0923145',
+          tokenBalance: 11300.00,
+          avatar: 'DM',
+          tier: 'Gold Traveler',
+          status: 'Active',
+          registeredDate: '2023-02-06'
+        },
+        {
+          id: 'TC-694012',
+          name: 'นภัสสร สันติสุข',
+          email: 'naphatsorn.s@gmail.com',
+          password: 'password123',
+          phone: '084-221-8899',
+          walletAddress: '0x33B109a887bF1209e89b01289124Bc9908FcaB12',
+          tokenBalance: 500.00,
+          avatar: 'NS',
+          tier: 'New Member (Bonus)',
+          status: 'Active',
+          registeredDate: '2023-02-07'
         }
       ],
       adminAccounts: [
@@ -991,7 +1095,93 @@
     ],
     directory: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.directory && DEPA_REAL_DATA.directory.length > 0)
       ? DEPA_REAL_DATA.directory
-      : []
+      : [],
+    apiKeys: [
+      {
+        id: 'KEY-001',
+        client: 'TVG Global OTA Service',
+        org: 'TRAVIZGO Platform Co., Ltd.',
+        environment: 'Production',
+        keyPrefix: 'tk_live_9a71bf08d4...',
+        fullKey: 'tk_live_9a71bf08d4924c5bb980d908271dfcc891',
+        rateLimit: '10,000 req/min',
+        whitelistedIps: '203.144.144.22, 203.144.144.23',
+        status: 'Active',
+        totalCalls: 489210,
+        lastActive: '1 นาทีที่แล้ว',
+        scope: 'read:packages,write:bookings,read:allotment'
+      },
+      {
+        id: 'KEY-002',
+        client: 'Gianttick Channel Distribution',
+        org: 'Gianttick Technology Pte.',
+        environment: 'Production',
+        keyPrefix: 'tk_live_38bf8c99e1...',
+        fullKey: 'tk_live_38bf8c99e19a4d8aa71f02847128669226',
+        rateLimit: '5,000 req/min',
+        whitelistedIps: '128.199.200.15',
+        status: 'Active',
+        totalCalls: 312450,
+        lastActive: '3 นาทีที่แล้ว',
+        scope: 'read:packages,read:inventory'
+      },
+      {
+        id: 'KEY-003',
+        client: 'Agoda Global Connectivity Gateway',
+        org: 'Agoda Services Co., Ltd.',
+        environment: 'Production',
+        keyPrefix: 'tk_live_agoda_7721...',
+        fullKey: 'tk_live_agoda_7721fd88910b429188210fe9921bc089',
+        rateLimit: '15,000 req/min',
+        whitelistedIps: '104.18.25.190, 104.18.26.190',
+        status: 'Active',
+        totalCalls: 284100,
+        lastActive: '5 นาทีที่แล้ว',
+        scope: 'read:packages,write:bookings,read:rates'
+      },
+      {
+        id: 'KEY-004',
+        client: 'Trip.com Group Partner Sync',
+        org: 'Ctrip / Trip.com Travel Singapore',
+        environment: 'Production',
+        keyPrefix: 'tk_live_trip_5510...',
+        fullKey: 'tk_live_trip_5510ae9910bf410291823901fbc0991a',
+        rateLimit: '12,000 req/min',
+        whitelistedIps: '47.91.120.48',
+        status: 'Active',
+        totalCalls: 198200,
+        lastActive: '12 นาทีที่แล้ว',
+        scope: 'read:packages,write:bookings'
+      },
+      {
+        id: 'KEY-005',
+        client: 'National Tourism Data Bank Open API',
+        org: 'Digital Economy Promotion Agency (depa)',
+        environment: 'Sandbox / Public B2B',
+        keyPrefix: 'tk_sandbox_databank...',
+        fullKey: 'tk_sandbox_databank_108k_201k_depa_gov_th',
+        rateLimit: '25,000 req/min',
+        whitelistedIps: 'Any (0.0.0.0/0)',
+        status: 'Active',
+        totalCalls: 154800,
+        lastActive: '2 นาทีที่แล้ว',
+        scope: 'read:suppliers_108k,read:packages_201k'
+      },
+      {
+        id: 'KEY-006',
+        client: 'Blockchain Webhook & Token Minting',
+        org: 'ThailandCONNEX EVM Bridge Core',
+        environment: 'Production',
+        keyPrefix: 'tk_live_evm_bridge...',
+        fullKey: 'tk_live_evm_bridge_99210bfca189201bc8901aef',
+        rateLimit: 'Unlimited (Internal VPC)',
+        whitelistedIps: '10.0.4.0/24 (VPC Peering)',
+        status: 'Active',
+        totalCalls: 44150,
+        lastActive: 'สดทันที (Realtime)',
+        scope: 'write:token_mint,write:token_burn,read:ledger'
+      }
+    ]
   };
 
   const getStorage = () => {
@@ -1432,6 +1622,44 @@
           u.tokenBalance = user.tokenBalance;
         }
       }
+    }
+
+    // API Key & Partner Integration Management
+    getApiKeys() {
+      const state = this.getState();
+      return state.apiKeys || (DEFAULT_STATE.apiKeys ? [...DEFAULT_STATE.apiKeys] : []);
+    }
+
+    addApiKey(keyData) {
+      const state = this.getState();
+      if (!state.apiKeys) state.apiKeys = DEFAULT_STATE.apiKeys ? [...DEFAULT_STATE.apiKeys] : [];
+      state.apiKeys.unshift(keyData);
+      this.save(state);
+      return { success: true, key: keyData };
+    }
+
+    toggleApiKey(id) {
+      const state = this.getState();
+      if (!state.apiKeys) state.apiKeys = DEFAULT_STATE.apiKeys ? [...DEFAULT_STATE.apiKeys] : [];
+      const item = state.apiKeys.find(k => k.id === id || k.fullKey === id);
+      if (item) {
+        item.status = item.status === 'Active' ? 'Disabled' : 'Active';
+        this.save(state);
+        return { success: true, status: item.status };
+      }
+      return { success: false };
+    }
+
+    deleteApiKey(id) {
+      const state = this.getState();
+      if (!state.apiKeys) state.apiKeys = DEFAULT_STATE.apiKeys ? [...DEFAULT_STATE.apiKeys] : [];
+      const idx = state.apiKeys.findIndex(k => k.id === id || k.fullKey === id);
+      if (idx !== -1) {
+        state.apiKeys.splice(idx, 1);
+        this.save(state);
+        return { success: true };
+      }
+      return { success: false };
     }
 
     // Reset Defaults

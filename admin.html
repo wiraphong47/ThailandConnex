@@ -909,6 +909,19 @@
 
       <div class="content-area">
 
+        <!-- Dynamic Role-Based Access Banner -->
+        <div id="admin-role-banner" style="margin-bottom: 16px; padding: 12px 18px; border-radius: 10px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+          <div id="admin-role-banner-text" style="display: flex; align-items: center; gap: 10px;">
+            <span id="admin-role-banner-icon" style="font-size: 22px;">👨‍💼</span>
+            <div id="admin-role-banner-msg">
+              <b>ฐาปกรณ์ สันติชาติศักดิ์</b> • Super Administrator (depa Central Hub) — <b>สิทธิ์ระดับสูงสุด (Root Level):</b> เข้าถึงคลังข้อมูล Big Data 109k และระบบ Token Blockchain ทั่วประเทศ
+            </div>
+          </div>
+          <button type="button" onclick="openAdminAuthModal()" style="background:#fff; border:1px solid currentColor; border-radius:6px; padding:6px 14px; font-size:12px; font-weight:700; cursor:pointer; color:inherit; white-space:nowrap;">
+            🔄 สลับบทบาท (Switch Role)
+          </button>
+        </div>
+
         <!-- ======================================================== -->
         <!-- VIEW 1: PERFORMANCE DASHBOARD (หน้า 100 / PDF 102) -->
         <!-- ======================================================== -->
@@ -3021,70 +3034,177 @@
     <script src="shared-store.js"></script>
   <script>
 
-    // Live Admin Data Synchronization with TCStore
+    // Live Admin Data Synchronization with TCStore (with Role-Based Access Control)
     function renderAdminFromStore(data) {
       if (!data) data = (typeof TCStore !== 'undefined') ? TCStore.getState() : null;
       if (!data) return;
 
-      // Update Current Admin in Sidebar
-      if (data.auth && data.auth.currentAdmin) {
-        const adm = data.auth.currentAdmin;
-        const aAvatar = document.getElementById('admin-sidebar-avatar');
-        const aName = document.getElementById('admin-sidebar-name');
-        const aRole = document.getElementById('admin-sidebar-role');
-        if (aAvatar) aAvatar.textContent = adm.avatar || '👨‍💼';
-        if (aName) aName.textContent = adm.name || 'Admin';
-        if (aRole) aRole.textContent = (adm.role || 'Administrator') + (adm.org ? ' (' + adm.org + ')' : '');
+      const currentAdmin = (data.auth && data.auth.currentAdmin) ? data.auth.currentAdmin : {
+        name: 'ฐาปกรณ์ สันติชาติศักดิ์',
+        email: 'thapakorn.s@depa.or.th',
+        role: 'Super Administrator',
+        org: 'depa Central Hub',
+        avatar: '👨‍💼',
+        badge: 'Super Admin'
+      };
+
+      const email = (currentAdmin.email || '').toLowerCase();
+      const isSuperAdmin = email.includes('thapakorn') || email.includes('depa');
+      const isOpsAdmin = email.includes('boonyarit') || email.includes('travizgo');
+      const isPartner = email.includes('somchai') || email.includes('phuket');
+      const isAuditor = email.includes('auditor') || email.includes('tat');
+
+      // 1. Update Current Admin Profile in Sidebar
+      const aAvatar = document.getElementById('admin-sidebar-avatar');
+      const aName = document.getElementById('admin-sidebar-name');
+      const aRole = document.getElementById('admin-sidebar-role');
+      if (aAvatar) aAvatar.textContent = currentAdmin.avatar || (isPartner ? '🏨' : (isAuditor ? '🏛️' : (isOpsAdmin ? '👨‍💻' : '👨‍💼')));
+      if (aName) aName.textContent = currentAdmin.name || 'Admin';
+      if (aRole) aRole.textContent = (currentAdmin.role || 'Administrator') + (currentAdmin.org ? ' (' + currentAdmin.org + ')' : '');
+
+      // 2. Update Dynamic Role-Based Access Banner
+      const rBanner = document.getElementById('admin-role-banner');
+      const rBannerIcon = document.getElementById('admin-role-banner-icon');
+      const rBannerMsg = document.getElementById('admin-role-banner-msg');
+      if (rBanner && rBannerIcon && rBannerMsg) {
+        if (isPartner) {
+          rBanner.style.background = '#ecfdf5';
+          rBanner.style.borderColor = '#a7f3d0';
+          rBanner.style.color = '#065f46';
+          rBannerIcon.textContent = '🏨';
+          rBannerMsg.innerHTML = '<b>สมชาย ท่องเที่ยว</b> • Merchant & Hotel Partner (Phuket Tour Hub) — <b>สิทธิ์ผู้ประกอบการ (Partner Portal):</b> แสดงเฉพาะข้อมูลสินค้า ยอดจอง และรายได้ในเครือของท่านตามมาตรฐานความปลอดภัย PDPA';
+        } else if (isAuditor) {
+          rBanner.style.background = '#fffbeb';
+          rBanner.style.borderColor = '#fde68a';
+          rBanner.style.color = '#92400e';
+          rBannerIcon.textContent = '🏛️';
+          rBannerMsg.innerHTML = '<b>ผู้ตรวจสอบ ททท.</b> • Tourism Data Auditor (TAT) — <b>โหมดตรวจสอบความโปร่งใส (Read-Only Mode):</b> เข้าดูรายงานสถิตินักท่องเที่ยวแห่งชาติและตรวจสอบ Blockchain Ledger';
+        } else if (isOpsAdmin) {
+          rBanner.style.background = '#f8fafc';
+          rBanner.style.borderColor = '#cbd5e1';
+          rBanner.style.color = '#1e293b';
+          rBannerIcon.textContent = '👨‍💻';
+          rBannerMsg.innerHTML = '<b>บุญญฤทธิ์ ฤทธิ์เดช</b> • Platform Operations Admin (TRAVIZGO) — <b>สิทธิ์ฝ่ายปฏิบัติการ:</b> จัดการคำสั่งซื้อ การอนุมัติสินค้า การจัดสรร Allotment และเชื่อมต่อ API';
+        } else {
+          rBanner.style.background = '#eff6ff';
+          rBanner.style.borderColor = '#bfdbfe';
+          rBanner.style.color = '#1e3a8a';
+          rBannerIcon.textContent = '👨‍💼';
+          rBannerMsg.innerHTML = '<b>ฐาปกรณ์ สันติชาติศักดิ์</b> • Super Administrator (depa Central Hub) — <b>สิทธิ์ระดับสูงสุด (Root Level):</b> เข้าถึงคลังข้อมูล Big Data 109k และระบบ Token Blockchain ทั่วประเทศ';
+        }
       }
 
-      // Render Activity Users from real-time registered users
-      const actTable = document.getElementById('tbody-activity-users');
-      if (actTable && data.auth && data.auth.registeredUsers) {
-        const currentUser = data.auth.currentUser || {};
-        actTable.innerHTML = data.auth.registeredUsers.map(u => {
-          const isOnline = (currentUser.id === u.id || currentUser.email === u.email) && currentUser.isLoggedIn !== false;
-          const isWelcome = u.tier && u.tier.includes('Welcome Bonus');
-          return `
-            <tr style="${isOnline ? 'background: rgba(22, 141, 225, 0.08); font-weight:600;' : ''}">
-              <td>
-                <b>${u.name}</b>
-                ${isOnline ? '<span class="badge badge-info" style="font-size:10px; margin-left:6px;">🟢 กำลังออนไลน์ (User Portal)</span>' : ''}
-                ${isWelcome ? '<span class="badge badge-success" style="font-size:10px; margin-left:6px;">✨ สมาชิกใหม่ (Live Registered)</span>' : ''}
-              </td>
-              <td>${u.email}</td>
-              <td><span style="font-size:16px;">${u.avatar || '👤'}</span> <span style="font-size:11px; color:var(--text-muted);">${u.id}</span></td>
-              <td>
-                <label class="switch-ui" title="ปิดกั้นการเข้าถึง">
-                  <input type="checkbox" ${u.status === 'Disabled' ? 'checked' : ''} onchange="toggleUserStatus(this, '${u.id}', '${u.name}')">
-                  <span class="switch-slider"></span>
-                </label>
-              </td>
-              <td style="text-align: right;">
-                <span class="badge ${u.status === 'Active' ? 'badge-success' : 'badge-danger'}" style="margin-right:4px;">${u.status || 'Active'}</span>
-                <button class="btn-secondary" onclick="editActivityUser('${u.name}', '${u.email}')">✏️ แก้ไข</button>
-              </td>
-            </tr>
-          `;
-        }).join('');
-        const actCountEl = document.getElementById('activity-user-count');
-        if (actCountEl) actCountEl.textContent = data.auth.registeredUsers.length;
+      // 3. Dynamic Sidebar Navigation Menu Permissions (RBAC)
+      const btnUser = document.getElementById('btn-user');
+      const subUser = document.getElementById('sub-user');
+      const btnAllot = document.getElementById('btn-allotment');
+      const subAllot = document.getElementById('sub-allotment');
+      const btnChannel = document.getElementById('btn-channel');
+      const subChannel = document.getElementById('sub-channel');
+      const btnApi = document.getElementById('btn-api');
+      const subApi = document.getElementById('sub-api');
+      const btnLog = document.getElementById('btn-log');
+      const btnDataBank = document.getElementById('btn-databank');
+      const btnDashboard = document.getElementById('btn-dashboard');
+      const btnBooking = document.getElementById('btn-booking');
+      const btnManage = document.getElementById('btn-manage');
+      const resetBtn = document.querySelector('.btn-reset-data');
+
+      // Topbar Reset button
+      if (resetBtn) resetBtn.style.display = (isPartner || isAuditor) ? 'none' : 'inline-flex';
+
+      if (isPartner) {
+        if (btnUser) btnUser.style.display = 'none';
+        if (subUser) subUser.style.display = 'none';
+        if (btnApi) btnApi.style.display = 'none';
+        if (subApi) subApi.style.display = 'none';
+        if (btnLog) btnLog.style.display = 'none';
+        if (btnAllot) btnAllot.style.display = 'flex';
+        if (btnChannel) btnChannel.style.display = 'flex';
+        if (btnDataBank) btnDataBank.style.display = 'flex';
+
+        // Update labels for partner view
+        if (btnDashboard) btnDashboard.querySelector('.menu-label-wrap span:last-child').textContent = 'Partner Dashboard (ยอดขายภูเก็ต)';
+        if (btnBooking) btnBooking.querySelector('.menu-label-wrap span:last-child').textContent = 'Manage Booking (การจองของฉัน)';
+        if (btnManage) btnManage.querySelector('.menu-label-wrap span:last-child').textContent = 'Manage (สินค้าของฉัน)';
+        if (btnDataBank) btnDataBank.querySelector('.menu-label-wrap span:last-child').textContent = 'Partner Directory (สารบบคู่ค้า)';
+
+        // If currently in a restricted view, redirect to dashboard
+        const curActive = document.querySelector('.view-section.active');
+        if (curActive && (curActive.id.includes('user') || curActive.id.includes('api') || curActive.id.includes('token-log'))) {
+          switchView('dashboard', btnDashboard);
+        }
+      } else if (isAuditor) {
+        if (btnUser) btnUser.style.display = 'flex';
+        if (btnAllot) { btnAllot.style.display = 'none'; if (subAllot) subAllot.style.display = 'none'; }
+        if (btnChannel) { btnChannel.style.display = 'none'; if (subChannel) subChannel.style.display = 'none'; }
+        if (btnApi) { btnApi.style.display = 'none'; if (subApi) subApi.style.display = 'none'; }
+        if (btnLog) btnLog.style.display = 'flex';
+        if (btnDataBank) btnDataBank.style.display = 'flex';
+
+        // Update labels for audit view
+        if (btnDashboard) btnDashboard.querySelector('.menu-label-wrap span:last-child').textContent = 'Tourism Analytics Dashboard';
+        if (btnBooking) btnBooking.querySelector('.menu-label-wrap span:last-child').textContent = 'Booking Audit (ตรวจประวัติจอง)';
+        if (btnManage) btnManage.querySelector('.menu-label-wrap span:last-child').textContent = 'Product Catalog Audit';
+        if (btnDataBank) btnDataBank.querySelector('.menu-label-wrap span:last-child').textContent = 'National Data Bank (ตรวจข้อมูล)';
+        if (btnLog) btnLog.querySelector('.menu-label-wrap span:last-child').textContent = 'Blockchain Audit Trail';
+
+        // If currently in a restricted view, redirect to dashboard
+        const curActive = document.querySelector('.view-section.active');
+        if (curActive && (curActive.id.includes('allotment') || curActive.id.includes('channel') || curActive.id.includes('api'))) {
+          switchView('dashboard', btnDashboard);
+        }
+      } else {
+        // Super Admin & Operations Admin
+        if (btnUser) btnUser.style.display = 'flex';
+        if (btnAllot) btnAllot.style.display = 'flex';
+        if (btnChannel) btnChannel.style.display = 'flex';
+        if (btnApi) btnApi.style.display = 'flex';
+        if (btnLog) btnLog.style.display = 'flex';
+        if (btnDataBank) btnDataBank.style.display = 'flex';
+
+        if (btnDashboard) btnDashboard.querySelector('.menu-label-wrap span:last-child').textContent = 'Performance Dashboard';
+        if (btnBooking) btnBooking.querySelector('.menu-label-wrap span:last-child').textContent = 'Manage Booking';
+        if (btnManage) btnManage.querySelector('.menu-label-wrap span:last-child').textContent = 'Manage';
+        if (btnDataBank) btnDataBank.querySelector('.menu-label-wrap span:last-child').textContent = 'National Tourism Data Bank';
+        if (btnLog) btnLog.querySelector('.menu-label-wrap span:last-child').textContent = 'Log (Blockchain / Audit)';
       }
 
-      const reservations = data.reservations || [];
+      // 4. Data Filtering: Reservations
+      const rawReservations = data.reservations || [];
+      let reservations = rawReservations;
+      if (isPartner) {
+        reservations = rawReservations.filter(r => {
+          const p = (r.property || '').toLowerCase();
+          const s = (r.serviceName || '').toLowerCase();
+          const a = (r.agent || '').toLowerCase();
+          return p.includes('phuket') || p.includes('ภูเก็ต') || p.includes('สมชาย') || p.includes('andaman') || p.includes('tour') || p.includes('sealife') || s.includes('phuket') || s.includes('ภูเก็ต') || s.includes('sealife') || a.includes('gianttick');
+        });
+      }
+
       const tokenLogs = data.tokenLogs || [];
-      const services = data.services || [];
+      const rawServices = data.services || [];
+      let services = rawServices;
+      if (isPartner) {
+        services = rawServices.filter(s => {
+          const loc = (s.location || '').toLowerCase();
+          const prov = (s.provider || '').toLowerCase();
+          const tit = (s.title || '').toLowerCase();
+          return loc.includes('ภูเก็ต') || loc.includes('phuket') || loc.includes('พังงา') || loc.includes('กระบี่') || prov.includes('phuket') || prov.includes('สมชาย') || prov.includes('andaman') || tit.includes('phuket');
+        });
+        if (services.length === 0) services = rawServices.slice(0, 15);
+      }
 
-      // Update KPI
+      // 5. Update KPI Elements
       const kpiBookings = document.getElementById('dash-kpi-bookings');
-      if (kpiBookings) kpiBookings.textContent = reservations.length;
+      if (kpiBookings) kpiBookings.textContent = isPartner ? `${reservations.length} (ภูเก็ต)` : reservations.length;
 
       const bCount = document.getElementById('booking-count');
-      if (bCount) bCount.textContent = reservations.length;
+      if (bCount) bCount.textContent = isPartner ? `${reservations.length} (การจองของคุณ)` : reservations.length;
 
       // Calculate today's bookings
       const todayCountEl = document.getElementById('dash-kpi-today-count');
       const todayRevEl = document.getElementById('dash-kpi-today-rev');
-      
       const todayStr = new Date().toISOString().substring(0, 10);
       const todayBookings = reservations.filter(r => (r.bookedOn || '').includes(todayStr) || (r.bookedOn || '').includes('2026-11-17') || (r.bookedOn || '').includes('2023-02-06'));
       const todayRev = todayBookings.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
@@ -3092,7 +3212,58 @@
       if (todayCountEl) todayCountEl.textContent = todayBookings.length;
       if (todayRevEl) todayRevEl.textContent = '฿ ' + todayRev.toLocaleString('th-TH', { minimumFractionDigits: 2 });
 
-      // Render Dashboard "LASTEST BOOKING" table (#table-dashboard-bookings)
+      // Total revenue on dashboard header
+      const totalRev = reservations.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
+      const dashTotalRev = document.getElementById('dash-total-revenue');
+      if (dashTotalRev) dashTotalRev.textContent = '฿ ' + totalRev.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+
+      // 6. Render Activity Users
+      const actTable = document.getElementById('tbody-activity-users');
+      const actCountEl = document.getElementById('activity-user-count');
+      if (actTable) {
+        if (isPartner) {
+          actTable.innerHTML = `
+            <tr>
+              <td colspan="5" style="text-align:center; padding:40px 20px; color:#64748b; font-size:13px;">
+                <div style="font-size:32px; margin-bottom:10px;">🔒</div>
+                <b style="font-size:15px; color:#1e293b;">การเข้าถึงถูกจำกัดตามมาตรฐานคุ้มครองข้อมูลส่วนบุคคล (PDPA)</b>
+                <p style="margin-top:6px; color:#64748b;">ผู้ประกอบการสามารถดูข้อมูลได้เฉพาะลูกค้าที่ทำการจองบริการของท่านในเมนู Manage Booking เท่านั้น</p>
+              </td>
+            </tr>
+          `;
+          if (actCountEl) actCountEl.textContent = '🔒 จำกัดสิทธิ์';
+        } else if (data.auth && data.auth.registeredUsers) {
+          const currentUser = data.auth.currentUser || {};
+          actTable.innerHTML = data.auth.registeredUsers.map(u => {
+            const isOnline = (currentUser.id === u.id || currentUser.email === u.email) && currentUser.isLoggedIn !== false;
+            const isWelcome = u.tier && u.tier.includes('Welcome Bonus');
+            return `
+              <tr style="${isOnline ? 'background: rgba(22, 141, 225, 0.08); font-weight:600;' : ''}">
+                <td>
+                  <b>${u.name}</b>
+                  ${isOnline ? '<span class="badge badge-info" style="font-size:10px; margin-left:6px;">🟢 กำลังออนไลน์</span>' : ''}
+                  ${isWelcome ? '<span class="badge badge-success" style="font-size:10px; margin-left:6px;">✨ สมาชิกใหม่</span>' : ''}
+                </td>
+                <td>${u.email}</td>
+                <td><span style="font-size:16px;">${u.avatar || '👤'}</span> <span style="font-size:11px; color:var(--text-muted);">${u.id}</span></td>
+                <td>
+                  <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'ปิดกั้นการเข้าถึง'}">
+                    <input type="checkbox" ${u.status === 'Disabled' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="toggleUserStatus(this, '${u.id}', '${u.name}')">
+                    <span class="switch-slider"></span>
+                  </label>
+                </td>
+                <td style="text-align: right;">
+                  <span class="badge ${u.status === 'Active' ? 'badge-success' : 'badge-danger'}" style="margin-right:4px;">${u.status || 'Active'}</span>
+                  ${isAuditor ? '<span class="badge badge-warning">Audit Record</span>' : `<button class="btn-secondary" onclick="editActivityUser('${u.name}', '${u.email}')">✏️ แก้ไข</button>`}
+                </td>
+              </tr>
+            `;
+          }).join('');
+          if (actCountEl) actCountEl.textContent = isAuditor ? `${data.auth.registeredUsers.length} (โหมดตรวจสอบ)` : data.auth.registeredUsers.length;
+        }
+      }
+
+      // 7. Render Dashboard Latest Bookings Table
       const dashTable = document.getElementById('table-dashboard-bookings');
       if (dashTable) {
         const tbody = dashTable.querySelector('tbody');
@@ -3115,7 +3286,7 @@
         }
       }
 
-      // Render Booking Management view table (#table-bookings)
+      // 8. Render Booking Management Table
       const bookTable = document.getElementById('table-bookings');
       if (bookTable) {
         const tbody = bookTable.querySelector('tbody');
@@ -3128,20 +3299,20 @@
               <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
               <td><b>฿${Number(r.amount).toLocaleString()}</b></td>
               <td>
-                <label class="switch-ui" title="เปิด/ปิดการยืนยันคำสั่งจอง">
-                  <input type="checkbox" ${r.status === 'Confirmed' ? 'checked' : ''} onchange="adminToggleBookingStatus('${r.id}', this.checked)">
+                <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'เปิด/ปิดการยืนยันคำสั่งจอง'}">
+                  <input type="checkbox" ${r.status === 'Confirmed' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="adminToggleBookingStatus('${r.id}', this.checked)">
                   <span class="switch-slider"></span>
                 </label>
               </td>
               <td style="text-align: right;">
-                <button class="btn-secondary" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">View 👁️</button>
+                <button class="btn-secondary" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">${isAuditor ? 'Audit 👁️' : 'View 👁️'}</button>
               </td>
             </tr>
           `).join('');
         }
       }
 
-      // Render Travel Token & Blockchain Log table (#table-token-log)
+      // 9. Render Blockchain Token Logs Table
       const tokenTable = document.getElementById('table-token-log');
       if (tokenTable) {
         const tbody = tokenTable.querySelector('tbody');
@@ -3161,7 +3332,7 @@
         }
       }
 
-      // Render List Product in View 6 from shared services
+      // 10. Render Products & Packages Tables
       const prodTable = document.getElementById('table-products');
       if (prodTable && services.length > 0) {
         const tbody = prodTable.querySelector('tbody');
@@ -3172,17 +3343,16 @@
               <td><b>${s.title}</b><br><small style="color:var(--text-muted)">โดย ${s.provider} (${s.location})</small></td>
               <td><span class="badge badge-info">ACT00${1000 + idx + 1}</span></td>
               <td>${s.unit === 'คืน' ? '24 hours' : 'Same day'}</td>
-              <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-              <td><span class="badge badge-success">Approved</span></td>
+              <td><label class="switch-ui"><input type="checkbox" checked ${isAuditor ? 'disabled' : ''}><span class="switch-slider"></span></label></td>
+              <td><span class="badge badge-success">${isAuditor ? 'Verified' : 'Approved'}</span></td>
               <td style="text-align: right;"><b style="color:var(--primary-navy)">฿${s.price.toLocaleString()}</b></td>
             </tr>
           `).join('');
           const pCount = document.getElementById('product-count');
-          if (pCount) pCount.textContent = services.length;
+          if (pCount) pCount.textContent = isPartner ? `${services.length} (สินค้าของฉัน)` : services.length;
         }
       }
 
-      // Render Thailand Packages in View 18 from shared services
       const pkgTable = document.getElementById('table-packages');
       if (pkgTable && services.length > 0) {
         const tbody = pkgTable.querySelector('tbody');
@@ -3198,7 +3368,7 @@
             </tr>
           `).join('');
           const pkgCount = document.getElementById('package-count');
-          if (pkgCount) pkgCount.textContent = services.length;
+          if (pkgCount) pkgCount.textContent = isPartner ? `${services.length} (แพ็กเกจของฉัน)` : services.length;
         }
       }
     }
@@ -4021,7 +4191,16 @@
       const cat = document.getElementById('admin-dir-category') ? document.getElementById('admin-dir-category').value : 'all';
       const search = (document.getElementById('admin-dir-search') ? document.getElementById('admin-dir-search').value : '').toLowerCase();
 
-      const filtered = adminDataBankDirectory.filter(d => {
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin)
+        ? TCStore.getState().auth.currentAdmin : {};
+      const isPartner = (currentAdmin.email || '').toLowerCase().includes('somchai') || (currentAdmin.email || '').toLowerCase().includes('phuket');
+
+      let sourceData = adminDataBankDirectory;
+      if (isPartner) {
+        sourceData = adminDataBankDirectory.filter(d => (d.province && (d.province.includes('ภูเก็ต') || d.province.includes('Phuket') || d.province.includes('พังงา') || d.province.includes('กระบี่'))) || (d.supplier && (d.supplier.includes('Phuket') || d.supplier.includes('สมชาย') || d.supplier.includes('Andaman'))));
+      }
+
+      const filtered = sourceData.filter(d => {
         if (cat !== 'all' && d.cat !== cat) return false;
         if (search && !d.supplier.toLowerCase().includes(search) && !d.name.toLowerCase().includes(search) && !d.province.toLowerCase().includes(search)) return false;
         return true;
@@ -4041,7 +4220,9 @@
       `).join('');
 
       const countEl = document.getElementById('admin-dir-count');
-      if (countEl) countEl.textContent = `แสดง ${filtered.length} รายการ (จากสารบบสินค้าโครงการ 201,764 รายการ)`;
+      if (countEl) countEl.textContent = isPartner
+        ? `แสดง ${filtered.length} รายการ (เฉพาะสินค้าในเครือข่ายคู่ค้าภูเก็ต)`
+        : `แสดง ${filtered.length} รายการ (จากสารบบสินค้าโครงการ 201,764 รายการ)`;
     }
 
     function filterAdminDirectoryTable() {

@@ -45,9 +45,11 @@
         name: 'ฐาปกรณ์ สันติชาติศักดิ์ (depa)',
         email: 'thapakorn.s@depa.or.th',
         role: 'Super Administrator',
+        roleCode: 'SUPER_ADMIN',
         org: 'depa Central Hub',
         avatar: '👨‍💼',
-        badge: 'Super Admin'
+        badge: 'Super Admin',
+        scope: 'national'
       },
       registeredUsers: [
         {
@@ -108,33 +110,42 @@
           email: 'thapakorn.s@depa.or.th',
           name: 'ฐาปกรณ์ สันติชาติศักดิ์ (depa)',
           role: 'Super Administrator',
+          roleCode: 'SUPER_ADMIN',
           org: 'depa Central Hub',
           avatar: '👨‍💼',
-          badge: 'Super Admin'
+          badge: 'Super Admin',
+          scope: 'national'
         },
         {
           email: 'boonyarit.r@travizgo.com',
           name: 'บุญญฤทธิ์ ฤทธิ์เดช',
           role: 'Platform Operations Admin',
+          roleCode: 'OPS_ADMIN',
           org: 'TRAVIZGO Platform',
           avatar: '👨‍💻',
-          badge: 'Operations'
+          badge: 'Operations',
+          scope: 'operational'
         },
         {
           email: 'somchai@phuket-tour.co.th',
           name: 'สมชาย ท่องเที่ยว (Hotel Partner)',
           role: 'Merchant / Hotel Manager',
+          roleCode: 'PARTNER',
           org: 'Phuket Tour & Partner Hub',
           avatar: '🏨',
-          badge: 'Hotel Partner'
+          badge: 'Hotel Partner',
+          scope: 'partner',
+          partnerKey: 'phuket'
         },
         {
           email: 'auditor@tat.or.th',
           name: 'ผู้ตรวจสอบ ททท. (TAT Auditor)',
           role: 'TAT Tourism Data Auditor',
+          roleCode: 'AUDITOR',
           org: 'Tourism Authority of Thailand',
           avatar: '🏛️',
-          badge: 'TAT Auditor'
+          badge: 'TAT Auditor',
+          scope: 'auditor'
         }
       ]
     },

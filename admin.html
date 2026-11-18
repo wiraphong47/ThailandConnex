@@ -425,6 +425,62 @@
     .clean-table tr:hover td { background: #f8fafc; }
     .clean-table tr:last-child td { border-bottom: 0; }
 
+    /* Table Pagination Styles */
+    .table-pagination-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border-top: 1px solid var(--border-line);
+      background: #fafcff;
+      border-radius: 0 0 10px 10px;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .page-nav-btn {
+      min-width: 34px;
+      height: 34px;
+      padding: 0 8px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .page-nav-btn:hover:not(:disabled) {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      color: var(--primary-blue);
+    }
+    .page-nav-btn.active {
+      background: var(--primary-blue);
+      border-color: var(--primary-blue);
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .page-nav-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      background: #f8fafc;
+    }
+    .page-nav-ellipsis {
+      padding: 0 4px;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
     /* Buttons & Inputs */
     .btn-action {
       background: var(--primary-blue);
@@ -2485,93 +2541,52 @@
         <!-- ======================================================== -->
         <div class="view-section" id="view-thailand-packages">
           <div class="table-card">
-            <div class="table-card-head">
-              <span>Thailand Packages (รายการแพ็กเกจท่องเที่ยวทั่วไทย 201,764 รายการ)</span>
+            <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <span style="font-size:17px; font-weight:700;">📦 Thailand Packages (รายการแพ็กเกจท่องเที่ยวทั่วไทย 201,764 รายการ)</span>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                  คลังสินค้าและบริการเชื่อมต่อข้อมูลจริงจาก DEPA Package_list.xlsx (แสดงผลแบบแบ่งหน้า รอบละ 10 รายการ)
+                </div>
+              </div>
               <button class="btn-action" onclick="openModal('modal-new-package')">+ เพิ่มแพ็กเกจใหม่</button>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-packages" class="input-clean" placeholder="🔍 ค้นหาชื่อแพ็กเกจ หรือผู้ให้บริการ..." style="flex:1; min-width:220px;" onkeyup="filterTable('search-packages', 'table-packages', 'package-count')">
-              <select id="filter-package-cat" class="input-clean" onchange="filterPkgCategory(this.value)">
-                <option value="all">ทุกหมวดหมู่ (ที่พัก, ขนส่ง, ท่องเที่ยว, สปา, อาหาร)</option>
+              <input type="text" id="search-packages" class="input-clean" placeholder="🔍 ค้นหาชื่อแพ็กเกจ ผู้ให้บริการ หรือพิกัด..." style="flex:1; min-width:240px;" onkeyup="handlePkgSearch(this.value)">
+              <select id="filter-package-cat" class="input-clean" onchange="handlePkgCategory(this.value)">
+                <option value="all">ทุกหมวดหมู่ (ที่พัก, ขนส่ง, ท่องเที่ยว, สปา, อาหาร, ของที่ระลึก)</option>
                 <option value="ที่พัก">เฉพาะ ที่พัก (Hotels & Resorts)</option>
                 <option value="ขนส่ง">เฉพาะ ขนส่ง (Transfers & Mobility)</option>
-                <option value="สถานที่ท่องเที่ยว">เฉพาะ สถานที่ท่องเที่ยว (Attractions & Cruises)</option>
+                <option value="สถานที่ท่องเที่ยว">เฉพาะ แหล่งท่องเที่ยว (Attractions & Cruises)</option>
                 <option value="สุขภาพ">เฉพาะ สุขภาพ/สปา (Wellness & Spa)</option>
                 <option value="อาหาร">เฉพาะ อาหาร/เครื่องดื่ม (Dining & Buffets)</option>
+                <option value="ของที่ระลึก">เฉพาะ สินค้าและของที่ระลึก (Souvenirs)</option>
               </select>
-              <button class="btn-secondary" onclick="exportTableToCSV('table-packages', 'ThailandConnex_Packages.csv')">Export CSV 📥</button>
-              <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="package-count">5</b></span>
+              <button class="btn-secondary" onclick="exportAllPackagesToCSV()">Export CSV 📥</button>
+              <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="package-count">1,190</b></span>
             </div>
-            <table class="clean-table" id="table-packages">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>ชื่อแพ็กเกจ (Package Name)</th>
-                  <th>ผู้ให้บริการ (Supplier)</th>
-                  <th>หมวดหมู่</th>
-                  <th>ราคาขาย</th>
-                  <th>สถานะ</th>
-                  <th style="text-align: right;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><b>Deluxe With Breakfast</b></td>
-                  <td>เดอะ มยุ สกาย รีสอร์ท แมท หัวหิน</td>
-                  <td><span class="badge" style="background:#dbeafe; color:#1e40af;">ที่พัก</span></td>
-                  <td><b>฿3,994.27</b></td>
-                  <td><span class="badge badge-success">Available</span></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-03')">ดูรายละเอียดที่พัก 🏨</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td><b>Limousine Express - Bangkok-Saraburi</b></td>
-                  <td>เจ วัน บิสซิเนส ทรานสปอร์ต</td>
-                  <td><span class="badge" style="background:#f1f5f9; color:#475569;">ขนส่ง</span></td>
-                  <td><b>฿3,570.00</b></td>
-                  <td><span class="badge badge-success">Available</span></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-08')">ดูรายละเอียด 👁️</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td><b>Dinner Cruise Ticket at Asiatique Pier</b></td>
-                  <td>Chao Phraya Princess Cruise</td>
-                  <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">สถานที่ท่องเที่ยว</span></td>
-                  <td><b>฿1,200.00</b></td>
-                  <td><span class="badge badge-success">Available</span></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-06')">ดูรายละเอียด 👁️</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td><b>Mud or Clay Body Wrap (90 mins)</b></td>
-                  <td>7 Spa Luxury - Health & Wellness</td>
-                  <td><span class="badge" style="background:#fce7f3; color:#be185d;">สุขภาพ/สปา</span></td>
-                  <td><b>฿1,400.00</b></td>
-                  <td><span class="badge badge-success">Available</span></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-05')">ดูรายละเอียด 👁️</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td><b>Sukhumvit Park Executive Suite</b></td>
-                  <td>Sukhumvit Park Hotel</td>
-                  <td><span class="badge" style="background:#dbeafe; color:#1e40af;">ที่พัก</span></td>
-                  <td><b>฿28,999.00</b></td>
-                  <td><span class="badge badge-success">Available</span></td>
-                  <td style="text-align: right;">
-                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('SRV-01')">ดูรายละเอียดที่พัก 🏨</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div style="overflow-x:auto;">
+              <table class="clean-table" id="table-packages">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">#</th>
+                    <th>ชื่อแพ็กเกจ (Package Name)</th>
+                    <th>ผู้ให้บริการ (Supplier)</th>
+                    <th>หมวดหมู่</th>
+                    <th>ราคาขาย</th>
+                    <th>สถานะ</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-packages">
+                  <!-- Dynamically rendered 10 items per page -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination Container -->
+            <div class="table-pagination-footer" id="packages-pagination-container">
+              <!-- Dynamically populated via renderPkgPaginationFooter -->
+            </div>
           </div>
         </div>
 
@@ -3576,24 +3591,8 @@
         }
       }
 
-      const pkgTable = document.getElementById('table-packages');
-      if (pkgTable && services.length > 0) {
-        const tbody = pkgTable.querySelector('tbody');
-        if (tbody) {
-          tbody.innerHTML = services.map((s, idx) => `
-            <tr>
-              <td>${idx + 1}</td>
-              <td><b>${s.title}</b></td>
-              <td>${s.provider}</td>
-              <td><span class="feat-tag" style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px;">${s.categoryName}</span></td>
-              <td><b>฿${s.price.toLocaleString()}.00</b></td>
-              <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
-            </tr>
-          `).join('');
-          const pkgCount = document.getElementById('package-count');
-          if (pkgCount) pkgCount.textContent = isPartner ? `${services.length} (แพ็กเกจของฉัน)` : services.length;
-        }
-      }
+      // Render Packages Table with 10 items per page pagination
+      renderPackagesTableWithPagination(services);
 
       // 11. Render API Management Keys
       const apiTbody = document.getElementById('tbody-api-keys');
@@ -4533,44 +4532,363 @@
       openModal('modal-token-verify');
     }
 
+    // ========================================================
+    // Thailand Packages: 10 Items per Page Pagination Engine
+    // ========================================================
+    const PKG_PER_PAGE = 10;
+    let pkgCurrentPage = 1;
+    let pkgSearchQuery = '';
+    let pkgCategoryFilter = 'all';
+    let pkgMasterList = [];
+
+    function renderPackagesTableWithPagination(serviceList) {
+      if (serviceList && Array.isArray(serviceList) && serviceList.length > 0) {
+        pkgMasterList = serviceList;
+      } else if (!pkgMasterList || pkgMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined') {
+          pkgMasterList = TCStore.getState().services || [];
+        }
+        if ((!pkgMasterList || pkgMasterList.length === 0) && typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.allServices) {
+          pkgMasterList = DEPA_REAL_DATA.allServices;
+        }
+      }
+
+      const q = (pkgSearchQuery || '').trim().toLowerCase();
+      const cat = (pkgCategoryFilter || 'all').trim();
+
+      // 1. Filter dataset
+      const filtered = pkgMasterList.filter(s => {
+        // Category filter
+        if (cat !== 'all') {
+          const cName = (s.categoryName || '').toLowerCase();
+          const cCode = (s.category || '').toLowerCase();
+          const target = cat.toLowerCase();
+          if (!cName.includes(target) && !cCode.includes(target)) {
+            return false;
+          }
+        }
+        // Search query filter
+        if (q) {
+          const t = (s.title || '').toLowerCase();
+          const p = (s.provider || '').toLowerCase();
+          const l = (s.location || '').toLowerCase();
+          const c = (s.categoryName || '').toLowerCase();
+          const id = (s.id || '').toLowerCase();
+          if (!t.includes(q) && !p.includes(q) && !l.includes(q) && !c.includes(q) && !id.includes(q)) {
+            return false;
+          }
+        }
+        return true;
+      });
+
+      // 2. Update record count badge
+      const countEl = document.getElementById('package-count');
+      if (countEl) {
+        countEl.textContent = filtered.length.toLocaleString('th-TH');
+      }
+
+      // 3. Calculate pagination boundaries
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PKG_PER_PAGE));
+      if (pkgCurrentPage > totalPages) pkgCurrentPage = totalPages;
+      if (pkgCurrentPage < 1) pkgCurrentPage = 1;
+
+      const startIdx = (pkgCurrentPage - 1) * PKG_PER_PAGE;
+      const endIdx = Math.min(startIdx + PKG_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      // 4. Render Table Rows
+      const tbody = document.getElementById('tbody-packages') || document.querySelector('#table-packages tbody');
+      if (tbody) {
+        if (currentSlice.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align:center; padding:36px; color:#64748b; font-size:13.5px;">
+                <div style="font-size:32px; margin-bottom:8px;">🔍</div>
+                <b>ไม่พบแพ็กเกจที่ตรงกับเงื่อนไขการค้นหา</b>
+                <div style="margin-top:4px; font-size:12px;">ลองเปลี่ยนคำค้นหาหรือเลือกหมวดหมู่อื่น</div>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = currentSlice.map((s, idx) => {
+            const rowNumber = startIdx + idx + 1;
+            let catColor = '#1e40af';
+            let catBg = '#dbeafe';
+            if (s.category === 'transport') { catColor = '#0f766e'; catBg = '#ccfbf1'; }
+            else if (s.category === 'attraction') { catColor = '#0369a1'; catBg = '#e0f2fe'; }
+            else if (s.category === 'spa') { catColor = '#be185d'; catBg = '#fce7f3'; }
+            else if (s.category === 'food') { catColor = '#c2410c'; catBg = '#ffedd5'; }
+            else if (s.category === 'souvenir') { catColor = '#7e22ce'; catBg = '#f3e8ff'; }
+
+            return `
+              <tr>
+                <td style="color:#64748b; font-weight:600;">${rowNumber}</td>
+                <td>
+                  <b>${s.title}</b>
+                  ${s.location ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">📍 ${s.location}</div>` : ''}
+                </td>
+                <td>
+                  <span style="font-weight:500;">${s.provider}</span>
+                </td>
+                <td>
+                  <span class="badge" style="background:${catBg}; color:${catColor}; font-size:11px; padding:3px 8px;">
+                    ${s.categoryName || s.category}
+                  </span>
+                </td>
+                <td>
+                  <b style="font-family:'IBM Plex Sans Thai'; color:var(--primary-navy); font-size:13.5px;">฿${Number(s.price).toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</b>
+                </td>
+                <td>
+                  <span class="badge badge-success" style="font-size:10.5px;">Available</span>
+                </td>
+                <td style="text-align: right;">
+                  <button class="btn-secondary" style="font-size:11.5px; padding:4px 10px;" onclick="openAdminHotelDetail('${s.id}')">
+                    ดูรายละเอียด 👁️
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // 5. Render Pagination Controls
+      renderPkgPaginationFooter(filtered.length, pkgCurrentPage, totalPages, startIdx, endIdx);
+    }
+
+    function renderPkgPaginationFooter(totalItems, currentPage, totalPages, startIdx, endIdx) {
+      const container = document.getElementById('packages-pagination-container');
+      if (!container) return;
+
+      if (totalItems === 0) {
+        container.innerHTML = `
+          <div style="color:var(--text-muted); font-size:12.5px;">ไม่มีรายการข้อมูล</div>
+        `;
+        return;
+      }
+
+      // Smart sliding window (up to 5 page numbers)
+      const maxButtons = 5;
+      let startP = Math.max(1, currentPage - 2);
+      let endP = Math.min(totalPages, startP + maxButtons - 1);
+      if (endP - startP + 1 < maxButtons) {
+        startP = Math.max(1, endP - maxButtons + 1);
+      }
+
+      let pagesHtml = '';
+
+      // First page if window starts after page 1
+      if (startP > 1) {
+        pagesHtml += `<button class="page-nav-btn" onclick="goToPkgPage(1)">1</button>`;
+        if (startP > 2) {
+          pagesHtml += `<span class="page-nav-ellipsis">...</span>`;
+        }
+      }
+
+      for (let p = startP; p <= endP; p++) {
+        pagesHtml += `<button class="page-nav-btn ${p === currentPage ? 'active' : ''}" onclick="goToPkgPage(${p})">${p}</button>`;
+      }
+
+      // Last page if window ends before totalPages
+      if (endP < totalPages) {
+        if (endP < totalPages - 1) {
+          pagesHtml += `<span class="page-nav-ellipsis">...</span>`;
+        }
+        pagesHtml += `<button class="page-nav-btn" onclick="goToPkgPage(${totalPages})">${totalPages}</button>`;
+      }
+
+      container.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; color:#475569; font-size:12.5px; flex-wrap:wrap;">
+          <span>แสดงรายการที่ <b>${startIdx + 1} - ${endIdx}</b> จากทั้งหมด <b>${totalItems.toLocaleString('th-TH')}</b> รายการ</span>
+          <span style="color:#cbd5e1;">|</span>
+          <span>หน้า <b>${currentPage}</b> จาก <b>${totalPages}</b></span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <div class="pagination-controls">
+            <button class="page-nav-btn" title="หน้าแรก" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPkgPage(1)">«</button>
+            <button class="page-nav-btn" title="ก่อนหน้า" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPkgPage(${currentPage - 1})">‹</button>
+            ${pagesHtml}
+            <button class="page-nav-btn" title="ถัดไป" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPkgPage(${currentPage + 1})">›</button>
+            <button class="page-nav-btn" title="หน้าสุดท้าย" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPkgPage(${totalPages})">»</button>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:5px; font-size:12px; color:#64748b; margin-left:8px;">
+            <span>ไปที่หน้า:</span>
+            <input type="number" min="1" max="${totalPages}" value="${currentPage}" 
+              style="width:52px; padding:4px 6px; text-align:center; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; font-weight:600;" 
+              onkeydown="if(event.key==='Enter') goToPkgPage(this.value)" 
+              onchange="goToPkgPage(this.value)">
+          </div>
+        </div>
+      `;
+    }
+
+    function goToPkgPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      pkgCurrentPage = pageNum;
+      renderPackagesTableWithPagination();
+      const el = document.getElementById('table-packages');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function handlePkgSearch(val) {
+      pkgSearchQuery = val || '';
+      pkgCurrentPage = 1;
+      renderPackagesTableWithPagination();
+    }
+
+    function handlePkgCategory(cat) {
+      pkgCategoryFilter = cat || 'all';
+      pkgCurrentPage = 1;
+      renderPackagesTableWithPagination();
+    }
+
+    function exportAllPackagesToCSV() {
+      if (!pkgMasterList || pkgMasterList.length === 0) {
+        showToast('ไม่มีข้อมูลแพ็กเกจสำหรับ Export', 'warning');
+        return;
+      }
+      const q = (pkgSearchQuery || '').trim().toLowerCase();
+      const cat = (pkgCategoryFilter || 'all').trim();
+      const filtered = pkgMasterList.filter(s => {
+        if (cat !== 'all') {
+          const cName = (s.categoryName || '').toLowerCase();
+          const cCode = (s.category || '').toLowerCase();
+          if (!cName.includes(cat.toLowerCase()) && !cCode.includes(cat.toLowerCase())) return false;
+        }
+        if (q) {
+          const t = (s.title || '').toLowerCase();
+          const p = (s.provider || '').toLowerCase();
+          const l = (s.location || '').toLowerCase();
+          if (!t.includes(q) && !p.includes(q) && !l.includes(q)) return false;
+        }
+        return true;
+      });
+
+      let csv = '\uFEFF';
+      csv += 'ลำดับ,รหัสแพ็กเกจ,ชื่อแพ็กเกจ,ผู้ให้บริการ,หมวดหมู่,ราคาขาย(THB),หน่วย,พิกัด\n';
+      filtered.forEach((s, idx) => {
+        const title = `"${(s.title || '').replace(/"/g, '""')}"`;
+        const prov = `"${(s.provider || '').replace(/"/g, '""')}"`;
+        const catName = `"${(s.categoryName || s.category || '').replace(/"/g, '""')}"`;
+        const loc = `"${(s.location || '').replace(/"/g, '""')}"`;
+        csv += `${idx + 1},${s.id || ''},${title},${prov},${catName},${s.price || 0},${s.unit || ''},${loc}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ThailandConnex_Packages_All_${filtered.length}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`Export แพ็กเกจทั้งหมด ${filtered.length} รายการสำเร็จ!`, 'success');
+    }
+
+    function openAdminHotelDetail(srvId) {
+      let s = null;
+      if (typeof TCStore !== 'undefined') {
+        s = TCStore.getServiceById(srvId);
+      }
+      if (!s && typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.allServices) {
+        s = DEPA_REAL_DATA.allServices.find(x => x.id === srvId);
+      }
+      if (!s && pkgMasterList && pkgMasterList.length > 0) {
+        s = pkgMasterList.find(x => x.id === srvId);
+      }
+      if (!s) {
+        showToast('ไม่พบข้อมูลแพ็กเกจ ' + srvId, 'warning');
+        return;
+      }
+
+      const titleEl = document.getElementById('admin-hotel-title');
+      if (titleEl) titleEl.textContent = s.title;
+
+      const skuEl = document.getElementById('admin-hotel-sku');
+      if (skuEl) skuEl.textContent = s.id || ('PKG-' + Math.floor(1000 + Math.random() * 9000));
+
+      const imgEl = document.getElementById('admin-hotel-img');
+      if (imgEl) {
+        const bgImg = s.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80';
+        imgEl.style.backgroundImage = `url('${bgImg}')`;
+      }
+
+      const netPrice = Math.round(s.price * 0.9);
+      const markup = s.price - netPrice;
+
+      const netEl = document.getElementById('admin-hotel-net');
+      if (netEl) netEl.textContent = '฿' + netPrice.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+
+      const markupEl = document.getElementById('admin-hotel-markup');
+      if (markupEl) markupEl.textContent = '+฿' + markup.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+
+      const priceEl = document.getElementById('admin-hotel-price');
+      if (priceEl) priceEl.textContent = '฿' + Number(s.price).toLocaleString('th-TH', { minimumFractionDigits: 2 });
+
+      const allotEl = document.getElementById('admin-hotel-allotment');
+      if (allotEl) allotEl.textContent = (s.allotment || 8) + ' รายการ/วัน';
+
+      const roomTypeEl = document.getElementById('admin-hotel-roomtype');
+      if (roomTypeEl) roomTypeEl.textContent = (s.categoryName || s.category) + ' - ' + s.title;
+
+      const sizeEl = document.getElementById('admin-hotel-size');
+      if (sizeEl) sizeEl.textContent = (s.unit === 'คืน' ? 'ห้องพักมาตรฐาน พร้อมอาหารเช้า' : 'แพ็กเกจกิจกรรมท่องเที่ยวมาตรฐาน depa');
+
+      const locEl = document.getElementById('admin-hotel-location');
+      if (locEl) locEl.textContent = s.location || 'ประเทศไทย';
+
+      const provEl = document.getElementById('admin-hotel-provider');
+      if (provEl) provEl.textContent = s.provider || 'ผู้ประกอบการในโครงการ depa';
+
+      const descEl = document.getElementById('admin-hotel-desc');
+      if (descEl) descEl.textContent = s.description || `${s.title} บริการคุณภาพมาตรฐานระดับประเทศ ได้รับการรับรองและเชื่อมต่อข้อมูลลงใน National Digital Tourism Data Bank ภายใต้โครงการ ThailandCONNEX`;
+
+      const amenEl = document.getElementById('admin-hotel-amenities');
+      if (amenEl) {
+        const feats = (s.features && s.features.length > 0) ? s.features : ['SHA Plus', 'WiFi ฟรี', 'ประกันอุบัติเหตุ', 'DBD Verified'];
+        amenEl.innerHTML = feats.map(f => `<span class="badge badge-info" style="font-size:11.5px; padding:4px 10px;">✓ ${f}</span>`).join('');
+      }
+
+      openModal('modal-admin-hotel-detail');
+    }
+
     function saveNewPackage() {
       const name = document.getElementById('new-pkg-name').value || 'แพ็กเกจใหม่';
       const supplier = document.getElementById('new-pkg-supplier').value || 'Supplier';
       const cat = document.getElementById('new-pkg-cat').value || 'สถานที่ท่องเที่ยว';
-      const price = document.getElementById('new-pkg-price').value || '฿1,500.00';
+      const priceRaw = parseFloat(document.getElementById('new-pkg-price').value.replace(/[^0-9.]/g, '')) || 1500;
 
-      const table = document.getElementById('table-packages');
-      if (table) {
-        const tbody = table.querySelector('tbody');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>6</td>
-          <td><b>${name}</b></td>
-          <td>${supplier}</td>
-          <td>${cat}</td>
-          <td><b>${price}</b></td>
-          <td style="text-align: right;"><span class="badge badge-success">Available</span></td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
+      const newPkg = {
+        id: 'SRV-CUSTOM-' + Math.floor(1000 + Math.random() * 9000),
+        title: name,
+        provider: supplier,
+        category: 'attraction',
+        categoryName: cat,
+        price: priceRaw,
+        unit: 'รายการ',
+        location: 'ประเทศไทย',
+        allotment: 10,
+        features: ['SHA Plus', 'พร้อมจำหน่าย'],
+        image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&q=80'
+      };
 
-        const count = document.getElementById('package-count');
-        if (count) count.textContent = parseInt(count.textContent || '0') + 1;
+      if (!pkgMasterList) pkgMasterList = [];
+      pkgMasterList.unshift(newPkg);
+
+      if (typeof TCStore !== 'undefined') {
+        const state = TCStore.getState();
+        if (state.services) state.services.unshift(newPkg);
+        TCStore.save(state);
       }
+
+      pkgCurrentPage = 1;
+      renderPackagesTableWithPagination();
       closeModal('modal-new-package');
       showToast(`เพิ่มแพ็กเกจ ${name} สำเร็จ!`, 'success');
-    }
-
-    function filterPkgCategory(cat) {
-      const table = document.getElementById('table-packages');
-      if (!table) return;
-      const rows = table.querySelectorAll('tbody tr');
-      rows.forEach(row => {
-        if (cat === 'all' || row.innerText.includes(cat)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
     }
 
     
@@ -4703,24 +5021,7 @@
     }
 
     function renderAdminPackagesTable() {
-      const tbody = document.querySelector('#table-packages tbody');
-      if (!tbody || typeof DEPA_REAL_DATA === 'undefined' || !DEPA_REAL_DATA.directory) return;
-      const realItems = DEPA_REAL_DATA.directory.slice(0, 20);
-      tbody.innerHTML = realItems.map((d, idx) => `
-        <tr>
-          <td>${idx + 1}</td>
-          <td><b>${d.name}</b></td>
-          <td>${d.supplier}</td>
-          <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">${d.catName || d.cat}</span></td>
-          <td><b style="font-family:'IBM Plex Sans Thai';">฿${Number(d.price).toLocaleString('th-TH')}</b></td>
-          <td><span class="badge badge-success">Available</span></td>
-          <td style="text-align: right;">
-            <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="showToast('ข้อมูลแพ็กเกจ: ${d.name} (${d.supplier})', 'info')">ดูรายละเอียด 👁️</button>
-          </td>
-        </tr>
-      `).join('');
-      const countEl = document.getElementById('package-count');
-      if (countEl) countEl.textContent = `${realItems.length} (เชื่อมต่อข้อมูลจริง .xlsx)`;
+      renderPackagesTableWithPagination();
     }
 
     document.addEventListener('DOMContentLoaded', () => {

@@ -670,12 +670,18 @@
 
     html, body {
       max-width: 100%;
-      overflow-x: hidden;
+      overflow-x: clip;
     }
     .app-layout, .main-wrap, .content-area, .view-section, .chart-card-exact {
       max-width: 100%;
       min-width: 0;
       box-sizing: border-box;
+    }
+    .topbar {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 900 !important;
+      box-shadow: 0 2px 12px rgba(15, 41, 66, 0.05);
     }
 
     @media (max-width: 900px) {
@@ -683,12 +689,12 @@
         display: block;
         width: 100%;
         max-width: 100vw;
-        overflow-x: hidden;
+        overflow-x: clip;
       }
       .main-wrap {
         width: 100%;
         max-width: 100vw;
-        overflow-x: hidden;
+        overflow-x: clip;
       }
       .admin-mobile-toggle {
         display: inline-flex;

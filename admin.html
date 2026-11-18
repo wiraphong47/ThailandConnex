@@ -1844,7 +1844,7 @@
                 <button class="btn-action" onclick="filterTable('search-admin-users', 'table-admin-users', 'admin-result-count')">Search</button>
               </div>
               <div style="display:flex; gap:12px; align-items:center;">
-                <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="admin-result-count">5</b></span>
+                <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="admin-result-count">9</b></span>
                 <button class="btn-secondary" onclick="exportTableToCSV('table-admin-users', 'ThailandConnex_Admin_Users.csv')">Export CSV 📥</button>
               </div>
             </div>
@@ -1864,35 +1864,63 @@
                   <td><b>Thapakorn Santichatsak</b><br><small style="color:var(--text-muted)">thapakorn.s@depa.or.th</small></td>
                   <td><span class="badge badge-info">Administrator</span></td>
                   <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
                 </tr>
                 <tr>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td><b>Chanaphat Suzuki</b><br><small style="color:var(--text-muted)">chanaphat.s@travizgo.com</small></td>
-                  <td><span class="badge" style="background:#f1f5f9; color:#475569;">Staff</span></td>
+                  <td><b>Sirikanya Wongsuwan</b><br><small style="color:var(--text-muted)">sirikanya.w@depa.or.th</small></td>
+                  <td><span class="badge badge-info">Staff</span></td>
                   <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
                 </tr>
                 <tr>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td><b>Boonyarit Ritdet</b><br><small style="color:var(--text-muted)">boonyarit.r@travizgo.com</small></td>
-                  <td><span class="badge badge-info">Administrator and other 1</span></td>
-                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
-                </tr>
-                <tr>
-                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td><b>Supakron Siw</b><br><small style="color:var(--text-muted)">supakron.s@travizgo.com</small></td>
+                  <td><b>Kittisak Prasert</b><br><small style="color:var(--text-muted)">kittisak.p@travizgo.com</small></td>
                   <td><span class="badge badge-info">Administrator</span></td>
                   <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
                 </tr>
                 <tr>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td><b>Kittichon Phi</b><br><small style="color:var(--text-muted)">kittichon.p@travizgo.com</small></td>
-                  <td><span class="badge badge-info">Administrator and other 1</span></td>
+                  <td><b>Nattaporn Rattanaporn</b><br><small style="color:var(--text-muted)">nattaporn.r@depa.or.th</small></td>
+                  <td><span class="badge badge-info">General Manager</span></td>
                   <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Watcharapong Srisuk</b><br><small style="color:var(--text-muted)">watcharapong.s@travizgo.com</small></td>
+                  <td><span class="badge badge-info">Test</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Ploypailin Thanakorn</b><br><small style="color:var(--text-muted)">ploypailin.t@depa.or.th</small></td>
+                  <td><span class="badge badge-info">Staff</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Anucha Chaiyasing</b><br><small style="color:var(--text-muted)">anucha.c@travizgo.com</small></td>
+                  <td><span class="badge badge-info">test redirect role list</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Kornkanok Boonmee</b><br><small style="color:var(--text-muted)">kornkanok.b@depa.or.th</small></td>
+                  <td><span class="badge badge-info">Staff</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Somchai Prasertkul (Merchant)</b><br><small style="color:var(--text-muted)">somchai.p@partner.thailandconnex.com</small></td>
+                  <td><span class="badge badge-warning">Staff</span></td>
+                  <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
                 </tr>
               </tbody>
             </table>
@@ -1912,7 +1940,7 @@
                   กำหนดสิทธิ์ระดับหน้าจอ Role-Based Access Control (RBAC) ตามมาตรฐาน ThailandCONNEX
                 </div>
               </div>
-              <button class="btn-action" onclick="showToast('เปิดแบบฟอร์มสร้างบทบาทใหม่', 'info')">+ Create Role</button>
+              <button class="btn-action" onclick="openModal('modal-new-role')">+ Create Role</button>
             </div>
 
             <!-- Sub Navigation Tabs for User Management -->
@@ -1939,17 +1967,27 @@
                 <tr>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
                   <td><b>Administrator</b></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-roles', 'บทบาท')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-roles')">🗑️</button></td>
                 </tr>
                 <tr>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
                   <td><b>Staff</b></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-roles', 'บทบาท')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-roles')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>Test</b></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-roles', 'บทบาท')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-roles')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td><b>test redirect role list</b></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-roles', 'บทบาท')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-roles')">🗑️</button></td>
                 </tr>
                 <tr>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
                   <td><b>General Manager</b></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-roles', 'บทบาท')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-roles')">🗑️</button></td>
                 </tr>
               </tbody>
             </table>
@@ -2048,14 +2086,18 @@
               <span>Manage Profile & Merchant Information (ข้อมูลนิติบุคคลและผู้ประกอบการ)</span>
               <button class="btn-action" onclick="saveProfile()">💾 บันทึกข้อมูล (Save Changes)</button>
             </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Company Name</label>
                 <input type="text" class="input-clean" value="บริษัท ใบหยกสกาย จำกัด" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Service / Activity Name</label>
-                <input type="text" class="input-clean" value="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" style="width:100%; margin-top:4px;">
+                <input type="text" class="input-clean" value="Baiyoke Sky Buffet & Observation Deck" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Service / Activity type</label>
+                <input type="text" class="input-clean" value="Food & Drinks (อาหารและเครื่องดื่ม)" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Country</label>
@@ -2070,16 +2112,48 @@
                 <input type="text" class="input-clean" value="เขตราชเทวี" style="width:100%; margin-top:4px;">
               </div>
               <div>
-                <label style="font-size:12px; font-weight:600; color:#475569;">Tax ID no.</label>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Sub-district (แขวง/ตำบล)</label>
+                <input type="text" class="input-clean" value="ถนนพญาไท" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Postcode (รหัสไปรษณีย์)</label>
+                <input type="text" class="input-clean" value="10400" style="width:100%; margin-top:4px;">
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label style="font-size:12px; font-weight:600; color:#475569;">Address (ที่อยู่จดทะเบียน)</label>
+                <input type="text" class="input-clean" value="222 ถนนราชปรารภ แขวงถนนพญาไท เขตราชเทวี กรุงเทพฯ 10400" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Tax ID no. (เลขประจำตัวผู้เสียภาษี)</label>
                 <input type="text" class="input-clean" value="0105536181307" style="width:100%; margin-top:4px;">
               </div>
               <div>
-                <label style="font-size:12px; font-weight:600; color:#475569;">Contact Person</label>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Website (เว็บไซต์อย่างเป็นทางการ)</label>
+                <input type="text" class="input-clean" value="https://www.baiyokeskyhotel.com" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Contact Person (ผู้ประสานงานหลัก)</label>
                 <input type="text" class="input-clean" value="Panop Api" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Position (ตำแหน่ง)</label>
+                <input type="text" class="input-clean" value="F&B Manager" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Contact Email</label>
                 <input type="text" class="input-clean" value="panop.api@travizgotech.com" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Contact no. (เบอร์โทรศัพท์)</label>
+                <input type="text" class="input-clean" value="+66 2 656 3000" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Bank Name (ธนาคารเพื่อรับเงินโอน)</label>
+                <input type="text" class="input-clean" value="ธนาคารกสิกรไทย (KBANK)" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Bank Account Number (เลขที่บัญชี)</label>
+                <input type="text" class="input-clean" value="045-2-89102-4" style="width:100%; margin-top:4px;">
               </div>
             </div>
           </div>
@@ -2118,7 +2192,8 @@
                     <th>Book before service</th>
                     <th>Enabled</th>
                     <th>Status</th>
-                    <th style="text-align: right;">Action</th>
+                    <th style="text-align: right;">Price</th>
+                    <th style="text-align: center; width: 110px;">Action</th>
                   </tr>
                 </thead>
                 <tbody id="tbody-products">
@@ -2147,7 +2222,7 @@
                 <button class="btn-action" onclick="filterTable('search-contracts', 'table-contracts', 'contract-count')">Search</button>
               </div>
               <div style="display:flex; gap:10px; align-items:center;">
-                <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="contract-count">4</b></span>
+                <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="contract-count">10</b></span>
                 <button class="btn-secondary" onclick="exportTableToCSV('table-contracts', 'ThailandConnex_Contracts.csv')">Export CSV 📥</button>
               </div>
             </div>
@@ -2197,12 +2272,72 @@
                 </tr>
                 <tr>
                   <td>4.</td>
-                  <td><b>Iowa Partner Agreement (6)</b></td>
+                  <td><b>Merchant Service Framework (4)</b></td>
                   <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
                   <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>20/10/2022</td>
                   <td style="text-align:center;">-</td>
-                  <td>13/09/2022</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>5.</td>
+                  <td><b>OTA Partner Agreement (3)</b></td>
                   <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>05/11/2022</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>6.</td>
+                  <td><b>Payment Gateway Consent (6)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>18/11/2022</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>7.</td>
+                  <td><b>B2B Travel Channel Term (7)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>02/12/2022</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>8.</td>
+                  <td><b>Data Processing Agreement (DPA) (8)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>15/12/2022</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>9.</td>
+                  <td><b>Digital Token Reward Rules (9)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>08/01/2023</td>
+                  <td style="text-align:center;">-</td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+                </tr>
+                <tr>
+                  <td>10.</td>
+                  <td><b>Nigedo (10)</b></td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+                  <td>28/01/2023</td>
+                  <td style="text-align:center;">-</td>
                   <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
                 </tr>
               </tbody>
@@ -2226,12 +2361,16 @@
                 <input type="number" id="bulk-allotment-qty" value="30" class="input-clean" style="width:70px; text-align:center;">
                 <button class="btn-action" style="font-size:11px;" onclick="applyBulkAllotment()">บันทึกทุกรายการ (Apply)</button>
               </div>
-              <button class="btn-secondary" onclick="exportTableToCSV('table-setting-allotment', 'ThailandConnex_Setting_Allotment.csv')">Export CSV 📥</button>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <input type="text" id="search-setting-allotment" class="input-clean" placeholder="🔍 ค้นหาสินค้า หรือรอบเวลา..." style="width:200px;" onkeyup="filterTable('search-setting-allotment', 'table-setting-allotment')">
+                <button class="btn-secondary" onclick="exportTableToCSV('table-setting-allotment', 'ThailandConnex_Setting_Allotment.csv')">Export CSV 📥</button>
+              </div>
             </div>
             <table class="clean-table" id="table-setting-allotment">
               <thead>
                 <tr>
                   <th>Product</th>
+                  <th>Show time</th>
                   <th>No. of allotment</th>
                   <th>Book before time</th>
                   <th>Set Period</th>
@@ -2242,35 +2381,57 @@
               <tbody>
                 <tr>
                   <td><b>บัตรเข้าชมวิว + บุฟเฟ่ต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony</b></td>
+                  <td><b>17:00</b></td>
                   <td><b>25</b></td>
                   <td>13:00</td>
                   <td>-</td>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
                 </tr>
                 <tr>
                   <td><b>บัตรเข้าชมวิว + บุฟเฟต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony</b></td>
+                  <td><b>19:00</b></td>
                   <td><b>15</b></td>
                   <td>12:00</td>
                   <td>-</td>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
                 </tr>
                 <tr>
                   <td><b>SLBK Aquarium Admission Only</b></td>
+                  <td><b>10:00 - 19:00</b></td>
                   <td><b>50</b></td>
                   <td>15:00</td>
                   <td>2023-02-01 - 2023-02-28</td>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
                 </tr>
                 <tr>
-                  <td><b>อาหารค่ำมื้อพิเศษพร้อมชมวิวมุมสูง ตึกใบหยกสกาย</b></td>
-                  <td><b>50</b></td>
-                  <td>15:00</td>
-                  <td>2023-01-01 - 2023-02-21</td>
+                  <td><b>SLBK Aquarium Admission + 4D Cinema</b></td>
+                  <td><b>11:00 - 18:00</b></td>
+                  <td><b>30</b></td>
+                  <td>12:00</td>
+                  <td>2023-02-01 - 2023-02-28</td>
                   <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-                  <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><b>Seat Type - Normal (Siam Niramit Phuket)</b></td>
+                  <td><b>20:00</b></td>
+                  <td><b>100</b></td>
+                  <td>17:00</td>
+                  <td>-</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td><b>Baiyoke Sky dinner buffet floor 81 (Outdoor Sky Box)</b></td>
+                  <td><b>18:30</b></td>
+                  <td><b>50</b></td>
+                  <td>14:00</td>
+                  <td>-</td>
+                  <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+                  <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
                 </tr>
               </tbody>
             </table>
@@ -2556,7 +2717,9 @@
                     <th>Agent</th>
                     <th>Total amount</th>
                     <th>Confirm</th>
-                    <th style="text-align: right;">Detail</th>
+                    <th>Cancelled</th>
+                    <th style="text-align: center;">Detail</th>
+                    <th style="text-align: right; width: 100px;">Action</th>
                   </tr>
                 </thead>
                 <tbody id="tbody-bookings">
@@ -2907,6 +3070,8 @@
                     <td>1.52%</td>
                     <td style="text-align: right;"><span class="badge badge-success">เชื่อมโยงระบบสมบูรณ์ 100%</span></td>
                   </tr>
+                </tbody>
+                <tfoot>
                   <tr style="background:#f1f5f9; font-weight:800;">
                     <td>-</td>
                     <td><b>รวมทั้งสิ้น (Total Tourism Ecosystem)</b></td>
@@ -2914,7 +3079,7 @@
                     <td><b>100.00%</b></td>
                     <td style="text-align: right; color:#10b981;"><b>บรรลุเป้าหมายตามเกณฑ์ (108.66%)</b></td>
                   </tr>
-                </tbody>
+                </tfoot>
               </table>
               <div class="table-pagination-footer" id="databank-pagination-container"></div>
             </div>
@@ -3068,6 +3233,27 @@
         <!-- VIEW 17: Log > Blockchain & Audit (หน้า 148 / PDF 150) -->
         <!-- ======================================================== -->
         <div class="view-section" id="view-token-log">
+
+          <!-- Token Summary Card (หน้า 148 / PDF) -->
+          <div class="table-card" style="margin-bottom: 20px; background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color:#fff; border:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:24px;">🪙</span>
+                  <span style="font-size:18px; font-weight:800; letter-spacing:0.3px;">ThailandConnexToken (TCN)</span>
+                  <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; font-size:11px;">ERC-20</span>
+                </div>
+                <div style="font-size:12.5px; opacity:0.85; margin-top:4px; font-family:monospace;">
+                  Contract: 0x5E2D25aca0abA3ad65B83A6c1620f0DAB9733760 &nbsp;|&nbsp; 18 Decimals &nbsp;|&nbsp; 3 Addresses
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px; opacity:0.8; text-transform:uppercase; letter-spacing:0.5px;">Total Supply (จำนวนโทเคนรวมในระบบ)</div>
+                <div style="font-size:24px; font-weight:800; color:#38bdf8;">561,380.00 TCN</div>
+              </div>
+            </div>
+          </div>
+
           <div class="table-card">
             <div class="table-card-head">
               <span>Token Transaction & Audit Log (GBEX Blockchain)</span>
@@ -3183,11 +3369,11 @@
         <div style="background:#f8fafc; padding:14px; border-radius:8px; margin-bottom:16px;">
           <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
             <span>Booking no. <b id="detail-bno">215983224211</b></span>
-            <span style="color:var(--text-muted)">Service date: <b>Thu 23, Feb 2023</b></span>
+            <span style="color:var(--text-muted)">Service date: <b id="detail-date">Thu 23, Feb 2023</b></span>
           </div>
           <div style="font-size:12.5px; color:#475569;">
-            Service provider: <b>Sealife Bangkok</b><br>
-            Package: <b>SLBK Aquarium Admission Only</b>
+            Service provider: <b id="detail-provider">Sealife Bangkok</b><br>
+            Package: <b id="detail-package">SLBK Aquarium Admission Only</b>
           </div>
         </div>
 
@@ -3203,20 +3389,20 @@
               <th>Total Profit</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="detail-breakdown-tbody">
             <tr>
               <td>ADULT</td>
-              <td>400</td>
-              <td>430</td>
-              <td>30</td>
-              <td>1</td>
-              <td><b>430</b></td>
-              <td><b style="color:#10b981;">30</b></td>
+              <td id="detail-net">400</td>
+              <td id="detail-markup">430</td>
+              <td id="detail-profit">30</td>
+              <td id="detail-pax">1</td>
+              <td><b id="detail-row-total">430</b></td>
+              <td><b style="color:#10b981;" id="detail-row-profit">30</b></td>
             </tr>
             <tr style="font-weight:700; background:#f8fafc;">
               <td colspan="5">Grand Total</td>
-              <td style="color:var(--primary-blue)">430 THB</td>
-              <td style="color:#10b981;">30 THB</td>
+              <td style="color:var(--primary-blue)" id="detail-grand-total">430 THB</td>
+              <td style="color:#10b981;" id="detail-grand-profit">30 THB</td>
             </tr>
           </tbody>
         </table>
@@ -3227,6 +3413,45 @@
           <button class="btn-secondary" style="color:#ef4444;" onclick="refundBookingAction()">❌ ขอคืนเงิน / Refund</button>
         </div>
         <button class="btn-action" onclick="closeModal('modal-booking-detail')">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Role (หน้า 35 / PDF 37) -->
+  <div class="modal-overlay" id="modal-new-role" onclick="if(event.target===this) closeModal('modal-new-role')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>สร้างบทบาทและกำหนดสิทธิ์ใหม่ (Create Role & Permissions)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-role')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">ชื่อบทบาท / Role Name *</label>
+          <input type="text" id="new-role-name" class="input-clean" placeholder="เช่น Operations Supervisor" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">คำอธิบายบทบาท / Description</label>
+          <input type="text" id="new-role-desc" class="input-clean" placeholder="เช่น ผู้ดูแลฝ่ายปฏิบัติการและจัดสรรโควตาสินค้า" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600; margin-bottom:6px; display:block;">เลือกสิทธิ์การเข้าถึงหน้าจอ (Screen Permissions):</label>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; background:#f8fafc; padding:12px; border-radius:8px; font-size:12px;">
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> ▦ Performance Dashboard</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> 👥 User Management</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> 📝 Manage Products</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> ● Manage Allotment</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> ● Manage Sale Channel</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> ▤ Manage Booking</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> ⚡ API Management</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> 🗄️ Tourism Data Bank</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox"> 📄 Blockchain Token Log</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> 📦 Thailand Packages</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-role')">Cancel</button>
+        <button class="btn-action" onclick="saveNewRole()">บันทึกบทบาท (Save Role)</button>
       </div>
     </div>
   </div>
@@ -3399,7 +3624,7 @@
     </div>
   </div>
 
-  <!-- Modal New Contract -->
+  <!-- Modal New Contract (หน้า 37 / PDF 39) -->
   <div class="modal-overlay" id="modal-new-contract" onclick="if(event.target===this) closeModal('modal-new-contract')">
     <div class="modal-card">
       <div class="modal-head">
@@ -3412,12 +3637,28 @@
           <input type="text" id="new-contract-name" class="input-clean" placeholder="เช่น Phuket Partner Agreement 2023" style="width:100%; margin-top:4px;">
         </div>
         <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">คู่สัญญา / Partner Name *</label>
-          <input type="text" id="new-contract-partner" class="input-clean" placeholder="เช่น Travizgo Tech Co., Ltd." style="width:100%; margin-top:4px;">
+          <label style="font-size:12px; font-weight:600;">อัปโหลดไฟล์สัญญา (PDF / DOCX) *</label>
+          <input type="file" id="new-contract-file" class="input-clean" style="width:100%; margin-top:4px;">
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">วันที่มีผลบังคับใช้ *</label>
-          <input type="date" id="new-contract-date" class="input-clean" value="2023-03-01" style="width:100%; margin-top:4px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Due date before stop operate (days)</label>
+            <input type="number" id="new-contract-due" class="input-clean" value="30" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Day after assigned (days)</label>
+            <input type="number" id="new-contract-days" class="input-clean" value="15" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px; background:#f8fafc; padding:12px; border-radius:8px;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+            <input type="checkbox" id="new-contract-required" checked>
+            <span><b>Is required</b> (ต้องลงนามก่อนเปิดใช้งานระบบ)</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+            <input type="checkbox" id="new-contract-new-prop" checked>
+            <span><b>Is assigned to new property</b> (ผูกสัญญากับที่พัก/บริการใหม่ทุกแห่งโดยอัตโนมัติ)</span>
+          </label>
         </div>
       </div>
       <div class="modal-foot">
@@ -4056,15 +4297,24 @@
       const bnoEl = document.getElementById('detail-bno');
       if (bnoEl) bnoEl.textContent = bno;
 
+      let rawAmount = 430;
+      let pax = 1;
+
       if (typeof TCStore !== 'undefined') {
         const r = TCStore.getState().reservations.find(x => String(x.id) === String(bno));
         if (r) {
           agent = r.agent || agent;
-          amount = r.amount + ' THB';
+          rawAmount = parseFloat(r.amount) || 430;
+          amount = rawAmount.toLocaleString('th-TH') + ' THB';
           date = r.bookedOn || date;
           supplier = r.property || supplier;
           pkg = r.serviceName || pkg;
+          pax = r.pax || 1;
+        } else {
+          rawAmount = parseFloat(String(amount).replace(/[^0-9.]/g, '')) || 430;
         }
+      } else {
+        rawAmount = parseFloat(String(amount).replace(/[^0-9.]/g, '')) || 430;
       }
 
       const dateEl = document.getElementById('detail-date');
@@ -4073,6 +4323,29 @@
       if (provEl) provEl.textContent = supplier;
       const pkgEl = document.getElementById('detail-package');
       if (pkgEl) pkgEl.textContent = pkg;
+
+      // Dynamic calculation for Net, Markup, Profit
+      const profitPerPax = Math.max(20, Math.round((rawAmount / pax) * 0.07));
+      const markupPerPax = Math.round(rawAmount / pax);
+      const netPerPax = Math.max(0, markupPerPax - profitPerPax);
+      const totalProfit = profitPerPax * pax;
+
+      const netEl = document.getElementById('detail-net');
+      if (netEl) netEl.textContent = netPerPax.toLocaleString('th-TH');
+      const markupEl = document.getElementById('detail-markup');
+      if (markupEl) markupEl.textContent = markupPerPax.toLocaleString('th-TH');
+      const profitEl = document.getElementById('detail-profit');
+      if (profitEl) profitEl.textContent = profitPerPax.toLocaleString('th-TH');
+      const paxEl = document.getElementById('detail-pax');
+      if (paxEl) paxEl.textContent = pax;
+      const rowTotEl = document.getElementById('detail-row-total');
+      if (rowTotEl) rowTotEl.textContent = rawAmount.toLocaleString('th-TH');
+      const rowProfEl = document.getElementById('detail-row-profit');
+      if (rowProfEl) rowProfEl.textContent = totalProfit.toLocaleString('th-TH');
+      const grandTotEl = document.getElementById('detail-grand-total');
+      if (grandTotEl) grandTotEl.textContent = rawAmount.toLocaleString('th-TH') + ' THB';
+      const grandProfEl = document.getElementById('detail-grand-profit');
+      if (grandProfEl) grandProfEl.textContent = totalProfit.toLocaleString('th-TH') + ' THB';
 
       openModal('modal-booking-detail');
     }
@@ -4599,21 +4872,20 @@
       const lname = document.getElementById('new-admin-lname') ? document.getElementById('new-admin-lname').value : 'Admin';
       const email = document.getElementById('new-admin-email') ? document.getElementById('new-admin-email').value : 'admin@depa.or.th';
 
-      const table = document.getElementById('table-admin-users');
-      if (table) {
-        const tbody = table.querySelector('tbody');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><label class="switch-ui"><input type="checkbox" checked onchange="toggleAdminStatus(this, '${fname} ${lname}')"><span class="switch-slider"></span></label></td>
-          <td><b>${fname} ${lname}</b><br><small style="color:var(--text-muted)">${email}</small></td>
-          <td><span class="badge badge-info">Administrator</span></td>
-          <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
-          <td style="text-align: right;"><button class="btn-secondary" onclick="showToast('แก้ไขข้อมูล ${fname}')">✏️</button></td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><label class="switch-ui"><input type="checkbox" checked onchange="toggleAdminStatus(this, '${fname} ${lname}')"><span class="switch-slider"></span></label></td>
+        <td><b>${fname} ${lname}</b><br><small style="color:var(--text-muted)">${email}</small></td>
+        <td><span class="badge badge-info">Administrator</span></td>
+        <td><span style="color:#10b981; font-weight:700;">✓ Verified</span></td>
+        <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-users', 'ผู้ดูแล')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-users')">🗑️</button></td>
+      `;
 
-        const countEl = document.getElementById('admin-result-count');
-        if (countEl) countEl.textContent = parseInt(countEl.textContent || '0') + 1;
+      addRowToDomTable('table-admin-users', tr);
+
+      const count = document.getElementById('admin-result-count');
+      if (count && typeof domTableState !== 'undefined' && domTableState['table-admin-users']) {
+        count.textContent = domTableState['table-admin-users'].allRows.length;
       }
 
       closeModal('modal-new-admin');
@@ -4624,23 +4896,29 @@
       const name = document.getElementById('new-act-fullname').value || 'New User';
       const email = document.getElementById('new-act-email').value || 'user@example.com';
 
-      const tbody = document.getElementById('tbody-activity-users');
-      if (tbody) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><b>${name}</b></td>
-          <td>${email}</td>
-          <td><span style="font-size:18px;">👤</span></td>
-          <td><label class="switch-ui"><input type="checkbox" onchange="toggleUserStatus(this, '${name}')"><span class="switch-slider"></span></label></td>
-          <td style="text-align: right;">
-            <button class="btn-secondary" onclick="editActivityUser('${name}', '${email}')">✏️ แก้ไข</button>
-            <button class="btn-secondary" style="color:#ef4444;" onclick="deleteTableRow(this, '${name}')">🗑️</button>
-          </td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
+      const newUser = {
+        id: 'USR-' + Math.floor(1000 + Math.random() * 9000),
+        name: name,
+        email: email,
+        phone: '08' + Math.floor(10000000 + Math.random() * 90000000),
+        tier: 'Standard Member',
+        walletAddress: '0x' + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+        tokenBalance: 50.00,
+        status: 'Active'
+      };
+
+      if (!actUserMasterList) actUserMasterList = [];
+      actUserMasterList.unshift(newUser);
+
+      if (typeof TCStore !== 'undefined' && TCStore.getState().users) {
+        TCStore.getState().users.unshift(newUser);
       }
+
+      actUserCurrentPage = 1;
+      renderActivityUsersPagination();
+
       closeModal('modal-new-activity-user');
-      showToast(`เพิ่มผู้ใช้งาน ${name} สำเร็จ!`, 'success');
+      showToast(`เพิ่มผู้ใช้งาน ${name} สำเร็จ! (แสดงในตารางทันที)`, 'success');
     }
 
 
@@ -4706,7 +4984,11 @@
     function resetActivityUsers() {
       const input = document.getElementById('search-activity-users');
       if (input) input.value = '';
-      filterTable('search-activity-users', 'table-activity-users');
+      if (typeof handleActUserSearch === 'function') {
+        handleActUserSearch('');
+      } else {
+        filterTable('search-activity-users', 'table-activity-users');
+      }
       showToast('รีเซ็ตการค้นหาเรียบร้อย', 'info');
     }
 
@@ -4744,30 +5026,65 @@
 
     function saveNewProduct() {
       const name = document.getElementById('new-prod-name').value || 'แพ็กเกจนำเที่ยวใหม่';
-      const code = document.getElementById('new-prod-code').value || 'ACT008888';
+      const code = document.getElementById('new-prod-code').value || ('ACT00' + Math.floor(1000 + Math.random() * 9000));
       const time = document.getElementById('new-prod-time').value || '24 hours';
 
-      const table = document.getElementById('table-products');
-      if (table) {
-        const tbody = table.querySelector('tbody');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color:#94a3b8; cursor:grab;">☰</td>
-          <td><b>${name}</b></td>
-          <td><span class="badge badge-info">${code}</span></td>
-          <td>${time}</td>
-          <td><label class="switch-ui"><input type="checkbox" checked onchange="toggleProductEnabled(this, '${code}')"><span class="switch-slider"></span></label></td>
-          <td><span class="badge badge-success">Approved</span></td>
-          <td style="text-align: right;"><button class="btn-secondary" onclick="showToast('แก้ไข ${code}')">✏️</button></td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
+      const newProd = {
+        id: 'pkg-custom-' + Date.now(),
+        title: name,
+        provider: 'ผู้ประกอบการในระบบ (Verified)',
+        location: 'กรุงเทพมหานคร',
+        category: 'attraction',
+        categoryName: 'กิจกรรมและสถานที่ท่องเที่ยว',
+        unit: time.includes('24') ? 'คืน' : 'ครั้ง',
+        price: 1500,
+        status: 'Approved'
+      };
 
-        const count = document.getElementById('product-count');
-        if (count) count.textContent = parseInt(count.textContent || '0') + 1;
+      if (!prodMasterList) prodMasterList = [];
+      prodMasterList.unshift(newProd);
+
+      if (typeof TCStore !== 'undefined' && TCStore.getState().services) {
+        TCStore.getState().services.unshift(newProd);
       }
 
+      prodCurrentPage = 1;
+      renderProductsTableWithPagination();
+      renderPackagesTableWithPagination();
+
       closeModal('modal-new-product');
-      showToast(`เพิ่มสินค้า ${name} สำเร็จ!`, 'success');
+      showToast(`เพิ่มสินค้า ${name} สำเร็จ! (เพิ่มเข้าสู่ระบบเรียบร้อย)`, 'success');
+    }
+
+    function editProductRow(idx) {
+      if (!prodMasterList || !prodMasterList[idx]) return;
+      const p = prodMasterList[idx];
+      const newTitle = prompt('แก้ไขชื่อสินค้า/บริการ:', p.title);
+      if (newTitle && newTitle.trim()) {
+        p.title = newTitle.trim();
+        const newPrice = prompt('แก้ไขราคาขาย (บาท):', p.price);
+        if (newPrice && !isNaN(parseFloat(newPrice))) {
+          p.price = parseFloat(newPrice);
+        }
+        renderProductsTableWithPagination();
+        renderPackagesTableWithPagination();
+        showToast('แก้ไขข้อมูลสินค้าเรียบร้อย', 'success');
+      }
+    }
+
+    function deleteProductRow(idx) {
+      if (!prodMasterList || !prodMasterList[idx]) return;
+      const p = prodMasterList[idx];
+      if (confirm(`คุณต้องการลบสินค้า "${p.title}" ใช่หรือไม่?`)) {
+        prodMasterList.splice(idx, 1);
+        if (typeof TCStore !== 'undefined' && TCStore.getState().services) {
+          const sIdx = TCStore.getState().services.findIndex(s => s.id === p.id);
+          if (sIdx !== -1) TCStore.getState().services.splice(sIdx, 1);
+        }
+        renderProductsTableWithPagination();
+        renderPackagesTableWithPagination();
+        showToast('ลบสินค้าเรียบร้อยแล้ว', 'success');
+      }
     }
 
     function filterProductCategory(cat) {
@@ -4808,26 +5125,30 @@
 
     function saveNewContract() {
       const name = document.getElementById('new-contract-name').value || 'New Agreement';
-      const date = document.getElementById('new-contract-date').value || '2023-03-01';
+      const isReq = document.getElementById('new-contract-required') ? document.getElementById('new-contract-required').checked : true;
 
-      const table = document.getElementById('table-contracts');
-      if (table) {
-        const tbody = table.querySelector('tbody');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>5.</td>
-          <td><b>${name}</b></td>
-          <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
-          <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
-          <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
-          <td>${date}</td>
-          <td style="text-align:center;">-</td>
-          <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
+      const count = (typeof domTableState !== 'undefined' && domTableState['table-contracts']) ? (domTableState['table-contracts'].allRows.length + 1) : 11;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${count}.</td>
+        <td><b>${name} (${count})</b></td>
+        <td style="text-align:center; color:#10b981; font-weight:700;">${isReq ? '✓' : '-'}</td>
+        <td style="text-align:center; color:#10b981; font-weight:700;">✓</td>
+        <td style="text-align:center; color:#10b981; font-weight:700;">${isReq ? '✓' : '-'}</td>
+        <td>2023-03-01</td>
+        <td style="text-align:center;">-</td>
+        <td style="text-align: right;"><button class="btn-secondary" onclick="viewContractModal(this)">📄 ดูสัญญา</button></td>
+      `;
+
+      addRowToDomTable('table-contracts', tr, false);
+
+      const cCount = document.getElementById('contract-count');
+      if (cCount && typeof domTableState !== 'undefined' && domTableState['table-contracts']) {
+        cCount.textContent = domTableState['table-contracts'].allRows.length;
       }
+
       closeModal('modal-new-contract');
-      showToast(`บันทึกสัญญา ${name} สำเร็จ!`, 'success');
+      showToast(`สร้างสัญญา ${name} สำเร็จ!`, 'success');
     }
 
     function applyBulkAllotment() {
@@ -4843,22 +5164,20 @@
     function saveNewAllotment() {
       const prod = document.getElementById('new-allot-prod').value || 'บัตรกิจกรรมใหม่';
       const qty = document.getElementById('new-allot-qty').value || '30';
-      const time = document.getElementById('new-allot-time').value || '14:00';
+      const time = document.getElementById('new-allot-time') ? document.getElementById('new-allot-time').value : '14:00';
 
-      const table = document.getElementById('table-setting-allotment');
-      if (table) {
-        const tbody = table.querySelector('tbody');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><b>${prod}</b></td>
-          <td><b>${qty}</b></td>
-          <td>${time}</td>
-          <td>-</td>
-          <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
-          <td style="text-align: right;"><button class="btn-secondary">✏️</button></td>
-        `;
-        tbody.insertBefore(tr, tbody.firstChild);
-      }
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><b>${prod}</b></td>
+        <td><b>${time}</b></td>
+        <td><b>${qty}</b></td>
+        <td>12:00</td>
+        <td>-</td>
+        <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+        <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
+      `;
+
+      addRowToDomTable('table-setting-allotment', tr);
       closeModal('modal-new-allotment');
       showToast(`บันทึกโควตา ${prod} จำนวน ${qty} สิทธิ์สำเร็จ!`, 'success');
     }
@@ -5664,6 +5983,117 @@
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
+
+    // ========================================================
+    // STATE-PRESERVING DOM TABLE CRUD HELPERS
+    // ========================================================
+    function addRowToDomTable(tableId, trElement, prepend = true) {
+      if (typeof domTableState !== 'undefined' && domTableState[tableId]) {
+        if (prepend) {
+          domTableState[tableId].allRows.unshift(trElement);
+        } else {
+          domTableState[tableId].allRows.push(trElement);
+        }
+        domTableState[tableId].currentPage = 1;
+        renderDomTablePagination(tableId);
+      } else {
+        const table = document.getElementById(tableId);
+        if (table) {
+          const tbody = table.querySelector('tbody');
+          if (tbody) {
+            if (prepend) tbody.insertBefore(trElement, tbody.firstChild);
+            else tbody.appendChild(trElement);
+          }
+        }
+      }
+    }
+
+    function deleteDomTableRow(btn, tableId) {
+      if (!confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?')) return;
+      const tr = btn.closest('tr');
+      if (!tr) return;
+      if (typeof domTableState !== 'undefined' && domTableState[tableId]) {
+        const rowText = tr.innerText.trim();
+        const idx = domTableState[tableId].allRows.findIndex(r => r.innerText.trim() === rowText);
+        if (idx !== -1) {
+          domTableState[tableId].allRows.splice(idx, 1);
+          renderDomTablePagination(tableId);
+          showToast('ลบรายการสำเร็จ', 'success');
+          return;
+        }
+      }
+      tr.remove();
+      showToast('ลบรายการสำเร็จ', 'success');
+    }
+
+    function editDomTableRow(btn, tableId, title = 'รายการ') {
+      const tr = btn.closest('tr');
+      if (!tr) return;
+      const targetTd = tr.querySelector('td:nth-child(2)') || tr.querySelector('td:nth-child(1)');
+      const currentVal = targetTd ? (targetTd.querySelector('b') ? targetTd.querySelector('b').innerText : targetTd.innerText.split('\n')[0]) : '';
+      const newVal = prompt(`แก้ไขข้อมูล (${title}):`, currentVal);
+      if (newVal !== null && newVal.trim() !== '') {
+        if (targetTd.querySelector('b')) {
+          targetTd.querySelector('b').textContent = newVal.trim();
+        } else {
+          targetTd.textContent = newVal.trim();
+        }
+        if (typeof domTableState !== 'undefined' && domTableState[tableId]) {
+          const idx = domTableState[tableId].allRows.findIndex(r => r === tr || r.innerText.includes(currentVal));
+          if (idx !== -1) {
+            const rowTargetTd = domTableState[tableId].allRows[idx].querySelector('td:nth-child(2)') || domTableState[tableId].allRows[idx].querySelector('td:nth-child(1)');
+            if (rowTargetTd && rowTargetTd.querySelector('b')) rowTargetTd.querySelector('b').textContent = newVal.trim();
+          }
+          renderDomTablePagination(tableId);
+        }
+        showToast('บันทึกการแก้ไขเรียบร้อย', 'success');
+      }
+    }
+
+    function saveNewRole() {
+      const name = document.getElementById('new-role-name').value || 'Custom Role';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+        <td><b>${name}</b></td>
+        <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-roles', 'บทบาท')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-roles')">🗑️</button></td>
+      `;
+      addRowToDomTable('table-admin-roles', tr);
+      closeModal('modal-new-role');
+      showToast(`สร้างบทบาท ${name} สำเร็จ!`, 'success');
+    }
+
+    function editBookingRow(id) {
+      if (typeof TCStore === 'undefined') return;
+      const r = TCStore.getState().reservations.find(x => String(x.id) === String(id));
+      if (!r) return;
+      const newAmt = prompt(`แก้ไขยอดชำระสำหรับการจอง #${id} (บาท):`, r.amount);
+      if (newAmt && !isNaN(parseFloat(newAmt))) {
+        r.amount = parseFloat(newAmt);
+        renderBookingsTableWithPagination();
+        if (typeof renderAdminAnalyticsDashboard === 'function') {
+          renderAdminAnalyticsDashboard(TCStore.getState().reservations);
+        }
+        showToast('แก้ไขข้อมูลการจองสำเร็จ', 'success');
+      }
+    }
+
+    function deleteBookingRow(id) {
+      if (!confirm(`คุณต้องการลบรายการจอง #${id} ใช่หรือไม่?`)) return;
+      if (typeof TCStore !== 'undefined') {
+        const list = TCStore.getState().reservations;
+        const idx = list.findIndex(x => String(x.id) === String(id));
+        if (idx !== -1) {
+          list.splice(idx, 1);
+          renderBookingsTableWithPagination();
+          if (typeof renderAdminAnalyticsDashboard === 'function') {
+            renderAdminAnalyticsDashboard(list);
+          }
+          showToast(`ลบรายการจอง #${id} เรียบร้อยแล้ว`, 'success');
+        }
+      }
+    }
+
     function initAllDomTablesPagination() {
       const domTables = [
         { tableId: 'table-admin-users', containerId: 'admin-users-pagination-container' },
@@ -5750,19 +6180,28 @@
       const tbody = document.getElementById('tbody-products') || document.querySelector('#table-products tbody');
       if (tbody) {
         if (currentSlice.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b;">ไม่พบข้อมูลสินค้าที่ตรงกับเงื่อนไข</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:#64748b;">ไม่พบข้อมูลสินค้าที่ตรงกับเงื่อนไข</td></tr>`;
         } else {
-          tbody.innerHTML = currentSlice.map((s, idx) => `
+          tbody.innerHTML = currentSlice.map((s, idx) => {
+            const rowIdx = startIdx + idx;
+            return `
             <tr>
               <td style="color:#94a3b8; cursor:grab;">☰</td>
               <td><b>${s.title}</b><br><small style="color:var(--text-muted)">โดย ${s.provider} (${s.location})</small></td>
-              <td><span class="badge badge-info">ACT00${1000 + (startIdx + idx) + 1}</span></td>
+              <td><span class="badge badge-info">ACT00${1000 + rowIdx + 1}</span></td>
               <td>${s.unit === 'คืน' ? '24 hours' : 'Same day'}</td>
-              <td><label class="switch-ui"><input type="checkbox" checked ${isAuditor ? 'disabled' : ''}><span class="switch-slider"></span></label></td>
+              <td><label class="switch-ui"><input type="checkbox" checked ${isAuditor ? 'disabled' : ''} onchange="toggleProductEnabled(this, 'ACT00${1000 + rowIdx + 1}')"><span class="switch-slider"></span></label></td>
               <td><span class="badge badge-success">${isAuditor ? 'Verified' : 'Approved'}</span></td>
               <td style="text-align: right;"><b style="color:var(--primary-navy)">฿${Number(s.price).toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</b></td>
+              <td style="text-align: center;">
+                <div style="display:inline-flex; gap:6px; justify-content:center;">
+                  <button class="btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="editProductRow(${rowIdx})" title="แก้ไขสินค้า">✏️</button>
+                  <button class="btn-secondary" style="padding:4px 8px; font-size:12px; color:#ef4444;" onclick="deleteProductRow(${rowIdx})" title="ลบสินค้า">🗑️</button>
+                </div>
+              </td>
             </tr>
-          `).join('');
+          `;
+          }).join('');
         }
       }
 
@@ -5866,7 +6305,7 @@
       const tbody = document.getElementById('tbody-bookings') || document.querySelector('#table-bookings tbody');
       if (tbody) {
         if (currentSlice.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#64748b;">ไม่พบข้อมูลการจอง</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:#64748b;">ไม่พบข้อมูลการจอง</td></tr>`;
         } else {
           tbody.innerHTML = currentSlice.map(r => `
             <tr>
@@ -5881,8 +6320,17 @@
                   <span class="switch-slider"></span>
                 </label>
               </td>
-              <td style="text-align: right;">
+              <td>
+                ${r.status === 'Cancelled' ? '<span class="badge badge-danger">Cancelled</span>' : '<span style="color:#94a3b8;">0</span>'}
+              </td>
+              <td style="text-align: center;">
                 <button class="btn-secondary" onclick="openBookingDetail('${r.id}', '${r.agent || 'User'}', '${r.amount} THB', '${r.bookedOn}', '${r.property}', '${r.serviceName}')">${isAuditor ? 'Audit 👁️' : 'View 👁️'}</button>
+              </td>
+              <td style="text-align: right;">
+                <div style="display:inline-flex; gap:6px;">
+                  <button class="btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="editBookingRow('${r.id}')" title="แก้ไขการจอง">✏️</button>
+                  <button class="btn-secondary" style="padding:4px 8px; font-size:12px; color:#ef4444;" onclick="deleteBookingRow('${r.id}')" title="ลบการจอง">🗑️</button>
+                </div>
               </td>
             </tr>
           `).join('');

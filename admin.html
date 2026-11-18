@@ -1317,6 +1317,543 @@
       }
     }
 
+
+    /* ===================================================================== */
+    /* HUMAN-CRAFTED EDITORIAL & ENTERPRISE DESIGN SYSTEM OVERRIDES          */
+    /* ===================================================================== */
+    :root, [data-theme="clean-ota"] {
+      --navy: #0f294d;
+      --navy-dark: #091931;
+      --blue: #1d4ed8;
+      --blue-light: #eff6ff;
+      --teal: #0f766e;
+      --teal-light: #f0fdfa;
+      --orange: #c2410c;
+      --orange-light: #fff7ed;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --wash: #f8fafc;
+      --primary-navy: #0f294d;
+      --primary-blue: #1d4ed8;
+      --primary-orange: #c2410c;
+      --bg-wash: #f8fafc;
+      --border-line: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --radius: 10px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.1);
+    }
+
+    [data-theme="boutique"] {
+      --navy: #11393b;
+      --navy-dark: #0a2526;
+      --blue: #0f766e;
+      --blue-light: #f0fdfa;
+      --teal: #115e59;
+      --teal-light: #ccfbf1;
+      --orange: #b45309;
+      --orange-light: #fef3c7;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e7e5e4;
+      --wash: #faf8f5;
+      --primary-navy: #11393b;
+      --primary-blue: #0f766e;
+      --primary-orange: #b45309;
+      --bg-wash: #faf8f5;
+      --border-line: #e7e5e4;
+      --text-main: #1c1917;
+      --text-muted: #57534e;
+    }
+
+    [data-theme="minimal-slate"] {
+      --navy: #18181b;
+      --navy-dark: #09090b;
+      --blue: #2563eb;
+      --blue-light: #f4f4f5;
+      --teal: #3f3f46;
+      --teal-light: #f4f4f5;
+      --orange: #18181b;
+      --orange-light: #f4f4f5;
+      --ink: #09090b;
+      --muted: #71717a;
+      --line: #e4e4e7;
+      --wash: #fafafa;
+      --primary-navy: #18181b;
+      --primary-blue: #2563eb;
+      --primary-orange: #18181b;
+      --bg-wash: #fafafa;
+      --border-line: #e4e4e7;
+      --text-main: #09090b;
+      --text-muted: #71717a;
+    }
+
+    /* Flat, disciplined enterprise surfaces (Remove flashy AI gradients) */
+    .user-hero {
+      background: var(--navy) !important;
+      border-radius: 12px !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .user-hero::before, .user-hero::after {
+      display: none !important;
+    }
+    .hero-tag {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      color: #f8fafc !important;
+      border-radius: 6px !important;
+      letter-spacing: 0.3px !important;
+    }
+    .stat-box {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 8px !important;
+    }
+    .stat-val {
+      color: #ffffff !important;
+    }
+    .btn-search, .btn-book, .btn-auth-header, .btn-auth-submit, .btn-action {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-radius: 8px !important;
+      box-shadow: none !important;
+      border: 1px solid var(--navy) !important;
+      transition: background 0.15s ease, opacity 0.15s ease !important;
+    }
+    .btn-search:hover, .btn-book:hover, .btn-auth-header:hover, .btn-auth-submit:hover, .btn-action:hover {
+      background: var(--blue) !important;
+      border-color: var(--blue) !important;
+      transform: none !important;
+    }
+    .token-pill {
+      background: #ffffff !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 8px !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .token-icon {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+    }
+    .token-val {
+      color: var(--navy) !important;
+    }
+    .token-sub {
+      color: var(--muted) !important;
+    }
+    .user-avatar, .suc-avatar, .profile-card-avatar {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
+      border: 1px solid rgba(255,255,255,0.2) !important;
+    }
+    .sidebar-user-card {
+      background: var(--navy) !important;
+      border-radius: 10px !important;
+      box-shadow: none !important;
+    }
+    .suc-bal-val {
+      color: #ffffff !important;
+    }
+    .badge-user {
+      background: #f1f5f9 !important;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 6px !important;
+    }
+    .btn-admin-switch, .portal-switcher {
+      background: #ffffff !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 8px !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .btn-admin-switch:hover, .portal-switcher:hover {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: var(--navy) !important;
+      transform: none !important;
+    }
+    .cat-pill {
+      border-radius: 8px !important;
+      background: #ffffff !important;
+      border: 1px solid var(--line) !important;
+      color: #334155 !important;
+      font-weight: 500 !important;
+    }
+    .cat-pill.active {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-color: var(--navy) !important;
+      font-weight: 600 !important;
+      box-shadow: none !important;
+    }
+    .service-card, .voucher-card, .table-container, .table-card, .chart-card-exact, .monthly-chart-card, .analytics-panel-card {
+      border-radius: 10px !important;
+      border: 1px solid var(--line) !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .service-card:hover, .voucher-card:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: var(--shadow-md) !important;
+      border-color: #cbd5e1 !important;
+    }
+    .card-category-badge {
+      background: rgba(15, 23, 42, 0.82) !important;
+      border-radius: 5px !important;
+      font-weight: 500 !important;
+    }
+    .card-rating-badge {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-radius: 5px !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12) !important;
+    }
+    .voucher-points-badge {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-radius: 6px !important;
+      box-shadow: none !important;
+    }
+    .btn-redeem {
+      background: var(--navy) !important;
+      border-radius: 8px !important;
+    }
+
+    /* Admin Analytics Suite Clean Editorial Overrides */
+    .analytics-header-bar {
+      background: #ffffff !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 10px !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .analytics-header-title h3 {
+      color: var(--ink) !important;
+      font-size: 17px !important;
+    }
+    .analytics-header-title p {
+      color: var(--muted) !important;
+    }
+    .analytics-year-btn {
+      background: #f8fafc !important;
+      color: #475569 !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 7px !important;
+      box-shadow: none !important;
+    }
+    .analytics-year-btn:hover {
+      background: #f1f5f9 !important;
+      color: var(--ink) !important;
+    }
+    .analytics-year-btn.active {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-color: var(--navy) !important;
+    }
+    .analytics-kpi-card {
+      border-radius: 10px !important;
+      border: 1px solid var(--line) !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .analytics-kpi-card::before {
+      background: var(--navy) !important;
+      width: 3px !important;
+    }
+    .analytics-kpi-sub {
+      color: var(--muted) !important;
+      font-weight: 500 !important;
+    }
+    .month-bar-track {
+      background: var(--navy) !important;
+      box-shadow: none !important;
+      border-radius: 4px 4px 0 0 !important;
+    }
+    .month-bar-comm {
+      background: rgba(255, 255, 255, 0.28) !important;
+    }
+    .month-col.active .month-bar-track {
+      background: var(--blue) !important;
+      box-shadow: none !important;
+    }
+    .month-bk-pill {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 5px !important;
+      font-weight: 600 !important;
+    }
+    .month-col:hover .month-bk-pill, .month-col.active .month-bk-pill {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-color: var(--navy) !important;
+      transform: none !important;
+    }
+    .month-col.active .month-label {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+    }
+
+    /* Theme Switcher Select Pill */
+    .theme-Select-pill {
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .theme-Select-pill:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+
+    /* ===================================================================== */
+    /* OCEAN & SUN COLOR SYSTEM (ฟ้า-น้ำทะเล ตัดส้ม-เหลืองสดใส บนพื้นขาว/ครีมอ่อน) */
+    /* ===================================================================== */
+    :root, [data-theme="ocean-sun"], [data-theme="clean-ota"] {
+      --navy: #027EBC;
+      --navy-dark: #015F8E;
+      --blue: #00A5CF;
+      --blue-light: #E6F7FB;
+      --teal: #00A5CF;
+      --teal-light: #E6F7FB;
+      --orange: #F26419;
+      --orange-light: #FFF3EB;
+      --sun-yellow: #F6AE2D;
+      --sun-yellow-light: #FFF9E6;
+      --ink: #0F2942;
+      --muted: #5A6B7C;
+      --line: #E6DFD5;
+      --wash: #FFF8F0;
+      --card-bg: #FFFFFF;
+      --sidebar-bg: #FFFFFF;
+      --primary-navy: #027EBC;
+      --primary-blue: #00A5CF;
+      --primary-orange: #F26419;
+      --bg-wash: #FFF8F0;
+      --border-line: #E6DFD5;
+      --text-main: #0F2942;
+      --text-muted: #5A6B7C;
+    }
+
+    body {
+      background: #FFF8F0 !important;
+      color: #0F2942 !important;
+    }
+
+    /* Navbar & Sidebar */
+    .navbar, .topbar, .sidebar {
+      background: #FFFFFF !important;
+      border-color: #E6DFD5 !important;
+    }
+    .brand, .brand-logo {
+      color: #027EBC !important;
+    }
+    .brand span, .brand-logo span {
+      color: #F26419 !important;
+    }
+    .badge-user {
+      background: #E6F7FB !important;
+      color: #027EBC !important;
+      border: 1px solid #B3E5F2 !important;
+    }
+    .badge-user::before {
+      background: #00A5CF !important;
+    }
+
+    /* Hero Banner (Ocean & Turquoise with Sunshine Accents) */
+    .user-hero {
+      background: linear-gradient(135deg, #027EBC 0%, #00A5CF 100%) !important;
+      border-radius: 14px !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 8px 24px rgba(2, 126, 188, 0.16) !important;
+    }
+    .hero-tag {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+      border: none !important;
+      font-weight: 700 !important;
+      border-radius: 999px !important;
+    }
+    .stat-box {
+      background: rgba(255, 255, 255, 0.14) !important;
+      border: 1px solid rgba(255, 255, 255, 0.28) !important;
+      border-radius: 10px !important;
+    }
+    .stat-val {
+      color: #FFF8F0 !important;
+    }
+
+    /* Primary CTA Buttons in Vibrant Sun Orange (#F26419) */
+    .btn-search, .btn-book, .btn-redeem {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+      border: 1px solid #F26419 !important;
+      border-radius: 8px !important;
+      box-shadow: 0 3px 10px rgba(242, 100, 25, 0.24) !important;
+      font-weight: 700 !important;
+    }
+    .btn-search:hover, .btn-book:hover, .btn-redeem:hover {
+      background: #D9530E !important;
+      border-color: #D9530E !important;
+      box-shadow: 0 4px 14px rgba(242, 100, 25, 0.34) !important;
+    }
+
+    /* Ocean & Turquoise Primary Action Buttons */
+    .btn-auth-header, .btn-auth-submit, .btn-action {
+      background: #027EBC !important;
+      color: #FFFFFF !important;
+      border: 1px solid #027EBC !important;
+      border-radius: 8px !important;
+    }
+    .btn-auth-header:hover, .btn-auth-submit:hover, .btn-action:hover {
+      background: #00A5CF !important;
+      border-color: #00A5CF !important;
+    }
+
+    /* Category Filter Pills */
+    .cat-pill {
+      background: #FFFFFF !important;
+      border: 1px solid #E6DFD5 !important;
+      color: #0F2942 !important;
+      border-radius: 999px !important;
+    }
+    .cat-pill:hover {
+      border-color: #00A5CF !important;
+      color: #027EBC !important;
+      background: #E6F7FB !important;
+    }
+    .cat-pill.active {
+      background: #00A5CF !important;
+      color: #FFFFFF !important;
+      border-color: #00A5CF !important;
+      box-shadow: 0 3px 10px rgba(0, 165, 207, 0.25) !important;
+    }
+
+    /* Cards & Badges */
+    .service-card, .voucher-card, .search-card, .table-container, .table-card, .chart-card-exact, .monthly-chart-card, .analytics-panel-card {
+      background: #FFFFFF !important;
+      border: 1px solid #E6DFD5 !important;
+      border-radius: 12px !important;
+    }
+    .card-category-badge {
+      background: #027EBC !important;
+      color: #FFFFFF !important;
+      border-radius: 6px !important;
+    }
+    .card-rating-badge {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+      font-weight: 800 !important;
+      border-radius: 6px !important;
+    }
+    .voucher-points-badge {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+      border-radius: 999px !important;
+    }
+    .price-val {
+      color: #027EBC !important;
+    }
+    .feat-tag {
+      background: #FFF8F0 !important;
+      color: #0F2942 !important;
+      border: 1px solid #F0E6D8 !important;
+    }
+
+    /* Token Pill & User Avatar */
+    .token-pill {
+      background: #FFF9E6 !important;
+      border: 1px solid #F6AE2D !important;
+      color: #0F2942 !important;
+    }
+    .token-icon {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+    }
+    .token-val {
+      color: #D9530E !important;
+    }
+    .user-avatar, .suc-avatar, .profile-card-avatar {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+    }
+    .sidebar-user-card {
+      background: linear-gradient(135deg, #027EBC 0%, #00A5CF 100%) !important;
+      color: #FFFFFF !important;
+    }
+    .side-nav-item.active, .menu-item-btn.active {
+      background: #E6F7FB !important;
+      color: #027EBC !important;
+      border-right-color: #00A5CF !important;
+    }
+
+    /* Dashboard & Monthly Chart (Ocean & Sun) */
+    .analytics-header-bar {
+      background: linear-gradient(135deg, #027EBC 0%, #00A5CF 100%) !important;
+      color: #FFFFFF !important;
+      border: none !important;
+    }
+    .analytics-header-title h3 {
+      color: #FFFFFF !important;
+    }
+    .analytics-header-title p {
+      color: #E6F7FB !important;
+    }
+    .analytics-year-btn {
+      background: rgba(255, 255, 255, 0.16) !important;
+      color: #FFFFFF !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
+    .analytics-year-btn.active {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+      border-color: #F6AE2D !important;
+      font-weight: 800 !important;
+    }
+    .analytics-kpi-card::before {
+      background: #00A5CF !important;
+      width: 4px !important;
+    }
+    .analytics-kpi-card.teal::before { background: #027EBC !important; }
+    .analytics-kpi-card.amber::before { background: #F6AE2D !important; }
+    .analytics-kpi-card.purple::before { background: #F26419 !important; }
+    .month-bar-track {
+      background: linear-gradient(180deg, #00A5CF 0%, #027EBC 100%) !important;
+      border-radius: 6px 6px 0 0 !important;
+    }
+    .month-bar-comm {
+      background: #F6AE2D !important;
+    }
+    .month-col.active .month-bar-track {
+      background: #F26419 !important;
+    }
+    .month-bk-pill {
+      background: #FFF3EB !important;
+      color: #F26419 !important;
+      border: 1px solid #FAD1B8 !important;
+    }
+    .month-col:hover .month-bk-pill, .month-col.active .month-bk-pill {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+      border-color: #F26419 !important;
+    }
+    .month-col.active .month-label {
+      background: #027EBC !important;
+      color: #FFFFFF !important;
+    }
+
 </style>
 </head>
 <body>
@@ -1467,6 +2004,11 @@
           <b id="crumb-nav">Performance Dashboard (ภาพรวมผลการดำเนินงาน)</b>
         </div>
         <div class="topbar-right">
+          <select id="ui-theme-selector" class="theme-Select-pill" onchange="applyUiTheme(this.value)" title="เปลี่ยนโทนสีของระบบ">
+            <option value="clean-ota">Theme: Clean Navy</option>
+            <option value="boutique">Theme: Boutique Teal</option>
+            <option value="minimal-slate">Theme: Minimal Slate</option>
+          </select>
           <div class="sync-status-pill" title="ระบบซิงค์ข้อมูลสด Real-time สองทางกับ User Portal">
             <span class="sync-dot"></span>
             <span class="sync-text">Live Sync (Admin ⇄ User)</span>
@@ -1527,19 +2069,19 @@
                 <!-- Dropdown selection -->
                 <div class="date-dropdown-menu" id="dash-date-menu" style="width:290px;">
                   <div class="date-dropdown-item active" id="range-item-live" onclick="selectDateRange('live')">
-                    <span>🟢 ช่วงปัจจุบัน (พ.ย. 2026 Live)</span>
+                    <span>ช่วงปัจจุบัน (พ.ย. 2026 Live)</span>
                     <small style="color:var(--text-muted)">Real-time</small>
                   </div>
                   <div class="date-dropdown-item" id="range-item-monthly" onclick="selectDateRange('monthly')">
-                    <span>📊 รายเดือนทั้งปี 2026 (ม.ค. - ธ.ค.)</span>
+                    <span>รายเดือนทั้งปี 2026 (ม.ค. - ธ.ค.)</span>
                     <small style="color:var(--text-muted)">12 เดือน</small>
                   </div>
                   <div class="date-dropdown-item" id="range-item-default" onclick="selectDateRange('default')">
-                    <span>📑 23 Jan - 7 Feb 2023</span>
+                    <span>23 Jan - 7 Feb 2023</span>
                     <small style="color:var(--text-muted)">รายงาน depa</small>
                   </div>
                   <div class="date-dropdown-item" id="range-item-ytd" onclick="selectDateRange('ytd')">
-                    <span>📈 Year 2023 (ม.ค. - ธ.ค. 2023)</span>
+                    <span>Year 2023 (ม.ค. - ธ.ค. 2023)</span>
                     <small style="color:var(--text-muted)">ทั้งปี 2023</small>
                   </div>
                 </div>
@@ -1553,7 +2095,7 @@
 
             <!-- Selected Point Detail Strip -->
             <div id="dash-top-wave-detail" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 16px; font-size:12.5px; color:#334155; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-              <span>💡 <b>คำแนะนำ:</b> คลิกที่จุดข้อมูลบนกราฟเพื่อดูยอดเงินและรายละเอียดการจองของวัน/เดือนนั้นๆ</span>
+              <span><b>คำแนะนำ:</b> คลิกที่จุดข้อมูลบนกราฟเพื่อดูยอดเงินและรายละเอียดการจองของวัน/เดือนนั้นๆ</span>
               <span style="color:#0284c7; font-weight:700;">ซิงค์ข้อมูลสดอัตโนมัติ (Real-time Sync)</span>
             </div>
           </div>
@@ -1584,17 +2126,17 @@
             <div class="analytics-header-bar">
               <div class="analytics-header-title">
                 <h3>
-                  <span>📊 แดชบอร์ดวิเคราะห์การจองเชิงลึก & ยอดเงินรายเดือน</span>
+                  <span>แดชบอร์ดวิเคราะห์การจองเชิงลึก & ยอดเงินรายเดือน</span>
                   <span style="font-size:11px; background:#10b981; color:#fff; padding:2px 9px; border-radius:999px; font-weight:700;">Live Analytics</span>
                 </h3>
                 <p>วิเคราะห์ยอดขายรายเดือน (ม.ค. – ธ.ค.), สัดส่วนหมวดหมู่บริการ, ช่องทาง OTA, สถานะการจอง และที่พักยอดนิยมแบบ Real-time</p>
               </div>
               <div class="analytics-header-controls">
                 <button type="button" class="analytics-year-btn active" id="btn-analytics-2026" onclick="setAdminAnalyticsYear('2026')">
-                  📅 ปี 2026 (ปัจจุบัน + Live Sync)
+                  ปี 2026 (ปัจจุบัน + Live Sync)
                 </button>
                 <button type="button" class="analytics-year-btn" id="btn-analytics-2023" onclick="setAdminAnalyticsYear('2023')">
-                  📑 ปี 2023 (ข้อมูลรายงานโครงการ)
+                  ปี 2023 (ข้อมูลรายงานโครงการ)
                 </button>
                 <button type="button" class="analytics-year-btn" onclick="exportMonthlyAnalyticsCSV()" style="background:rgba(16,185,129,0.25); border-color:#34d399; color:#ecfdf5;">
                   📥 Export รายงานรายเดือน CSV
@@ -1606,7 +2148,7 @@
             <div class="analytics-kpi-grid">
               <div class="analytics-kpi-card">
                 <div class="analytics-kpi-top">
-                  <span>💰 ยอดเงินการจองรวมทั้งปี (Gross Revenue)</span>
+                  <span>ยอดเงินการจองรวมทั้งปี (Gross Revenue)</span>
                   <span>THB</span>
                 </div>
                 <div class="analytics-kpi-val" id="an-kpi-annual-rev">฿0.00</div>
@@ -1614,15 +2156,15 @@
               </div>
               <div class="analytics-kpi-card teal">
                 <div class="analytics-kpi-top">
-                  <span>🏦 ค่าคอมมิชชันแพลตฟอร์มรวม (5% Fee)</span>
+                  <span>ค่าคอมมิชชันแพลตฟอร์มรวม (5% Fee)</span>
                   <span>Net Revenue</span>
                 </div>
                 <div class="analytics-kpi-val" id="an-kpi-annual-comm">฿0.00</div>
-                <div class="analytics-kpi-sub" id="an-kpi-annual-token">🪙 แจกโทเคนสะสม 0 TCP</div>
+                <div class="analytics-kpi-sub" id="an-kpi-annual-token">แจกโทเคนสะสม 0 TCP</div>
               </div>
               <div class="analytics-kpi-card amber">
                 <div class="analytics-kpi-top">
-                  <span>🧾 ยอดเฉลี่ยต่อคำสั่งจอง (Avg. Order Value)</span>
+                  <span>ยอดเฉลี่ยต่อคำสั่งจอง (Avg. Order Value)</span>
                   <span>AOV</span>
                 </div>
                 <div class="analytics-kpi-val" id="an-kpi-aov">฿0.00</div>
@@ -1642,13 +2184,13 @@
             <div class="monthly-chart-card">
               <div class="chart-section-head">
                 <div>
-                  <h4>1. 📈 กราฟยอดเงินรายได้และจำนวนการจองรายเดือน (ม.ค. – ธ.ค.)</h4>
+                  <h4>1. กราฟยอดเงินรายได้และจำนวนการจองรายเดือน (ม.ค. – ธ.ค.)</h4>
                   <p>คลิกที่แท่งเดือนใดก็ได้เพื่อเจาะลึกดูรายละเอียดการจองและยอดเงินของเดือนนั้นๆ (Interactive Monthly Drill-down)</p>
                 </div>
                 <div class="chart-legend-inline">
-                  <span><i class="legend-dot" style="background:#0284c7;"></i>ยอดขายรายเดือน (฿)</span>
-                  <span><i class="legend-dot" style="background:#38bdf8;"></i>ค่าคอมมิชชัน (5%)</span>
-                  <span><i class="legend-dot" style="background:#ea580c; border-radius:50%;"></i>จำนวนการจอง (รายการ)</span>
+                  <span><i class="legend-dot" style="background:#00A5CF;"></i>ยอดขายรายเดือน (฿)</span>
+                  <span><i class="legend-dot" style="background:#F6AE2D;"></i>ค่าคอมมิชชัน (5%)</span>
+                  <span><i class="legend-dot" style="background:#F26419; border-radius:50%;"></i>จำนวนการจอง (รายการ)</span>
                   <button type="button" class="btn-secondary" id="btn-reset-month-filter" style="display:none; padding:4px 10px; font-size:11.5px; color:#0284c7; border-color:#7dd3fc; background:#f0f9ff;" onclick="selectDashboardMonth('all')">
                     ✕ แสดงครบทุกเดือน
                   </button>
@@ -1673,7 +2215,7 @@
               <div class="analytics-panel-card">
                 <div class="chart-section-head" style="margin-bottom:6px;">
                   <div>
-                    <h4>2. 🍩 สัดส่วนยอดจองและรายได้ตามหมวดหมู่บริการ</h4>
+                    <h4>2. สัดส่วนยอดจองและรายได้ตามหมวดหมู่บริการ</h4>
                     <p>เปรียบเทียบสัดส่วนรายได้จากที่พัก แหล่งท่องเที่ยว สปา และทัวร์</p>
                   </div>
                 </div>
@@ -1686,7 +2228,7 @@
               <div class="analytics-panel-card">
                 <div class="chart-section-head" style="margin-bottom:6px;">
                   <div>
-                    <h4>3. 📊 ยอดจองและรายได้แยกตามช่องทางการขาย (OTA & Direct)</h4>
+                    <h4>3. ยอดจองและรายได้แยกตามช่องทางการขาย (OTA & Direct)</h4>
                     <p>เปรียบเทียบการจองตรงผ่านหน้าเว็บ (User Direct) กับตัวแทนจำหน่าย OTA</p>
                   </div>
                 </div>
@@ -1700,7 +2242,7 @@
             <div class="analytics-panel-card" style="margin-bottom:20px;">
               <div class="chart-section-head" style="margin-bottom:10px;">
                 <div>
-                  <h4>4. 📍 อันดับผู้ประกอบการและบริการที่มียอดจองสูงสุด (Top Performing Properties & Services)</h4>
+                  <h4>4. อันดับผู้ประกอบการและบริการที่มียอดจองสูงสุด (Top Performing Properties & Services)</h4>
                   <p>จัดอันดับตามยอดขายรวม (THB) จำนวนคำสั่งจอง และค่าคอมมิชชันที่สร้างให้แพลตฟอร์ม</p>
                 </div>
               </div>
@@ -1783,7 +2325,7 @@
                 🛡️ 2. Admin User List (ส่วนกลาง 5 ราย)
               </button>
               <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-roles', document.getElementById('sub-btn-admin-role'))">
-                🔑 3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
+                3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
               </button>
             </div>
 
@@ -1866,7 +2408,7 @@
                 🛡️ 2. Admin User List (ส่วนกลาง 5 ราย)
               </button>
               <button class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-roles', document.getElementById('sub-btn-admin-role'))">
-                🔑 3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
+                3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
               </button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
@@ -1966,7 +2508,7 @@
           <div class="table-card">
             <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
               <div>
-                <span style="font-size:17px; font-weight:700;">🔑 Admin Role List & Screen Permission (บทบาทและสิทธิ์เข้าถึง)</span>
+                <span style="font-size:17px; font-weight:700;">Admin Role List & Screen Permission (บทบาทและสิทธิ์เข้าถึง)</span>
                 <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
                   กำหนดสิทธิ์ระดับหน้าจอ Role-Based Access Control (RBAC) ตามมาตรฐาน ThailandCONNEX
                 </div>
@@ -1983,7 +2525,7 @@
                 🛡️ 2. Admin User List (ส่วนกลาง 5 ราย)
               </button>
               <button class="btn-action" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-roles', document.getElementById('sub-btn-admin-role'))">
-                🔑 3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
+                3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
               </button>
             </div>
             <table class="clean-table" id="table-admin-roles" style="margin-bottom: 24px;">
@@ -2813,7 +3355,7 @@
           <!-- Section 1: Active API Keys Table -->
           <div class="table-card" style="margin-bottom: 20px;">
             <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-              <span>🔑 Authorized API Keys & Partner Gateways (รายชื่อกุญแจเชื่อมต่อระบบ)</span>
+              <span>Authorized API Keys & Partner Gateways (รายชื่อกุญแจเชื่อมต่อระบบ)</span>
               <div style="display:flex; gap:8px;">
                 <button class="btn-secondary" onclick="exportTableToCSV('table-api-keys', 'ThailandConnex_API_Keys.csv')">Export CSV 📥</button>
               </div>
@@ -2938,7 +3480,7 @@
                 <div style="margin-top:6px;"><b>Authentication:</b> <code style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11.5px;">Bearer &lt;YOUR_API_KEY&gt;</code></div>
                 <div style="margin-top:6px;"><b>Rate Limits:</b> 5,000 - 25,000 requests/minute ต่อ Client IP</div>
                 <div style="margin-top:10px;">
-                  <button class="btn-secondary" style="font-size:11.5px;" onclick="copyApiKey('curl -X GET https://api.thailandconnex.com/v1/databank/packages -H \'Authorization: Bearer tk_live_demo\'')">📋 คัดลอกคำสั่ง cURL ตัวอย่าง</button>
+                  <button class="btn-secondary" style="font-size:11.5px;" onclick="copyApiKey('curl -X GET https://api.thailandconnex.com/v1/databank/packages -H \'Authorization: Bearer tk_live_demo\'')">คัดลอกคำสั่ง cURL ตัวอย่าง</button>
                 </div>
               </div>
             </div>
@@ -2969,13 +3511,13 @@
             <!-- Sub Navigation Tabs for Data Bank -->
             <div style="display:flex; gap:8px; margin-top:16px; border-bottom:1px solid #e2e8f0; padding-bottom:12px; flex-wrap:wrap;">
               <button id="tab-btn-suppliers" class="btn-action" style="padding:8px 16px; font-size:13px; font-weight:600;" onclick="switchDataBankSubTab('suppliers')">
-                🏢 1. สถิติผู้ประกอบการ (108,659 ราย)
+                1. สถิติผู้ประกอบการ (108,659 ราย)
               </button>
               <button id="tab-btn-packages" class="btn-secondary" style="padding:8px 16px; font-size:13px; font-weight:600;" onclick="switchDataBankSubTab('packages')">
                 📦 2. สารบบสินค้าและบริการ (201,764 รายการ)
               </button>
               <button id="tab-btn-analytics" class="btn-secondary" style="padding:8px 16px; font-size:13px; font-weight:600;" onclick="switchDataBankSubTab('analytics')">
-                📈 3. สถาปัตยกรรม Big Data & มูลค่าเศรษฐกิจ (1.2 หมื่นล้าน)
+                3. สถาปัตยกรรม Big Data & มูลค่าเศรษฐกิจ (1.2 หมื่นล้าน)
               </button>
             </div>
           </div>
@@ -2995,7 +3537,7 @@
               <!-- Interactive Province Filter -->
               <div style="background:#f8fafc; padding:14px 18px; border-radius:10px; margin-top:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; border:1px solid #e2e8f0;">
                 <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                  <span style="font-size:13px; font-weight:700; color:var(--text-dark);">📍 กรองตามพื้นที่ / จังหวัด:</span>
+                  <span style="font-size:13px; font-weight:700; color:var(--text-dark);">กรองตามพื้นที่ / จังหวัด:</span>
                   <select id="databank-prov-filter" class="input-clean" onchange="filterDataBankProvince(this.value)" style="font-weight:600; min-width:280px;">
                     <option value="all">ทั่วประเทศไทย (77 จังหวัด - 109,947 ราย)</option>
                     <option value="bkk">กรุงเทพมหานคร (Bangkok - 33,001 ราย)</option>
@@ -4873,15 +5415,15 @@
             : `ยอดรวม ${selP.bk} รายการจอง (ค่าคอมมิชชัน ฿${Math.round(selP.rev * 0.05).toLocaleString('th-TH')})`;
           detailBox.innerHTML = `
             <div>
-              <b style="color:#0284c7;">📌 ${selP.fullLabel}:</b> ยอดขายรวม <b>฿${selP.rev.toLocaleString('th-TH')}</b> (${selP.bk} รายการจอง) — <span style="color:#475569;">${itemNames}</span>
+              <b style="color:#0284c7;">${selP.fullLabel}:</b> ยอดขายรวม <b>฿${selP.rev.toLocaleString('th-TH')}</b> (${selP.bk} รายการจอง) — <span style="color:#475569;">${itemNames}</span>
             </div>
             <button type="button" class="btn-secondary" style="font-size:11px; padding:4px 10px;" onclick="selectTopWavePoint(-1)">✕ ปิดรายละเอียด</button>
           `;
         } else {
           const maxPt = [...pointsData].sort((a, b) => b.rev - a.rev)[0];
           detailBox.innerHTML = `
-            <span>💡 <b>สรุปกราฟช่วงเวลานี้:</b> ยอดสูงสุดอยู่ที่ <b>${maxPt ? maxPt.fullLabel : '-'} (฿${maxPt ? maxPt.rev.toLocaleString('th-TH') : '0'})</b> • คลิกที่จุดกลมบนกราฟเพื่อดูรายละเอียดรายวัน</span>
-            <span style="color:#0284c7; font-weight:700;">🟢 ซิงค์ข้อมูลสดอัตโนมัติ (Real-time Sync)</span>
+            <span><b>สรุปกราฟช่วงเวลานี้:</b> ยอดสูงสุดอยู่ที่ <b>${maxPt ? maxPt.fullLabel : '-'} (฿${maxPt ? maxPt.rev.toLocaleString('th-TH') : '0'})</b> • คลิกที่จุดกลมบนกราฟเพื่อดูรายละเอียดรายวัน</span>
+            <span style="color:#0284c7; font-weight:700;">ซิงค์ข้อมูลสดอัตโนมัติ (Real-time Sync)</span>
           `;
         }
       }
@@ -5622,7 +6164,7 @@
                 <td style="color:#64748b; font-weight:600;">${rowNumber}</td>
                 <td>
                   <b>${s.title}</b>
-                  ${s.location ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">📍 ${s.location}</div>` : ''}
+                  ${s.location ? `<div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${s.location}</div>` : ''}
                 </td>
                 <td>
                   <span style="font-weight:500;">${s.provider}</span>
@@ -6493,8 +7035,8 @@
                     <span style="display:inline-flex; width:32px; height:32px; border-radius:50%; background:#e0f2fe; color:var(--primary-blue); font-weight:700; align-items:center; justify-content:center; font-size:12px;">${u.avatar || 'TC'}</span>
                     <div>
                       <b>${u.name}</b>
-                      ${isOnline ? '<span class="badge badge-info" style="font-size:9.5px; margin-left:4px;">🟢 Online</span>' : ''}
-                      ${isWelcome ? '<span class="badge badge-success" style="font-size:9.5px; margin-left:4px;">✨ New</span>' : ''}
+                      ${isOnline ? '<span class="badge badge-info" style="font-size:9.5px; margin-left:4px;">Online</span>' : ''}
+                      ${isWelcome ? '<span class="badge badge-success" style="font-size:9.5px; margin-left:4px;">New</span>' : ''}
                       <div style="font-size:11px; color:var(--text-muted); font-family:monospace;">ID: ${u.id}</div>
                     </div>
                   </div>
@@ -6506,7 +7048,7 @@
                 <td>
                   <span class="badge badge-info" style="font-size:10.5px;">${u.tier || 'Member'}</span>
                   <div style="font-size:10.5px; color:var(--text-muted); font-family:monospace; margin-top:2px;" title="${u.walletAddress}">
-                    🔑 ${walletTruncated}
+                    ${walletTruncated}
                   </div>
                 </td>
                 <td>
@@ -6663,7 +7205,7 @@
               <tr>
                 <td>
                   <b>${k.client}</b>
-                  ${k.org ? `<br><small style="color:var(--text-muted); font-size:11px;">🏢 ${k.org}</small>` : ''}
+                  ${k.org ? `<br><small style="color:var(--text-muted); font-size:11px;">${k.org}</small>` : ''}
                 </td>
                 <td>
                   <span class="badge ${k.environment && k.environment.includes('Prod') ? 'badge-info' : 'badge-warning'}" style="font-size:10.5px;">${k.environment || 'Production'}</span>
@@ -6961,15 +7503,15 @@
     function detectServiceCategory(r) {
       const text = ((r.serviceName || '') + ' ' + (r.property || '')).toLowerCase();
       if (text.includes('spa') || text.includes('สปา') || text.includes('นวด') || text.includes('wellness')) {
-        return { key: 'wellness', label: '💆 สุขภาพและสปา (Wellness)', color: '#8b5cf6' };
+        return { key: 'wellness', label: 'สุขภาพและสปา (Wellness)', color: '#8b5cf6' };
       }
       if (text.includes('cruise') || text.includes('ล่องเรือ') || text.includes('sealife') || text.includes('ใบหยก') || text.includes('balcony') || text.includes('บัตร')) {
-        return { key: 'attraction', label: '🎡 แหล่งท่องเที่ยว & ล่องเรือ', color: '#0d9488' };
+        return { key: 'attraction', label: 'แหล่งท่องเที่ยว & ล่องเรือ', color: '#0d9488' };
       }
       if (text.includes('tour') || text.includes('ทัวร์') || text.includes('package') || text.includes('ดำน้ำ')) {
-        return { key: 'tour', label: '🧭 แพ็กเกจทัวร์ & กิจกรรม', color: '#f59e0b' };
+        return { key: 'tour', label: 'แพ็กเกจทัวร์ & กิจกรรม', color: '#f59e0b' };
       }
-      return { key: 'accommodation', label: '🏨 โรงแรมและที่พัก (Hotel)', color: '#0284c7' };
+      return { key: 'accommodation', label: 'โรงแรมและที่พัก (Hotel)', color: '#0284c7' };
     }
 
 
@@ -7134,15 +7676,15 @@
         const minM = [...monthlyData].sort((a, b) => a.revenue - b.revenue)[0];
         summaryWrap.innerHTML = `
           <div>
-            <span style="color:#64748b; font-size:11.5px;">🏆 เดือนที่กราฟพุ่งสูงสุด (Peak Month):</span>
+            <span style="color:#64748b; font-size:11.5px;">เดือนที่กราฟพุ่งสูงสุด (Peak Month):</span>
             <div style="font-weight:800; color:#0284c7; margin-top:2px;">${peakM.fullName} — ฿${peakM.revenue.toLocaleString('th-TH')} (${peakM.bookings} จอง)</div>
           </div>
           <div>
-            <span style="color:#64748b; font-size:11.5px;">📊 ค่าเฉลี่ยรายเดือน (Monthly Average):</span>
+            <span style="color:#64748b; font-size:11.5px;">ค่าเฉลี่ยรายเดือน (Monthly Average):</span>
             <div style="font-weight:800; color:#0d9488; margin-top:2px;">฿${avgRev.toLocaleString('th-TH')} / เดือน (เฉลี่ย ${avgBk} จอง/เดือน)</div>
           </div>
           <div>
-            <span style="color:#64748b; font-size:11.5px;">📌 ช่วงต่ำสุด-สูงสุด (Min – Max Range):</span>
+            <span style="color:#64748b; font-size:11.5px;">ช่วงต่ำสุด-สูงสุด (Min – Max Range):</span>
             <div style="font-weight:800; color:#0f172a; margin-top:2px;">฿${minM.revenue.toLocaleString('th-TH')} – ฿${peakM.revenue.toLocaleString('th-TH')}</div>
           </div>
         `;
@@ -7249,7 +7791,7 @@
 
       if (elAnnRev) elAnnRev.textContent = '฿' + annualRev.toLocaleString('th-TH');
       if (elAnnComm) elAnnComm.textContent = '฿' + annualComm.toLocaleString('th-TH');
-      if (elAnnToken) elAnnToken.textContent = '🪙 แจกโทเคนสะสม ' + annualComm.toLocaleString('th-TH') + ' TCP';
+      if (elAnnToken) elAnnToken.textContent = 'แจกโทเคนสะสม ' + annualComm.toLocaleString('th-TH') + ' TCP';
       if (elAov) elAov.textContent = '฿' + aov.toLocaleString('th-TH');
       if (elTotalBk) elTotalBk.textContent = 'จากทั้งหมด ' + annualBk.toLocaleString('th-TH') + ' รายการจองทั้งปี';
       if (elConfRate) elConfRate.textContent = confRate + '%';
@@ -7292,7 +7834,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
               <div>
                 <div style="font-size:13.5px; font-weight:700; color:#0f172a;">
-                  📌 สรุปภาพรวมรายเดือนทั้งปี ${adminAnalyticsYear} (คลิกที่แท่งกราฟแต่ละเดือนด้านบนเพื่อเจาะลึกรายการจองของเดือนนั้น)
+                  สรุปภาพรวมรายเดือนทั้งปี ${adminAnalyticsYear} (คลิกที่แท่งกราฟแต่ละเดือนด้านบนเพื่อเจาะลึกรายการจองของเดือนนั้น)
                 </div>
                 <div style="font-size:12px; color:#475569; margin-top:4px;">
                   • ยอดจองสดในระบบเดือน <b>พ.ย. (${novData.bookings} รายการ = ฿${novData.revenue.toLocaleString('th-TH')})</b> และ <b>ธ.ค. (${decData.bookings} รายการ = ฿${decData.revenue.toLocaleString('th-TH')})</b> ซิงค์อัตโนมัติจากหน้า User Portal
@@ -7323,7 +7865,7 @@
                   <span class="badge badge-info" style="margin-left:6px; font-size:10.5px;">${r.agent || 'User Direct'}</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-                  <span style="color:#64748b;">📅 เช็คอิน: <b>${r.checkin}</b></span>
+                  <span style="color:#64748b;">เช็คอิน: <b>${r.checkin}</b></span>
                   <span style="color:#0d9488; font-size:11.5px;">คอมมิชชัน: <b>฿${commAmt.toLocaleString('th-TH')}</b></span>
                   <b style="color:#0f172a; font-size:13.5px;">฿${Number(r.amount).toLocaleString('th-TH')}</b>
                   <span class="badge ${r.status === 'Confirmed' || r.status === 'Completed' ? 'badge-success' : (r.status === 'Cancelled' ? 'badge-danger' : 'badge-warning')}">${r.status}</span>
@@ -7336,7 +7878,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
               <div>
                 <span style="font-size:11px; font-weight:700; color:#0d9488; text-transform:uppercase;">Monthly Drill-Down Analysis</span>
-                <h4 style="margin:2px 0 0; font-size:15px; color:#0f172a;">📅 รายละเอียดประจำเดือน ${selM.fullName} ปี ${adminAnalyticsYear}</h4>
+                <h4 style="margin:2px 0 0; font-size:15px; color:#0f172a;">รายละเอียดประจำเดือน ${selM.fullName} ปี ${adminAnalyticsYear}</h4>
               </div>
               <div style="display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px;">
                 <span>ยอดขายรวม: <b style="color:#0284c7;">฿${selM.revenue.toLocaleString('th-TH')}</b></span>
@@ -7357,10 +7899,10 @@
 
       // Render Chart 2: Category Donut Chart
       const catMap = {
-        accommodation: { label: '🏨 โรงแรมและที่พัก', color: '#0284c7', rev: 0, count: 0 },
-        attraction: { label: '🎡 แหล่งท่องเที่ยว & ล่องเรือ', color: '#0d9488', rev: 0, count: 0 },
-        wellness: { label: '💆 สุขภาพและสปา', color: '#8b5cf6', rev: 0, count: 0 },
-        tour: { label: '🧭 แพ็กเกจทัวร์ & กิจกรรม', color: '#f59e0b', rev: 0, count: 0 }
+        accommodation: { label: 'โรงแรมและที่พัก (Accommodation)', color: '#027EBC', rev: 0, count: 0 },
+        attraction: { label: 'แหล่งท่องเที่ยวและล่องเรือ (Attraction)', color: '#00A5CF', rev: 0, count: 0 },
+        wellness: { label: 'สุขภาพและสปา (Wellness & Spa)', color: '#F26419', rev: 0, count: 0 },
+        tour: { label: 'แพ็กเกจทัวร์และกิจกรรม (Tours)', color: '#F6AE2D', rev: 0, count: 0 }
       };
 
       reservations.forEach(r => {
@@ -7433,7 +7975,7 @@
       });
       const chanArr = Object.values(chanMap).sort((a, b) => b.rev - a.rev);
       const maxChanRev = Math.max(...chanArr.map(c => c.rev), 1);
-      const chanColors = ['#0284c7', '#0d9488', '#8b5cf6', '#f59e0b', '#ec4899'];
+      const chanColors = ['#027EBC', '#00A5CF', '#F26419', '#F6AE2D', '#5A6B7C'];
 
       const chanWrap = document.getElementById('admin-channel-bars-wrap');
       if (chanWrap) {
@@ -7494,7 +8036,7 @@
                 </div>
               </div>
               <div class="horiz-bar-bg">
-                <div class="horiz-bar-fill" style="width:${widthPct}%; background:linear-gradient(90deg, #0284c7, #0d9488);"></div>
+                <div class="horiz-bar-fill" style="width:${widthPct}%; background:var(--primary-navy);"></div>
               </div>
             </div>
           `;
@@ -7551,6 +8093,32 @@
         });
       }
     });
+
+
+    // ==========================================
+    // MULTI-PALETTE THEME SWITCHER (SYNCED)
+    // ==========================================
+    function applyUiTheme(themeName) {
+      const valid = ['clean-ota', 'boutique', 'minimal-slate'];
+      const chosen = valid.includes(themeName) ? themeName : 'clean-ota';
+      document.documentElement.setAttribute('data-theme', chosen);
+      try { localStorage.setItem('TC_UI_THEME', chosen); } catch (e) {}
+      const sel = document.getElementById('ui-theme-selector');
+      if (sel && sel.value !== chosen) sel.value = chosen;
+    }
+    (function initSavedTheme() {
+      try {
+        const saved = localStorage.getItem('TC_UI_THEME') || 'clean-ota';
+        document.documentElement.setAttribute('data-theme', saved);
+        window.addEventListener('DOMContentLoaded', () => {
+          const sel = document.getElementById('ui-theme-selector');
+          if (sel) sel.value = saved;
+        });
+        window.addEventListener('storage', (e) => {
+          if (e.key === 'TC_UI_THEME' && e.newValue) applyUiTheme(e.newValue);
+        });
+      } catch (e) {}
+    })();
 
   </script>
 </body>

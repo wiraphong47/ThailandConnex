@@ -9,18 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --navy: #083b7c;
-      --navy-dark: #062b5c;
-      --blue: #168de1;
-      --blue-light: #e8f4fd;
-      --teal: #08b99d;
-      --teal-light: #e6f8f4;
-      --orange: #ff7834;
-      --orange-light: #fff2eb;
-      --ink: #15243b;
-      --muted: #64748b;
-      --line: #e2e8f0;
-      --wash: #f4f7fb;
+      --navy: #027EBC;
+      --navy-dark: #015F8E;
+      --blue: #00A5CF;
+      --blue-light: #E6F7FB;
+      --teal: #00A5CF;
+      --teal-light: #E6F7FB;
+      --orange: #F26419;
+      --orange-light: #FFF3EB;
+      --sun-yellow: #F6AE2D;
+      --ink: #0F2942;
+      --muted: #5A6B7C;
+      --line: #E6DFD5;
+      --wash: #FFF8F0;
       --card-bg: #ffffff;
       --sidebar-bg: #ffffff;
       --success: #10b981;
@@ -2188,6 +2189,704 @@
       }
     }
 
+
+    /* ===================================================================== */
+    /* HUMAN-CRAFTED EDITORIAL & ENTERPRISE DESIGN SYSTEM OVERRIDES          */
+    /* ===================================================================== */
+    :root, [data-theme="clean-ota"] {
+      --navy: #0f294d;
+      --navy-dark: #091931;
+      --blue: #1d4ed8;
+      --blue-light: #eff6ff;
+      --teal: #0f766e;
+      --teal-light: #f0fdfa;
+      --orange: #c2410c;
+      --orange-light: #fff7ed;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --wash: #f8fafc;
+      --primary-navy: #0f294d;
+      --primary-blue: #1d4ed8;
+      --primary-orange: #c2410c;
+      --bg-wash: #f8fafc;
+      --border-line: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --radius: 10px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.1);
+    }
+
+    [data-theme="boutique"] {
+      --navy: #11393b;
+      --navy-dark: #0a2526;
+      --blue: #0f766e;
+      --blue-light: #f0fdfa;
+      --teal: #115e59;
+      --teal-light: #ccfbf1;
+      --orange: #b45309;
+      --orange-light: #fef3c7;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e7e5e4;
+      --wash: #faf8f5;
+      --primary-navy: #11393b;
+      --primary-blue: #0f766e;
+      --primary-orange: #b45309;
+      --bg-wash: #faf8f5;
+      --border-line: #e7e5e4;
+      --text-main: #1c1917;
+      --text-muted: #57534e;
+    }
+
+    [data-theme="minimal-slate"] {
+      --navy: #18181b;
+      --navy-dark: #09090b;
+      --blue: #2563eb;
+      --blue-light: #f4f4f5;
+      --teal: #3f3f46;
+      --teal-light: #f4f4f5;
+      --orange: #18181b;
+      --orange-light: #f4f4f5;
+      --ink: #09090b;
+      --muted: #71717a;
+      --line: #e4e4e7;
+      --wash: #fafafa;
+      --primary-navy: #18181b;
+      --primary-blue: #2563eb;
+      --primary-orange: #18181b;
+      --bg-wash: #fafafa;
+      --border-line: #e4e4e7;
+      --text-main: #09090b;
+      --text-muted: #71717a;
+    }
+
+    /* Flat, disciplined enterprise surfaces (Remove flashy AI gradients) */
+    .user-hero {
+      background: var(--navy) !important;
+      border-radius: 12px !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .user-hero::before, .user-hero::after {
+      display: none !important;
+    }
+    .hero-tag {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      color: #f8fafc !important;
+      border-radius: 6px !important;
+      letter-spacing: 0.3px !important;
+    }
+    .stat-box {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 8px !important;
+    }
+    .stat-val {
+      color: #ffffff !important;
+    }
+    .btn-search, .btn-book, .btn-auth-header, .btn-auth-submit, .btn-action {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-radius: 8px !important;
+      box-shadow: none !important;
+      border: 1px solid var(--navy) !important;
+      transition: background 0.15s ease, opacity 0.15s ease !important;
+    }
+    .btn-search:hover, .btn-book:hover, .btn-auth-header:hover, .btn-auth-submit:hover, .btn-action:hover {
+      background: var(--blue) !important;
+      border-color: var(--blue) !important;
+      transform: none !important;
+    }
+    .token-pill {
+      background: #ffffff !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 8px !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .token-icon {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+    }
+    .token-val {
+      color: var(--navy) !important;
+    }
+    .token-sub {
+      color: var(--muted) !important;
+    }
+    .user-avatar, .suc-avatar, .profile-card-avatar {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
+      border: 1px solid rgba(255,255,255,0.2) !important;
+    }
+    .sidebar-user-card {
+      background: var(--navy) !important;
+      border-radius: 10px !important;
+      box-shadow: none !important;
+    }
+    .suc-bal-val {
+      color: #ffffff !important;
+    }
+    .badge-user {
+      background: #f1f5f9 !important;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 6px !important;
+    }
+    .btn-admin-switch, .portal-switcher {
+      background: #ffffff !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 8px !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .btn-admin-switch:hover, .portal-switcher:hover {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: var(--navy) !important;
+      transform: none !important;
+    }
+    .cat-pill {
+      border-radius: 8px !important;
+      background: #ffffff !important;
+      border: 1px solid var(--line) !important;
+      color: #334155 !important;
+      font-weight: 500 !important;
+    }
+    .cat-pill.active {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-color: var(--navy) !important;
+      font-weight: 600 !important;
+      box-shadow: none !important;
+    }
+    .service-card, .voucher-card, .table-container, .table-card, .chart-card-exact, .monthly-chart-card, .analytics-panel-card {
+      border-radius: 10px !important;
+      border: 1px solid var(--line) !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .service-card:hover, .voucher-card:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: var(--shadow-md) !important;
+      border-color: #cbd5e1 !important;
+    }
+    .card-category-badge {
+      background: rgba(15, 23, 42, 0.82) !important;
+      border-radius: 5px !important;
+      font-weight: 500 !important;
+    }
+    .card-rating-badge {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-radius: 5px !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12) !important;
+    }
+    .voucher-points-badge {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-radius: 6px !important;
+      box-shadow: none !important;
+    }
+    .btn-redeem {
+      background: var(--navy) !important;
+      border-radius: 8px !important;
+    }
+
+    /* Admin Analytics Suite Clean Editorial Overrides */
+    .analytics-header-bar {
+      background: #ffffff !important;
+      color: var(--ink) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 10px !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .analytics-header-title h3 {
+      color: var(--ink) !important;
+      font-size: 17px !important;
+    }
+    .analytics-header-title p {
+      color: var(--muted) !important;
+    }
+    .analytics-year-btn {
+      background: #f8fafc !important;
+      color: #475569 !important;
+      border: 1px solid var(--line) !important;
+      border-radius: 7px !important;
+      box-shadow: none !important;
+    }
+    .analytics-year-btn:hover {
+      background: #f1f5f9 !important;
+      color: var(--ink) !important;
+    }
+    .analytics-year-btn.active {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-color: var(--navy) !important;
+    }
+    .analytics-kpi-card {
+      border-radius: 10px !important;
+      border: 1px solid var(--line) !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+    .analytics-kpi-card::before {
+      background: var(--navy) !important;
+      width: 3px !important;
+    }
+    .analytics-kpi-sub {
+      color: var(--muted) !important;
+      font-weight: 500 !important;
+    }
+    .month-bar-track {
+      background: var(--navy) !important;
+      box-shadow: none !important;
+      border-radius: 4px 4px 0 0 !important;
+    }
+    .month-bar-comm {
+      background: rgba(255, 255, 255, 0.28) !important;
+    }
+    .month-col.active .month-bar-track {
+      background: var(--blue) !important;
+      box-shadow: none !important;
+    }
+    .month-bk-pill {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 5px !important;
+      font-weight: 600 !important;
+    }
+    .month-col:hover .month-bk-pill, .month-col.active .month-bk-pill {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+      border-color: var(--navy) !important;
+      transform: none !important;
+    }
+    .month-col.active .month-label {
+      background: var(--navy) !important;
+      color: #ffffff !important;
+    }
+
+    /* Theme Switcher Select Pill */
+    .theme-Select-pill {
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .theme-Select-pill:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+
+    /* Top Navbar Single-Line Alignment & Overflow Prevention */
+    .navbar {
+      height: 68px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: nowrap;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .badge-user {
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      padding: 4px 10px !important;
+      line-height: 1.2 !important;
+    }
+    .nav-center-title {
+      white-space: nowrap !important;
+      flex-shrink: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .token-pill {
+      height: 38px !important;
+      padding: 0 13px !important;
+      border-radius: 8px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+    .token-pill > div:last-child {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .token-val {
+      font-size: 13.5px !important;
+      font-weight: 700 !important;
+      white-space: nowrap !important;
+      line-height: 1 !important;
+    }
+    .token-sub {
+      display: none !important;
+    }
+    .user-profile {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 9px !important;
+      padding: 4px 8px !important;
+      border-radius: 8px !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      transition: background 0.15s ease;
+    }
+    .user-profile:hover {
+      background: #f1f5f9;
+    }
+    .user-avatar {
+      width: 36px !important;
+      height: 36px !important;
+      flex-shrink: 0 !important;
+    }
+    .user-meta {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      line-height: 1.25 !important;
+      white-space: nowrap !important;
+    }
+    .user-name {
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      color: var(--ink) !important;
+      white-space: nowrap !important;
+    }
+    .user-id {
+      font-size: 11px !important;
+      color: var(--muted) !important;
+      white-space: nowrap !important;
+    }
+
+    @media (max-width: 1240px) {
+      .nav-center-title {
+        display: none !important;
+      }
+    }
+    @media (max-width: 1024px) {
+      .sync-status-pill {
+        display: none !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .user-meta {
+        display: none !important;
+      }
+      .badge-user {
+        display: none !important;
+      }
+    }
+
+
+    /* ===================================================================== */
+    /* OCEAN & SUN COLOR SYSTEM (ฟ้า-น้ำทะเล ตัดส้ม-เหลืองสดใส บนพื้นขาว/ครีมอ่อน) */
+    /* ===================================================================== */
+    :root, [data-theme="ocean-sun"], [data-theme="clean-ota"] {
+      --navy: #027EBC;
+      --navy-dark: #015F8E;
+      --blue: #00A5CF;
+      --blue-light: #E6F7FB;
+      --teal: #00A5CF;
+      --teal-light: #E6F7FB;
+      --orange: #F26419;
+      --orange-light: #FFF3EB;
+      --sun-yellow: #F6AE2D;
+      --sun-yellow-light: #FFF9E6;
+      --ink: #0F2942;
+      --muted: #5A6B7C;
+      --line: #E6DFD5;
+      --wash: #FFF8F0;
+      --card-bg: #FFFFFF;
+      --sidebar-bg: #FFFFFF;
+      --primary-navy: #027EBC;
+      --primary-blue: #00A5CF;
+      --primary-orange: #F26419;
+      --bg-wash: #FFF8F0;
+      --border-line: #E6DFD5;
+      --text-main: #0F2942;
+      --text-muted: #5A6B7C;
+    }
+
+    body {
+      background: #FFF8F0 !important;
+      color: #0F2942 !important;
+    }
+
+    /* Navbar & Sidebar */
+    .navbar, .topbar, .sidebar {
+      background: #FFFFFF !important;
+      border-color: #E6DFD5 !important;
+    }
+    .brand, .brand-logo {
+      color: #027EBC !important;
+    }
+    .brand span, .brand-logo span {
+      color: #F26419 !important;
+    }
+    .badge-user {
+      background: #E6F7FB !important;
+      color: #027EBC !important;
+      border: 1px solid #B3E5F2 !important;
+    }
+    .badge-user::before {
+      background: #00A5CF !important;
+    }
+
+    /* Hero Banner (Ocean & Turquoise with Sunshine Accents) */
+    .user-hero {
+      background: linear-gradient(135deg, #027EBC 0%, #00A5CF 100%) !important;
+      border-radius: 14px !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 8px 24px rgba(2, 126, 188, 0.16) !important;
+    }
+    .hero-tag {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+      border: none !important;
+      font-weight: 700 !important;
+      border-radius: 999px !important;
+    }
+    .hero-stats {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)) !important;
+      gap: 14px !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
+      padding-top: 20px !important;
+      margin-top: 18px !important;
+    }
+    .stat-box {
+      background: rgba(255, 255, 255, 0.14) !important;
+      backdrop-filter: blur(6px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.28) !important;
+      border-radius: 12px !important;
+      padding: 14px 18px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      gap: 4px !important;
+    }
+    .stat-val {
+      color: #FFFFFF !important;
+      font-size: 22px !important;
+      font-weight: 800 !important;
+      line-height: 1.2 !important;
+      letter-spacing: -0.3px !important;
+    }
+    .stat-lbl {
+      color: rgba(255, 255, 255, 0.92) !important;
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      opacity: 1 !important;
+    }
+
+    /* Primary CTA Buttons in Vibrant Sun Orange (#F26419) */
+    .btn-search, .btn-book, .btn-redeem {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+      border: 1px solid #F26419 !important;
+      border-radius: 8px !important;
+      box-shadow: 0 3px 10px rgba(242, 100, 25, 0.24) !important;
+      font-weight: 700 !important;
+    }
+    .btn-search:hover, .btn-book:hover, .btn-redeem:hover {
+      background: #D9530E !important;
+      border-color: #D9530E !important;
+      box-shadow: 0 4px 14px rgba(242, 100, 25, 0.34) !important;
+    }
+
+    /* Ocean & Turquoise Primary Action Buttons */
+    .btn-auth-header, .btn-auth-submit, .btn-action {
+      background: #027EBC !important;
+      color: #FFFFFF !important;
+      border: 1px solid #027EBC !important;
+      border-radius: 8px !important;
+    }
+    .btn-auth-header:hover, .btn-auth-submit:hover, .btn-action:hover {
+      background: #00A5CF !important;
+      border-color: #00A5CF !important;
+    }
+
+    /* Category Filter Pills */
+    .cat-pill {
+      background: #FFFFFF !important;
+      border: 1px solid #E6DFD5 !important;
+      color: #0F2942 !important;
+      border-radius: 999px !important;
+    }
+    .cat-pill:hover {
+      border-color: #00A5CF !important;
+      color: #027EBC !important;
+      background: #E6F7FB !important;
+    }
+    .cat-pill.active {
+      background: #00A5CF !important;
+      color: #FFFFFF !important;
+      border-color: #00A5CF !important;
+      box-shadow: 0 3px 10px rgba(0, 165, 207, 0.25) !important;
+    }
+
+    /* Cards & Badges */
+    .service-card, .voucher-card, .search-card, .table-container, .table-card, .chart-card-exact, .monthly-chart-card, .analytics-panel-card {
+      background: #FFFFFF !important;
+      border: 1px solid #E6DFD5 !important;
+      border-radius: 12px !important;
+    }
+    .card-category-badge {
+      background: #027EBC !important;
+      color: #FFFFFF !important;
+      border-radius: 6px !important;
+    }
+    .card-rating-badge {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+      font-weight: 800 !important;
+      border-radius: 6px !important;
+    }
+    .voucher-points-badge {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+      border-radius: 999px !important;
+    }
+    .price-val {
+      color: #027EBC !important;
+    }
+    .feat-tag {
+      background: #FFF8F0 !important;
+      color: #0F2942 !important;
+      border: 1px solid #F0E6D8 !important;
+    }
+
+    /* Token Pill & User Avatar */
+    .token-pill {
+      background: #FFF9E6 !important;
+      border: 1px solid #F6AE2D !important;
+      color: #0F2942 !important;
+    }
+    .token-icon {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+    }
+    .token-val {
+      color: #D9530E !important;
+    }
+    .user-avatar, .suc-avatar, .profile-card-avatar {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+    }
+    .sidebar-user-card {
+      background: linear-gradient(135deg, #027EBC 0%, #00A5CF 100%) !important;
+      color: #FFFFFF !important;
+    }
+    .side-nav-item.active, .menu-item-btn.active {
+      background: #E6F7FB !important;
+      color: #027EBC !important;
+      border-right-color: #00A5CF !important;
+    }
+
+    /* Dashboard & Monthly Chart (Ocean & Sun) */
+    .analytics-header-bar {
+      background: linear-gradient(135deg, #027EBC 0%, #00A5CF 100%) !important;
+      color: #FFFFFF !important;
+      border: none !important;
+    }
+    .analytics-header-title h3 {
+      color: #FFFFFF !important;
+    }
+    .analytics-header-title p {
+      color: #E6F7FB !important;
+    }
+    .analytics-year-btn {
+      background: rgba(255, 255, 255, 0.16) !important;
+      color: #FFFFFF !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
+    .analytics-year-btn.active {
+      background: #F6AE2D !important;
+      color: #0F2942 !important;
+      border-color: #F6AE2D !important;
+      font-weight: 800 !important;
+    }
+    .analytics-kpi-card::before {
+      background: #00A5CF !important;
+      width: 4px !important;
+    }
+    .analytics-kpi-card.teal::before { background: #027EBC !important; }
+    .analytics-kpi-card.amber::before { background: #F6AE2D !important; }
+    .analytics-kpi-card.purple::before { background: #F26419 !important; }
+    .month-bar-track {
+      background: linear-gradient(180deg, #00A5CF 0%, #027EBC 100%) !important;
+      border-radius: 6px 6px 0 0 !important;
+    }
+    .month-bar-comm {
+      background: #F6AE2D !important;
+    }
+    .month-col.active .month-bar-track {
+      background: #F26419 !important;
+    }
+    .month-bk-pill {
+      background: #FFF3EB !important;
+      color: #F26419 !important;
+      border: 1px solid #FAD1B8 !important;
+    }
+    .month-col:hover .month-bk-pill, .month-col.active .month-bk-pill {
+      background: #F26419 !important;
+      color: #FFFFFF !important;
+      border-color: #F26419 !important;
+    }
+    .month-col.active .month-label {
+      background: #027EBC !important;
+      color: #FFFFFF !important;
+    }
+
 </style>
 </head>
 <body>
@@ -2297,7 +2996,7 @@
       <div id="sidebar-user-card-logged-out" class="sidebar-user-card" style="display:none; background:linear-gradient(135deg, #1e293b, #334155);">
         <div style="font-weight:700; font-size:14px; margin-bottom:4px;">ยินดีต้อนรับสู่ ThailandCONNEX</div>
         <div style="font-size:12px; color:#cbd5e1; margin-bottom:12px;">เข้าสู่ระบบเพื่อสะสมแต้ม TCP และสิทธิประโยชน์พิเศษ</div>
-        <button onclick="openAuthModal('login')" style="width:100%; background:var(--orange); color:#fff; border:none; border-radius:8px; padding:8px 0; font-weight:700; font-size:13px; cursor:pointer;">🔑 เข้าสู่ระบบ / ลงทะเบียน</button>
+        <button onclick="openAuthModal('login')" style="width:100%; background:var(--orange); color:#fff; border:none; border-radius:8px; padding:8px 0; font-weight:700; font-size:13px; cursor:pointer;">เข้าสู่ระบบ / ลงทะเบียน</button>
       </div>
 
       <!-- Navigation Menu Items -->
@@ -2359,6 +3058,13 @@
 
       <!-- Sidebar Footer -->
       <div class="sidebar-footer">
+        <div style="margin-bottom:10px;">
+          <select id="ui-theme-selector" class="theme-Select-pill" style="width:100%;" onchange="applyUiTheme(this.value)" title="เปลี่ยนโทนสีของเว็บไซต์">
+            <option value="clean-ota">โทนสี: Clean OTA (Navy)</option>
+            <option value="boutique">โทนสี: Boutique Luxury (Emerald)</option>
+            <option value="minimal-slate">โทนสี: Minimal Slate (Monochrome)</option>
+          </select>
+        </div>
         <div><b>ThailandCONNEX</b> (depa)</div>
         <div>รหัสโครงการ: IF-65-0018</div>
         <div style="font-size:10px; color:#94a3b8; margin-top:4px;">บริษัท ทราวิซโก เทคโนโลยี จำกัด</div>
@@ -2375,7 +3081,7 @@
         <!-- Hero Banner -->
         <div class="user-hero">
           <div class="hero-content">
-            <span class="hero-tag">✨ National Digital Tourism Platform</span>
+            <span class="hero-tag">National Digital Tourism Platform</span>
             <h1 class="hero-title">ปลายทางในฝัน ของคนนับล้าน</h1>
             <p class="hero-desc">ค้นหาและจองโรงแรม รีสอร์ท กิจกรรมท่องเที่ยว และบริการนำเที่ยวทั่วไทย ด้วยราคาตรงจากผู้ประกอบการ พร้อมสะสม Travel Token (TCP) ในทุกการเดินทาง</p>
             <div class="hero-stats">
@@ -2451,14 +3157,14 @@
           <!-- Category Filter Pills (Official DEPA Excel Numbers) -->
           <div class="category-pills">
             <span class="cat-pill active" onclick="setCategoryFilter('all', this)">ทั้งหมด (202,021)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('accommodation', this)">🏨 ที่พักและโรงแรม (143,035)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('tour', this)">🧭 แพ็กเกจทัวร์ & มัคคุเทศก์ (30,988)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('wellness', this)">💆 สุขภาพและสปา (8,391)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('mobility', this)">🚗 ยานพาหนะและรถรับส่ง (6,622)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('food', this)">🍽️ ร้านอาหารและเครื่องดื่ม (6,146)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('attraction', this)">🎡 แหล่งท่องเที่ยวและบัตรเข้าชม (5,220)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('retail', this)">🛍️ ร้านค้าปลีกและของที่ระลึก (1,049)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('community', this)">🌿 ชุมชนท่องเที่ยว (570)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('accommodation', this)">ที่พักและโรงแรม (143,035)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('tour', this)">แพ็กเกจทัวร์ & มัคคุเทศก์ (30,988)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('wellness', this)">สุขภาพและสปา (8,391)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('mobility', this)">ยานพาหนะและรถรับส่ง (6,622)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('food', this)">ร้านอาหารและเครื่องดื่ม (6,146)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('attraction', this)">แหล่งท่องเที่ยวและบัตรเข้าชม (5,220)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('retail', this)">ร้านค้าปลีกและของที่ระลึก (1,049)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('community', this)">ชุมชนท่องเที่ยว (570)</span>
           </div>
         </div>
 
@@ -2482,7 +3188,7 @@
         <div id="services-pagination" style="margin-top: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;"></div>
 
         <!-- National Digital Tourism Data Bank Gateway Card -->
-        <div style="background: linear-gradient(135deg, #083b7c, #0c4a6e); border-radius: 14px; padding: 22px 26px; color: #fff; margin-top: 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; box-shadow: 0 4px 18px rgba(8,59,124,0.18);">
+        <div style="background: var(--navy); border-radius: 14px; padding: 22px 26px; color: #fff; margin-top: 36px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; box-shadow: 0 4px 18px rgba(8,59,124,0.18);">
           <div style="display: flex; align-items: center; gap: 16px;">
             <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 26px;">
               🗄️
@@ -2509,15 +3215,15 @@
       <!-- ============================================== -->
       <section id="view-rewards" class="view-panel">
         <!-- TCP Banner -->
-        <div style="background:linear-gradient(135deg, #0f172a, #1e293b); color:#fff; border-radius:20px; padding:28px 32px; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
+        <div style="background: var(--navy); color:#fff; border-radius:20px; padding:28px 32px; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
           <div>
-            <div style="color:#38bdf8; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">ThailandCONNEX Token Ecosystem</div>
+            <div style="color:#ffffff; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">ThailandCONNEX Token Ecosystem</div>
             <h2 style="font-size:24px; margin:0 0 6px;">ศูนย์แลกสิทธิประโยชน์ & Travel Token (TCP)</h2>
             <p style="margin:0; opacity:0.8; font-size:13px; max-width:600px;">สะสมคะแนนจากการท่องเที่ยว แล้วนำมาแลก Voucher ส่วนลดห้องพัก อาหาร สปา และบัตรเข้าชมสถานที่ท่องเที่ยวฟรี</p>
           </div>
           <div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:16px 24px; text-align:right;">
             <div style="font-size:11px; opacity:0.8; margin-bottom:4px;">ยอดคะแนนสะสมของคุณ</div>
-            <div style="font-family:'IBM Plex Sans Thai'; font-size:26px; font-weight:800; color:#38bdf8;" id="rewards-balance-display">41,520.00 TCP</div>
+            <div style="font-family:'IBM Plex Sans Thai'; font-size:26px; font-weight:800; color:#ffffff;" id="rewards-balance-display">41,520.00 TCP</div>
             <div style="font-size:11px; color:#fde047; margin-top:4px;">⚡ มี 500 TCP หมดอายุ 31 ธ.ค. 2566</div>
           </div>
         </div>
@@ -2651,9 +3357,9 @@
               <span style="background:#e0f2fe; color:#0369a1; font-size:11px; font-weight:600; padding:4px 8px; border-radius:6px; font-family: 'IBM Plex Sans Thai', sans-serif;">ERC-20</span>
             </div>
 
-            <div style="background:linear-gradient(135deg, #093b7c, #1377c8); border-radius:14px; padding:20px; color:#ffffff; margin-bottom:20px; box-shadow:0 6px 16px rgba(9,59,124,0.2);">
+            <div style="background: var(--navy); border-radius:14px; padding:20px; color:#ffffff; margin-bottom:20px; box-shadow:0 6px 16px rgba(9,59,124,0.2);">
               <div style="font-size:12px; opacity:0.85;">ยอดคงเหลือ (Balance)</div>
-              <div style="font-family:'IBM Plex Sans Thai'; font-size:32px; font-weight:800; color:#38bdf8; margin:4px 0 12px;" id="wallet-big-balance">41,520.00 TCP</div>
+              <div style="font-family:'IBM Plex Sans Thai'; font-size:32px; font-weight:800; color:#ffffff; margin:4px 0 12px;" id="wallet-big-balance">41,520.00 TCP</div>
               <div style="display:flex; justify-content:space-between; font-size:11px; opacity:0.8; border-top:1px solid rgba(255,255,255,0.15); padding-top:10px;">
                 <span>Wallet: 0x5E2D...33760</span>
                 <span>ThailandCONNEX Custody</span>
@@ -3027,7 +3733,7 @@
 
       <div class="modal-body" style="padding: 16px 20px 20px;">
         <div class="auth-tab-bar">
-          <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">🔑 เข้าสู่ระบบ</button>
+          <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">เข้าสู่ระบบ</button>
           <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">📝 ลงทะเบียน (+500 TCP)</button>
         </div>
 
@@ -3117,7 +3823,7 @@
               <span>ยอมรับเงื่อนไขการใช้งานและนโยบายความเป็นส่วนตัว ThailandCONNEX</span>
             </label>
             <button type="submit" class="btn-auth-submit" style="background:linear-gradient(135deg, #10b981, #059669);">
-              🎉 ลงทะเบียน & รับ 500 TCP ทันที
+              ลงทะเบียน & รับ 500 TCP ทันที
             </button>
           </form>
         </div>
@@ -4097,7 +4803,7 @@
           '🍳 ห้องครัวสไตล์ยุโรปพร้อมเตาอบ ไมโครเวฟ ตู้เย็น',
           '🧺 เครื่องซักผ้าและเครื่องอบผ้าในห้องพัก',
           '🏋️ ฟิตเนสเซ็นเตอร์ สนามเทนนิส และสนามสควอช',
-          '🚗 ที่จอดรถส่วนตัวฟรี พร้อมสถานีชาร์จ EV Charger',
+          'ที่จอดรถส่วนตัวฟรี พร้อมสถานีชาร์จ EV Charger',
           '셔 รถ Shuttle Tuk-Tuk รับส่ง BTS ฟรีตลอดวัน',
           '🛡️ ระบบคีย์การ์ดรักษาความปลอดภัยและ รปภ. 24 ชม.'
         ]
@@ -4162,7 +4868,7 @@
           '🍳 บริการ Floating Breakfast เสิร์ฟถึงห้องพัก',
           '🛁 อ่างอาบน้ำหินอ่อนพร้อมวิวทะเล',
           '📶 ฟรี Wi-Fi ความเร็วสูงครอบคลุมถึงหน้าหาด',
-          '🚗 ที่จอดรถกว้างขวางพร้อม รปภ. 24 ชม.'
+          'ที่จอดรถกว้างขวางพร้อม รปภ. 24 ชม.'
         ]
       },
       'SRV-09': {
@@ -4191,7 +4897,7 @@
           '🌊 ระเบียงส่วนตัวเห็นวิวทะเลกะตะ',
           '🏊 สระว่ายน้ำ 2 สระพร้อมบาร์ริมสระ',
           '🍳 บุฟเฟ่ต์อาหารเช้าซีฟู้ด & นานาชาติ',
-          '💆 สปาแผนไทยและห้องนวดอโรมา',
+          'สปาแผนไทยและห้องนวดอโรมา',
           '📶 ฟรี Wi-Fi ทั่วบริเวณโรงแรม'
         ]
       },
@@ -4252,7 +4958,7 @@
           '🍳 บริการ Floating Breakfast เสิร์ฟถึงสระน้ำ',
           '🛁 อ่างอาบน้ำกลางแจ้งมองเห็นวิวทะเล',
           '🍸 บาร์ส่วนตัวพร้อมเครื่องดื่ม Welcome drink',
-          '🚗 บริการรถรับส่งสนามบินสมุยฟรี',
+          'บริการรถรับส่งสนามบินสมุยฟรี',
           '📶 ฟรี Wi-Fi ความเร็วสูง'
         ]
       }
@@ -4613,18 +5319,18 @@
               ${data.title}
             </div>
             <div style="font-size:12px; color:#475569;">
-              🏢 ผู้ให้บริการ: <b>${data.provider}</b>
+              ผู้ให้บริการ: <b>${data.provider}</b>
             </div>
           </div>
         </div>
 
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:8px;">
           <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px;">
-            <label style="display:block; font-size:11px; color:#64748b; margin-bottom:4px;">📅 วันที่เช็คอิน (ตั้งแต่ ${todayStr})</label>
+            <label style="display:block; font-size:11px; color:#64748b; margin-bottom:4px;">วันที่เช็คอิน (ตั้งแต่ ${todayStr})</label>
             <input type="date" id="confirm-booking-checkin" min="${todayStr}" value="${safeCheckin}" onchange="onConfirmCheckinChange()" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; color:#0f172a; background:#fff; font-family:inherit;">
           </div>
           <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px;">
-            <label style="display:block; font-size:11px; color:#64748b; margin-bottom:4px;">📅 วันที่เช็คเอาท์</label>
+            <label style="display:block; font-size:11px; color:#64748b; margin-bottom:4px;">วันที่เช็คเอาท์</label>
             <input type="date" id="confirm-booking-checkout" min="${safeCheckin}" value="${safeCheckout}" onchange="onConfirmCheckoutChange()" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; color:#0f172a; background:#fff; font-family:inherit;">
           </div>
         </div>
@@ -4760,7 +5466,7 @@
       closeModal('modal-confirm-booking');
       state.activeConfirmBooking = null;
 
-      showToast(`🎉 ยืนยันการจองสำเร็จ! รหัสการจอง: BK-${newId} (รับ +${Math.round(b.price * 0.05)} TCP) ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
+      showToast(`ยืนยันการจองสำเร็จ! รหัสการจอง: BK-${newId} (รับ +${Math.round(b.price * 0.05)} TCP) ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
       setTimeout(() => switchTab('view-reservations', 'ประวัติการจอง'), 600);
     }
 
@@ -4805,7 +5511,7 @@
         renderRewards();
         renderCoupons();
         renderTokenLogs();
-        showToast('✨ แลกคูปองสำเร็จ! ส่งธุรกรรม Token Burning ไปยัง Admin Ledger เรียบร้อย');
+        showToast('แลกคูปองสำเร็จ! ส่งธุรกรรม Token Burning ไปยัง Admin Ledger เรียบร้อย');
       } else {
         const v = state.vouchers.find(x => x.id === voucherId);
         if (!v) return;
@@ -4932,7 +5638,7 @@
                 </p>
                 <div style="display:flex; gap:10px; justify-content:center;">
                   <button class="btn-search" style="padding: 10px 24px; font-size: 13.5px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; cursor:pointer;" onclick="openAuthModal('login')">
-                    🔑 เข้าสู่ระบบเพื่อดูรายการจอง
+                    เข้าสู่ระบบเพื่อดูรายการจอง
                   </button>
                   <button class="btn-export" style="padding: 10px 20px; font-size: 13.5px; border-radius: 8px; cursor:pointer;" onclick="switchTab('view-booking', 'จองบริการท่องเที่ยว')">
                     ค้นหาบริการท่องเที่ยว
@@ -5079,7 +5785,7 @@
 
       let totalSpent = 0;
       let confirmedCount = 0;
-      const catCounts = { '🏨 ที่พัก/โรงแรม': 0, '🎡 แหล่งท่องเที่ยว/ล่องเรือ': 0, '💆 สปา/เวลเนส': 0 };
+      const catCounts = { 'ที่พัก/โรงแรม': 0, 'แหล่งท่องเที่ยว/ล่องเรือ': 0, 'สปา/เวลเนส': 0 };
 
       userReservations.forEach(r => {
         const amt = parseFloat(r.amount) || 0;
@@ -5098,9 +5804,9 @@
         }
 
         const txt = ((r.serviceName || '') + ' ' + (r.property || '')).toLowerCase();
-        if (txt.includes('spa') || txt.includes('สปา')) catCounts['💆 สปา/เวลเนส'] += amt;
-        else if (txt.includes('cruise') || txt.includes('ล่องเรือ') || txt.includes('sealife') || txt.includes('ใบหยก')) catCounts['🎡 แหล่งท่องเที่ยว/ล่องเรือ'] += amt;
-        else catCounts['🏨 ที่พัก/โรงแรม'] += amt;
+        if (txt.includes('spa') || txt.includes('สปา')) catCounts['สปา/เวลเนส'] += amt;
+        else if (txt.includes('cruise') || txt.includes('ล่องเรือ') || txt.includes('sealife') || txt.includes('ใบหยก')) catCounts['แหล่งท่องเที่ยว/ล่องเรือ'] += amt;
+        else catCounts['ที่พัก/โรงแรม'] += amt;
       });
 
       const totalEarnedTCP = Math.round(totalSpent * 0.05);
@@ -5116,7 +5822,7 @@
             ${cnt > 0 ? `<span style="font-size:10px; font-weight:700; color:#0369a1; background:#e0f2fe; padding:2px 7px; border-radius:99px; margin-bottom:4px; white-space:nowrap;">${cnt} จอง</span>` : '<span style="height:19px; margin-bottom:4px;"></span>'}
             <span style="font-size:10.5px; font-weight:700; color:${val > 0 ? '#0f172a' : '#94a3b8'}; margin-bottom:5px; white-space:nowrap;">${val > 0 ? '฿' + val.toLocaleString('th-TH') : '-'}</span>
             <div style="width:100%; height:120px; display:flex; align-items:flex-end; justify-content:center; border-bottom:2px solid #cbd5e1; padding-bottom:1px;">
-              <div style="width:100%; max-width:34px; height:${hPx}px; background:${val > 0 ? (isSel ? '#0d9488' : 'linear-gradient(180deg, #0284c7, #083b7c)') : '#e2e8f0'}; border-radius:6px 6px 0 0; transition:height 0.3s;"></div>
+              <div style="width:100%; max-width:34px; height:${hPx}px; background:${val > 0 ? (isSel ? '#F26419' : 'linear-gradient(180deg, #00A5CF, #027EBC)') : '#E6DFD5'}; border-radius:6px 6px 0 0; transition:height 0.3s;"></div>
             </div>
             <span style="font-size:12px; font-weight:700; color:${isSel ? '#ffffff' : '#334155'}; background:${isSel ? '#0d9488' : 'transparent'}; padding:2px 7px; border-radius:6px; margin-top:8px; line-height:1.3; white-space:nowrap;">${mName}</span>
           </div>
@@ -5128,7 +5834,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
             <div>
               <h3 style="margin:0 0 4px; font-size:16px; color:var(--navy); display:flex; align-items:center; gap:8px;">
-                <span>📊 สรุปภาพรวมการจองและยอดใช้จ่ายรายเดือนของคุณ (${state.user.name})</span>
+                <span>สรุปภาพรวมการจองและยอดใช้จ่ายรายเดือนของคุณ (${state.user.name})</span>
               </h3>
               <p style="margin:0; font-size:12px; color:var(--muted);">แสดงข้อมูลสถิติการเดินทางและยอดเงินแต่ละเดือนเฉพาะบัญชีของคุณ (คลิกที่เดือนเพื่อกรองตารางด้านล่าง)</p>
             </div>
@@ -5141,17 +5847,17 @@
 
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:12px; margin-bottom:18px;">
             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #0284c7; border-radius:10px; padding:12px 14px;">
-              <div style="font-size:11.5px; color:#64748b; font-weight:600;">📋 รายการจองของฉันทั้งหมด</div>
+              <div style="font-size:11.5px; color:#64748b; font-weight:600;">รายการจองของฉันทั้งหมด</div>
               <div style="font-size:22px; font-weight:800; color:var(--navy); margin-top:4px;">${userReservations.length} <small style="font-size:12px; font-weight:600;">รายการ</small></div>
               <div style="font-size:11px; color:#059669; font-weight:600;">ยืนยันแล้ว ${confirmedCount} รายการ</div>
             </div>
             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #0d9488; border-radius:10px; padding:12px 14px;">
-              <div style="font-size:11.5px; color:#64748b; font-weight:600;">💰 ยอดใช้จ่ายรวมสุทธิ</div>
+              <div style="font-size:11.5px; color:#64748b; font-weight:600;">ยอดใช้จ่ายรวมสุทธิ</div>
               <div style="font-size:22px; font-weight:800; color:#0d9488; margin-top:4px;">฿${totalSpent.toLocaleString('th-TH')}</div>
               <div style="font-size:11px; color:#64748b;">เฉลี่ย ฿${Math.round(totalSpent / Math.max(userReservations.length, 1)).toLocaleString('th-TH')} / การจอง</div>
             </div>
             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #f59e0b; border-radius:10px; padding:12px 14px;">
-              <div style="font-size:11.5px; color:#64748b; font-weight:600;">🪙 แต้มสะสมที่ได้รับ (Cashback 5%)</div>
+              <div style="font-size:11.5px; color:#64748b; font-weight:600;">แต้มสะสมที่ได้รับ (Cashback 5%)</div>
               <div style="font-size:22px; font-weight:800; color:#d97706; margin-top:4px;">+${totalEarnedTCP.toLocaleString('th-TH')} TCP</div>
               <div style="font-size:11px; color:#b45309; font-weight:600;">เข้ากระเป๋า ERC-20 อัตโนมัติ</div>
             </div>
@@ -5419,7 +6125,7 @@
           updateHeaderBadges();
           renderReservations();
           closeModal('modal-auth');
-          showToast(`🎉 ยินดีต้อนรับคุณ ${res.user.name} (${method === 'ThaiD' ? 'ยืนยันตัวตนผ่าน ThaiD สำเร็จ' : 'เข้าสู่ระบบสำเร็จ'})`);
+          showToast(`ยินดีต้อนรับคุณ ${res.user.name} (${method === 'ThaiD' ? 'ยืนยันตัวตนผ่าน ThaiD สำเร็จ' : 'เข้าสู่ระบบสำเร็จ'})`);
           checkPendingBookingAfterLogin();
         } else {
           showToast(res.message || 'เข้าสู่ระบบไม่สำเร็จ', true);
@@ -5440,7 +6146,7 @@
           updateHeaderBadges();
           renderReservations();
           closeModal('modal-auth');
-          showToast(`🎉 เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${res.user.name}`);
+          showToast(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับคุณ ${res.user.name}`);
           checkPendingBookingAfterLogin();
         } else {
           showToast(res.message || 'เข้าสู่ระบบไม่สำเร็จ', true);
@@ -5461,7 +6167,7 @@
           state.user = res.user;
           updateHeaderBadges();
           closeModal('modal-auth');
-          showToast(`🎉 ยินดีต้อนรับคุณ ${res.user.name}! ได้รับ 500 TCP Welcome Bonus เรียบร้อยแล้ว`);
+          showToast(`ยินดีต้อนรับคุณ ${res.user.name}! ได้รับ 500 TCP Welcome Bonus เรียบร้อยแล้ว`);
           checkPendingBookingAfterLogin();
         } else {
           showToast(res.message || 'ลงทะเบียนไม่สำเร็จ', true);
@@ -5543,7 +6249,7 @@
       const addr = state.user ? state.user.walletAddress : '';
       if (navigator.clipboard && addr) {
         navigator.clipboard.writeText(addr);
-        showToast('📋 คัดลอกที่อยู่กระเป๋าเงิน ERC-20 แล้ว');
+        showToast('คัดลอกที่อยู่กระเป๋าเงิน ERC-20 แล้ว');
       } else {
         showToast('Wallet: ' + addr);
       }
@@ -5627,6 +6333,32 @@
         setTimeout(() => t.remove(), 300);
       }, 3500);
     }
+
+    // ==========================================
+    // MULTI-PALETTE THEME SWITCHER (SYNCED)
+    // ==========================================
+    function applyUiTheme(themeName) {
+      const valid = ['clean-ota', 'boutique', 'minimal-slate'];
+      const chosen = valid.includes(themeName) ? themeName : 'clean-ota';
+      document.documentElement.setAttribute('data-theme', chosen);
+      try { localStorage.setItem('TC_UI_THEME', chosen); } catch (e) {}
+      const sel = document.getElementById('ui-theme-selector');
+      if (sel && sel.value !== chosen) sel.value = chosen;
+    }
+    (function initSavedTheme() {
+      try {
+        const saved = localStorage.getItem('TC_UI_THEME') || 'clean-ota';
+        document.documentElement.setAttribute('data-theme', saved);
+        window.addEventListener('DOMContentLoaded', () => {
+          const sel = document.getElementById('ui-theme-selector');
+          if (sel) sel.value = saved;
+        });
+        window.addEventListener('storage', (e) => {
+          if (e.key === 'TC_UI_THEME' && e.newValue) applyUiTheme(e.newValue);
+        });
+      } catch (e) {}
+    })();
+
   </script>
 </body>
 </html>

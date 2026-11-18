@@ -803,7 +803,7 @@
         amount: 430,
         commission: 22,
         status: 'Confirmed',
-        notes: 'จองผ่านระบบ ThailandCONNEX Portal (ได้รับ 21.50 TCP)'
+        notes: 'จองผ่านระบบ ThailandCONNEX Portal (ได้รับ 21.50 TCN)'
       },
       {
         id: '955397221',
@@ -1345,12 +1345,12 @@
         amount: amount,
         commission: commission,
         status: res.status || 'Confirmed',
-        notes: res.notes || `จองออนไลน์ผ่าน ThailandCONNEX Platform (Earned ${(amount * 0.05).toFixed(1)} TCP)`
+        notes: res.notes || `จองออนไลน์ผ่าน ThailandCONNEX Platform (Earned ${(amount * 0.05).toFixed(1)} TCN)`
       };
 
       state.reservations.unshift(newBooking);
 
-      // Earn tokens (5% of booking value as TCP)
+      // Earn tokens (5% of booking value as TCN)
       const earnedPoints = Math.round(amount * 0.05 * 100) / 100;
       if (earnedPoints > 0) {
         state.user.tokenBalance = Math.round((state.user.tokenBalance + earnedPoints) * 100) / 100;
@@ -1392,7 +1392,7 @@
       if (!v) return { success: false, message: 'ไม่พบรหัส Voucher' };
 
       if (state.user.tokenBalance < v.points) {
-        return { success: false, message: 'คะแนน TCP ไม่เพียงพอสำหรับการแลก' };
+        return { success: false, message: 'คะแนน TCN ไม่เพียงพอสำหรับการแลก' };
       }
 
       state.user.tokenBalance = Math.round((state.user.tokenBalance - v.points) * 100) / 100;
@@ -1569,7 +1569,7 @@
         time: getNowStr(),
         action: 'Token Minting',
         actionCode: '+',
-        detail: `🎉 Welcome Bonus 500 TCP สมัครสมาชิกใหม่ (${newUser.name})`,
+        detail: `🎉 Welcome Bonus 500 TCN สมัครสมาชิกใหม่ (${newUser.name})`,
         amount: initialBonus,
         balance: initialBonus,
         txHash: generateHash(),

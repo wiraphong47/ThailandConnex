@@ -1724,16 +1724,20 @@
           <div class="search-row">
             <div class="form-group">
               <label>จุดหมายปลายทาง / ชื่อที่พัก / กิจกรรม</label>
-              <input type="text" id="service-search-input" class="form-control" placeholder="เช่น Bangkok, Thailand หรือ กรุงเทพฯ, ภูเก็ต, เชียงใหม่..." value="Bangkok, Thailand" list="destination-suggestions" oninput="filterServices()" style="font-family:'IBM Plex Sans Thai', sans-serif !important;">
+              <input type="text" id="service-search-input" class="form-control" placeholder="ค้นหาจุดหมายปลายทาง เช่น กรุงเทพฯ, ภูเก็ต, เชียงใหม่, ปากช่อง, สุโขทัย, กระบี่ หรือเลือกดูทั้งหมด..." value="" list="destination-suggestions" oninput="filterServices()" style="font-family:'IBM Plex Sans Thai', sans-serif !important;">
               <datalist id="destination-suggestions">
-                <option value="Bangkok, Thailand">กรุงเทพมหานคร (Bangkok)</option>
-                <option value="ภูเก็ต (Phuket)">ภูเก็ต - ทะเล ป่าตอง กะตะ</option>
-                <option value="เชียงใหม่ (Chiang Mai)">เชียงใหม่ - คูเมือง แม่ริม</option>
-                <option value="พัทยา / ชลบุรี (Pattaya)">พัทยา ชลบุรี</option>
-                <option value="หัวหิน (Hua Hin)">หัวหิน ชะอำ ประจวบฯ</option>
-                <option value="กระบี่ (Krabi)">กระบี่ อ่าวนาง เกาะพีพี</option>
-                <option value="เกาะสมุย (Koh Samui)">เกาะสมุย สุราษฎร์ธานี</option>
-                <option value="ทั้งหมด (All Thailand)">ทุกจุดหมายปลายทาง ทั่วประเทศ</option>
+                <option value="all">ทุกจุดหมายปลายทาง ทั่วประเทศไทย (77 จังหวัด)</option>
+                <option value="กรุงเทพมหานคร">กรุงเทพมหานคร (Bangkok - 33,001 ผู้ประกอบการ)</option>
+                <option value="ภูเก็ต">ภูเก็ต (Phuket - 9,345 ผู้ประกอบการ)</option>
+                <option value="ชลบุรี">ชลบุรี / พัทยา (Chonburi - 7,902 ผู้ประกอบการ)</option>
+                <option value="เชียงใหม่">เชียงใหม่ (Chiang Mai - 6,346 ผู้ประกอบการ)</option>
+                <option value="สุราษฎร์ธานี">สุราษฎร์ธานี / เกาะสมุย (5,500 ผู้ประกอบการ)</option>
+                <option value="กระบี่">กระบี่ / อ่าวนาง (3,308 ผู้ประกอบการ)</option>
+                <option value="นครราชสีมา">นครราชสีมา / ปากช่อง / เขาใหญ่</option>
+                <option value="สุโขทัย">สุโขทัย (เมืองประวัติศาสตร์)</option>
+                <option value="เชียงราย">เชียงราย (ชุมชนท่องเที่ยวและธรรมชาติ)</option>
+                <option value="ตราด">ตราด / เกาะช้าง</option>
+                <option value="ราชบุรี">ราชบุรี / ดำเนินสะดวก</option>
               </datalist>
             </div>
             <div class="form-group">
@@ -1764,16 +1768,17 @@
             </button>
           </div>
 
-          <!-- Category Filter Pills -->
+          <!-- Category Filter Pills (Official DEPA Excel Numbers) -->
           <div class="category-pills">
-            <span class="cat-pill active" onclick="setCategoryFilter('all', this)">ทั้งหมด (201,764)</span>
+            <span class="cat-pill active" onclick="setCategoryFilter('all', this)">ทั้งหมด (202,021)</span>
             <span class="cat-pill" onclick="setCategoryFilter('accommodation', this)">🏨 ที่พักและโรงแรม (143,035)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('attraction', this)">🎡 แหล่งท่องเที่ยวและบัตรเข้าชม (6,652)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('wellness', this)">💆 สุขภาพและสปา (8,386)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('tour', this)">🧭 แพ็กเกจทัวร์ & มัคคุเทศก์ (30,948)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('food', this)">🍽️ ร้านอาหารและเครื่องดื่ม (6,044)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('mobility', this)">🚗 ยานพาหนะและรถรับส่ง (5,172)</span>
-            <span class="cat-pill" onclick="setCategoryFilter('community', this)">🌿 ชุมชนท่องเที่ยว (553)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('tour', this)">🧭 แพ็กเกจทัวร์ & มัคคุเทศก์ (30,988)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('wellness', this)">💆 สุขภาพและสปา (8,391)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('mobility', this)">🚗 ยานพาหนะและรถรับส่ง (6,622)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('food', this)">🍽️ ร้านอาหารและเครื่องดื่ม (6,146)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('attraction', this)">🎡 แหล่งท่องเที่ยวและบัตรเข้าชม (5,220)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('retail', this)">🛍️ ร้านค้าปลีกและของที่ระลึก (1,049)</span>
+            <span class="cat-pill" onclick="setCategoryFilter('community', this)">🌿 ชุมชนท่องเที่ยว (570)</span>
           </div>
         </div>
 
@@ -2461,6 +2466,7 @@
   <!-- Toast Container -->
   <div class="toast-box" id="toast-container"></div>
 
+  <script src="depa-real-data.js"></script>
   <script src="shared-store.js"></script>
   <!-- Interactive JavaScript Logic with Real PDF Dataset -->
   <script>
@@ -2498,8 +2504,8 @@
       pendingBooking: null,
       activeConfirmBooking: null,
       
-      // Services for booking (PDF Pages 91, 208-220)
-      services: [
+      // Services for booking from Real DEPA Excel Dataset
+      services: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices) ? DEPA_REAL_DATA.featuredServices : [
         {
           id: 'SRV-01',
           category: 'accommodation',

@@ -1873,12 +1873,13 @@
                 <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                   <span style="font-size:13px; font-weight:700; color:var(--text-dark);">📍 กรองตามพื้นที่ / จังหวัด:</span>
                   <select id="databank-prov-filter" class="input-clean" onchange="filterDataBankProvince(this.value)" style="font-weight:600; min-width:280px;">
-                    <option value="all">ทั่วประเทศไทย (77 จังหวัด - 108,659 ราย)</option>
-                    <option value="bkk">กรุงเทพมหานคร (Bangkok - 28,450 ราย)</option>
-                    <option value="phuket">ภูเก็ต (Phuket - 18,420 ราย)</option>
-                    <option value="cm">เชียงใหม่ (Chiang Mai - 14,890 ราย)</option>
-                    <option value="chonburi">ชลบุรี / พัทยา (Chonburi - 12,310 ราย)</option>
-                    <option value="surat">สุราษฎร์ธานี / เกาะสมุย (Surat Thani - 8,950 ราย)</option>
+                    <option value="all">ทั่วประเทศไทย (77 จังหวัด - 109,947 ราย)</option>
+                    <option value="bkk">กรุงเทพมหานคร (Bangkok - 33,001 ราย)</option>
+                    <option value="phuket">ภูเก็ต (Phuket - 9,345 ราย)</option>
+                    <option value="chonburi">ชลบุรี / พัทยา (Chonburi - 7,902 ราย)</option>
+                    <option value="cm">เชียงใหม่ (Chiang Mai - 6,346 ราย)</option>
+                    <option value="surat">สุราษฎร์ธานี / เกาะสมุย (Surat Thani - 5,500 ราย)</option>
+                    <option value="krabi">กระบี่ (Krabi - 3,308 ราย)</option>
                   </select>
                 </div>
                 <span style="font-size:12px; color:var(--text-muted)">ข้อมูลยืนยันผลการดำเนินงานโครงการ รหัส IF-65-0018</span>
@@ -1994,7 +1995,7 @@
           <div id="databank-subtab-packages" style="display:none;">
             <div class="table-card">
               <div class="table-card-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <span>สารบบสินค้าและบริการด้านการท่องเที่ยว (Target: 200,000 | ผลสำเร็จ: 201,764 รายการ)</span>
+                <span>สารบบสินค้าและบริการด้านการท่องเที่ยว (Target: 200,000 | ผลสำเร็จ: 202,021 รายการ จากไฟล์ .xlsx)</span>
                 <button class="btn-action" style="font-size:11.5px;" onclick="exportAdminDirectoryCSV()">
                   Export สารบบสินค้าและบริการ CSV 📥
                 </button>
@@ -2915,6 +2916,7 @@
     </div>
   </div>
 
+    <script src="depa-real-data.js"></script>
     <script src="shared-store.js"></script>
   <script>
 
@@ -3854,7 +3856,9 @@
 
     
     // National Tourism Data Bank Directory Data (อ้างอิงตามรายงานสมบูรณ์ หน้า 176-240)
-    const adminDataBankDirectory = [
+    const adminDataBankDirectory = (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.directory && DEPA_REAL_DATA.directory.length > 0)
+      ? DEPA_REAL_DATA.directory
+      : [
       { no: 1, cat: 'Accommodation', supplier: 'DNA Resort & Spa', name: 'Deluxe Suite with Jacuzzi', province: 'นครราชสีมา (ปากช่อง)', price: 3990, allotment: 15, status: 'Active' },
       { no: 2, cat: 'Accommodation', supplier: 'เรือนศรีสิริ เกสท์เฮาส์', name: 'Standard Twin Room', province: 'สุโขทัย (เมือง)', price: 850, allotment: 8, status: 'Active' },
       { no: 3, cat: 'Accommodation', supplier: 'เดอะ เซเว่น กระบี่ (SHA Extra Plus)', name: 'Deluxe Sea View Balcony', province: 'กระบี่ (อ่าวนาง)', price: 2450, allotment: 20, status: 'Active' },
@@ -3949,12 +3953,54 @@
       showToast('📥 ดาวน์โหลดสารบบสินค้า Data Bank เรียบร้อยแล้ว');
     }
 
+    function renderAdminProductsTable() {
+      const tbody = document.querySelector('#table-products tbody');
+      if (!tbody || typeof DEPA_REAL_DATA === 'undefined' || !DEPA_REAL_DATA.directory) return;
+      const realItems = DEPA_REAL_DATA.directory.slice(0, 15);
+      tbody.innerHTML = realItems.map((p, idx) => `
+        <tr>
+          <td style="color:#94a3b8; cursor:grab;">☰</td>
+          <td><b>${p.name}</b> <small style="color:#64748b; font-weight:normal;">(${p.supplier})</small></td>
+          <td><span class="badge badge-info">PRD-${(1000 + idx)}</span></td>
+          <td>24 hours</td>
+          <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
+          <td><span class="badge badge-success">Approved</span></td>
+          <td style="text-align: right;"><button class="btn-secondary" onclick="showToast('ดูรายละเอียดสินค้า: ${p.name}', 'info')">✏️</button></td>
+        </tr>
+      `).join('');
+      const countEl = document.getElementById('product-count');
+      if (countEl) countEl.textContent = `${realItems.length} (เชื่อมต่อข้อมูลจริง .xlsx)`;
+    }
+
+    function renderAdminPackagesTable() {
+      const tbody = document.querySelector('#table-packages tbody');
+      if (!tbody || typeof DEPA_REAL_DATA === 'undefined' || !DEPA_REAL_DATA.directory) return;
+      const realItems = DEPA_REAL_DATA.directory.slice(0, 20);
+      tbody.innerHTML = realItems.map((d, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><b>${d.name}</b></td>
+          <td>${d.supplier}</td>
+          <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">${d.catName || d.cat}</span></td>
+          <td><b style="font-family:'IBM Plex Sans Thai';">฿${Number(d.price).toLocaleString('th-TH')}</b></td>
+          <td><span class="badge badge-success">Available</span></td>
+          <td style="text-align: right;">
+            <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="showToast('ข้อมูลแพ็กเกจ: ${d.name} (${d.supplier})', 'info')">ดูรายละเอียด 👁️</button>
+          </td>
+        </tr>
+      `).join('');
+      const countEl = document.getElementById('package-count');
+      if (countEl) countEl.textContent = `${realItems.length} (เชื่อมต่อข้อมูลจริง .xlsx)`;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Check URL hash for direct tab navigation
       if (window.location.hash === '#databank') {
         switchView('databank-kpi', document.getElementById('btn-databank'));
       }
       renderAdminDirectory();
+      renderAdminProductsTable();
+      renderAdminPackagesTable();
 
       renderAdminFromStore();
 

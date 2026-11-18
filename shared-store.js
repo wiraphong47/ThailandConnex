@@ -14,10 +14,10 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const STORAGE_KEY = 'TC_DATA_STORE_V6';
+  const STORAGE_KEY = 'TC_DATA_STORE_V7';
 
   const DEFAULT_STATE = {
-    version: 6,
+    version: 7,
     lastUpdated: Date.now(),
     user: {
       name: 'อลิสา ใจดี',
@@ -138,218 +138,537 @@
         }
       ]
     },
-    services: [
+    services: (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices && DEPA_REAL_DATA.featuredServices.length > 0)
+      ? DEPA_REAL_DATA.featuredServices
+      : [
       {
-        id: 'SRV-01',
-        category: 'accommodation',
-        categoryName: 'โรงแรมและที่พัก',
-        title: 'Sukhumvit Park, Bangkok - Marriott Executive Apartments',
-        provider: 'Sukhumvit Park Hotel',
-        location: 'สุขุมวิท, กรุงเทพมหานคร',
-        rating: '4.9 ★',
-        features: ['SHA Plus', 'WiFi ฟรี', 'สระว่ายน้ำ', 'ใกล้ BTS'],
-        price: 28999,
-        unit: 'คืน',
-        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80',
-        roomType: 'One Bedroom Suite',
-        allotment: 12
+            "id": "SRV-01",
+            "category": "accommodation",
+            "categoryName": "โรงแรมและที่พัก",
+            "title": "DNA Resort & Spa - Deluxe With Breakfast",
+            "provider": "DNA Resort & Spa",
+            "location": "ปากช่อง, นครราชสีมา",
+            "rating": "4.7 ★",
+            "features": [
+                  "SHA Plus",
+                  "WiFi ฟรี",
+                  "ที่จอดรถ",
+                  "ใกล้แหล่งท่องเที่ยว"
+            ],
+            "price": 3994.27,
+            "unit": "คืน",
+            "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80",
+            "allotment": 28
       },
       {
-        id: 'SRV-02',
-        category: 'accommodation',
-        categoryName: 'โรงแรมและที่พัก',
-        title: 'Cye 428 All Day Hostel @ Sukhumvit',
-        provider: 'Cye Hospitality Group',
-        location: 'คลองเตย, กรุงเทพมหานคร',
-        rating: '4.8 ★',
-        features: ['ฟรีอาหารเช้า', 'Co-working Space', 'WiFi ความเร็วสูง'],
-        price: 1850,
-        unit: 'คืน',
-        image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Deluxe Dormitory Room',
-        allotment: 24
+            "id": "SRV-02",
+            "category": "accommodation",
+            "categoryName": "โรงแรมและที่พัก",
+            "title": "เรืองศรีศิริ เกสท์เฮาส์ - Duplex Villa With Breakfast",
+            "provider": "เรืองศรีศิริ เกสท์เฮาส์",
+            "location": "เมืองสุโขทัย, สุโขทัย",
+            "rating": "4.7 ★",
+            "features": [
+                  "SHA Plus",
+                  "WiFi ฟรี",
+                  "ที่จอดรถ",
+                  "ใกล้แหล่งท่องเที่ยว"
+            ],
+            "price": 6595.79,
+            "unit": "คืน",
+            "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80",
+            "allotment": 11
       },
       {
-        id: 'SRV-03',
-        category: 'accommodation',
-        categoryName: 'โรงแรมและที่พัก',
-        title: 'เดอะ มยุ สกาย รีสอร์ท แมท หัวหิน (SHA Extra Plus)',
-        provider: 'บจก. สวนพักรักไทยโฮมสเตย์',
-        location: 'หัวหิน, ประจวบคีรีขันธ์',
-        rating: '4.9 ★',
-        features: ['วิวทะเลส่วนตัว', 'อาหารเช้า 2 ท่าน', 'สระว่ายน้ำอินฟินิตี้'],
-        price: 3994,
-        unit: 'คืน',
-        image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Deluxe With Breakfast',
-        allotment: 8
+            "id": "SRV-03",
+            "category": "accommodation",
+            "categoryName": "โรงแรมและที่พัก",
+            "title": "Tt Resident - Deluxe Studio",
+            "provider": "Tt Resident",
+            "location": "เขตบางนา, กรุงเทพมหานคร",
+            "rating": "4.9 ★",
+            "features": [
+                  "SHA Plus",
+                  "WiFi ฟรี",
+                  "ที่จอดรถ",
+                  "ใกล้แหล่งท่องเที่ยว"
+            ],
+            "price": 825.29,
+            "unit": "คืน",
+            "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop&q=80",
+            "allotment": 8
       },
       {
-        id: 'SRV-04',
-        category: 'attraction',
-        categoryName: 'แหล่งท่องเที่ยว',
-        title: 'บัตรเข้าชมวิว + ดินเนอร์บุฟเฟ่ต์ ตึกใบหยกสกาย',
-        provider: 'Bangkok Balcony Baiyoke',
-        location: 'ราชเทวี, กรุงเทพมหานคร',
-        rating: '4.7 ★',
-        features: ['ชมวิวชั้น 77 & 84', 'บุฟเฟ่ต์ซีฟู้ดพรีเมียม', 'Open Air Balcony'],
-        price: 1290,
-        unit: 'ท่าน',
-        image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Dinner Buffet Ticket',
-        allotment: 50
+            "id": "SRV-04",
+            "category": "accommodation",
+            "categoryName": "โรงแรมและที่พัก",
+            "title": "เดอะ เฮเว่น กระบี่ (SHA Extra Plus) - Standard Room",
+            "provider": "เดอะ เฮเว่น กระบี่ (SHA Extra Plus)",
+            "location": "เมืองกระบี่, กระบี่",
+            "rating": "4.9 ★",
+            "features": [
+                  "SHA Plus",
+                  "WiFi ฟรี",
+                  "ที่จอดรถ",
+                  "ใกล้แหล่งท่องเที่ยว"
+            ],
+            "price": 3500.0,
+            "unit": "คืน",
+            "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop&q=80",
+            "allotment": 16
       },
       {
-        id: 'SRV-05',
-        category: 'wellness',
-        categoryName: 'สุขภาพและสปา',
-        title: '7 Spa Luxury Health & Wellness - Mud Wrap & Thai Herbal',
-        provider: '7 Spa Luxury Group',
-        location: 'บางละมุง, ชลบุรี',
-        rating: '4.9 ★',
-        features: ['นวด 120 นาที', 'อ่างแช่น้ำแร่สมุนไพร', 'Welcome Drink'],
-        price: 1400,
-        unit: 'คอร์ส',
-        image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Mud or Clay Body Wrap (120 Mins)',
-        allotment: 15
+            "id": "SRV-05",
+            "category": "accommodation",
+            "categoryName": "โรงแรมและที่พัก",
+            "title": "เดอะ สตาร์ฮิล คอนโด เชียงใหม่ - Standard Room With Breakfast",
+            "provider": "เดอะ สตาร์ฮิล คอนโด เชียงใหม่",
+            "location": "เมืองเชียงใหม่, เชียงใหม่",
+            "rating": "4.8 ★",
+            "features": [
+                  "SHA Plus",
+                  "WiFi ฟรี",
+                  "ที่จอดรถ",
+                  "ใกล้แหล่งท่องเที่ยว"
+            ],
+            "price": 4000.0,
+            "unit": "คืน",
+            "image": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&auto=format&fit=crop&q=80",
+            "allotment": 15
       },
       {
-        id: 'SRV-06',
-        category: 'tour',
-        categoryName: 'แพ็กเกจทัวร์',
-        title: 'ล่องเรือสำราญ Chao Phraya Princess Cruise ดินเนอร์ใต้แสงจันทร์',
-        provider: 'Chao Phraya Princess',
-        location: 'ท่าเรือเอเชียทีค, กรุงเทพมหานคร',
-        rating: '4.8 ★',
-        features: ['บุฟเฟ่ต์นานาชาติ', 'ดนตรีสด Live Band', 'ล่อง 2 ชั่วโมง'],
-        price: 1200,
-        unit: 'ท่าน',
-        image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Dinner Cruise Standard',
-        allotment: 40
+            "id": "SRV-06",
+            "category": "tour",
+            "categoryName": "แพ็กเกจทัวร์ & มัคคุเทศก์",
+            "title": "Dave Malhotra - Half Day (4-5 hrs. with out meal)",
+            "provider": "Dave Malhotra",
+            "location": "Klong toei, Bangkok",
+            "rating": "4.7 ★",
+            "features": [
+                  "รวมไกด์มืออาชีพ",
+                  "รวมอาหาร/เครื่องดื่ม",
+                  "ประกันอุบัติเหตุ"
+            ],
+            "price": 1200,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&auto=format&fit=crop&q=80",
+            "allotment": 45
       },
       {
-        id: 'SRV-07',
-        category: 'community',
-        categoryName: 'ชุมชนท่องเที่ยว',
-        title: 'วิถีชุมชนท่องเที่ยวบ้านช้างกลาง & การแสดงช้างแสนรู้',
-        provider: 'กลุ่มอนุรักษ์ช้างสุรินทร์',
-        location: 'ท่าตูม, สุรินทร์',
-        rating: '4.9 ★',
-        features: ['อาบน้ำช้าง', 'อาหารพื้นบ้านท้องถิ่น', 'เวิร์กช็อปหัตถกรรม'],
-        price: 450,
-        unit: 'ท่าน',
-        image: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Day Pass + Activity',
-        allotment: 30
+            "id": "SRV-07",
+            "category": "tour",
+            "categoryName": "แพ็กเกจทัวร์ & มัคคุเทศก์",
+            "title": "Dave Malhotra - Full Day",
+            "provider": "Dave Malhotra",
+            "location": "Klong toei, Bangkok",
+            "rating": "4.8 ★",
+            "features": [
+                  "รวมไกด์มืออาชีพ",
+                  "รวมอาหาร/เครื่องดื่ม",
+                  "ประกันอุบัติเหตุ"
+            ],
+            "price": 1800,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80",
+            "allotment": 20
       },
       {
-        id: 'SRV-08',
-        category: 'mobility',
-        categoryName: 'ขนส่งและยานพาหนะ',
-        title: 'Limousine Express รถตู้ VIP สุวรรณภูมิ - พัทยา',
-        provider: 'Limousine Express Thailand',
-        location: 'กรุงเทพฯ - พัทยา',
-        rating: '4.8 ★',
-        features: ['เบาะนวดปรับไฟฟ้า', 'คนขับมืออาชีพ', 'น้ำดื่มฟรี'],
-        price: 3570,
-        unit: 'เที่ยว',
-        image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Toyota Commuter VIP 9 Seats',
-        allotment: 10
+            "id": "SRV-08",
+            "category": "tour",
+            "categoryName": "แพ็กเกจทัวร์ & มัคคุเทศก์",
+            "title": "Dave Malhotra - Overnight (Rate per day)",
+            "provider": "Dave Malhotra",
+            "location": "Klong toei, Bangkok",
+            "rating": "4.7 ★",
+            "features": [
+                  "รวมไกด์มืออาชีพ",
+                  "รวมอาหาร/เครื่องดื่ม",
+                  "ประกันอุบัติเหตุ"
+            ],
+            "price": 2000,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&auto=format&fit=crop&q=80",
+            "allotment": 22
       },
       {
-        id: 'SRV-09',
-        category: 'accommodation',
-        categoryName: 'โรงแรมและที่พัก',
-        title: 'Andaman Seaview Resort Kata Beach (SHA Extra Plus)',
-        provider: 'บจก. กะตะ ซีวิว ภูเก็ต',
-        location: 'กะตะ, ภูเก็ต',
-        rating: '4.9 ★',
-        features: ['ติดหาดกะตะ', 'สระว่ายน้ำ 2 สระ', 'ฟรีอาหารเช้าบุฟเฟ่ต์'],
-        price: 2450,
-        unit: 'คืน',
-        image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Deluxe Ocean View Room',
-        allotment: 14
+            "id": "SRV-09",
+            "category": "tour",
+            "categoryName": "แพ็กเกจทัวร์ & มัคคุเทศก์",
+            "title": "Dave Malhotra - MICE (Rate per day)",
+            "provider": "Dave Malhotra",
+            "location": "Klong toei, Bangkok",
+            "rating": "4.9 ★",
+            "features": [
+                  "รวมไกด์มืออาชีพ",
+                  "รวมอาหาร/เครื่องดื่ม",
+                  "ประกันอุบัติเหตุ"
+            ],
+            "price": 4000,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&auto=format&fit=crop&q=80",
+            "allotment": 33
       },
       {
-        id: 'SRV-10',
-        category: 'tour',
-        categoryName: 'แพ็กเกจทัวร์',
-        title: 'One Day Trip ดำน้ำเกาะพีพี - อ่าวมาหยา Speedboat คาตามารัน',
-        provider: 'Phuket Marine Tour Co., Ltd.',
-        location: 'ท่าเรือรัษฎา, ภูเก็ต',
-        rating: '4.9 ★',
-        features: ['อุปกรณ์ดำน้ำครบชุด', 'อาหารกลางวันบุฟเฟ่ต์', 'ประกันอุบัติเหตุ'],
-        price: 1890,
-        unit: 'ท่าน',
-        image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Catamaran Speedboat Day Tour',
-        allotment: 35
+            "id": "SRV-10",
+            "category": "attraction",
+            "categoryName": "แหล่งท่องเที่ยวและบัตรเข้าชม",
+            "title": "Bangkok Fight Lab - All Access Membership - one month",
+            "provider": "Bangkok Fight Lab",
+            "location": "Ratchthavee, Bangkok",
+            "rating": "4.8 ★",
+            "features": [
+                  "Fast Track",
+                  "e-Ticket ทันที",
+                  "เข้าชมได้ทุกโซน"
+            ],
+            "price": 6200,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&auto=format&fit=crop&q=80",
+            "allotment": 47
       },
       {
-        id: 'SRV-11',
-        category: 'accommodation',
-        categoryName: 'โรงแรมและที่พัก',
-        title: 'Chiang Mai Heritage Boutique Hotel & Lanna Spa',
-        provider: 'เฮอริเทจ ลานนา กรุ๊ป',
-        location: 'คูเมือง, เชียงใหม่',
-        rating: '4.8 ★',
-        features: ['สถาปัตยกรรมล้านนา', 'สระน้ำเกลือ', 'ใกล้ถนนคนเดินท่าแพ'],
-        price: 1950,
-        unit: 'คืน',
-        image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Lanna Heritage Superior',
-        allotment: 9
+            "id": "SRV-11",
+            "category": "attraction",
+            "categoryName": "แหล่งท่องเที่ยวและบัตรเข้าชม",
+            "title": "Bangkok Fight Lab - All Access Membership - 6 months",
+            "provider": "Bangkok Fight Lab",
+            "location": "Ratchthavee, Bangkok",
+            "rating": "4.7 ★",
+            "features": [
+                  "Fast Track",
+                  "e-Ticket ทันที",
+                  "เข้าชมได้ทุกโซน"
+            ],
+            "price": 36000,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&auto=format&fit=crop&q=80",
+            "allotment": 42
       },
       {
-        id: 'SRV-12',
-        category: 'tour',
-        categoryName: 'แพ็กเกจทัวร์',
-        title: 'ทัวร์ดอยอินทนนท์ เส้นทางศึกษาธรรมชาติกิ่วแม่ปาน + ไกด์ท้องถิ่น',
-        provider: 'เชียงใหม่ อีโค่ ทัวร์ริซึ่ม',
-        location: 'จอมทอง, เชียงใหม่',
-        rating: '4.9 ★',
-        features: ['รถตู้ VIP รับส่งโรงแรม', 'ไกด์ม้งท้องถิ่น', 'ชมพระมหาธาตุเจดีย์'],
-        price: 1350,
-        unit: 'ท่าน',
-        image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Full Day Eco Tour',
-        allotment: 20
+            "id": "SRV-12",
+            "category": "attraction",
+            "categoryName": "แหล่งท่องเที่ยวและบัตรเข้าชม",
+            "title": "Bangkok Fight Lab - All Access Membership - one year",
+            "provider": "Bangkok Fight Lab",
+            "location": "Ratchthavee, Bangkok",
+            "rating": "4.9 ★",
+            "features": [
+                  "Fast Track",
+                  "e-Ticket ทันที",
+                  "เข้าชมได้ทุกโซน"
+            ],
+            "price": 67000,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&auto=format&fit=crop&q=80",
+            "allotment": 41
       },
       {
-        id: 'SRV-13',
-        category: 'attraction',
-        categoryName: 'แหล่งท่องเที่ยว',
-        title: 'บัตรสวนน้ำ Columbia Pictures Aquaverse Pattaya',
-        provider: 'Aquaverse Management Ltd.',
-        location: 'นาจอมเทียน, ชลบุรี',
-        rating: '4.7 ★',
-        features: ['เล่นได้ไม่จำกัดเครื่องเล่น', 'โซนเด็กและครอบครัว', 'Cabana ส่วนตัว'],
-        price: 990,
-        unit: 'ท่าน',
-        image: 'https://images.unsplash.com/photo-1582650625119-3a31f841807d?auto=format&fit=crop&w=600&q=80',
-        roomType: 'All-Day Pass Ticket',
-        allotment: 60
+            "id": "SRV-13",
+            "category": "attraction",
+            "categoryName": "แหล่งท่องเที่ยวและบัตรเข้าชม",
+            "title": "Bangkok Fight Lab - Hardcore Grappling - one month",
+            "provider": "Bangkok Fight Lab",
+            "location": "Ratchthavee, Bangkok",
+            "rating": "4.7 ★",
+            "features": [
+                  "Fast Track",
+                  "e-Ticket ทันที",
+                  "เข้าชมได้ทุกโซน"
+            ],
+            "price": 4400,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&auto=format&fit=crop&q=80",
+            "allotment": 38
       },
       {
-        id: 'SRV-14',
-        category: 'accommodation',
-        categoryName: 'โรงแรมและที่พัก',
-        title: 'Samui Sunset Bay Private Pool Villa',
-        provider: 'สมุย ซันเซ็ท รีสอร์ท กรุ๊ป',
-        location: 'บ่อผุด, สุราษฎร์ธานี',
-        rating: '4.9 ★',
-        features: ['วิลล่าพร้อมสระส่วนตัว', 'วิวทะเลพาโนรามา', 'Floating Breakfast'],
-        price: 4890,
-        unit: 'คืน',
-        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80',
-        roomType: 'Oceanfront Pool Villa',
-        allotment: 6
+            "id": "SRV-14",
+            "category": "wellness",
+            "categoryName": "สุขภาพและสปา",
+            "title": "7 Spa Luxury - Signature Aromatherapy Massage",
+            "provider": "7 Spa Luxury",
+            "location": "บางละมุง, ชลบุรี",
+            "rating": "4.8 ★",
+            "features": [
+                  "ผู้เชี่ยวชาญ",
+                  "ผลิตภัณฑ์ธรรมชาติ",
+                  "ห้องส่วนตัว"
+            ],
+            "price": 1450,
+            "unit": "แพ็กเกจ",
+            "image": "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&auto=format&fit=crop&q=80",
+            "allotment": 48
+      },
+      {
+            "id": "SRV-15",
+            "category": "wellness",
+            "categoryName": "สุขภาพและสปา",
+            "title": "7 Spa Luxury - Diamond Infusion Facial",
+            "provider": "7 Spa Luxury",
+            "location": "บางละมุง, ชลบุรี",
+            "rating": "4.9 ★",
+            "features": [
+                  "ผู้เชี่ยวชาญ",
+                  "ผลิตภัณฑ์ธรรมชาติ",
+                  "ห้องส่วนตัว"
+            ],
+            "price": 1300,
+            "unit": "แพ็กเกจ",
+            "image": "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800&auto=format&fit=crop&q=80",
+            "allotment": 39
+      },
+      {
+            "id": "SRV-16",
+            "category": "wellness",
+            "categoryName": "สุขภาพและสปา",
+            "title": "7 Spa Luxury - Champagne and Roses Couple's Retreat",
+            "provider": "7 Spa Luxury",
+            "location": "บางละมุง, ชลบุรี",
+            "rating": "4.7 ★",
+            "features": [
+                  "ผู้เชี่ยวชาญ",
+                  "ผลิตภัณฑ์ธรรมชาติ",
+                  "ห้องส่วนตัว"
+            ],
+            "price": 1250,
+            "unit": "แพ็กเกจ",
+            "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&auto=format&fit=crop&q=80",
+            "allotment": 26
+      },
+      {
+            "id": "SRV-17",
+            "category": "wellness",
+            "categoryName": "สุขภาพและสปา",
+            "title": "7 Spa Luxury - 24K Gold Body Wrap",
+            "provider": "7 Spa Luxury",
+            "location": "บางละมุง, ชลบุรี",
+            "rating": "4.7 ★",
+            "features": [
+                  "ผู้เชี่ยวชาญ",
+                  "ผลิตภัณฑ์ธรรมชาติ",
+                  "ห้องส่วนตัว"
+            ],
+            "price": 1100,
+            "unit": "แพ็กเกจ",
+            "image": "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&auto=format&fit=crop&q=80",
+            "allotment": 6
+      },
+      {
+            "id": "SRV-18",
+            "category": "mobility",
+            "categoryName": "ยานพาหนะและรถรับส่ง",
+            "title": "Limousine Express - Benz S-Class",
+            "provider": "Limousine Express",
+            "location": "Muang, Bangkok",
+            "rating": "4.8 ★",
+            "features": [
+                  "รับ-ส่งตรงเวลา",
+                  "คนขับมืออาชีพ",
+                  "ประกันภัยผู้โดยสาร"
+            ],
+            "price": 5200,
+            "unit": "คัน",
+            "image": "https://images.unsplash.com/photo-1550355291-bbee04a92027?w=800&auto=format&fit=crop&q=80",
+            "allotment": 47
+      },
+      {
+            "id": "SRV-19",
+            "category": "mobility",
+            "categoryName": "ยานพาหนะและรถรับส่ง",
+            "title": "Limousine Express - BMW Series 7",
+            "provider": "Limousine Express",
+            "location": "Muang, Bangkok",
+            "rating": "4.8 ★",
+            "features": [
+                  "รับ-ส่งตรงเวลา",
+                  "คนขับมืออาชีพ",
+                  "ประกันภัยผู้โดยสาร"
+            ],
+            "price": 5200,
+            "unit": "คัน",
+            "image": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=80",
+            "allotment": 35
+      },
+      {
+            "id": "SRV-20",
+            "category": "mobility",
+            "categoryName": "ยานพาหนะและรถรับส่ง",
+            "title": "Limousine Express - Benz E-Class",
+            "provider": "Limousine Express",
+            "location": "Muang, Bangkok",
+            "rating": "4.8 ★",
+            "features": [
+                  "รับ-ส่งตรงเวลา",
+                  "คนขับมืออาชีพ",
+                  "ประกันภัยผู้โดยสาร"
+            ],
+            "price": 1950,
+            "unit": "คัน",
+            "image": "https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&auto=format&fit=crop&q=80",
+            "allotment": 40
+      },
+      {
+            "id": "SRV-21",
+            "category": "food",
+            "categoryName": "ร้านอาหารและเครื่องดื่ม",
+            "title": "คาเฟ่ดำเนินสะดวก - โกโก้",
+            "provider": "คาเฟ่ดำเนินสะดวก",
+            "location": "Muang, Amnat Charoen",
+            "rating": "4.9 ★",
+            "features": [
+                  "วัตถุดิบพรีเมียม",
+                  "อาหารปรุงสด",
+                  "วิวสวย"
+            ],
+            "price": 45,
+            "unit": "เซ็ต",
+            "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80",
+            "allotment": 8
+      },
+      {
+            "id": "SRV-22",
+            "category": "food",
+            "categoryName": "ร้านอาหารและเครื่องดื่ม",
+            "title": "คาเฟ่ดำเนินสะดวก - ชานม",
+            "provider": "คาเฟ่ดำเนินสะดวก",
+            "location": "Muang, Amnat Charoen",
+            "rating": "4.9 ★",
+            "features": [
+                  "วัตถุดิบพรีเมียม",
+                  "อาหารปรุงสด",
+                  "วิวสวย"
+            ],
+            "price": 45,
+            "unit": "เซ็ต",
+            "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop&q=80",
+            "allotment": 40
+      },
+      {
+            "id": "SRV-23",
+            "category": "food",
+            "categoryName": "ร้านอาหารและเครื่องดื่ม",
+            "title": "คาเฟ่ดำเนินสะดวก - ชาเขียว",
+            "provider": "คาเฟ่ดำเนินสะดวก",
+            "location": "Muang, Amnat Charoen",
+            "rating": "4.8 ★",
+            "features": [
+                  "วัตถุดิบพรีเมียม",
+                  "อาหารปรุงสด",
+                  "วิวสวย"
+            ],
+            "price": 45,
+            "unit": "เซ็ต",
+            "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80",
+            "allotment": 23
+      },
+      {
+            "id": "SRV-24",
+            "category": "community",
+            "categoryName": "ชุมชนท่องเที่ยว",
+            "title": "ชุมชนท่องเที่ยวบ้านสันป่าเหียง จ.เชียงราย - Package Art therapy 1 Day trip",
+            "provider": "ชุมชนท่องเที่ยวบ้านสันป่าเหียง จ.เชียงราย",
+            "location": "กรุงเทพมหานคร",
+            "rating": "4.9 ★",
+            "features": [
+                  "วิถีชุมชนแท้",
+                  "Workshop ทำมือ",
+                  "สนับสนุนชุมชน"
+            ],
+            "price": 1380,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1609137144822-263c9b7447c2?w=800&auto=format&fit=crop&q=80",
+            "allotment": 9
+      },
+      {
+            "id": "SRV-25",
+            "category": "community",
+            "categoryName": "ชุมชนท่องเที่ยว",
+            "title": "ชุมชนท่องเที่ยวบ้านสันป่าเหียง จ.เชียงราย (Package Art therapy & Communitites Activities 1 Day trip)",
+            "provider": "ชุมชนท่องเที่ยวบ้านสันป่าเหียง จ.เชียงราย",
+            "location": "กรุงเทพมหานคร",
+            "rating": "4.7 ★",
+            "features": [
+                  "วิถีชุมชนแท้",
+                  "Workshop ทำมือ",
+                  "สนับสนุนชุมชน"
+            ],
+            "price": 2380,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&auto=format&fit=crop&q=80",
+            "allotment": 37
+      },
+      {
+            "id": "SRV-26",
+            "category": "community",
+            "categoryName": "ชุมชนท่องเที่ยว",
+            "title": "ชุมชนท่องเที่ยวบ้านสันป่าเหียง จ.เชียงราย (Package Art therapy & Communitites Activities 2 Day 1 Night)",
+            "provider": "ชุมชนท่องเที่ยวบ้านสันป่าเหียง จ.เชียงราย",
+            "location": "กรุงเทพมหานคร",
+            "rating": "4.8 ★",
+            "features": [
+                  "วิถีชุมชนแท้",
+                  "Workshop ทำมือ",
+                  "สนับสนุนชุมชน"
+            ],
+            "price": 3420,
+            "unit": "ท่าน",
+            "image": "https://images.unsplash.com/photo-1609137144822-263c9b7447c2?w=800&auto=format&fit=crop&q=80",
+            "allotment": 46
+      },
+      {
+            "id": "SRV-27",
+            "category": "retail",
+            "categoryName": "ร้านค้าปลีกและของที่ระลึก",
+            "title": "Ananya Koh Chang coconut oil - น้ำมันมะพร้าวสกัดเย็น 100 มล.",
+            "provider": "Ananya Koh Chang coconut oil",
+            "location": "Muang, 56/4 ม.2 ต.เกาะช้างใต้, Amphoe Ko Chang, Thailand, Trat",
+            "rating": "4.9 ★",
+            "features": [
+                  "OTOP 5 ดาว",
+                  "ของแท้ 100%",
+                  "จัดส่งปลอดภัย"
+            ],
+            "price": 100,
+            "unit": "ชิ้น",
+            "image": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&auto=format&fit=crop&q=80",
+            "allotment": 47
+      },
+      {
+            "id": "SRV-28",
+            "category": "retail",
+            "categoryName": "ร้านค้าปลีกและของที่ระลึก",
+            "title": "Ananya Koh Chang coconut oil - น้ำมันมะพร้าวสกัดเย็น 200 มล.",
+            "provider": "Ananya Koh Chang coconut oil",
+            "location": "Muang, 56/4 ม.2 ต.เกาะช้างใต้, Amphoe Ko Chang, Thailand, Trat",
+            "rating": "4.9 ★",
+            "features": [
+                  "OTOP 5 ดาว",
+                  "ของแท้ 100%",
+                  "จัดส่งปลอดภัย"
+            ],
+            "price": 180,
+            "unit": "ชิ้น",
+            "image": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&auto=format&fit=crop&q=80",
+            "allotment": 11
+      },
+      {
+            "id": "SRV-29",
+            "category": "retail",
+            "categoryName": "ร้านค้าปลีกและของที่ระลึก",
+            "title": "Ananya Koh Chang coconut oil - น้ำมันมะพร้าวสกัดเย็น 500 มล.",
+            "provider": "Ananya Koh Chang coconut oil",
+            "location": "Muang, 56/4 ม.2 ต.เกาะช้างใต้, Amphoe Ko Chang, Thailand, Trat",
+            "rating": "4.8 ★",
+            "features": [
+                  "OTOP 5 ดาว",
+                  "ของแท้ 100%",
+                  "จัดส่งปลอดภัย"
+            ],
+            "price": 330,
+            "unit": "ชิ้น",
+            "image": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&auto=format&fit=crop&q=80",
+            "allotment": 15
       }
-    ],
+],
     reservations: [
       {
         id: '128669226',
@@ -706,6 +1025,9 @@
           if (!parsed.version || parsed.version < DEFAULT_STATE.version) {
             this.save(DEFAULT_STATE, false);
           } else {
+            if (typeof DEPA_REAL_DATA !== 'undefined' && DEPA_REAL_DATA.featuredServices) {
+              parsed.services = DEPA_REAL_DATA.featuredServices;
+            }
             this._memoryCache = parsed;
           }
         }

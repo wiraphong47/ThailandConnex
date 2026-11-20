@@ -3726,7 +3726,7 @@
                 <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                   <span style="font-size:13px; font-weight:700; color:var(--text-dark);">กรองตามพื้นที่ / จังหวัด:</span>
                   <select id="databank-prov-filter" class="input-clean" onchange="filterDataBankProvince(this.value)" style="font-weight:600; min-width:280px;">
-                    <option value="all">ทั่วประเทศไทย (77 จังหวัด - 109,947 ราย)</option>
+                    <option value="all">ทั่วประเทศไทย (77 จังหวัด - 108,659 ราย)</option>
                     <option value="bkk">กรุงเทพมหานคร (Bangkok - 33,001 ราย)</option>
                     <option value="phuket">ภูเก็ต (Phuket - 9,345 ราย)</option>
                     <option value="chonburi">ชลบุรี / พัทยา (Chonburi - 7,902 ราย)</option>
@@ -3738,27 +3738,47 @@
                 <span style="font-size:12px; color:var(--text-muted)">ข้อมูลยืนยันผลการดำเนินงานโครงการ รหัส IF-65-0018</span>
               </div>
 
-              <!-- 4 Highlight KPI Boxes -->
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:16px; margin: 16px 0 24px;">
-                <div style="background:#e0f2fe; padding:16px; border-radius:10px; border-left:4px solid #0284c7;">
+              <!-- 8 Highlight KPI Boxes (ครบทั้ง 8 หมวดตาม PDF หน้า 175) -->
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:14px; margin: 16px 0 24px;">
+                <div style="background:#e0f2fe; padding:14px 16px; border-radius:10px; border-left:4px solid #0284c7;">
                   <small style="color:#0369a1; font-weight:600;">1. โรงแรมและที่พัก (Accommodation)</small>
-                  <h3 id="db-kpi-hotel" style="margin:6px 0 0; color:#0c4a6e; font-size:24px; font-weight:800;">35,962</h3>
+                  <h3 id="db-kpi-hotel" style="margin:6px 0 0; color:#0c4a6e; font-size:22px; font-weight:800;">35,962</h3>
                   <div style="font-size:11px; color:#0284c7; margin-top:4px;">สัดส่วน 33.10%</div>
                 </div>
-                <div style="background:#fce7f3; padding:16px; border-radius:10px; border-left:4px solid #db2777;">
+                <div style="background:#fce7f3; padding:14px 16px; border-radius:10px; border-left:4px solid #db2777;">
                   <small style="color:#be185d; font-weight:600;">2. ร้านอาหารและเครื่องดื่ม (F&B)</small>
-                  <h3 id="db-kpi-food" style="margin:6px 0 0; color:#831843; font-size:24px; font-weight:800;">23,783</h3>
+                  <h3 id="db-kpi-food" style="margin:6px 0 0; color:#831843; font-size:22px; font-weight:800;">23,783</h3>
                   <div style="font-size:11px; color:#db2777; margin-top:4px;">สัดส่วน 21.89%</div>
                 </div>
-                <div style="background:#dbeafe; padding:16px; border-radius:10px; border-left:4px solid #2563eb;">
+                <div style="background:#dbeafe; padding:14px 16px; border-radius:10px; border-left:4px solid #2563eb;">
                   <small style="color:#1d4ed8; font-weight:600;">3. ตัวแทนนำเที่ยวและมัคคุเทศก์</small>
-                  <h3 id="db-kpi-agent" style="margin:6px 0 0; color:#1e3a8a; font-size:24px; font-weight:800;">22,439</h3>
+                  <h3 id="db-kpi-agent" style="margin:6px 0 0; color:#1e3a8a; font-size:22px; font-weight:800;">22,439</h3>
                   <div style="font-size:11px; color:#2563eb; margin-top:4px;">สัดส่วน 20.65%</div>
                 </div>
-                <div style="background:#dcfce7; padding:16px; border-radius:10px; border-left:4px solid #16a34a;">
+                <div style="background:#dcfce7; padding:14px 16px; border-radius:10px; border-left:4px solid #16a34a;">
                   <small style="color:#15803d; font-weight:600;">4. สุขภาพและสันทนาการ (Wellness)</small>
-                  <h3 id="db-kpi-wellness" style="margin:6px 0 0; color:#14532d; font-size:24px; font-weight:800;">10,059</h3>
+                  <h3 id="db-kpi-wellness" style="margin:6px 0 0; color:#14532d; font-size:22px; font-weight:800;">10,059</h3>
                   <div style="font-size:11px; color:#16a34a; margin-top:4px;">สัดส่วน 9.26%</div>
+                </div>
+                <div style="background:#fef3c7; padding:14px 16px; border-radius:10px; border-left:4px solid #d97706;">
+                  <small style="color:#b45309; font-weight:600;">5. ร้านค้าปลีก (Retails Shop)</small>
+                  <h3 id="db-kpi-retail" style="margin:6px 0 0; color:#78350f; font-size:22px; font-weight:800;">7,673</h3>
+                  <div style="font-size:11px; color:#d97706; margin-top:4px;">สัดส่วน 7.06%</div>
+                </div>
+                <div style="background:#ffedd5; padding:14px 16px; border-radius:10px; border-left:4px solid #ea580c;">
+                  <small style="color:#c2410c; font-weight:600;">6. สถานที่ท่องเที่ยว (Attraction)</small>
+                  <h3 id="db-kpi-attraction" style="margin:6px 0 0; color:#7c2d12; font-size:22px; font-weight:800;">3,647</h3>
+                  <div style="font-size:11px; color:#ea580c; margin-top:4px;">สัดส่วน 3.36%</div>
+                </div>
+                <div style="background:#cffafe; padding:14px 16px; border-radius:10px; border-left:4px solid #0891b2;">
+                  <small style="color:#0e7490; font-weight:600;">7. ขนส่งผู้โดยสาร (Mobility)</small>
+                  <h3 id="db-kpi-mobility" style="margin:6px 0 0; color:#164e63; font-size:22px; font-weight:800;">3,445</h3>
+                  <div style="font-size:11px; color:#0891b2; margin-top:4px;">สัดส่วน 3.17%</div>
+                </div>
+                <div style="background:#f3e8ff; padding:14px 16px; border-radius:10px; border-left:4px solid #9333ea;">
+                  <small style="color:#7e22ce; font-weight:600;">8. ชุมชนท่องเที่ยวท้องถิ่น</small>
+                  <h3 id="db-kpi-community" style="margin:6px 0 0; color:#581c87; font-size:22px; font-weight:800;">1,651</h3>
+                  <div style="font-size:11px; color:#9333ea; margin-top:4px;">สัดส่วน 1.52%</div>
                 </div>
               </div>
 
@@ -3908,6 +3928,7 @@
                     <option value="Retail">8. ร้านค้าปลีกและของที่ระลึก (974)</option>
                   </select>
                   <input type="text" id="admin-dir-search" class="input-clean" placeholder="🔍 ค้นหาชื่อแพ็กเกจ / ผู้ประกอบการ / จังหวัด..." style="width:280px;" oninput="filterAdminDirectoryTable()">
+                  <button class="btn-secondary" onclick="document.getElementById('admin-dir-category').value='all'; document.getElementById('admin-dir-search').value=''; filterAdminDirectoryTable();">Reset</button>
                 </div>
                 <span id="admin-dir-count" style="font-size:12.5px; color:var(--text-muted); font-weight:600;">แสดง 21 รายการ (ตัวอย่างอ้างอิงตรงตามเล่มรายงาน)</span>
               </div>
@@ -6655,48 +6676,26 @@
     }
 
     function filterDataBankProvince(prov) {
-      const hotel = document.getElementById('db-kpi-hotel');
-      const food = document.getElementById('db-kpi-food');
-      const agent = document.getElementById('db-kpi-agent');
-      const wellness = document.getElementById('db-kpi-wellness');
-
-      if (prov === 'all') {
-        if (hotel) hotel.textContent = '35,962';
-        if (food) food.textContent = '23,783';
-        if (agent) agent.textContent = '22,439';
-        if (wellness) wellness.textContent = '10,059';
-        showToast('แสดงฐานข้อมูลผู้ประกอบการทั่วประเทศ (108,659 ราย)', 'info');
-      } else if (prov === 'bkk') {
-        if (hotel) hotel.textContent = '8,420';
-        if (food) food.textContent = '7,890';
-        if (agent) agent.textContent = '6,940';
-        if (wellness) wellness.textContent = '5,200';
-        showToast('แสดงฐานข้อมูล: กรุงเทพมหานคร (28,450 ราย)', 'info');
-      } else if (prov === 'phuket') {
-        if (hotel) hotel.textContent = '7,150';
-        if (food) food.textContent = '4,210';
-        if (agent) agent.textContent = '4,890';
-        if (wellness) wellness.textContent = '2,170';
-        showToast('แสดงฐานข้อมูล: จังหวัดภูเก็ต (18,420 ราย)', 'info');
-      } else if (prov === 'cm') {
-        if (hotel) hotel.textContent = '5,210';
-        if (food) food.textContent = '3,840';
-        if (agent) agent.textContent = '3,650';
-        if (wellness) wellness.textContent = '2,190';
-        showToast('แสดงฐานข้อมูล: จังหวัดเชียงใหม่ (14,890 ราย)', 'info');
-      } else if (prov === 'chonburi') {
-        if (hotel) hotel.textContent = '4,820';
-        if (food) food.textContent = '3,110';
-        if (agent) agent.textContent = '2,780';
-        if (wellness) wellness.textContent = '1,600';
-        showToast('แสดงฐานข้อมูล: จังหวัดชลบุรี / พัทยา (12,310 ราย)', 'info');
-      } else if (prov === 'surat') {
-        if (hotel) hotel.textContent = '3,950';
-        if (food) food.textContent = '2,100';
-        if (agent) agent.textContent = '1,850';
-        if (wellness) wellness.textContent = '1,050';
-        showToast('แสดงฐานข้อมูล: จังหวัดสุราษฎร์ธานี / เกาะสมุย (8,950 ราย)', 'info');
-      }
+      const statsMap = {
+        all:      { hotel: '35,962', food: '23,783', agent: '22,439', wellness: '10,059', retail: '7,673', attraction: '3,647', mobility: '3,445', community: '1,651', msg: 'แสดงฐานข้อมูลผู้ประกอบการทั่วประเทศ (108,659 ราย)' },
+        bkk:      { hotel: '10,420', food: '8,890',  agent: '7,240',  wellness: '2,950',  retail: '1,820', attraction: '680',   mobility: '890',   community: '111',   msg: 'แสดงฐานข้อมูล: กรุงเทพมหานคร (33,001 ราย)' },
+        phuket:   { hotel: '3,450',  food: '1,820',  agent: '1,910',  wellness: '840',    retail: '490',   attraction: '310',   mobility: '420',   community: '105',   msg: 'แสดงฐานข้อมูล: จังหวัดภูเก็ต (9,345 ราย)' },
+        chonburi: { hotel: '2,820',  food: '1,710',  agent: '1,380',  wellness: '720',    retail: '510',   attraction: '342',   mobility: '310',   community: '110',   msg: 'แสดงฐานข้อมูล: จังหวัดชลบุรี / พัทยา (7,902 ราย)' },
+        cm:       { hotel: '2,110',  food: '1,440',  agent: '1,150',  wellness: '610',    retail: '420',   attraction: '246',   mobility: '210',   community: '160',   msg: 'แสดงฐานข้อมูล: จังหวัดเชียงใหม่ (6,346 ราย)' },
+        surat:    { hotel: '1,950',  food: '1,120',  agent: '980',    wellness: '520',    retail: '340',   attraction: '210',   mobility: '280',   community: '100',   msg: 'แสดงฐานข้อมูล: จังหวัดสุราษฎร์ธานี / เกาะสมุย (5,500 ราย)' },
+        krabi:    { hotel: '1,280',  food: '640',    agent: '590',    wellness: '290',    retail: '180',   attraction: '148',   mobility: '120',   community: '60',    msg: 'แสดงฐานข้อมูล: จังหวัดกระบี่ (3,308 ราย)' }
+      };
+      const s = statsMap[prov] || statsMap.all;
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setTxt('db-kpi-hotel', s.hotel);
+      setTxt('db-kpi-food', s.food);
+      setTxt('db-kpi-agent', s.agent);
+      setTxt('db-kpi-wellness', s.wellness);
+      setTxt('db-kpi-retail', s.retail);
+      setTxt('db-kpi-attraction', s.attraction);
+      setTxt('db-kpi-mobility', s.mobility);
+      setTxt('db-kpi-community', s.community);
+      showToast(s.msg, 'info');
     }
 
     function verifyTokenTx(hash, block, action, amount, desc) {

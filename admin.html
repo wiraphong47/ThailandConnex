@@ -5563,6 +5563,9 @@
             if (arrow) arrow.classList.add('open');
           }
         }
+        try {
+          activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (e) {}
       }
 
       const title = navTitles[viewId] || viewId;

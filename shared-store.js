@@ -1355,7 +1355,7 @@
       if (earnedPoints > 0) {
         state.user.tokenBalance = Math.round((state.user.tokenBalance + earnedPoints) * 100) / 100;
         if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
-        this.syncUserBalanceToRegistered(state.user);
+        this.syncUserBalanceToRegistered(state.user, state);
         state.tokenLogs.unshift({
           time: now,
           userId: newBooking.userId || state.user.id || 'TC-849204',
@@ -1399,7 +1399,7 @@
 
       state.user.tokenBalance = Math.round((state.user.tokenBalance - v.points) * 100) / 100;
       if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
-      this.syncUserBalanceToRegistered(state.user);
+      this.syncUserBalanceToRegistered(state.user, state);
       if (v.remaining > 0) v.remaining -= 1;
 
       const randomBarcode = Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join('').replace(/(\d{4})/g, '$1 ').trim();
@@ -1454,7 +1454,7 @@
 
       state.user.tokenBalance = Math.round((state.user.tokenBalance - amount) * 100) / 100;
       if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
-      this.syncUserBalanceToRegistered(state.user);
+      this.syncUserBalanceToRegistered(state.user, state);
       const curUser = (state.auth && state.auth.currentUser) ? state.auth.currentUser : (state.user || {});
       state.tokenLogs.unshift({
         time: getNowStr(),
@@ -1628,13 +1628,14 @@
       return { success: true };
     }
 
-    syncUserBalanceToRegistered(user) {
-      const state = this.getState();
+    syncUserBalanceToRegistered(user, targetState) {
+      const state = targetState || this.getState();
       if (state.auth && state.auth.registeredUsers && user && user.id) {
         const u = state.auth.registeredUsers.find(x => x.id === user.id);
         if (u) {
           u.tokenBalance = user.tokenBalance;
         }
+        if (!targetState) this.save(state);
       }
     }
 

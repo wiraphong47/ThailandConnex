@@ -3359,7 +3359,7 @@
           </div>
           <div style="display:flex; gap:8px;">
             <button class="cat-pill active" onclick="filterCouponState('active', this)">คูปองพร้อมใช้ (<span id="active-coupon-count">3</span>)</button>
-            <button class="cat-pill" onclick="filterCouponState('used', this)">คูปองที่ใช้แล้ว (2)</button>
+            <button class="cat-pill" onclick="filterCouponState('used', this)">คูปองที่ใช้แล้ว (<span id="used-coupon-count">2</span>)</button>
           </div>
         </div>
 
@@ -4591,10 +4591,13 @@
       if (wBigBal) wBigBal.textContent = bal.toLocaleString('th-TH', {minimumFractionDigits: 2}) + ' TCP';
 
       const activeCount = state.myCoupons ? state.myCoupons.filter(c => c.status === 'active').length : 0;
+      const usedCount = state.myCoupons ? state.myCoupons.filter(c => c.status === 'used').length : 0;
       const sBadge = document.getElementById('side-coupon-badge');
       if (sBadge) sBadge.textContent = activeCount;
       const aCount = document.getElementById('active-coupon-count');
       if (aCount) aCount.textContent = activeCount;
+      const uCount = document.getElementById('used-coupon-count');
+      if (uCount) uCount.textContent = usedCount;
       document.querySelectorAll('.coupon-pill-count').forEach(el => el.textContent = activeCount);
     }
 
@@ -5911,11 +5914,21 @@
       renderReservations();
     }
 
+    let resSortState = { field: '', asc: true };
     function sortReservations(field) {
+      if (resSortState.field === field) {
+        resSortState.asc = !resSortState.asc;
+      } else {
+        resSortState.field = field;
+        resSortState.asc = true;
+      }
+      const dir = resSortState.asc ? 1 : -1;
       if (field === 'id') {
-        state.reservations.reverse();
+        state.reservations.sort((a, b) => String(a.id).localeCompare(String(b.id)) * dir);
+      } else if (field === 'checkin') {
+        state.reservations.sort((a, b) => String(a.checkin || '').localeCompare(String(b.checkin || '')) * dir);
       } else if (field === 'amount') {
-        state.reservations.sort((a,b) => b.amount - a.amount);
+        state.reservations.sort((a, b) => ((Number(a.amount) || 0) - (Number(b.amount) || 0)) * dir);
       }
       renderReservations();
     }
@@ -6006,8 +6019,13 @@
       `).join('');
     }
 
-    // Execute Token Transfer
+    // Execute Token Transfer (Synced with TCStore & Admin Portal)
     function executeTokenTransfer() {
+      if (!isUserLoggedIn()) {
+        showToast('กรุณาเข้าสู่ระบบก่อนทำการโอนคะแนน', true);
+        openAuthModal('login');
+        return;
+      }
       const target = document.getElementById('transfer-target').value.trim();
       const amount = parseFloat(document.getElementById('transfer-amount').value);
 
@@ -6024,25 +6042,35 @@
         return;
       }
 
-      state.user.tokenBalance -= amount;
-      
-      state.tokenLogs.unshift({
-        time: new Date().toISOString().replace('T', ' ').substring(0, 19),
-        action: 'Transfer Out',
-        actionCode: 'T',
-        detail: `โอนคะแนนให้ ${target}`,
-        amount: -amount,
-        balance: state.user.tokenBalance,
-        txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
-        status: 'Confirmed'
-      });
+      if (typeof TCStore !== 'undefined') {
+        const res = TCStore.transferTokens(target, amount);
+        if (!res.success) {
+          showToast(res.message || 'ไม่สามารถโอนคะแนนได้', true);
+          return;
+        }
+        syncStateFromStore();
+      } else {
+        state.user.tokenBalance -= amount;
+        state.tokenLogs.unshift({
+          time: new Date().toISOString().replace('T', ' ').substring(0, 19),
+          userId: state.user.id,
+          userName: state.user.name,
+          action: 'Transfer Out',
+          actionCode: 'T',
+          detail: `โอนคะแนนให้ ${target}`,
+          amount: -amount,
+          balance: state.user.tokenBalance,
+          txHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+          status: 'Confirmed'
+        });
+      }
 
       document.getElementById('transfer-target').value = '';
       document.getElementById('transfer-amount').value = '';
 
       updateHeaderBadges();
       renderTokenLogs();
-      showToast(`🚀 โอนสำเร็จ ${amount.toLocaleString('th-TH')} TCP ให้กับ ${target}`);
+      showToast(`โอนสำเร็จ ${amount.toLocaleString('th-TH')} TCP ให้กับ ${target} (ซิงค์ข้อมูลไปยัง Admin เรียบร้อย)`);
     }
 
     // Render National Services Directory Table
@@ -6201,7 +6229,10 @@
         const res = TCStore.registerUser({ name, email, phone, password });
         if (res.success) {
           state.user = res.user;
+          userSelectedBookingMonth = 'all';
+          syncStateFromStore();
           updateHeaderBadges();
+          renderReservations();
           closeModal('modal-auth');
           showToast(`ยินดีต้อนรับคุณ ${res.user.name}! ได้รับ 500 TCP Welcome Bonus เรียบร้อยแล้ว`);
           checkPendingBookingAfterLogin();

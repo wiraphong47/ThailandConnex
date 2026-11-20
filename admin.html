@@ -602,7 +602,7 @@
       inset: 0;
       background: rgba(15, 23, 42, 0.5);
       backdrop-filter: blur(4px);
-      z-index: 100;
+      z-index: 2000 !important;
       display: none;
       place-items: center;
       padding: 20px;
@@ -2337,7 +2337,7 @@
                 </div>
               </div>
               <div style="display:flex; gap:8px;">
-                <button class="btn-action" onclick="openModal('modal-new-activity-user')">+ Add New User</button>
+                <button class="btn-action" onclick="openNewActivityUserModal()">+ Add New User</button>
               </div>
             </div>
 
@@ -4353,21 +4353,56 @@
     </div>
   </div>
 
-  <!-- Modal New Activity User -->
+  <!-- Modal New / Edit Activity User -->
   <div class="modal-overlay" id="modal-new-activity-user" onclick="if(event.target===this) closeModal('modal-new-activity-user')">
     <div class="modal-card">
       <div class="modal-head">
-        <h3>เพิ่มผู้ใช้งานกิจกรรมใหม่ (New Activity User)</h3>
+        <h3 id="modal-act-user-title">เพิ่มผู้ใช้งานกิจกรรมใหม่ (New Activity User)</h3>
         <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-activity-user')">✕</button>
       </div>
       <div class="modal-body">
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">Fullname (ชื่อ-นามสกุล) *</label>
-          <input type="text" id="new-act-fullname" class="input-clean" placeholder="ชื่อ-นามสกุล" style="width:100%; margin-top:4px;">
+        <input type="hidden" id="new-act-edit-id" value="">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Fullname (ชื่อ-นามสกุล) *</label>
+            <input type="text" id="new-act-fullname" class="input-clean" placeholder="เช่น คุณสมหญิง ใจดี" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Email address *</label>
+            <input type="email" id="new-act-email" class="input-clean" placeholder="user@thailandconnex.com" style="width:100%; margin-top:4px;">
+          </div>
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">Email address *</label>
-          <input type="email" id="new-act-email" class="input-clean" placeholder="user@company.com" style="width:100%; margin-top:4px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Phone Number (เบอร์โทรศัพท์)</label>
+            <input type="text" id="new-act-phone" class="input-clean" placeholder="081-234-5678" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Password (รหัสผ่านเข้าใช้งาน)</label>
+            <input type="text" id="new-act-password" class="input-clean" placeholder="password123" value="password123" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Member Tier (ระดับสมาชิก)</label>
+            <select id="new-act-tier" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="Explorer">Explorer</option>
+              <option value="Silver Explorer">Silver Explorer</option>
+              <option value="Gold Traveler">Gold Traveler</option>
+              <option value="VIP Platinum Traveler">VIP Platinum Traveler</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Token Balance (TCN)</label>
+            <input type="number" id="new-act-token" class="input-clean" placeholder="500" value="500" min="0" step="10" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Status (สถานะ)</label>
+            <select id="new-act-status" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="Active">Active (เปิดใช้งาน)</option>
+              <option value="Disabled">Disabled (ระงับชั่วคราว)</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="modal-foot">
@@ -5579,22 +5614,76 @@
       showToast(`สร้างผู้ดูแลระบบ ${fname} ${lname} เรียบร้อยแล้ว!`, 'success');
     }
 
+    function openNewActivityUserModal() {
+      const titleEl = document.getElementById('modal-act-user-title');
+      if (titleEl) titleEl.textContent = 'เพิ่มผู้ใช้งานกิจกรรมใหม่ (New Activity User)';
+      const editIdEl = document.getElementById('new-act-edit-id');
+      if (editIdEl) editIdEl.value = '';
+      if (document.getElementById('new-act-fullname')) document.getElementById('new-act-fullname').value = '';
+      if (document.getElementById('new-act-email')) document.getElementById('new-act-email').value = '';
+      if (document.getElementById('new-act-phone')) document.getElementById('new-act-phone').value = '';
+      if (document.getElementById('new-act-password')) document.getElementById('new-act-password').value = 'password123';
+      if (document.getElementById('new-act-tier')) document.getElementById('new-act-tier').value = 'Explorer';
+      if (document.getElementById('new-act-token')) document.getElementById('new-act-token').value = '500';
+      if (document.getElementById('new-act-status')) document.getElementById('new-act-status').value = 'Active';
+      openModal('modal-new-activity-user');
+    }
+
     function saveNewActivityUser() {
+      const editId = (document.getElementById('new-act-edit-id') && document.getElementById('new-act-edit-id').value.trim()) || '';
       const name = (document.getElementById('new-act-fullname').value || '').trim() || 'New User';
       const email = (document.getElementById('new-act-email').value || '').trim() || 'user@example.com';
+      const phone = (document.getElementById('new-act-phone') && document.getElementById('new-act-phone').value.trim()) || ('08' + Math.floor(10000000 + Math.random() * 90000000));
+      const password = (document.getElementById('new-act-password') && document.getElementById('new-act-password').value.trim()) || 'password123';
+      const tier = (document.getElementById('new-act-tier') && document.getElementById('new-act-tier').value) || 'Explorer';
+      const tokenRaw = document.getElementById('new-act-token') ? parseFloat(document.getElementById('new-act-token').value) : 500;
+      const tokenBalance = isNaN(tokenRaw) ? 500 : Math.max(0, tokenRaw);
+      const status = (document.getElementById('new-act-status') && document.getElementById('new-act-status').value) || 'Active';
 
       const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TC';
+
+      if (editId) {
+        const u = (actUserMasterList || []).find(x => String(x.id) === String(editId));
+        if (u) {
+          u.name = name;
+          u.email = email;
+          u.phone = phone;
+          u.password = password;
+          u.tier = tier;
+          u.avatar = initials;
+          u.tokenBalance = tokenBalance;
+          u.status = status;
+        }
+        if (typeof TCStore !== 'undefined') {
+          const st = TCStore.getState();
+          if (st.auth && Array.isArray(st.auth.registeredUsers) && st.auth.registeredUsers !== actUserMasterList) {
+            const su = st.auth.registeredUsers.find(x => String(x.id) === String(editId));
+            if (su) {
+              su.name = name; su.email = email; su.phone = phone; su.password = password;
+              su.tier = tier; su.avatar = initials; su.tokenBalance = tokenBalance; su.status = status;
+            }
+          }
+          if (typeof TCStore.save === 'function') TCStore.save(st);
+          if (typeof renderAdminFromStore === 'function') renderAdminFromStore(st);
+        } else {
+          renderActivityUsersWithPagination();
+        }
+        closeModal('modal-new-activity-user');
+        showToast(`บันทึกการแก้ไขผู้ใช้ ${name} เรียบร้อยแล้ว!`, 'success');
+        return;
+      }
+
       const newUser = {
         id: 'TC-' + Math.floor(100000 + Math.random() * 900000),
         name: name,
         email: email,
-        password: 'password123',
-        phone: '08' + Math.floor(10000000 + Math.random() * 90000000),
-        tier: 'Explorer',
+        password: password,
+        phone: phone,
+        tier: tier,
         avatar: initials,
         walletAddress: '0x' + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''),
-        tokenBalance: 500.00,
-        status: 'Active',
+        tokenBalance: tokenBalance,
+        status: status,
         registeredDate: new Date().toISOString().split('T')[0]
       };
 
@@ -5607,10 +5696,12 @@
           st.auth.registeredUsers.unshift(newUser);
         }
         if (typeof TCStore.save === 'function') TCStore.save(st);
+        actUserCurrentPage = 1;
+        if (typeof renderAdminFromStore === 'function') renderAdminFromStore(st);
+      } else {
+        actUserCurrentPage = 1;
+        renderActivityUsersWithPagination();
       }
-
-      actUserCurrentPage = 1;
-      renderActivityUsersWithPagination();
 
       closeModal('modal-new-activity-user');
       showToast(`เพิ่มผู้ใช้งาน ${name} สำเร็จ! (แสดงในตารางทันที)`, 'success');
@@ -5663,20 +5754,17 @@
 
     function editActivityUser(userId, name, email) {
       const u = (actUserMasterList || []).find(x => String(x.id) === String(userId)) || (actUserMasterList || []).find(x => x.email === email);
-      const newName = prompt(`แก้ไขชื่อ-นามสกุลผู้ใช้:`, u ? u.name : name);
-      if (newName === null) return;
-      const newEmail = prompt(`แก้ไขอีเมลสำหรับ ${newName.trim() || name}:`, u ? u.email : email);
-      if (newEmail === null) return;
-
-      if (u) {
-        if (newName.trim()) u.name = newName.trim();
-        if (newEmail.trim()) u.email = newEmail.trim();
-        if (typeof TCStore !== 'undefined' && typeof TCStore.save === 'function') {
-          TCStore.save(TCStore.getState());
-        }
-      }
-      renderActivityUsersWithPagination();
-      showToast(`บันทึกการแก้ไขผู้ใช้ ${u ? u.name : name} สำเร็จ`, 'success');
+      const titleEl = document.getElementById('modal-act-user-title');
+      if (titleEl) titleEl.textContent = 'แก้ไขข้อมูลผู้ใช้งาน (Edit Activity User)';
+      if (document.getElementById('new-act-edit-id')) document.getElementById('new-act-edit-id').value = u ? u.id : userId;
+      if (document.getElementById('new-act-fullname')) document.getElementById('new-act-fullname').value = u ? u.name : name;
+      if (document.getElementById('new-act-email')) document.getElementById('new-act-email').value = u ? u.email : email;
+      if (document.getElementById('new-act-phone')) document.getElementById('new-act-phone').value = (u && u.phone) || '';
+      if (document.getElementById('new-act-password')) document.getElementById('new-act-password').value = (u && u.password) || 'password123';
+      if (document.getElementById('new-act-tier')) document.getElementById('new-act-tier').value = (u && u.tier) || 'Explorer';
+      if (document.getElementById('new-act-token')) document.getElementById('new-act-token').value = u ? (u.tokenBalance ?? 0) : 500;
+      if (document.getElementById('new-act-status')) document.getElementById('new-act-status').value = (u && u.status) || 'Active';
+      openModal('modal-new-activity-user');
     }
 
     function deleteActivityUser(userId, name) {

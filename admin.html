@@ -2835,6 +2835,14 @@
                 <label style="font-size:12px; font-weight:600; color:#475569;">Bank Account Number (เลขที่บัญชี)</label>
                 <input type="text" id="prof-bank-acc" class="input-clean" value="045-2-89102-4" style="width:100%; margin-top:4px;">
               </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Check-in Time (เวลาเช็คอิน)</label>
+                <input type="time" id="prof-checkin-time" class="input-clean" value="14:00" style="width:100%; margin-top:4px;">
+              </div>
+              <div>
+                <label style="font-size:12px; font-weight:600; color:#475569;">Check-out Time (เวลาเช็คเอาท์)</label>
+                <input type="time" id="prof-checkout-time" class="input-clean" value="12:00" style="width:100%; margin-top:4px;">
+              </div>
             </div>
           </div>
         </div>
@@ -4511,6 +4519,16 @@
             <input type="text" id="new-prod-location" class="input-clean" placeholder="กรุงเทพมหานคร" value="กรุงเทพมหานคร" style="width:100%; margin-top:4px;">
           </div>
         </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Check-in Time (เวลาเช็คอิน)</label>
+            <input type="time" id="new-prod-checkin" class="input-clean" value="14:00" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Check-out Time (เวลาเช็คเอาท์)</label>
+            <input type="time" id="new-prod-checkout" class="input-clean" value="12:00" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
       </div>
       <div class="modal-foot">
         <button class="btn-secondary" onclick="closeModal('modal-new-product')">Cancel</button>
@@ -5910,7 +5928,8 @@
       'prof-company', 'prof-service-name', 'prof-service-type', 'prof-country',
       'prof-province', 'prof-district', 'prof-subdistrict', 'prof-postcode',
       'prof-address', 'prof-taxid', 'prof-website', 'prof-contact-person',
-      'prof-position', 'prof-email', 'prof-phone', 'prof-bank', 'prof-bank-acc'
+      'prof-position', 'prof-email', 'prof-phone', 'prof-bank', 'prof-bank-acc',
+      'prof-checkin-time', 'prof-checkout-time'
     ];
 
     function loadSavedProfile() {
@@ -5973,12 +5992,16 @@
       const catName = catEl && catEl.options[catEl.selectedIndex] ? catEl.options[catEl.selectedIndex].text : 'กิจกรรมและสถานที่ท่องเที่ยว';
       const provider = (document.getElementById('new-prod-provider') && document.getElementById('new-prod-provider').value.trim()) || 'ผู้ประกอบการในระบบ (Verified)';
       const location = (document.getElementById('new-prod-location') && document.getElementById('new-prod-location').value.trim()) || 'กรุงเทพมหานคร';
+      const checkIn = (document.getElementById('new-prod-checkin') && document.getElementById('new-prod-checkin').value) || '14:00';
+      const checkOut = (document.getElementById('new-prod-checkout') && document.getElementById('new-prod-checkout').value) || '12:00';
 
       const newProd = {
         id: 'pkg-custom-' + Date.now(),
         title: name,
         code: code,
         bookBefore: time,
+        checkIn: checkIn + ' น.',
+        checkOut: checkOut + ' น.',
         provider: provider,
         location: location,
         category: catCode,

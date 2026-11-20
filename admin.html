@@ -2143,7 +2143,7 @@
             <div class="kpi-box" style="cursor:pointer;" onclick="switchView('booking-list')">
               <small>Bookings (ยอดการจอง)</small>
               <strong id="dash-kpi-bookings">80</strong>
-              <a href="javascript:void(0)" onclick="switchView('booking-list')">View all ➔</a>
+              <a href="javascript:void(0)" onclick="event.stopPropagation(); switchView('booking-list')">View all ➔</a>
             </div>
             <div class="kpi-box">
               <small>Bookings today (การจองวันนี้)</small>
@@ -5532,13 +5532,31 @@
 
       document.querySelectorAll('.menu-item-btn, .submenu-item-btn').forEach(b => b.classList.remove('active'));
 
-      if (triggerBtn) {
-        triggerBtn.classList.add('active');
-        const parentSub = triggerBtn.closest('.submenu-list');
-        if (parentSub) {
-          parentSub.classList.add('open');
-          parentSub.style.display = '';
-          const parentBtn = parentSub.previousElementSibling;
+      // Always resolve the corresponding sidebar menu/submenu button even if called from outside the sidebar (e.g., "View all")
+      const sidebarMatch = document.querySelector(`.sidebar .submenu-item-btn[onclick*="'${viewId}'"], .sidebar .menu-item-btn[onclick*="'${viewId}'"]`);
+      const activeBtn = (triggerBtn && triggerBtn.closest && triggerBtn.closest('.sidebar')) ? triggerBtn : sidebarMatch;
+      const activeParentSub = activeBtn ? activeBtn.closest('.submenu-list') : null;
+
+      document.querySelectorAll('.submenu-list').forEach(s => {
+        if (s !== activeParentSub) {
+          s.classList.remove('open');
+          s.style.display = '';
+        }
+      });
+      document.querySelectorAll('.menu-arrow').forEach(a => {
+        const parentBtn = a.closest('.menu-item-btn');
+        const nextSub = parentBtn ? parentBtn.nextElementSibling : null;
+        if (!activeParentSub || nextSub !== activeParentSub) {
+          a.classList.remove('open');
+        }
+      });
+
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        if (activeParentSub) {
+          activeParentSub.classList.add('open');
+          activeParentSub.style.display = '';
+          const parentBtn = activeParentSub.previousElementSibling;
           if (parentBtn) {
             parentBtn.classList.add('active');
             const arrow = parentBtn.querySelector('.menu-arrow');

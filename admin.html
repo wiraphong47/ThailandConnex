@@ -3887,28 +3887,55 @@
         <div class="view-section" id="view-token-log">
 
           <!-- Token Summary Card (หน้า 148 / PDF) -->
-          <div class="table-card" style="margin-bottom: 20px; background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color:#fff; border:none;">
+          <div class="table-card" style="margin-bottom: 20px; background:linear-gradient(135deg, #027EBC 0%, #00A5CF 100%) !important; color:#fff; border:none;">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
               <div>
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="font-size:24px;">🪙</span>
                   <span style="font-size:18px; font-weight:800; letter-spacing:0.3px;">ThailandConnexToken (TCN)</span>
-                  <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff; font-size:11px;">ERC-20</span>
+                  <span class="badge" style="background:#F6AE2D; color:#0F2942; font-size:11px; font-weight:800;">ERC-20</span>
                 </div>
-                <div style="font-size:12.5px; opacity:0.85; margin-top:4px; font-family:monospace;">
+                <div style="font-size:12.5px; opacity:0.92; margin-top:4px; font-family:monospace;">
                   Contract: 0x5E2D25aca0abA3ad65B83A6c1620f0DAB9733760 &nbsp;|&nbsp; 18 Decimals &nbsp;|&nbsp; 3 Addresses
                 </div>
               </div>
               <div style="text-align:right;">
-                <div style="font-size:11px; opacity:0.8; text-transform:uppercase; letter-spacing:0.5px;">Total Supply (จำนวนโทเคนรวมในระบบ)</div>
-                <div style="font-size:24px; font-weight:800; color:#38bdf8;">561,380.00 TCN</div>
+                <div style="font-size:11px; opacity:0.85; text-transform:uppercase; letter-spacing:0.5px;">Total Supply (จำนวนโทเคนรวมในระบบ)</div>
+                <div style="font-size:24px; font-weight:800; color:#FFF8F0;">561,380.00 TCN</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Smart Contract & Tokenomics Card (Moved from User Portal) -->
+          <div class="table-card" style="margin-bottom: 20px;">
+            <div style="margin-bottom: 14px;">
+              <span style="font-size:11px; font-weight:700; color:var(--primary-blue); text-transform:uppercase; letter-spacing:0.5px;">Smart Contract & Tokenomics</span>
+              <h3 style="margin:4px 0 8px; font-size:18px; color:var(--primary-navy);">กลไกโทเคนการท่องเที่ยวแห่งชาติ</h3>
+              <p style="font-size:13px; color:var(--text-muted); line-height:1.65; margin:0 0 16px;">
+                ระบบ Reward Token บนบล็อกเชนตามรายงาน depa จัดทำโดย บจก. ทราวิซโก เทคโนโลยี เป็นระบบที่สร้างแรงจูงใจและกระตุ้นการซื้อซ้ำ (Repeat Purchase) และเปิดโอกาสให้ผู้ประกอบการร่วมสร้างคุณค่า (Co-Creation)
+              </p>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-bottom:16px;">
+                <div style="background:#FFF8F0; border:1px solid #E6DFD5; border-radius:10px; padding:14px 16px;">
+                  <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">Total Token Supply</div>
+                  <div style="font-size:18px; font-weight:800; color:var(--primary-navy); margin-top:2px;">561,380 TCN</div>
+                </div>
+                <div style="background:#FFF8F0; border:1px solid #E6DFD5; border-radius:10px; padding:14px 16px;">
+                  <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">Decimals</div>
+                  <div style="font-size:18px; font-weight:800; color:var(--primary-navy); margin-top:2px;">18 Decimals</div>
+                </div>
+                <div style="background:#FFF8F0; border:1px solid #E6DFD5; border-radius:10px; padding:14px 16px;">
+                  <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">Consensus Mechanism</div>
+                  <div style="font-size:18px; font-weight:800; color:var(--primary-blue); margin-top:2px;">Proof of Authority (PoA)</div>
+                </div>
+              </div>
+              <div style="background:#E6F7FB; border-left:4px solid #00A5CF; border-radius:8px; padding:12px 16px; font-size:12.5px; color:#0F2942;">
+                <b>ข้อแนะนำการใช้งาน:</b> ผู้ใช้งานสามารถนำ Travel Token ไปใช้เป็นส่วนลดกับผู้ประกอบการโรงแรม ร้านอาหาร และแพ็กเกจทัวร์ที่ร่วมโครงการได้สูงสุด 100% ตามเงื่อนไขของแต่ละโปรโมชัน โดยระบบผู้ดูแลสามารถตรวจสอบธุรกรรม Mint / Burn / Transfer ทั้งหมดได้จากตารางด้านล่าง
               </div>
             </div>
           </div>
 
           <div class="table-card">
             <div class="table-card-head">
-              <span>Token Transaction & Audit Log (GBEX Blockchain)</span>
+              <span>ประวัติธุรกรรมโทเคน (Transaction & Audit Log — GBEX Blockchain)</span>
               <div style="display:flex; gap:8px; align-items:center;">
                 <span class="badge badge-info">Smart Contract: 0x5E2D25...9733760</span>
                 <button class="btn-secondary" onclick="exportTableToCSV('table-token-log', 'ThailandConnex_Token_Logs.csv')">Export Log CSV 📥</button>

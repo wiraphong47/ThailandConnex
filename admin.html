@@ -3283,9 +3283,16 @@
               <span>Price Tier List (การกำหนดขั้นกำไรมาตรฐาน)</span>
               <button class="btn-action" onclick="openModal('modal-new-tier')">+ Add New Tier</button>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <input type="text" id="search-tier" class="input-clean" placeholder="🔍 ค้นหาขั้นราคา (Tier)..." style="max-width:300px;" onkeyup="filterTable('search-tier', 'table-price-tier')">
-              <button class="btn-secondary" onclick="exportTableToCSV('table-price-tier', 'ThailandConnex_Price_Tiers.csv')">Export CSV 📥</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; gap:8px; flex:1; max-width:440px;">
+                <input type="text" id="search-tier" class="input-clean" placeholder="🔍 ค้นหาขั้นราคา (Tier)..." style="width:100%;" onkeyup="filterTable('search-tier', 'table-price-tier', 'price-tier-count')">
+                <button class="btn-action" onclick="filterTable('search-tier', 'table-price-tier', 'price-tier-count')">Search</button>
+                <button class="btn-secondary" onclick="document.getElementById('search-tier').value=''; filterTable('search-tier', 'table-price-tier', 'price-tier-count')">Reset</button>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="price-tier-count">4</b></span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-price-tier', 'ThailandConnex_Price_Tiers.csv')">Export CSV 📥</button>
+              </div>
             </div>
             <table class="clean-table" id="table-price-tier">
               <thead>
@@ -3331,9 +3338,16 @@
               <span>Partner Price Tier List (การกำหนดขั้นราคาให้กับ Agent / OTAs)</span>
               <button class="btn-action" onclick="openModal('modal-new-partner-tier')">+ Assign Partner Tier</button>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <input type="text" id="search-partner-tier" class="input-clean" placeholder="🔍 ค้นหาคู่ค้า (Partner)..." style="max-width:300px;" onkeyup="filterTable('search-partner-tier', 'table-partner-tier')">
-              <button class="btn-secondary" onclick="exportTableToCSV('table-partner-tier', 'ThailandConnex_Partner_Price_Tiers.csv')">Export CSV 📥</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; gap:8px; flex:1; max-width:440px;">
+                <input type="text" id="search-partner-tier" class="input-clean" placeholder="🔍 ค้นหาคู่ค้า (Partner)..." style="width:100%;" onkeyup="filterTable('search-partner-tier', 'table-partner-tier', 'partner-tier-count')">
+                <button class="btn-action" onclick="filterTable('search-partner-tier', 'table-partner-tier', 'partner-tier-count')">Search</button>
+                <button class="btn-secondary" onclick="document.getElementById('search-partner-tier').value=''; filterTable('search-partner-tier', 'table-partner-tier', 'partner-tier-count')">Reset</button>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="partner-tier-count">2</b></span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-partner-tier', 'ThailandConnex_Partner_Price_Tiers.csv')">Export CSV 📥</button>
+              </div>
             </div>
             <table class="clean-table" id="table-partner-tier">
               <thead>
@@ -3372,9 +3386,16 @@
               <span>Specific markup List (การปรับราคาเฉพาะบางกิจกรรม)</span>
               <button class="btn-action" onclick="openModal('modal-new-markup')">+ Add Specific Markup</button>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <input type="text" id="search-specific-markup" class="input-clean" placeholder="🔍 ค้นหา Partner หรือ Supplier..." style="max-width:300px;" onkeyup="filterTable('search-specific-markup', 'table-specific-markup')">
-              <button class="btn-secondary" onclick="exportTableToCSV('table-specific-markup', 'ThailandConnex_Specific_Markups.csv')">Export CSV 📥</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; gap:8px; flex:1; max-width:440px;">
+                <input type="text" id="search-specific-markup" class="input-clean" placeholder="🔍 ค้นหา Partner หรือ Supplier..." style="width:100%;" onkeyup="filterTable('search-specific-markup', 'table-specific-markup', 'specific-markup-count')">
+                <button class="btn-action" onclick="filterTable('search-specific-markup', 'table-specific-markup', 'specific-markup-count')">Search</button>
+                <button class="btn-secondary" onclick="document.getElementById('search-specific-markup').value=''; filterTable('search-specific-markup', 'table-specific-markup', 'specific-markup-count')">Reset</button>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="specific-markup-count">4</b></span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-specific-markup', 'ThailandConnex_Specific_Markups.csv')">Export CSV 📥</button>
+              </div>
             </div>
             <table class="clean-table" id="table-specific-markup">
               <thead>
@@ -6288,6 +6309,9 @@
         <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-price-tier', 'Price Tier')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-price-tier')">🗑️</button></td>
       `;
       addRowToDomTable('table-price-tier', tr);
+      if (document.getElementById('price-tier-count') && domTableState['table-price-tier']) {
+        document.getElementById('price-tier-count').textContent = domTableState['table-price-tier'].allRows.length;
+      }
       closeModal('modal-new-tier');
       showToast(`สร้างระดับราคา ${name} (+${markup} THB) สำเร็จ!`, 'success');
     }
@@ -6305,6 +6329,9 @@
         <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-partner-tier', 'Partner account')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-partner-tier')">🗑️</button></td>
       `;
       addRowToDomTable('table-partner-tier', tr);
+      if (document.getElementById('partner-tier-count') && domTableState['table-partner-tier']) {
+        document.getElementById('partner-tier-count').textContent = domTableState['table-partner-tier'].allRows.length;
+      }
       closeModal('modal-new-partner-tier');
       showToast(`กำหนดขั้นราคาคู่ค้า ${partner} เป็น ${tier} สำเร็จ!`, 'success');
     }
@@ -6322,6 +6349,9 @@
         <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-specific-markup', 'Specific Markup')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-specific-markup')">🗑️</button></td>
       `;
       addRowToDomTable('table-specific-markup', tr);
+      if (document.getElementById('specific-markup-count') && domTableState['table-specific-markup']) {
+        document.getElementById('specific-markup-count').textContent = domTableState['table-specific-markup'].allRows.length;
+      }
       closeModal('modal-new-markup');
       showToast(`บันทึก Specific Markup ${partner} สำหรับ ${supplier} เรียบร้อย!`, 'success');
     }
@@ -7116,6 +7146,15 @@
           }
           if (tableId === 'table-enabled-allot' && document.getElementById('enabled-allot-count')) {
             document.getElementById('enabled-allot-count').textContent = domTableState[tableId].allRows.length;
+          }
+          if (tableId === 'table-price-tier' && document.getElementById('price-tier-count')) {
+            document.getElementById('price-tier-count').textContent = domTableState[tableId].allRows.length;
+          }
+          if (tableId === 'table-partner-tier' && document.getElementById('partner-tier-count')) {
+            document.getElementById('partner-tier-count').textContent = domTableState[tableId].allRows.length;
+          }
+          if (tableId === 'table-specific-markup' && document.getElementById('specific-markup-count')) {
+            document.getElementById('specific-markup-count').textContent = domTableState[tableId].allRows.length;
           }
           showToast('ลบรายการสำเร็จ', 'success');
           return;

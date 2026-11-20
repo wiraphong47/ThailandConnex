@@ -4060,6 +4060,21 @@
     </main>
   </div>
 
+  <!-- Universal Edit Modal (ใช้ร่วมกันทุกตาราง) -->
+  <div class="modal-overlay" id="modal-universal-edit" onclick="if(event.target===this) closeModal('modal-universal-edit')">
+    <div class="modal-card" style="max-width: 520px; width: 95%;">
+      <div class="modal-head">
+        <h3 id="universal-edit-title">แก้ไขข้อมูล</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-universal-edit')">✕</button>
+      </div>
+      <div class="modal-body" id="universal-edit-fields"></div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-universal-edit')">Cancel</button>
+        <button class="btn-action" onclick="saveUniversalEdit()">💾 บันทึกการแก้ไข</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Booking Detail (หน้า 101 / PDF 103) -->
   <div class="modal-overlay" id="modal-booking-detail" onclick="if(event.target===this) closeModal('modal-booking-detail')">
     <div class="modal-card">
@@ -5908,20 +5923,24 @@
       if (!prodMasterList) return;
       const p = prodMasterList.find(x => String(x.id) === String(prodId));
       if (!p) return;
-      const newTitle = prompt('แก้ไขชื่อสินค้า/บริการ:', p.title);
-      if (newTitle && newTitle.trim()) {
-        p.title = newTitle.trim();
-        const newPrice = prompt('แก้ไขราคาขาย (บาท):', p.price);
-        if (newPrice && !isNaN(parseFloat(newPrice))) {
-          p.price = parseFloat(newPrice);
-        }
+      openUniversalEditModal('แก้ไขข้อมูลสินค้า/บริการ', [
+        { key: 'title', label: 'Product Name (ชื่อสินค้า/บริการ)', value: p.title || '', type: 'text' },
+        { key: 'provider', label: 'Provider (ผู้ให้บริการ)', value: p.provider || '', type: 'text' },
+        { key: 'location', label: 'Location (สถานที่/จังหวัด)', value: p.location || '', type: 'text' },
+        { key: 'price', label: 'Price (ราคาขาย - บาท)', value: p.price ?? 0, type: 'number' }
+      ], (vals) => {
+        if (vals.title.trim()) p.title = vals.title.trim();
+        if (vals.provider.trim()) p.provider = vals.provider.trim();
+        if (vals.location.trim()) p.location = vals.location.trim();
+        const pr = parseFloat(vals.price);
+        if (!isNaN(pr) && pr >= 0) p.price = pr;
         if (typeof TCStore !== 'undefined' && typeof TCStore.save === 'function') {
           TCStore.save(TCStore.getState());
         }
         renderProductsTableWithPagination();
         renderPackagesTableWithPagination();
-        showToast('แก้ไขข้อมูลสินค้าเรียบร้อย', 'success');
-      }
+        showToast('แก้ไขข้อมูลสินค้าเรียบร้อยแล้ว!', 'success');
+      });
     }
 
     function deleteProductRow(prodId) {
@@ -6893,28 +6912,185 @@
       showToast('ลบรายการสำเร็จ', 'success');
     }
 
+    let universalEditCallback = null;
+
+    function openUniversalEditModal(title, fields, onSave) {
+      universalEditCallback = onSave;
+      const titleEl = document.getElementById('universal-edit-title');
+      if (titleEl) titleEl.textContent = title || 'แก้ไขข้อมูล';
+      const bodyEl = document.getElementById('universal-edit-fields');
+      if (bodyEl) {
+        bodyEl.innerHTML = fields.map(f => {
+          if (f.type === 'select') {
+            const opts = (f.options || []).map(o => `<option value="${o}" ${o === f.value ? 'selected' : ''}>${o}</option>`).join('');
+            return `
+              <div style="margin-bottom:12px;">
+                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">${f.label}</label>
+                <select class="input-clean universal-edit-input" data-key="${f.key}" style="width:100%;">${opts}</select>
+              </div>
+            `;
+          }
+          const safeVal = String(f.value ?? '').replace(/"/g, '&quot;');
+          return `
+            <div style="margin-bottom:12px;">
+              <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">${f.label}</label>
+              <input type="${f.type || 'text'}" class="input-clean universal-edit-input" data-key="${f.key}" value="${safeVal}" style="width:100%;">
+            </div>
+          `;
+        }).join('');
+      }
+      openModal('modal-universal-edit');
+    }
+
+    function saveUniversalEdit() {
+      const inputs = document.querySelectorAll('#universal-edit-fields .universal-edit-input');
+      const vals = {};
+      inputs.forEach(inp => {
+        vals[inp.getAttribute('data-key')] = inp.value;
+      });
+      if (typeof universalEditCallback === 'function') {
+        universalEditCallback(vals);
+      }
+      closeModal('modal-universal-edit');
+    }
+
     function editDomTableRow(btn, tableId, title = 'รายการ') {
       const tr = btn.closest('tr');
       if (!tr) return;
-      const targetTd = tr.querySelector('td:nth-child(2)') || tr.querySelector('td:nth-child(1)');
-      const currentVal = targetTd ? (targetTd.querySelector('b') ? targetTd.querySelector('b').innerText : targetTd.innerText.split('\n')[0]) : '';
-      const newVal = prompt(`แก้ไขข้อมูล (${title}):`, currentVal);
-      if (newVal !== null && newVal.trim() !== '') {
-        if (targetTd.querySelector('b')) {
-          targetTd.querySelector('b').textContent = newVal.trim();
-        } else {
-          targetTd.textContent = newVal.trim();
-        }
+
+      let targetRow = tr;
+      if (typeof domTableState !== 'undefined' && domTableState[tableId]) {
+        const rowText = tr.innerText.trim();
+        const idx = domTableState[tableId].allRows.findIndex(r => r.innerText.trim() === rowText);
+        if (idx !== -1) targetRow = domTableState[tableId].allRows[idx];
+      }
+
+      const tds = targetRow.querySelectorAll('td');
+      const finishDomUpdate = (msg = 'บันทึกการแก้ไขเรียบร้อย!') => {
         if (typeof domTableState !== 'undefined' && domTableState[tableId]) {
-          const idx = domTableState[tableId].allRows.findIndex(r => r === tr || r.innerText.includes(currentVal));
-          if (idx !== -1) {
-            const rowTargetTd = domTableState[tableId].allRows[idx].querySelector('td:nth-child(2)') || domTableState[tableId].allRows[idx].querySelector('td:nth-child(1)');
-            if (rowTargetTd && rowTargetTd.querySelector('b')) rowTargetTd.querySelector('b').textContent = newVal.trim();
-          }
           renderDomTablePagination(tableId);
         }
-        showToast('บันทึกการแก้ไขเรียบร้อย', 'success');
+        showToast(msg, 'success');
+      };
+
+      if (tableId === 'table-admin-users' && tds.length >= 4) {
+        const curName = (tds[1].querySelector('b') && tds[1].querySelector('b').innerText) || '';
+        const curEmail = (tds[1].querySelector('small') && tds[1].querySelector('small').innerText) || '';
+        const curRole = (tds[2].querySelector('.badge') && tds[2].querySelector('.badge').innerText) || 'Administrator';
+        openUniversalEditModal('แก้ไขข้อมูลผู้ดูแลระบบ (Edit Admin)', [
+          { key: 'name', label: 'ชื่อ-นามสกุล (User)', value: curName },
+          { key: 'email', label: 'อีเมล (Email)', value: curEmail, type: 'email' },
+          { key: 'role', label: 'บทบาท (Role)', value: curRole }
+        ], (v) => {
+          if (v.name.trim() && tds[1].querySelector('b')) tds[1].querySelector('b').textContent = v.name.trim();
+          if (v.email.trim() && tds[1].querySelector('small')) tds[1].querySelector('small').textContent = v.email.trim();
+          if (v.role.trim() && tds[2].querySelector('.badge')) tds[2].querySelector('.badge').textContent = v.role.trim();
+          finishDomUpdate('แก้ไขข้อมูลผู้ดูแลระบบเรียบร้อย!');
+        });
+        return;
       }
+
+      if (tableId === 'table-admin-roles' && tds.length >= 2) {
+        const curRole = (tds[1].querySelector('b') && tds[1].querySelector('b').innerText) || tds[1].innerText.trim();
+        openUniversalEditModal('แก้ไขชื่อบทบาท (Edit Role)', [
+          { key: 'role', label: 'Role Name (ชื่อบทบาท)', value: curRole }
+        ], (v) => {
+          if (v.role.trim()) {
+            if (tds[1].querySelector('b')) tds[1].querySelector('b').textContent = v.role.trim();
+            else tds[1].textContent = v.role.trim();
+          }
+          finishDomUpdate('แก้ไขชื่อบทบาทเรียบร้อย!');
+        });
+        return;
+      }
+
+      if (tableId === 'table-setting-allotment' && tds.length >= 5) {
+        openUniversalEditModal('แก้ไขโควตาสินค้า (Edit Allotment)', [
+          { key: 'prod', label: 'Product (ชื่อสินค้า)', value: (tds[0].querySelector('b') || tds[0]).innerText.trim() },
+          { key: 'showtime', label: 'Show time (รอบเวลา)', value: (tds[1].querySelector('b') || tds[1]).innerText.trim() },
+          { key: 'qty', label: 'No. of allotment (จำนวนโควตา)', value: (tds[2].querySelector('b') || tds[2]).innerText.trim(), type: 'number' },
+          { key: 'before', label: 'Book before time', value: tds[3].innerText.trim() },
+          { key: 'period', label: 'Set Period', value: tds[4].innerText.trim() }
+        ], (v) => {
+          if (v.prod.trim()) (tds[0].querySelector('b') || tds[0]).textContent = v.prod.trim();
+          if (v.showtime.trim()) (tds[1].querySelector('b') || tds[1]).textContent = v.showtime.trim();
+          if (v.qty.trim()) (tds[2].querySelector('b') || tds[2]).textContent = v.qty.trim();
+          tds[3].textContent = v.before.trim() || '-';
+          tds[4].textContent = v.period.trim() || '-';
+          finishDomUpdate('แก้ไขโควตาสินค้าเรียบร้อย!');
+        });
+        return;
+      }
+
+      if (tableId === 'table-enabled-allot' && tds.length >= 2) {
+        const curCode = (tds[1].querySelector('b') || tds[1]).innerText.trim();
+        openUniversalEditModal('แก้ไขรายการเปิดขาย (Enabled Allotment)', [
+          { key: 'code', label: 'Supplier code / Product', value: curCode }
+        ], (v) => {
+          if (v.code.trim()) (tds[1].querySelector('b') || tds[1]).textContent = v.code.trim();
+          tds[0].textContent = new Date().toISOString().replace('T', ' ').substring(0, 19);
+          finishDomUpdate('แก้ไขรายการ Enabled Allotment เรียบร้อย!');
+        });
+        return;
+      }
+
+      if (tableId === 'table-price-tier' && tds.length >= 2) {
+        const curTier = (tds[0].querySelector('b') || tds[0]).innerText.trim();
+        const curMarkup = (tds[1].querySelector('b') || tds[1]).innerText.replace(/[^0-9.]/g, '').trim();
+        openUniversalEditModal('แก้ไข Price Tier', [
+          { key: 'tier', label: 'Tier name (ชื่อขั้นราคา)', value: curTier },
+          { key: 'markup', label: 'Markup (THB)', value: curMarkup, type: 'number' }
+        ], (v) => {
+          if (v.tier.trim()) (tds[0].querySelector('b') || tds[0]).textContent = v.tier.trim();
+          if (v.markup.trim()) tds[1].innerHTML = `<b>${v.markup.trim()}</b> THB`;
+          finishDomUpdate('แก้ไข Price Tier เรียบร้อย!');
+        });
+        return;
+      }
+
+      if (tableId === 'table-partner-tier' && tds.length >= 3) {
+        const curPartner = (tds[1].querySelector('b') || tds[1]).innerText.trim();
+        const curTier = (tds[2].querySelector('.badge') || tds[2]).innerText.trim();
+        openUniversalEditModal('แก้ไข Partner Price Tier', [
+          { key: 'partner', label: 'Partner account (ชื่อคู่ค้า)', value: curPartner },
+          { key: 'tier', label: 'Price tier', value: curTier }
+        ], (v) => {
+          if (v.partner.trim()) (tds[1].querySelector('b') || tds[1]).textContent = v.partner.trim();
+          if (v.tier.trim() && tds[2].querySelector('.badge')) tds[2].querySelector('.badge').textContent = v.tier.trim();
+          finishDomUpdate('แก้ไข Partner Price Tier เรียบร้อย!');
+        });
+        return;
+      }
+
+      if (tableId === 'table-specific-markup' && tds.length >= 3) {
+        const curPartner = (tds[0].querySelector('b') || tds[0]).innerText.trim();
+        const curSupplier = tds[1].innerText.trim();
+        const curMarkup = (tds[2].querySelector('b') || tds[2]).innerText.replace(/[^0-9.]/g, '').trim();
+        openUniversalEditModal('แก้ไข Specific Markup', [
+          { key: 'partner', label: 'Partner account', value: curPartner },
+          { key: 'supplier', label: 'Supplier (ผู้ให้บริการ)', value: curSupplier },
+          { key: 'markup', label: 'Markup (THB)', value: curMarkup, type: 'number' }
+        ], (v) => {
+          if (v.partner.trim()) (tds[0].querySelector('b') || tds[0]).textContent = v.partner.trim();
+          if (v.supplier.trim()) tds[1].textContent = v.supplier.trim();
+          if (v.markup.trim()) tds[2].innerHTML = `<b>${v.markup.trim()}</b> THB`;
+          finishDomUpdate('แก้ไข Specific Markup เรียบร้อย!');
+        });
+        return;
+      }
+
+      // Generic fallback
+      const targetTd = tds[1] || tds[0];
+      const currentVal = targetTd ? ((targetTd.querySelector('b') && targetTd.querySelector('b').innerText) || targetTd.innerText.split('\n')[0]) : '';
+      openUniversalEditModal(`แก้ไขข้อมูล (${title})`, [
+        { key: 'val', label: title, value: currentVal }
+      ], (v) => {
+        if (v.val.trim()) {
+          if (targetTd.querySelector('b')) targetTd.querySelector('b').textContent = v.val.trim();
+          else targetTd.textContent = v.val.trim();
+        }
+        finishDomUpdate();
+      });
     }
 
     function saveNewRole() {
@@ -6936,17 +7112,24 @@
 
     function editBookingRow(id) {
       if (typeof TCStore === 'undefined') return;
-      const r = TCStore.getState().reservations.find(x => String(x.id) === String(id));
+      const st = TCStore.getState();
+      const r = st.reservations.find(x => String(x.id) === String(id));
       if (!r) return;
-      const newAmt = prompt(`แก้ไขยอดชำระสำหรับการจอง #${id} (บาท):`, r.amount);
-      if (newAmt && !isNaN(parseFloat(newAmt))) {
-        r.amount = parseFloat(newAmt);
+      openUniversalEditModal(`แก้ไขคำสั่งจอง #${id}`, [
+        { key: 'agent', label: 'Agent / ช่องทางการจอง', value: r.agent || 'User Direct' },
+        { key: 'amount', label: 'Total amount (ยอดชำระ - บาท)', value: r.amount ?? 0, type: 'number' },
+        { key: 'status', label: 'Status (สถานะการจอง)', value: r.status || 'Confirmed', type: 'select', options: ['Confirmed', 'Pending', 'Cancelled'] }
+      ], (vals) => {
+        if (vals.agent.trim()) r.agent = vals.agent.trim();
+        const amt = parseFloat(vals.amount);
+        if (!isNaN(amt) && amt >= 0) r.amount = amt;
+        if (vals.status) r.status = vals.status;
+        if (typeof TCStore.save === 'function') TCStore.save(st);
         renderBookingsTableWithPagination();
-        if (typeof renderAdminAnalyticsDashboard === 'function') {
-          renderAdminAnalyticsDashboard(TCStore.getState().reservations);
-        }
-        showToast('แก้ไขข้อมูลการจองสำเร็จ', 'success');
-      }
+        if (typeof renderDashboardBookingsTableWithPagination === 'function') renderDashboardBookingsTableWithPagination(st.reservations);
+        if (typeof renderAdminAnalyticsDashboard === 'function') renderAdminAnalyticsDashboard(st.reservations);
+        showToast('แก้ไขข้อมูลการจองสำเร็จ!', 'success');
+      });
     }
 
     function deleteBookingRow(id) {

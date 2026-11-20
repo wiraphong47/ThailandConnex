@@ -4063,48 +4063,114 @@
           </div>
 
           <div class="table-card">
-            <div class="table-card-head">
+            <div class="table-card-head" style="flex-wrap:wrap; gap:10px;">
               <span>ประวัติธุรกรรมโทเคน (Transaction & Audit Log — GBEX Blockchain)</span>
-              <div style="display:flex; gap:8px; align-items:center;">
-                <span class="badge badge-info">Smart Contract: 0x5E2D25...9733760</span>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span class="badge badge-info" style="cursor:pointer;" onclick="navigator.clipboard && navigator.clipboard.writeText('0x5E2D25aca0abA3ad65B83A6c1620f0DAB9733760'); showToast('คัดลอก Contract Address แล้ว', 'info');" title="คลิกเพื่อคัดลอก Contract Address">Smart Contract: 0x5E2D25...9733760 📋</span>
                 <button class="btn-secondary" onclick="exportTableToCSV('table-token-log', 'ThailandConnex_Token_Logs.csv')">Export Log CSV 📥</button>
               </div>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <input type="text" id="search-token-log" class="input-clean" placeholder="🔍 ค้นหา Tx Hash หรือประเภท Action..." style="max-width:320px;" onkeyup="handleTokenLogSearch(this.value)">
-              <span style="font-size:12.5px; color:var(--text-muted)">Consensus: <b>Proof of Authority (PoA)</b></span>
+
+            <!-- Sub-Tabs matching PDF p.148: Token Transfers | Token Holders -->
+            <div style="display:flex; gap:8px; margin:12px 0 16px; border-bottom:1px solid #e2e8f0; padding-bottom:10px; flex-wrap:wrap;">
+              <button id="token-subtab-btn-transfers" class="btn-action" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchTokenLogSubTab('transfers')">
+                🔄 Token Transfers (ประวัติธุรกรรม Mint / Burn)
+              </button>
+              <button id="token-subtab-btn-holders" class="btn-secondary" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchTokenLogSubTab('holders')">
+                👛 Token Holders (ผู้ถือครอง 3 Addresses)
+              </button>
             </div>
-            <table class="clean-table" id="table-token-log">
-              <thead>
-                <tr>
-                  <th>Tx Hash</th>
-                  <th>Action</th>
-                  <th>Amount</th>
-                  <th>From / To</th>
-                  <th>Datetime</th>
-                  <th style="text-align: right;">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="font-family: 'IBM Plex Sans Thai', sans-serif; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x19969313908271dfcc89100293847a98b', '8481515', 'Token Minting', '50 TCN', 'Earned from booking #128669226')">0x19969313908271dfcc... 🔍</td>
-                  <td><span class="badge badge-success">Token Minting</span></td>
-                  <td><b>50 TCN</b></td>
-                  <td>Earned from booking #128669226</td>
-                  <td>2023-02-06 15:12:08</td>
-                  <td style="text-align: right;"><span class="badge badge-success">Block #8481515</span></td>
-                </tr>
-                <tr>
-                  <td style="font-family: 'IBM Plex Sans Thai', sans-serif; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x0c4a9cea7a1efde4e8194017583920194', '8481443', 'Token Burning', '10 TCN', 'Redeemed for voucher discount')">0x0c4a9cea7a1efde4e8... 🔍</td>
-                  <td><span class="badge badge-warning">Token Burning</span></td>
-                  <td><b>10 TCN</b></td>
-                  <td>Redeemed for voucher discount</td>
-                  <td>2023-02-06 13:33:36</td>
-                  <td style="text-align: right;"><span class="badge badge-success">Block #8481443</span></td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="table-pagination-footer" id="token-log-pagination-container"></div>
+
+            <div id="token-subtab-transfers">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; gap:8px; flex:1; max-width:580px; flex-wrap:wrap;">
+                  <input type="text" id="search-token-log" class="input-clean" placeholder="🔍 ค้นหา Tx Hash, Block หรือรายละเอียด..." style="flex:1; min-width:200px;" onkeyup="handleTokenLogSearch(this.value)">
+                  <select id="filter-token-action" class="input-clean" onchange="handleTokenLogAction(this.value)">
+                    <option value="all">ทุกประเภท Action</option>
+                    <option value="Mint">Token Minting (สร้างเหรียญ)</option>
+                    <option value="Burn">Token Burning (ใช้/เบิร์นเหรียญ)</option>
+                    <option value="Transfer">Token Transfer (โอนเหรียญ)</option>
+                  </select>
+                  <button class="btn-action" onclick="handleTokenLogSearch(document.getElementById('search-token-log').value)">Search</button>
+                  <button class="btn-secondary" onclick="resetTokenLogFilters()">Reset</button>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center;">
+                  <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="token-log-count">0</b></span>
+                  <span style="font-size:12.5px; color:var(--text-muted)">Consensus: <b>Proof of Authority (PoA)</b></span>
+                </div>
+              </div>
+              <div style="overflow-x:auto;">
+                <table class="clean-table" id="table-token-log">
+                  <thead>
+                    <tr>
+                      <th>Tx Hash</th>
+                      <th>Action</th>
+                      <th>Amount</th>
+                      <th>From / To</th>
+                      <th>Datetime</th>
+                      <th style="text-align: right;">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-family: 'IBM Plex Sans Thai', sans-serif; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x19969313908271dfcc89100293847a98b', '8481515', 'Token Minting', '50 TCN', 'Earned from booking #128669226')">0x19969313908271dfcc... 🔍</td>
+                      <td><span class="badge badge-success">Token Minting</span></td>
+                      <td><b>50 TCN</b></td>
+                      <td>Earned from booking #128669226</td>
+                      <td>2023-02-06 15:12:08</td>
+                      <td style="text-align: right;"><span class="badge badge-success">Block #8481515</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="table-pagination-footer" id="token-log-pagination-container"></div>
+            </div>
+
+            <div id="token-subtab-holders" style="display:none;">
+              <div style="overflow-x:auto;">
+                <table class="clean-table" id="table-token-holders">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Address</th>
+                      <th>Owner / Label</th>
+                      <th>Quantity (TCN)</th>
+                      <th style="text-align: right;">Percentage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td style="font-family:monospace; color:var(--primary-blue);">0x5E2D25aca0abA3ad65B83A6c1620f0DAB9733760</td>
+                      <td><b>depa / ThailandCONNEX Treasury Contract</b></td>
+                      <td><b>415,200.00 TCN</b></td>
+                      <td style="text-align: right;"><span class="badge badge-info">73.96%</span></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td style="font-family:monospace; color:var(--primary-blue);">0x0442bd05f33025EB6B0A9675c063b99c1E6D3Ef4</td>
+                      <td><b>TRAVIZGO Reward Distribution Pool</b></td>
+                      <td><b>104,660.00 TCN</b></td>
+                      <td style="text-align: right;"><span class="badge badge-success">18.64%</span></td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td style="font-family:monospace; color:var(--primary-blue);">0x71C4B92F26c95BfBE8b105A12E83204981Ea1945</td>
+                      <td><b>Traveler Active Staking & Redemption Pool</b></td>
+                      <td><b>41,520.00 TCN</b></td>
+                      <td style="text-align: right;"><span class="badge badge-warning">7.40%</span></td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr style="background:#f8fafc; font-weight:700;">
+                      <td colspan="3">Total Supply (3 Addresses)</td>
+                      <td style="color:var(--primary-blue);">561,380.00 TCN</td>
+                      <td style="text-align: right;">100.00%</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -7951,6 +8017,25 @@
     let tokenLogCurrentPage = 1;
     const TOKEN_PER_PAGE = 10;
     let tokenLogSearchQuery = '';
+    let tokenLogActionFilter = 'all';
+
+    function switchTokenLogSubTab(tab) {
+      const trDiv = document.getElementById('token-subtab-transfers');
+      const hdDiv = document.getElementById('token-subtab-holders');
+      const trBtn = document.getElementById('token-subtab-btn-transfers');
+      const hdBtn = document.getElementById('token-subtab-btn-holders');
+      if (tab === 'holders') {
+        if (trDiv) trDiv.style.display = 'none';
+        if (hdDiv) hdDiv.style.display = 'block';
+        if (trBtn) trBtn.className = 'btn-secondary';
+        if (hdBtn) hdBtn.className = 'btn-action';
+      } else {
+        if (trDiv) trDiv.style.display = 'block';
+        if (hdDiv) hdDiv.style.display = 'none';
+        if (trBtn) trBtn.className = 'btn-action';
+        if (hdBtn) hdBtn.className = 'btn-secondary';
+      }
+    }
 
     function renderTokenLogsTableWithPagination(tokenLogsList) {
       if (tokenLogsList && Array.isArray(tokenLogsList)) tokenLogMasterList = tokenLogsList;
@@ -7959,6 +8044,10 @@
       }
 
       const filtered = tokenLogMasterList.filter(l => {
+        if (tokenLogActionFilter !== 'all') {
+          const act = (l.action || '').toLowerCase();
+          if (!act.includes(tokenLogActionFilter.toLowerCase())) return false;
+        }
         if (tokenLogSearchQuery) {
           const q = tokenLogSearchQuery.toLowerCase();
           const h = (l.txHash || '').toLowerCase();
@@ -7969,6 +8058,9 @@
         }
         return true;
       });
+
+      const cntEl = document.getElementById('token-log-count');
+      if (cntEl) cntEl.textContent = filtered.length;
 
       const totalPages = Math.max(1, Math.ceil(filtered.length / TOKEN_PER_PAGE));
       if (tokenLogCurrentPage > totalPages) tokenLogCurrentPage = totalPages;
@@ -8015,6 +8107,24 @@
       tokenLogSearchQuery = val || '';
       tokenLogCurrentPage = 1;
       renderTokenLogsTableWithPagination();
+    }
+
+    function handleTokenLogAction(val) {
+      tokenLogActionFilter = val || 'all';
+      tokenLogCurrentPage = 1;
+      renderTokenLogsTableWithPagination();
+    }
+
+    function resetTokenLogFilters() {
+      const s = document.getElementById('search-token-log');
+      if (s) s.value = '';
+      const f = document.getElementById('filter-token-action');
+      if (f) f.value = 'all';
+      tokenLogSearchQuery = '';
+      tokenLogActionFilter = 'all';
+      tokenLogCurrentPage = 1;
+      renderTokenLogsTableWithPagination();
+      showToast('รีเซ็ตตัวกรอง Blockchain Log เรียบร้อย', 'info');
     }
 
     // ========================================================

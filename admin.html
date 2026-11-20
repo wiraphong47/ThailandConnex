@@ -2450,9 +2450,10 @@
               </button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <div style="display:flex; gap:8px; flex:1; max-width:400px;">
-                <input type="text" id="search-admin-users" class="input-clean" placeholder="🔍 ค้นหาด้วยชื่อหรืออีเมลผู้ดูแล..." style="width:100%;" onkeyup="filterTable('search-admin-users', 'table-admin-users', 'admin-result-count')">
+              <div style="display:flex; gap:8px; flex:1; max-width:480px;">
+                <input type="text" id="search-admin-users" class="input-clean" placeholder="🔍 Search by user (ค้นหาด้วยชื่อหรืออีเมลผู้ดูแล)..." style="width:100%;" onkeyup="filterTable('search-admin-users', 'table-admin-users', 'admin-result-count')">
                 <button class="btn-action" onclick="filterTable('search-admin-users', 'table-admin-users', 'admin-result-count')">Search</button>
+                <button class="btn-secondary" onclick="document.getElementById('search-admin-users').value=''; filterTable('search-admin-users', 'table-admin-users', 'admin-result-count')">Reset</button>
               </div>
               <div style="display:flex; gap:12px; align-items:center;">
                 <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="admin-result-count">9</b></span>
@@ -2563,8 +2564,19 @@
                 🛡️ 2. Admin User List (ส่วนกลาง 9 ราย)
               </button>
               <button class="btn-action" style="padding:6px 14px; font-size:12.5px; font-weight:600;" onclick="switchView('admin-roles', document.getElementById('sub-btn-admin-role'))">
-                3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
+                🔑 3. Admin Role & Permissions (สิทธิ์ระดับหน้าจอ)
               </button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; gap:8px; flex:1; max-width:480px;">
+                <input type="text" id="search-admin-roles" class="input-clean" placeholder="🔍 Search by role name (ค้นหาชื่อบทบาท)..." style="width:100%;" onkeyup="filterTable('search-admin-roles', 'table-admin-roles', 'role-result-count')">
+                <button class="btn-action" onclick="filterTable('search-admin-roles', 'table-admin-roles', 'role-result-count')">Search</button>
+                <button class="btn-secondary" onclick="document.getElementById('search-admin-roles').value=''; filterTable('search-admin-roles', 'table-admin-roles', 'role-result-count')">Reset</button>
+              </div>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="role-result-count">5</b></span>
+                <button class="btn-secondary" onclick="exportTableToCSV('table-admin-roles', 'ThailandConnex_Admin_Roles.csv')">Export CSV 📥</button>
+              </div>
             </div>
             <table class="clean-table" id="table-admin-roles" style="margin-bottom: 24px;">
               <thead>
@@ -2606,8 +2618,10 @@
 
             <div class="table-card-head" style="margin-top:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
               <span>Screen Permission (ตั้งค่าสิทธิ์การเข้าถึงระดับหน้าจอ)</span>
-              <div style="display:flex; gap:8px; align-items:center;">
-                <label style="font-size:12px; font-weight:600;">เลือกเทมเพลตสิทธิ์:</label>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <label style="font-size:12px; font-weight:600;">Role name:</label>
+                <input type="text" id="perm-role-name-input" class="input-clean" value="Administrator" style="width:160px; padding:4px 10px; font-size:12px; font-weight:600;" readonly>
+                <label style="font-size:12px; font-weight:600;">เทมเพลตสิทธิ์:</label>
                 <select id="role-preset-select" class="input-clean" onchange="applyRolePreset(this.value)" style="padding:4px 8px; font-size:12px;">
                   <option value="admin">Administrator (Super Admin - ทุกสิทธิ์)</option>
                   <option value="operator">Operator (จัดการสินค้าและการจอง)</option>
@@ -5819,16 +5833,21 @@
 
     function applyRolePreset(role) {
       const checkboxes = document.querySelectorAll('#table-screen-permissions tbody input[type="checkbox"]');
+      const roleInput = document.getElementById('perm-role-name-input');
       if (role === 'admin') {
+        if (roleInput) roleInput.value = 'Administrator';
         checkboxes.forEach(cb => cb.checked = true);
         showToast('ใช้เทมเพลตสิทธิ์: Super Admin (เข้าถึงได้ทุกสิทธิ์)', 'success');
       } else if (role === 'operator') {
+        if (roleInput) roleInput.value = 'Staff / Operator';
         checkboxes.forEach((cb, idx) => cb.checked = (idx % 2 === 0));
         showToast('ใช้เทมเพลตสิทธิ์: Operator (จัดการสินค้า/บริการ)', 'info');
       } else if (role === 'finance') {
+        if (roleInput) roleInput.value = 'General Manager';
         checkboxes.forEach((cb, idx) => cb.checked = (idx % 3 !== 0));
         showToast('ใช้เทมเพลตสิทธิ์: Finance (การเงินและ Price Tier)', 'info');
       } else if (role === 'auditor') {
+        if (roleInput) roleInput.value = 'Auditor (Read-Only)';
         checkboxes.forEach(cb => cb.checked = false);
         document.querySelectorAll('#table-screen-permissions tbody tr td:nth-child(2) input').forEach(cb => cb.checked = true);
         showToast('ใช้เทมเพลตสิทธิ์: Auditor (อ่านอย่างเดียว Read-Only)', 'warning');
@@ -6857,6 +6876,15 @@
         if (idx !== -1) {
           domTableState[tableId].allRows.splice(idx, 1);
           renderDomTablePagination(tableId);
+          if (tableId === 'table-admin-users' && document.getElementById('admin-result-count')) {
+            document.getElementById('admin-result-count').textContent = domTableState[tableId].allRows.length;
+          }
+          if (tableId === 'table-admin-roles' && document.getElementById('role-result-count')) {
+            document.getElementById('role-result-count').textContent = domTableState[tableId].allRows.length;
+          }
+          if (tableId === 'table-contracts' && document.getElementById('contract-count')) {
+            document.getElementById('contract-count').textContent = domTableState[tableId].allRows.length;
+          }
           showToast('ลบรายการสำเร็จ', 'success');
           return;
         }
@@ -6898,6 +6926,10 @@
         <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-admin-roles', 'บทบาท')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-admin-roles')">🗑️</button></td>
       `;
       addRowToDomTable('table-admin-roles', tr);
+      const rCount = document.getElementById('role-result-count');
+      if (rCount && typeof domTableState !== 'undefined' && domTableState['table-admin-roles']) {
+        rCount.textContent = domTableState['table-admin-roles'].allRows.length;
+      }
       closeModal('modal-new-role');
       showToast(`สร้างบทบาท ${name} สำเร็จ!`, 'success');
     }

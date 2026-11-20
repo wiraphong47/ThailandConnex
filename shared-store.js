@@ -1358,6 +1358,8 @@
         this.syncUserBalanceToRegistered(state.user);
         state.tokenLogs.unshift({
           time: now,
+          userId: newBooking.userId || state.user.id || 'TC-849204',
+          userName: newBooking.guest || state.user.name || 'คุณอลิสา ใจดี',
           action: 'Token Minting',
           actionCode: '+',
           detail: `Earned from booking #${newBooking.id} (${newBooking.property})`,
@@ -1396,6 +1398,8 @@
       }
 
       state.user.tokenBalance = Math.round((state.user.tokenBalance - v.points) * 100) / 100;
+      if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
+      this.syncUserBalanceToRegistered(state.user);
       if (v.remaining > 0) v.remaining -= 1;
 
       const randomBarcode = Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join('').replace(/(\d{4})/g, '$1 ').trim();
@@ -1410,9 +1414,12 @@
       };
       state.myCoupons.unshift(newCoupon);
 
+      const curUser = (state.auth && state.auth.currentUser) ? state.auth.currentUser : (state.user || {});
       // Token Burning on blockchain
       state.tokenLogs.unshift({
         time: getNowStr(),
+        userId: curUser.id || state.user.id || 'TC-849204',
+        userName: curUser.name || state.user.name || 'คุณอลิสา ใจดี',
         action: 'Token Burning',
         actionCode: '-',
         detail: `Redeemed for voucher: ${v.name.substring(0, 32)}...`,
@@ -1446,8 +1453,13 @@
       if (state.user.tokenBalance < amount) return { success: false, message: 'ยอดคงเหลือไม่เพียงพอ' };
 
       state.user.tokenBalance = Math.round((state.user.tokenBalance - amount) * 100) / 100;
+      if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
+      this.syncUserBalanceToRegistered(state.user);
+      const curUser = (state.auth && state.auth.currentUser) ? state.auth.currentUser : (state.user || {});
       state.tokenLogs.unshift({
         time: getNowStr(),
+        userId: curUser.id || state.user.id || 'TC-849204',
+        userName: curUser.name || state.user.name || 'คุณอลิสา ใจดี',
         action: 'Transfer Out',
         actionCode: 'T',
         detail: `โอนคะแนนให้ ${target}`,
@@ -1567,9 +1579,11 @@
       // Welcome bonus minting on blockchain
       state.tokenLogs.unshift({
         time: getNowStr(),
+        userId: newUser.id,
+        userName: newUser.name,
         action: 'Token Minting',
         actionCode: '+',
-        detail: `🎉 Welcome Bonus 500 TCN สมัครสมาชิกใหม่ (${newUser.name})`,
+        detail: `Welcome Bonus 500 TCN สมัครสมาชิกใหม่ (${newUser.name})`,
         amount: initialBonus,
         balance: initialBonus,
         txHash: generateHash(),

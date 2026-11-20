@@ -2018,12 +2018,13 @@
           <span class="badge badge-info" style="font-size:10px; background:rgba(22,141,225,0.15); color:var(--primary-blue);">108k / 201k</span>
         </button>
 
-        <!-- 9. Log -->
+        <!-- 9. Token & Transaction Log -->
         <button class="menu-item-btn" id="btn-log" onclick="switchView('token-log', this)">
           <div class="menu-label-wrap">
             <span class="menu-icon">📄</span>
-            <span>Log (Blockchain / Audit)</span>
+            <span>กลไกโทเคน & ประวัติธุรกรรม</span>
           </div>
+          <span class="badge badge-info" style="font-size:10px; background:rgba(0,165,207,0.15); color:var(--primary-navy);">TCN Log</span>
         </button>
 
         <!-- 10. Thailand Packages -->
@@ -4062,10 +4063,41 @@
             </div>
           </div>
 
+          <!-- User Token Usage & Spending Summary (ใครใช้ไปเท่าไหร่แล้ว) -->
+          <div class="table-card" style="margin-bottom: 20px;">
+            <div class="table-card-head">
+              <div>
+                <span style="font-size:15.5px; color:var(--primary-navy);">สรุปยอดการใช้โทเคนและยอดใช้จ่ายรายบุคคล (ใครใช้ไปเท่าไหร่แล้ว)</span>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:500; margin-top:2px;">แสดงยอดเงินจองสะสม แต้มที่ได้รับ แต้มที่ใช้ไปแล้ว (แลกคูปอง/โอนออก) และยอดคงเหลือของสมาชิกแต่ละคนแบบ Real-time</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="search-user-usage" class="input-clean" placeholder="ค้นหาชื่อสมาชิก / รหัส TC-..." style="max-width:220px; height:34px; font-size:12.5px;" onkeyup="renderUserTokenUsageTable()">
+                <button class="btn-secondary" style="height:34px; font-size:12px;" onclick="exportTableToCSV('table-user-token-usage', 'ThailandConnex_User_Token_Usage.csv')">Export สรุปรายบุคคล CSV</button>
+              </div>
+            </div>
+            <table class="clean-table" id="table-user-token-usage">
+              <thead>
+                <tr>
+                  <th>ผู้ใช้งาน (User & ID)</th>
+                  <th>ยอดจองสะสม (THB)</th>
+                  <th>ได้รับแต้มสะสม (Earned)</th>
+                  <th>ใช้แต้มไปแล้ว (Used / Transfer)</th>
+                  <th>แต้มคงเหลือปัจจุบัน</th>
+                  <th style="text-align:right;">ดูธุรกรรม</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-user-token-usage">
+                <!-- Populated dynamically by renderUserTokenUsageTable() -->
+              </tbody>
+            </table>
+          </div>
+
           <div class="table-card">
             <div class="table-card-head" style="flex-wrap:wrap; gap:10px;">
               <span>ประวัติธุรกรรมโทเคน (Transaction & Audit Log — GBEX Blockchain)</span>
               <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <span id="token-log-user-filter-badge" style="display:none; font-size:12px; font-weight:700; color:#027EBC; background:#E6F7FB; padding:4px 10px; border-radius:999px; border:1px solid #B3E5F2;"></span>
+                <button type="button" id="btn-clear-token-user-filter" class="btn-secondary" style="display:none; font-size:11.5px; padding:4px 10px;" onclick="filterTokenLogsByUser('')">✕ แสดงทุกคน</button>
                 <span class="badge badge-info" style="cursor:pointer;" onclick="navigator.clipboard && navigator.clipboard.writeText('0x5E2D25aca0abA3ad65B83A6c1620f0DAB9733760'); showToast('คัดลอก Contract Address แล้ว', 'info');" title="คลิกเพื่อคัดลอก Contract Address">Smart Contract: 0x5E2D25...9733760 📋</span>
                 <button class="btn-secondary" onclick="exportTableToCSV('table-token-log', 'ThailandConnex_Token_Logs.csv')">Export Log CSV 📥</button>
               </div>
@@ -4084,7 +4116,7 @@
             <div id="token-subtab-transfers">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
                 <div style="display:flex; gap:8px; flex:1; max-width:580px; flex-wrap:wrap;">
-                  <input type="text" id="search-token-log" class="input-clean" placeholder="🔍 ค้นหา Tx Hash, Block หรือรายละเอียด..." style="flex:1; min-width:200px;" onkeyup="handleTokenLogSearch(this.value)">
+                  <input type="text" id="search-token-log" class="input-clean" placeholder="🔍 ค้นหาชื่อผู้ใช้งาน, Tx Hash, Block หรือรายละเอียด..." style="flex:1; min-width:200px;" onkeyup="handleTokenLogSearch(this.value)">
                   <select id="filter-token-action" class="input-clean" onchange="handleTokenLogAction(this.value)">
                     <option value="all">ทุกประเภท Action</option>
                     <option value="Mint">Token Minting (สร้างเหรียญ)</option>
@@ -4103,16 +4135,18 @@
                 <table class="clean-table" id="table-token-log">
                   <thead>
                     <tr>
+                      <th>ผู้ทำรายการ (User)</th>
                       <th>Tx Hash</th>
                       <th>Action</th>
                       <th>Amount</th>
-                      <th>From / To</th>
+                      <th>รายละเอียดรายการ</th>
                       <th>Datetime</th>
                       <th style="text-align: right;">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
+                      <td><b>คุณอลิสา ใจดี</b><div style="font-size:11px; color:var(--text-muted);">TC-849204</div></td>
                       <td style="font-family: 'IBM Plex Sans Thai', sans-serif; color:var(--primary-blue); cursor:pointer;" onclick="verifyTokenTx('0x19969313908271dfcc89100293847a98b', '8481515', 'Token Minting', '50 TCN', 'Earned from booking #128669226')">0x19969313908271dfcc... 🔍</td>
                       <td><span class="badge badge-success">Token Minting</span></td>
                       <td><b>50 TCN</b></td>
@@ -5198,7 +5232,7 @@
         if (subUser) { subUser.classList.remove('open'); subUser.style.display = 'none'; }
         if (btnApi) btnApi.style.display = 'none';
         if (subApi) { subApi.classList.remove('open'); subApi.style.display = 'none'; }
-        if (btnLog) btnLog.style.display = 'none';
+        if (btnLog) btnLog.style.display = 'flex';
         if (btnAllot) btnAllot.style.display = 'flex';
         if (subAllot) subAllot.style.display = '';
         if (btnChannel) btnChannel.style.display = 'flex';
@@ -5254,7 +5288,7 @@
         if (btnBooking) btnBooking.querySelector('.menu-label-wrap span:last-child').textContent = 'Manage Booking';
         if (btnManage) btnManage.querySelector('.menu-label-wrap span:last-child').textContent = 'Manage';
         if (btnDataBank) btnDataBank.querySelector('.menu-label-wrap span:last-child').textContent = 'National Tourism Data Bank';
-        if (btnLog) btnLog.querySelector('.menu-label-wrap span:last-child').textContent = 'Log (Blockchain / Audit)';
+        if (btnLog) btnLog.querySelector('.menu-label-wrap span:last-child').textContent = 'กลไกโทเคน & ประวัติธุรกรรม';
       }
 
       // 4. Data Filtering: Reservations
@@ -8074,6 +8108,7 @@
     const TOKEN_PER_PAGE = 10;
     let tokenLogSearchQuery = '';
     let tokenLogActionFilter = 'all';
+    let tokenLogUserFilter = '';
 
     function switchTokenLogSubTab(tab) {
       const trDiv = document.getElementById('token-subtab-transfers');
@@ -8093,16 +8128,146 @@
       }
     }
 
+    function resolveTokenLogOwner(logItem, users) {
+      if (logItem.userName) {
+        return { id: logItem.userId || '-', name: logItem.userName };
+      }
+      const det = String(logItem.detail || '');
+      for (const u of users) {
+        const cleanName = (u.name || '').replace('คุณ', '').trim();
+        if ((u.id && det.includes(u.id)) || (cleanName && det.includes(cleanName))) {
+          return { id: u.id, name: u.name };
+        }
+      }
+      // Default attribution for initial report logs
+      return { id: 'TC-849204', name: 'คุณอลิสา ใจดี' };
+    }
+
+    function filterTokenLogsByUser(userName) {
+      tokenLogUserFilter = userName || '';
+      tokenLogCurrentPage = 1;
+      const badge = document.getElementById('token-log-user-filter-badge');
+      const clearBtn = document.getElementById('btn-clear-token-user-filter');
+      if (badge) {
+        badge.style.display = tokenLogUserFilter ? 'inline-block' : 'none';
+        badge.textContent = 'กรองเฉพาะ: ' + tokenLogUserFilter;
+      }
+      if (clearBtn) {
+        clearBtn.style.display = tokenLogUserFilter ? 'inline-flex' : 'none';
+      }
+      renderTokenLogsTableWithPagination();
+      const tbl = document.getElementById('table-token-log');
+      if (tbl && tokenLogUserFilter) tbl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function renderUserTokenUsageTable() {
+      const tbody = document.getElementById('tbody-user-token-usage');
+      if (!tbody || typeof TCStore === 'undefined') return;
+      const st = TCStore.getState();
+      const users = (st.auth && st.auth.registeredUsers) ? st.auth.registeredUsers : [];
+      const logs = st.tokenLogs || [];
+      const reservations = st.reservations || [];
+      const currentUser = (st.auth && st.auth.currentUser) ? st.auth.currentUser : {};
+      const q = (document.getElementById('search-user-usage')?.value || '').trim().toLowerCase();
+
+      const rows = users.filter(u => {
+        if (!q) return true;
+        return (u.name || '').toLowerCase().includes(q) || (u.id || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q);
+      }).map(u => {
+        const cleanName = (u.name || '').replace('คุณ', '').trim();
+        const userLogs = logs.filter(l => {
+          const owner = resolveTokenLogOwner(l, users);
+          return owner.id === u.id || owner.name === u.name || (cleanName && owner.name.includes(cleanName));
+        });
+
+        let earnedTcp = 0;
+        let usedTcp = 0;
+        let burnCount = 0;
+        let transferCount = 0;
+        userLogs.forEach(l => {
+          const amt = parseFloat(l.amount) || 0;
+          if (amt > 0) earnedTcp += amt;
+          else if (amt < 0) {
+            usedTcp += Math.abs(amt);
+            if ((l.action || '').includes('Transfer')) transferCount++;
+            else burnCount++;
+          }
+        });
+
+        const userRes = reservations.filter(r =>
+          (r.userId && r.userId === u.id) ||
+          (r.email && u.email && r.email.toLowerCase() === u.email.toLowerCase()) ||
+          (cleanName && r.guest && r.guest.includes(cleanName))
+        );
+        const totalSpentThb = userRes.filter(r => r.status !== 'Cancelled').reduce((s, r) => s + (parseFloat(r.amount) || 0), 0);
+        const bal = parseFloat(u.tokenBalance) || 0;
+        const isOnline = (currentUser.id === u.id || currentUser.email === u.email) && currentUser.isLoggedIn !== false;
+
+        return {
+          u, earnedTcp, usedTcp, burnCount, transferCount, totalSpentThb, bkCount: userRes.length, bal, isOnline, txCount: userLogs.length
+        };
+      });
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px; color:#64748b;">ไม่พบข้อมูลผู้ใช้งาน</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(row => `
+        <tr>
+          <td>
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span style="width:32px; height:32px; border-radius:50%; background:#027EBC; color:#fff; font-weight:700; font-size:12px; display:inline-grid; place-items:center; flex-shrink:0;">${row.u.avatar || 'TC'}</span>
+              <div>
+                <b>${row.u.name}</b>
+                ${row.isOnline ? '<span class="badge badge-success" style="font-size:9.5px; margin-left:4px;">Online</span>' : ''}
+                <div style="font-size:11px; color:var(--text-muted);">ID: ${row.u.id} • ${row.u.email || '-'}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <b style="color:#0F2942; font-size:13.5px;">฿${row.totalSpentThb.toLocaleString('th-TH')}</b>
+            <div style="font-size:11px; color:var(--text-muted);">จองทั้งหมด ${row.bkCount} รายการ</div>
+          </td>
+          <td>
+            <b style="color:#027EBC;">+${row.earnedTcp.toLocaleString('th-TH', { minimumFractionDigits: 2 })} TCP</b>
+          </td>
+          <td>
+            <b style="color:${row.usedTcp > 0 ? '#F26419' : '#64748b'}; font-size:13.5px;">${row.usedTcp > 0 ? '-' : ''}${row.usedTcp.toLocaleString('th-TH', { minimumFractionDigits: 2 })} TCP</b>
+            <div style="font-size:11px; color:var(--text-muted);">${row.usedTcp > 0 ? `แลกคูปอง ${row.burnCount} ครั้ง • โอนออก ${row.transferCount} ครั้ง` : 'ยังไม่มีการใช้แต้ม'}</div>
+          </td>
+          <td>
+            <b style="color:#00A5CF; font-size:13.5px;">${row.bal.toLocaleString('th-TH', { minimumFractionDigits: 2 })} TCP</b>
+          </td>
+          <td style="text-align:right;">
+            <button type="button" class="btn-secondary" style="font-size:11.5px; padding:5px 10px;" onclick="filterTokenLogsByUser('${(row.u.name || '').replace(/'/g, '')}')">
+              ดูประวัติ (${row.txCount})
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
     function renderTokenLogsTableWithPagination(tokenLogsList) {
       if (tokenLogsList && Array.isArray(tokenLogsList)) tokenLogMasterList = tokenLogsList;
       if (!tokenLogMasterList || tokenLogMasterList.length === 0) {
         if (typeof TCStore !== 'undefined') tokenLogMasterList = TCStore.getState().tokenLogs || [];
       }
 
+      renderUserTokenUsageTable();
+
+      const st = (typeof TCStore !== 'undefined') ? TCStore.getState() : {};
+      const users = (st.auth && st.auth.registeredUsers) ? st.auth.registeredUsers : [];
+
       const filtered = tokenLogMasterList.filter(l => {
         if (tokenLogActionFilter !== 'all') {
           const act = (l.action || '').toLowerCase();
           if (!act.includes(tokenLogActionFilter.toLowerCase())) return false;
+        }
+        const owner = resolveTokenLogOwner(l, users);
+        if (tokenLogUserFilter) {
+          const cleanTarget = tokenLogUserFilter.replace('คุณ', '').trim();
+          if (owner.name !== tokenLogUserFilter && !owner.name.includes(cleanTarget)) return false;
         }
         if (tokenLogSearchQuery) {
           const q = tokenLogSearchQuery.toLowerCase();
@@ -8110,7 +8275,9 @@
           const a = (l.action || '').toLowerCase();
           const d = (l.detail || '').toLowerCase();
           const b = String(l.block || '').toLowerCase();
-          if (!h.includes(q) && !a.includes(q) && !d.includes(q) && !b.includes(q)) return false;
+          const uName = (owner.name || '').toLowerCase();
+          const uId = (owner.id || '').toLowerCase();
+          if (!h.includes(q) && !a.includes(q) && !d.includes(q) && !b.includes(q) && !uName.includes(q) && !uId.includes(q)) return false;
         }
         return true;
       });
@@ -8129,20 +8296,28 @@
       const tbody = document.querySelector('#table-token-log tbody');
       if (tbody) {
         if (currentSlice.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:30px; color:#64748b;">ไม่พบบันทึกธุรกรรม Token</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#64748b;">ไม่พบบันทึกธุรกรรม Token</td></tr>`;
         } else {
-          tbody.innerHTML = currentSlice.map(l => `
+          tbody.innerHTML = currentSlice.map(l => {
+            const owner = resolveTokenLogOwner(l, users);
+            const amt = Number(l.amount) || 0;
+            return `
             <tr>
-              <td style="color:var(--primary-blue); cursor:pointer; font-weight:600;" onclick="verifyTokenTx('${l.txHash}', '${l.block || '8481515'}', '${l.action}', '${l.amount > 0 ? '+' : ''}${l.amount} TCN', '${l.detail}')">
-                ${l.txHash ? l.txHash.substring(0, 18) + '...' : '0x1996931390...'} 🔍
+              <td>
+                <b>${owner.name}</b>
+                <div style="font-size:11px; color:var(--text-muted);">${owner.id}</div>
+              </td>
+              <td style="color:var(--primary-blue); cursor:pointer; font-weight:600;" onclick="verifyTokenTx('${l.txHash}', '${l.block || '8481515'}', '${l.action}', '${amt > 0 ? '+' : ''}${amt} TCN', '${l.detail}')">
+                ${l.txHash ? l.txHash.substring(0, 16) + '...' : '0x1996931390...'}
               </td>
               <td><span class="badge ${l.action.includes('Mint') ? 'badge-success' : (l.action.includes('Burn') ? 'badge-warning' : 'badge-info')}">${l.action}</span></td>
-              <td><b>${l.amount > 0 ? '+' : ''}${Number(l.amount).toLocaleString()} TCN</b></td>
+              <td><b style="color:${amt >= 0 ? '#027EBC' : '#F26419'};">${amt > 0 ? '+' : ''}${amt.toLocaleString('th-TH', { minimumFractionDigits: 2 })} TCP</b></td>
               <td>${l.detail}</td>
               <td>${l.time}</td>
               <td style="text-align: right;"><span class="badge badge-success">Block #${l.block || '8481515'}</span></td>
             </tr>
-          `).join('');
+          `;
+          }).join('');
         }
       }
 

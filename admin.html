@@ -3052,8 +3052,10 @@
                 <input type="number" id="bulk-allotment-qty" value="30" class="input-clean" style="width:70px; text-align:center;">
                 <button class="btn-action" style="font-size:11px;" onclick="applyBulkAllotment()">บันทึกทุกรายการ (Apply)</button>
               </div>
-              <div style="display:flex; gap:8px; align-items:center;">
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                 <input type="text" id="search-setting-allotment" class="input-clean" placeholder="🔍 ค้นหาสินค้า หรือรอบเวลา..." style="width:200px;" onkeyup="filterTable('search-setting-allotment', 'table-setting-allotment')">
+                <button class="btn-action" style="font-size:12px;" onclick="filterTable('search-setting-allotment', 'table-setting-allotment')">Search</button>
+                <button class="btn-secondary" style="font-size:12px;" onclick="document.getElementById('search-setting-allotment').value=''; filterTable('search-setting-allotment', 'table-setting-allotment')">Reset</button>
                 <button class="btn-secondary" onclick="exportTableToCSV('table-setting-allotment', 'ThailandConnex_Setting_Allotment.csv')">Export CSV 📥</button>
               </div>
             </div>
@@ -3137,10 +3139,14 @@
           <div class="table-card">
             <div class="table-card-head">
               <span>Enabled Allotment List (เปิด-ปิดการจองโควตาแยกรายผู้ให้บริการ)</span>
-              <button class="btn-action" onclick="showToast('เปิดแบบฟอร์มกำหนดสถานะโควตาใหม่', 'info')">+ Add Supplier Allotment</button>
+              <button class="btn-action" onclick="openModal('modal-new-enabled-allot')">+ Add Supplier Allotment</button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <input type="text" id="search-enabled-allot" class="input-clean" placeholder="🔍 ค้นหาชื่อ Supplier code..." style="max-width:300px;" onkeyup="filterTable('search-enabled-allot', 'table-enabled-allot', 'enabled-allot-count')">
+              <div style="display:flex; gap:8px; flex:1; max-width:440px;">
+                <input type="text" id="search-enabled-allot" class="input-clean" placeholder="🔍 ค้นหาชื่อ Supplier code..." style="width:100%;" onkeyup="filterTable('search-enabled-allot', 'table-enabled-allot', 'enabled-allot-count')">
+                <button class="btn-action" onclick="filterTable('search-enabled-allot', 'table-enabled-allot', 'enabled-allot-count')">Search</button>
+                <button class="btn-secondary" onclick="document.getElementById('search-enabled-allot').value=''; filterTable('search-enabled-allot', 'table-enabled-allot', 'enabled-allot-count')">Reset</button>
+              </div>
               <div style="display:flex; gap:10px; align-items:center;">
                 <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="enabled-allot-count">4</b></span>
                 <button class="btn-secondary" onclick="exportTableToCSV('table-enabled-allot', 'ThailandConnex_Enabled_Allotment.csv')">Export CSV 📥</button>
@@ -3196,10 +3202,11 @@
               <button class="btn-action" onclick="exportTableToCSV('table-allotment-report', 'ThailandConnex_Allotment_Report.csv')">Export CSV / Excel 📥</button>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-allot-report" class="input-clean" placeholder="🔍 ค้นหาตามกิจกรรมหรือสินค้า..." style="flex:1; min-width:200px;" onkeyup="filterTable('search-allot-report', 'table-allotment-report')">
-              <input type="date" class="input-clean" value="2023-02-24">
-              <button class="btn-action" onclick="showToast('อัปเดตข้อมูลรายงานประจำวันที่ 24/02/2023 แล้ว')">Search</button>
-              <button class="btn-secondary" onclick="document.getElementById('search-allot-report').value=''; filterTable('search-allot-report', 'table-allotment-report')">Reset</button>
+              <input type="text" id="search-allot-report" class="input-clean" placeholder="🔍 ค้นหาตามกิจกรรมหรือสินค้า..." style="flex:1; min-width:200px;" onkeyup="filterTable('search-allot-report', 'table-allotment-report', 'allot-report-count')">
+              <input type="date" id="date-allot-report" class="input-clean" value="2023-02-24">
+              <button class="btn-action" onclick="filterTable('search-allot-report', 'table-allotment-report', 'allot-report-count'); showToast('อัปเดตรายงานโควตาประจำวันที่ ' + (document.getElementById('date-allot-report').value || '2023-02-24') + ' แล้ว', 'info')">Search</button>
+              <button class="btn-secondary" onclick="document.getElementById('search-allot-report').value=''; filterTable('search-allot-report', 'table-allotment-report', 'allot-report-count')">Reset</button>
+              <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="allot-report-count">6</b></span>
             </div>
             <table class="clean-table" id="table-allotment-report">
               <thead>
@@ -3215,10 +3222,42 @@
               <tbody>
                 <tr>
                   <td><b>ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ</b></td>
-                  <td>บัตรเข้าชมวิว + บุฟเฟ่ต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony<br><small style="color:var(--text-muted)">Show time : Monday, Tuesday, Wednesday, Thursday, Friday 20:00</small></td>
+                  <td>บัตรเข้าชมวิว + บุฟเฟ่ต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony<br><small style="color:var(--text-muted)">Show time : Monday - Friday 17:00</small></td>
                   <td><b>25</b></td>
                   <td><b style="color:#059669;">25</b></td>
                   <td>13:00</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Enabled</span></td>
+                </tr>
+                <tr>
+                  <td><b>ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ</b></td>
+                  <td>บัตรเข้าชมวิว + บุฟเฟต์มื้อค่ำที่ห้องอาหาร Bangkok Balcony<br><small style="color:var(--text-muted)">Show time : Daily 19:00</small></td>
+                  <td><b>15</b></td>
+                  <td><b style="color:#059669;">12</b></td>
+                  <td>12:00</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Enabled</span></td>
+                </tr>
+                <tr>
+                  <td><b>Sealife Bangkok Ocean World</b></td>
+                  <td>SLBK Aquarium Admission Only<br><small style="color:var(--text-muted)">Show time : 10:00 - 19:00</small></td>
+                  <td><b>50</b></td>
+                  <td><b style="color:#059669;">43</b></td>
+                  <td>15:00</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Enabled</span></td>
+                </tr>
+                <tr>
+                  <td><b>Sealife Bangkok Ocean World</b></td>
+                  <td>SLBK Aquarium Admission + 4D Cinema<br><small style="color:var(--text-muted)">Show time : 11:00 - 18:00</small></td>
+                  <td><b>30</b></td>
+                  <td><b style="color:#059669;">28</b></td>
+                  <td>12:00</td>
+                  <td style="text-align: right;"><span class="badge badge-success">Enabled</span></td>
+                </tr>
+                <tr>
+                  <td><b>Siam Niramit Phuket</b></td>
+                  <td>Seat Type - Normal (Siam Niramit Phuket)<br><small style="color:var(--text-muted)">Show time : 20:00</small></td>
+                  <td><b>100</b></td>
+                  <td><b style="color:#059669;">84</b></td>
+                  <td>17:00</td>
                   <td style="text-align: right;"><span class="badge badge-success">Enabled</span></td>
                 </tr>
                 <tr>
@@ -4546,23 +4585,59 @@
       </div>
       <div class="modal-body">
         <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">ชื่อสินค้า/บริการ *</label>
-          <input type="text" id="new-allot-prod" class="input-clean" placeholder="ชื่อกิจกรรมหรือบัตรบริการ" style="width:100%; margin-top:4px;">
+          <label style="font-size:12px; font-weight:600;">Product (ชื่อสินค้า/บริการ) *</label>
+          <input type="text" id="new-allot-prod" class="input-clean" placeholder="เช่น SLBK Aquarium Admission Only" style="width:100%; margin-top:4px;">
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
           <div>
-            <label style="font-size:12px; font-weight:600;">จำนวนโควตาต่อวัน (Slots) *</label>
-            <input type="number" id="new-allot-qty" class="input-clean" value="40" style="width:100%; margin-top:4px;">
+            <label style="font-size:12px; font-weight:600;">Show time (รอบเวลา)</label>
+            <input type="text" id="new-allot-showtime" class="input-clean" value="18:00" placeholder="เช่น 18:00 หรือ 10:00 - 19:00" style="width:100%; margin-top:4px;">
           </div>
           <div>
-            <label style="font-size:12px; font-weight:600;">จองล่วงหน้าก่อนเวลา</label>
-            <input type="text" id="new-allot-time" class="input-clean" value="14:00" style="width:100%; margin-top:4px;">
+            <label style="font-size:12px; font-weight:600;">No. of allotment (จำนวนโควตา) *</label>
+            <input type="number" id="new-allot-qty" class="input-clean" value="40" min="0" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Book before time (จองล่วงหน้าก่อนเวลา)</label>
+            <input type="time" id="new-allot-time" class="input-clean" value="14:00" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Set Period (ช่วงวันที่เปิดขาย)</label>
+            <input type="text" id="new-allot-period" class="input-clean" value="-" placeholder="เช่น 2023-02-01 - 2023-02-28" style="width:100%; margin-top:4px;">
           </div>
         </div>
       </div>
       <div class="modal-foot">
         <button class="btn-secondary" onclick="closeModal('modal-new-allotment')">Cancel</button>
         <button class="btn-action" onclick="saveNewAllotment()">บันทึกโควตา</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal New Enabled Allotment -->
+  <div class="modal-overlay" id="modal-new-enabled-allot" onclick="if(event.target===this) closeModal('modal-new-enabled-allot')">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>เพิ่มสถานะโควตาผู้ประกอบการ (Enabled Allotment)</h3>
+        <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-enabled-allot')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px; font-weight:600;">Supplier code / Product *</label>
+          <input type="text" id="new-enabled-allot-code" class="input-clean" placeholder="เช่น Alcazar show หรือ ACT099" style="width:100%; margin-top:4px;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; cursor:pointer;">
+            <input type="checkbox" id="new-enabled-allot-active" checked>
+            <span><b>Enabled</b> (เปิดใช้งานการจองโควตาทันที)</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" onclick="closeModal('modal-new-enabled-allot')">Cancel</button>
+        <button class="btn-action" onclick="saveNewEnabledAllot()">บันทึกข้อมูล</button>
       </div>
     </div>
   </div>
@@ -6158,17 +6233,19 @@
     }
 
     function saveNewAllotment() {
-      const prod = document.getElementById('new-allot-prod').value || 'บัตรกิจกรรมใหม่';
-      const qty = document.getElementById('new-allot-qty').value || '30';
-      const time = document.getElementById('new-allot-time') ? document.getElementById('new-allot-time').value : '14:00';
+      const prod = (document.getElementById('new-allot-prod').value || '').trim() || 'บัตรกิจกรรมใหม่';
+      const showtime = (document.getElementById('new-allot-showtime') && document.getElementById('new-allot-showtime').value.trim()) || '18:00';
+      const qty = (document.getElementById('new-allot-qty').value || '').trim() || '30';
+      const time = (document.getElementById('new-allot-time') && document.getElementById('new-allot-time').value.trim()) || '14:00';
+      const period = (document.getElementById('new-allot-period') && document.getElementById('new-allot-period').value.trim()) || '-';
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td><b>${prod}</b></td>
-        <td><b>${time}</b></td>
+        <td><b>${showtime}</b></td>
         <td><b>${qty}</b></td>
-        <td>12:00</td>
-        <td>-</td>
+        <td>${time}</td>
+        <td>${period}</td>
         <td><label class="switch-ui"><input type="checkbox" checked><span class="switch-slider"></span></label></td>
         <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-setting-allotment', 'โควตา')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-setting-allotment')">🗑️</button></td>
       `;
@@ -6176,6 +6253,28 @@
       addRowToDomTable('table-setting-allotment', tr);
       closeModal('modal-new-allotment');
       showToast(`บันทึกโควตา ${prod} จำนวน ${qty} สิทธิ์สำเร็จ!`, 'success');
+    }
+
+    function saveNewEnabledAllot() {
+      const code = (document.getElementById('new-enabled-allot-code').value || '').trim() || 'New Supplier';
+      const isEnabled = document.getElementById('new-enabled-allot-active') ? document.getElementById('new-enabled-allot-active').checked : true;
+      const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19);
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${nowStr}</td>
+        <td><b>${code}</b></td>
+        <td><label class="switch-ui"><input type="checkbox" ${isEnabled ? 'checked' : ''}><span class="switch-slider"></span></label></td>
+        <td style="text-align: right;"><button class="btn-secondary" onclick="editDomTableRow(this, 'table-enabled-allot', 'Supplier code')">✏️</button> <button class="btn-secondary" style="color:#ef4444;" onclick="deleteDomTableRow(this, 'table-enabled-allot')">🗑️</button></td>
+      `;
+
+      addRowToDomTable('table-enabled-allot', tr);
+      const cEl = document.getElementById('enabled-allot-count');
+      if (cEl && typeof domTableState !== 'undefined' && domTableState['table-enabled-allot']) {
+        cEl.textContent = domTableState['table-enabled-allot'].allRows.length;
+      }
+      closeModal('modal-new-enabled-allot');
+      showToast(`เพิ่มรายการโควตา ${code} เรียบร้อยแล้ว!`, 'success');
     }
 
     function saveNewPriceTier() {
@@ -7014,6 +7113,9 @@
           }
           if (tableId === 'table-contracts' && document.getElementById('contract-count')) {
             document.getElementById('contract-count').textContent = domTableState[tableId].allRows.length;
+          }
+          if (tableId === 'table-enabled-allot' && document.getElementById('enabled-allot-count')) {
+            document.getElementById('enabled-allot-count').textContent = domTableState[tableId].allRows.length;
           }
           showToast('ลบรายการสำเร็จ', 'success');
           return;

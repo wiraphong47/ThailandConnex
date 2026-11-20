@@ -3447,7 +3447,8 @@
               <button class="btn-action" onclick="openModal('modal-new-booking')">+ สร้างการจองใหม่ (Manual Booking)</button>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-bookings" class="input-clean" placeholder="🔍 ค้นหาด้วย Booking No., Ref No. หรือ Agent..." style="flex:1; min-width:220px;" onkeyup="handleBkSearch(this.value)">
+              <input type="text" id="search-bookings" class="input-clean" placeholder="🔍 ค้นหาด้วย Booking No., Ref No. หรือ Agent..." style="flex:1; min-width:200px;" onkeyup="handleBkSearch(this.value)">
+              <input type="date" id="filter-booking-date" class="input-clean" onchange="handleBkDate(this.value)" title="กรองตามวันที่จอง / เช็คอิน">
               <select id="filter-booking-status" class="input-clean" onchange="handleBkStatus(this.value)">
                 <option value="all">ทุกสถานะการจอง</option>
                 <option value="Confirmed">Confirmed (ยืนยันแล้ว)</option>
@@ -3455,6 +3456,7 @@
                 <option value="Pending">Pending (รอชำระเงิน)</option>
               </select>
               <button class="btn-action" onclick="handleBkSearch(document.getElementById('search-bookings').value)">Search</button>
+              <button class="btn-secondary" onclick="resetBookingFilters()">Reset</button>
               <button class="btn-secondary" onclick="exportBookingsToCSV()">Export to Excel / CSV 📥</button>
               <span style="font-size:12.5px; color:var(--text-muted)">Total Bookings: <b id="booking-count">11</b></span>
             </div>
@@ -4857,26 +4859,54 @@
         <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-booking')">✕</button>
       </div>
       <div class="modal-body">
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">Agent / Partner *</label>
-          <select id="new-bk-agent" class="input-clean" style="width:100%; margin-top:4px;">
-            <option value="TVG">TVG Global OTA</option>
-            <option value="Gianttick">Gianttick</option>
-            <option value="Direct">Direct Guest</option>
-          </select>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Agent / Partner *</label>
+            <select id="new-bk-agent" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="TVG">TVG Global OTA</option>
+              <option value="Gianttick">Gianttick</option>
+              <option value="Direct">Direct Guest</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">ชื่อผู้จอง (Guest Name)</label>
+            <input type="text" id="new-bk-guest" class="input-clean" placeholder="เช่น คุณอลิสา ใจดี" value="คุณอลิสา ใจดี" style="width:100%; margin-top:4px;">
+          </div>
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">กิจกรรม / แพ็กเกจที่จอง *</label>
-          <input type="text" id="new-bk-package" class="input-clean" placeholder="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" value="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" style="width:100%; margin-top:4px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">กิจกรรม / แพ็กเกจที่จอง *</label>
+            <input type="text" id="new-bk-package" class="input-clean" placeholder="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" value="ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">ผู้ให้บริการ (Service provider)</label>
+            <input type="text" id="new-bk-provider" class="input-clean" placeholder="ตึกใบหยกสกาย" value="ตึกใบหยกสกาย" style="width:100%; margin-top:4px;">
+          </div>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Check-in Date & Time (เช็คอิน)</label>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <input type="date" id="new-bk-checkin" class="input-clean" style="flex:1;">
+              <input type="time" id="new-bk-checkin-time" class="input-clean" value="14:00" style="width:110px;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Check-out Date & Time (เช็คเอาท์)</label>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <input type="date" id="new-bk-checkout" class="input-clean" style="flex:1;">
+              <input type="time" id="new-bk-checkout-time" class="input-clean" value="12:00" style="width:110px;">
+            </div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
           <div>
             <label style="font-size:12px; font-weight:600;">จำนวนผู้โดยสาร (Pax) *</label>
-            <input type="number" id="new-bk-pax" class="input-clean" value="2" style="width:100%; margin-top:4px;">
+            <input type="number" id="new-bk-pax" class="input-clean" value="2" min="1" style="width:100%; margin-top:4px;">
           </div>
           <div>
             <label style="font-size:12px; font-weight:600;">ยอดรวม (Total THB) *</label>
-            <input type="text" id="new-bk-total" class="input-clean" value="860" style="width:100%; margin-top:4px;">
+            <input type="number" id="new-bk-total" class="input-clean" value="860" min="0" style="width:100%; margin-top:4px;">
           </div>
         </div>
       </div>
@@ -5266,22 +5296,37 @@
 
     function saveNewBooking() {
       const agent = document.getElementById('new-bk-agent').value || 'TVG';
+      const guest = (document.getElementById('new-bk-guest') && document.getElementById('new-bk-guest').value.trim()) || 'คุณอลิสา ใจดี';
+      const pkg = (document.getElementById('new-bk-package') && document.getElementById('new-bk-package').value.trim()) || 'ชมวิวตึกใบหยกสกายพร้อมอาหารค่ำ';
+      const provider = (document.getElementById('new-bk-provider') && document.getElementById('new-bk-provider').value.trim()) || 'ThailandCONNEX Central Supplier';
+      const pax = parseInt(document.getElementById('new-bk-pax') ? document.getElementById('new-bk-pax').value : '1', 10) || 1;
       const bno = '128' + Math.floor(100000 + Math.random() * 900000);
       const total = parseFloat(document.getElementById('new-bk-total').value) || 860;
+      const todayStr = new Date().toISOString().split('T')[0];
+      const checkin = (document.getElementById('new-bk-checkin') && document.getElementById('new-bk-checkin').value) || todayStr;
+      const checkinTime = (document.getElementById('new-bk-checkin-time') && document.getElementById('new-bk-checkin-time').value) || '14:00';
+      const checkout = (document.getElementById('new-bk-checkout') && document.getElementById('new-bk-checkout').value) || todayStr;
+      const checkoutTime = (document.getElementById('new-bk-checkout-time') && document.getElementById('new-bk-checkout-time').value) || '12:00';
 
       if (typeof TCStore !== 'undefined') {
         TCStore.addReservation({
           id: bno,
           agent: agent,
+          guest: guest,
+          pax: pax,
           amount: total,
-          serviceName: 'Admin Direct Booking Package',
-          property: 'ThailandCONNEX Central Supplier',
+          serviceName: pkg,
+          property: provider,
+          checkin: checkin,
+          checkout: checkout,
+          checkinTime: checkinTime,
+          checkoutTime: checkoutTime,
           status: 'Confirmed'
         });
       }
 
       closeModal('modal-new-booking');
-      showToast(`สร้างคำสั่งจอง #${bno} ยอด ${total} THB สำเร็จ! (ส่งข้อมูลสดไปยัง User Portal เรียบร้อย)`, 'success');
+      showToast(`สร้างคำสั่งจอง #${bno} ยอด ${total.toLocaleString()} THB สำเร็จ! (ส่งข้อมูลสดไปยัง User Portal เรียบร้อย)`, 'success');
     }
 
     const navTitles = {
@@ -7387,14 +7432,14 @@
     function deleteBookingRow(id) {
       if (!confirm(`คุณต้องการลบรายการจอง #${id} ใช่หรือไม่?`)) return;
       if (typeof TCStore !== 'undefined') {
-        const list = TCStore.getState().reservations;
+        const st = TCStore.getState();
+        const list = st.reservations || [];
         const idx = list.findIndex(x => String(x.id) === String(id));
         if (idx !== -1) {
           list.splice(idx, 1);
-          renderBookingsTableWithPagination();
-          if (typeof renderAdminAnalyticsDashboard === 'function') {
-            renderAdminAnalyticsDashboard(list);
-          }
+          if (typeof TCStore.save === 'function') TCStore.save(st);
+          if (typeof renderAdminFromStore === 'function') renderAdminFromStore(st);
+          else renderBookingsTableWithPagination();
           showToast(`ลบรายการจอง #${id} เรียบร้อยแล้ว`, 'success');
         }
       }
@@ -7563,6 +7608,7 @@
     const BK_PER_PAGE = 10;
     let bkSearchQuery = '';
     let bkStatusFilter = 'all';
+    let bkDateFilter = '';
 
     function renderBookingsTableWithPagination(reservationsList) {
       if (reservationsList && Array.isArray(reservationsList)) bkMasterList = reservationsList;
@@ -7586,6 +7632,11 @@
 
       const filtered = dataToUse.filter(r => {
         if (bkStatusFilter !== 'all' && r.status !== bkStatusFilter) return false;
+        if (bkDateFilter) {
+          const bOn = String(r.bookedOn || '');
+          const cIn = String(r.checkin || '');
+          if (!bOn.startsWith(bkDateFilter) && !cIn.startsWith(bkDateFilter)) return false;
+        }
         if (bkSearchQuery) {
           const q = bkSearchQuery.toLowerCase();
           const id = String(r.id || '').toLowerCase();
@@ -7667,6 +7718,27 @@
       bkStatusFilter = status || 'all';
       bkCurrentPage = 1;
       renderBookingsTableWithPagination();
+    }
+
+    function handleBkDate(val) {
+      bkDateFilter = val || '';
+      bkCurrentPage = 1;
+      renderBookingsTableWithPagination();
+    }
+
+    function resetBookingFilters() {
+      const s = document.getElementById('search-bookings');
+      if (s) s.value = '';
+      const d = document.getElementById('filter-booking-date');
+      if (d) d.value = '';
+      const st = document.getElementById('filter-booking-status');
+      if (st) st.value = 'all';
+      bkSearchQuery = '';
+      bkDateFilter = '';
+      bkStatusFilter = 'all';
+      bkCurrentPage = 1;
+      renderBookingsTableWithPagination();
+      showToast('รีเซ็ตตัวกรองการจองเรียบร้อย', 'info');
     }
 
     function exportBookingsToCSV() {

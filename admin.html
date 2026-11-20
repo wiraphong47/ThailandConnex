@@ -1995,6 +1995,7 @@
         </button>
         <div class="submenu-list" id="sub-booking">
           <button class="submenu-item-btn" onclick="switchView('booking-list', this)">Booking List</button>
+          <button class="submenu-item-btn" onclick="switchView('invoice-report', this)">Invoice Report</button>
         </div>
 
         <!-- 7. API Management > -->
@@ -3488,6 +3489,101 @@
         </div>
 
         <!-- ======================================================== -->
+        <!-- VIEW 14B: Manage Booking > Invoice Report (หน้า 89 / PDF 91) -->
+        <!-- ======================================================== -->
+        <div class="view-section" id="view-invoice-report">
+          <div class="table-card">
+            <div class="table-card-head" style="flex-wrap:wrap; gap:10px;">
+              <div>
+                <span>Invoice Report (รายงานใบแจ้งหนี้และการโอนเงิน • PDF หน้า 89)</span>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:400; margin-top:2px;">
+                  ตรวจสอบยอดใบแจ้งหนี้ ช่องทางชำระเงิน (PromptPay / SabuyPay / Card / B2B) วันที่โอนเงิน และบัญชีธนาคารผู้ประกอบการ
+                </div>
+              </div>
+              <button class="btn-action" style="background:#f59e0b; border-color:#f59e0b;" onclick="exportInvoiceReportToCSV()">Export to Excel 📥</button>
+            </div>
+
+            <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:12px; margin-bottom:18px;">
+              <div class="kpi-card" style="padding:14px; border-left:4px solid var(--primary-blue);">
+                <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">TOTAL INVOICED (ยอดรวมทั้งหมด)</div>
+                <div id="inv-kpi-total" style="font-size:22px; font-weight:800; color:var(--primary-navy); margin-top:4px;">฿0</div>
+                <div id="inv-kpi-total-count" style="font-size:11px; color:var(--text-muted); margin-top:2px;">0 ใบแจ้งหนี้</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-left:4px solid #10b981;">
+                <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">PAID / SETTLED (ชำระและโอนแล้ว)</div>
+                <div id="inv-kpi-paid" style="font-size:22px; font-weight:800; color:#10b981; margin-top:4px;">฿0</div>
+                <div id="inv-kpi-paid-count" style="font-size:11px; color:#059669; margin-top:2px;">0 รายการ</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-left:4px solid #f59e0b;">
+                <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">PENDING PAYMENT (รอชำระเงิน)</div>
+                <div id="inv-kpi-pending" style="font-size:22px; font-weight:800; color:#d97706; margin-top:4px;">฿0</div>
+                <div id="inv-kpi-pending-count" style="font-size:11px; color:#b45309; margin-top:2px;">0 รายการ</div>
+              </div>
+              <div class="kpi-card" style="padding:14px; border-left:4px solid #6366f1;">
+                <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">PLATFORM COMMISSION (5%)</div>
+                <div id="inv-kpi-commission" style="font-size:22px; font-weight:800; color:#4f46e5; margin-top:4px;">฿0</div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">หักจากรายการที่ชำระแล้ว</div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-bottom:14px; align-items:end; background:#f8fafc; padding:14px; border-radius:10px; border:1px solid #e2e8f0;">
+              <div>
+                <label style="font-size:11px; font-weight:600; color:#475569; display:block; margin-bottom:4px;">From</label>
+                <input type="date" id="inv-filter-from" class="input-clean" style="width:100%;">
+              </div>
+              <div>
+                <label style="font-size:11px; font-weight:600; color:#475569; display:block; margin-bottom:4px;">To</label>
+                <input type="date" id="inv-filter-to" class="input-clean" style="width:100%;">
+              </div>
+              <div>
+                <label style="font-size:11px; font-weight:600; color:#475569; display:block; margin-bottom:4px;">Invoice Number / Booking</label>
+                <input type="text" id="inv-filter-search" class="input-clean" placeholder="INV-2026-... หรือ ชื่อลูกค้า" style="width:100%;" onkeyup="applyInvoiceFilters()">
+              </div>
+              <div>
+                <label style="font-size:11px; font-weight:600; color:#475569; display:block; margin-bottom:4px;">Payment Method</label>
+                <select id="inv-filter-method" class="input-clean" style="width:100%;" onchange="applyInvoiceFilters()">
+                  <option value="all">ทุกช่องทางชำระเงิน</option>
+                  <option value="PromptPay QR">PromptPay QR</option>
+                  <option value="SabuyPay Wallet">SabuyPay Wallet</option>
+                  <option value="Credit / Debit Card">Credit / Debit Card</option>
+                  <option value="Bank Transfer">Bank Transfer (B2B)</option>
+                  <option value="Pay at Property">Pay at Property / Invoice</option>
+                </select>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-secondary" style="flex:1;" onclick="resetInvoiceFilters()">Cancel</button>
+                <button class="btn-action" style="flex:1;" onclick="applyInvoiceFilters()">Apply</button>
+              </div>
+            </div>
+
+            <div style="overflow-x:auto;">
+              <table class="clean-table" id="table-invoice-report">
+                <thead>
+                  <tr>
+                    <th>Invoice Date</th>
+                    <th>Invoice Number</th>
+                    <th>Booking / Guest</th>
+                    <th>Currency</th>
+                    <th>Amount</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Transfer Date</th>
+                    <th>Bank Account Number</th>
+                    <th style="text-align:right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-invoice-report">
+                  <!-- Dynamically populated via renderInvoiceReportTableWithPagination -->
+                </tbody>
+              </table>
+            </div>
+            <div class="table-pagination-footer" id="invoice-report-pagination-container">
+              <!-- Dynamically populated via renderInvoiceReportTableWithPagination -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================================================== -->
         <!-- VIEW 15: API Management > API Key & Integration (หน้า 163 / PDF 165) -->
         <!-- ======================================================== -->
         <div class="view-section" id="view-api-keys">
@@ -4292,13 +4388,19 @@
       </div>
       <div class="modal-body">
         <div style="background:#f8fafc; padding:14px; border-radius:8px; margin-bottom:16px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:6px;">
             <span>Booking no. <b id="detail-bno">215983224211</b></span>
             <span style="color:var(--text-muted)">Service date: <b id="detail-date">Thu 23, Feb 2023</b></span>
           </div>
           <div style="font-size:12.5px; color:#475569;">
             Service provider: <b id="detail-provider">Sealife Bangkok</b><br>
             Package: <b id="detail-package">SLBK Aquarium Admission Only</b>
+          </div>
+          <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #cbd5e1; display:flex; flex-wrap:wrap; gap:12px; font-size:12px; align-items:center;">
+            <span>🧾 Invoice: <b id="detail-invoice-no">INV-2026-128669226</b></span>
+            <span>💳 Payment: <b id="detail-payment-method">SabuyPay Wallet</b></span>
+            <span id="detail-payment-status" class="badge badge-success">Paid</span>
+            <span style="color:#64748b;">🏦 <span id="detail-bank-account">KBank •••-•-8824-1</span> (<span id="detail-transfer-date">2026-11-21</span>)</span>
           </div>
         </div>
 
@@ -4333,8 +4435,9 @@
         </table>
       </div>
       <div class="modal-foot" style="justify-content:space-between;">
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button class="btn-secondary" onclick="printBookingVoucher()">🖨️ พิมพ์บัตร Voucher</button>
+          <button class="btn-action" id="btn-detail-mark-paid" style="display:none; background:#10b981; border-color:#10b981;" onclick="markCurrentDetailPaid()">✓ ยืนยันรับชำระเงิน</button>
           <button class="btn-secondary" style="color:#ef4444;" onclick="refundBookingAction()">❌ ขอคืนเงิน / Refund</button>
         </div>
         <button class="btn-action" onclick="closeModal('modal-booking-detail')">ปิดหน้าต่าง</button>
@@ -5071,6 +5174,25 @@
             <input type="number" id="new-bk-total" class="input-clean" value="860" min="0" style="width:100%; margin-top:4px;">
           </div>
         </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:4px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">ช่องทางชำระเงิน (Payment Method)</label>
+            <select id="new-bk-payment-method" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="Bank Transfer (B2B)">Bank Transfer (B2B)</option>
+              <option value="PromptPay QR">PromptPay QR</option>
+              <option value="SabuyPay Wallet">SabuyPay Wallet</option>
+              <option value="Credit / Debit Card">Credit / Debit Card</option>
+              <option value="Pay at Property / Invoice">Pay at Property / Invoice</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">สถานะการชำระเงิน (Payment Status)</label>
+            <select id="new-bk-payment-status" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="Paid">Paid (ชำระแล้ว)</option>
+              <option value="Pending">Pending (รอชำระเงิน)</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="modal-foot">
         <button class="btn-secondary" onclick="closeModal('modal-new-booking')">Cancel</button>
@@ -5359,8 +5481,9 @@
       // 7. Render Dashboard Latest Bookings Table (Paginated 10 items per page)
       renderDashboardBookingsTableWithPagination(reservations);
 
-      // 8. Render Booking Management Table (Paginated 10 items per page)
+      // 8. Render Booking Management Table & Invoice Report Table (Paginated 10 items per page)
       renderBookingsTableWithPagination(reservations);
+      renderInvoiceReportTableWithPagination(reservations);
 
       // 9. Render Blockchain Token Logs Table (Paginated 10 items per page)
       renderTokenLogsTableWithPagination(tokenLogs);
@@ -5389,14 +5512,21 @@
 
     // Dynamic openBookingDetail with full Store lookup
     function openBookingDetail(bno, agent = 'TVG', amount = '430 THB', date = '2026-11-17 10:15:00', supplier = 'Sealife Bangkok', pkg = 'SLBK Aquarium Admission Only') {
+      const cleanBno = String(bno || '').replace(/^BK-/i, '');
       const bnoEl = document.getElementById('detail-bno');
-      if (bnoEl) bnoEl.textContent = bno;
+      if (bnoEl) bnoEl.textContent = cleanBno;
 
       let rawAmount = 430;
       let pax = 1;
+      let invNo = 'INV-2026-' + cleanBno;
+      let payMethod = 'SabuyPay Wallet';
+      let payStatus = 'Paid';
+      let bankAcc = 'KBank •••-•-8824-1';
+      let transDate = (date || '2026-11-20').slice(0, 10);
 
       if (typeof TCStore !== 'undefined') {
-        const r = TCStore.getState().reservations.find(x => String(x.id) === String(bno));
+        const st = TCStore.getState();
+        const r = (st.reservations || []).find(x => String(x.id).replace(/^BK-/i, '') === cleanBno);
         if (r) {
           agent = r.agent || agent;
           rawAmount = parseFloat(r.amount) || 430;
@@ -5405,6 +5535,11 @@
           supplier = r.property || supplier;
           pkg = r.serviceName || pkg;
           pax = r.pax || 1;
+          invNo = r.invoiceNo || invNo;
+          payMethod = r.paymentMethod || payMethod;
+          payStatus = r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' || r.status === 'Pending' ? 'Pending' : 'Paid'));
+          bankAcc = r.bankAccountNo || bankAcc;
+          transDate = r.transferDate || (payStatus === 'Paid' ? (r.bookedOn || '').slice(0, 10) : '-');
         } else {
           rawAmount = parseFloat(String(amount).replace(/[^0-9.]/g, '')) || 430;
         }
@@ -5418,6 +5553,27 @@
       if (provEl) provEl.textContent = supplier;
       const pkgEl = document.getElementById('detail-package');
       if (pkgEl) pkgEl.textContent = pkg;
+
+      const invEl = document.getElementById('detail-invoice-no');
+      if (invEl) invEl.textContent = invNo;
+      const pmEl = document.getElementById('detail-payment-method');
+      if (pmEl) pmEl.textContent = payMethod;
+      const psEl = document.getElementById('detail-payment-status');
+      if (psEl) {
+        psEl.textContent = payStatus === 'Paid' ? 'Paid (ชำระแล้ว)' : (payStatus === 'Refunded' ? 'Refunded (คืนเงิน)' : 'Pending (รอชำระเงิน)');
+        psEl.className = 'badge ' + (payStatus === 'Paid' ? 'badge-success' : (payStatus === 'Refunded' ? 'badge-danger' : 'badge-warning'));
+      }
+      const bkEl = document.getElementById('detail-bank-account');
+      if (bkEl) bkEl.textContent = bankAcc;
+      const tdEl = document.getElementById('detail-transfer-date');
+      if (tdEl) tdEl.textContent = transDate;
+
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin) || {};
+      const isAuditor = (currentAdmin.email || '').toLowerCase().includes('auditor') || (currentAdmin.email || '').toLowerCase().includes('tat');
+      const markPaidBtn = document.getElementById('btn-detail-mark-paid');
+      if (markPaidBtn) {
+        markPaidBtn.style.display = (payStatus === 'Pending' && !isAuditor) ? 'inline-flex' : 'none';
+      }
 
       // Dynamic calculation for Net, Markup, Profit
       const profitPerPax = Math.max(20, Math.round((rawAmount / pax) * 0.07));
@@ -5445,6 +5601,13 @@
       openModal('modal-booking-detail');
     }
 
+    function markCurrentDetailPaid() {
+      const bno = document.getElementById('detail-bno') ? document.getElementById('detail-bno').textContent : '';
+      if (!bno) return;
+      adminMarkInvoicePaid(bno);
+      openBookingDetail(bno);
+    }
+
     function refundBookingAction() {
       const bno = document.getElementById('detail-bno').textContent;
       if (confirm(`คุณต้องการยืนยันการคืนเงิน (Refund) สำหรับคำสั่งจอง #${bno} ใช่หรือไม่?`)) {
@@ -5469,6 +5632,8 @@
       const checkinTime = (document.getElementById('new-bk-checkin-time') && document.getElementById('new-bk-checkin-time').value) || '14:00';
       const checkout = (document.getElementById('new-bk-checkout') && document.getElementById('new-bk-checkout').value) || todayStr;
       const checkoutTime = (document.getElementById('new-bk-checkout-time') && document.getElementById('new-bk-checkout-time').value) || '12:00';
+      const payMethod = (document.getElementById('new-bk-payment-method') && document.getElementById('new-bk-payment-method').value) || 'Bank Transfer (B2B)';
+      const payStatus = (document.getElementById('new-bk-payment-status') && document.getElementById('new-bk-payment-status').value) || 'Paid';
 
       if (typeof TCStore !== 'undefined') {
         TCStore.addReservation({
@@ -5483,12 +5648,14 @@
           checkout: checkout,
           checkinTime: checkinTime,
           checkoutTime: checkoutTime,
-          status: 'Confirmed'
+          paymentMethod: payMethod,
+          paymentStatus: payStatus,
+          status: payStatus === 'Pending' ? 'PendingConfirm' : 'Confirmed'
         });
       }
 
       closeModal('modal-new-booking');
-      showToast(`สร้างคำสั่งจอง #${bno} ยอด ${total.toLocaleString()} THB สำเร็จ! (ส่งข้อมูลสดไปยัง User Portal เรียบร้อย)`, 'success');
+      showToast(`สร้างคำสั่งจอง #${bno} ยอด ${total.toLocaleString()} THB (${payMethod}) สำเร็จ!`, 'success');
     }
 
     const navTitles = {
@@ -5506,6 +5673,7 @@
       'partner-price-tier': 'Manage Sale Channel > Partner Price Tier',
       'specific-markup': 'Manage Sale Channel > Specific markup',
       'booking-list': 'Manage Booking > Booking List',
+      'invoice-report': 'Manage Booking > Invoice Report (PDF หน้า 89)',
       'api-keys': 'API management > API Key & Integration',
       'databank-kpi': 'Master Data > National Tourism Data Bank (108k)',
       'token-log': 'Log > Travel Token & Audit Log',
@@ -7863,7 +8031,13 @@
       }
 
       const filtered = dataToUse.filter(r => {
-        if (bkStatusFilter !== 'all' && r.status !== bkStatusFilter) return false;
+        if (bkStatusFilter !== 'all') {
+          if (bkStatusFilter === 'Pending') {
+            if (r.status !== 'Pending' && r.status !== 'PendingConfirm' && r.paymentStatus !== 'Pending') return false;
+          } else if (r.status !== bkStatusFilter) {
+            return false;
+          }
+        }
         if (bkDateFilter) {
           const bOn = String(r.bookedOn || '');
           const cIn = String(r.checkin || '');
@@ -7876,7 +8050,8 @@
           const ag = (r.agent || '').toLowerCase();
           const prop = (r.property || '').toLowerCase();
           const serv = (r.serviceName || '').toLowerCase();
-          if (!id.includes(q) && !ref.includes(q) && !ag.includes(q) && !prop.includes(q) && !serv.includes(q)) return false;
+          const inv = (r.invoiceNo || '').toLowerCase();
+          if (!id.includes(q) && !ref.includes(q) && !ag.includes(q) && !prop.includes(q) && !serv.includes(q) && !inv.includes(q)) return false;
         }
         return true;
       });
@@ -7897,13 +8072,20 @@
         if (currentSlice.length === 0) {
           tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:#64748b;">ไม่พบข้อมูลการจอง</td></tr>`;
         } else {
-          tbody.innerHTML = currentSlice.map(r => `
+          tbody.innerHTML = currentSlice.map(r => {
+            const pStatus = r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' || r.status === 'Pending' ? 'Pending' : 'Paid'));
+            const pColor = pStatus === 'Paid' ? '#059669' : (pStatus === 'Refunded' ? '#ef4444' : '#d97706');
+            const pText = pStatus === 'Paid' ? '✓ Paid' : (pStatus === 'Refunded' ? '↩ Refunded' : '⏳ Pending');
+            return `
             <tr>
               <td>${r.bookedOn}</td>
-              <td><b>BK-${r.id.replace('BK-', '')}</b></td>
+              <td><b>BK-${r.id.replace('BK-', '')}</b><br><small style="color:var(--text-muted); font-size:10.5px;">${r.invoiceNo || ('INV-2026-' + r.id)}</small></td>
               <td>${r.refNo || ('1675' + r.id)}</td>
               <td><span class="badge badge-info">${r.agent || 'User Direct'}</span></td>
-              <td><b>฿${Number(r.amount).toLocaleString()}</b></td>
+              <td>
+                <b>฿${Number(r.amount).toLocaleString()}</b><br>
+                <small style="color:${pColor}; font-weight:600; font-size:10.5px;">${pText} • ${r.paymentMethod || 'SabuyPay'}</small>
+              </td>
               <td>
                 <label class="switch-ui" title="${isAuditor ? 'โหมดตรวจสอบ: อ่านอย่างเดียว' : 'เปิด/ปิดการยืนยันคำสั่งจอง'}">
                   <input type="checkbox" ${r.status === 'Confirmed' ? 'checked' : ''} ${isAuditor ? 'disabled' : ''} onchange="adminToggleBookingStatus('${r.id}', this.checked)">
@@ -7923,7 +8105,8 @@
                 </div>
               </td>
             </tr>
-          `).join('');
+          `;
+          }).join('');
         }
       }
 
@@ -7974,9 +8157,18 @@
     }
 
     function exportBookingsToCSV() {
-      const headers = ['Booking Date', 'Booking No', 'Reference No', 'Agent', 'Property / Service', 'Amount', 'Status'];
+      const headers = ['Booking Date', 'Booking No', 'Invoice No', 'Reference No', 'Agent', 'Property / Service', 'Amount', 'Payment Method', 'Payment Status', 'Status'];
       const rows = (bkMasterList || []).map(r => [
-        r.bookedOn, `BK-${r.id.replace('BK-', '')}`, r.refNo || ('1675' + r.id), `"${r.agent || 'User Direct'}"`, `"${r.property || ''} - ${r.serviceName || ''}"`, r.amount, r.status
+        r.bookedOn,
+        `BK-${r.id.replace('BK-', '')}`,
+        r.invoiceNo || `INV-2026-${r.id.replace('BK-', '')}`,
+        r.refNo || ('1675' + r.id),
+        `"${r.agent || 'User Direct'}"`,
+        `"${r.property || ''} - ${r.serviceName || ''}"`,
+        r.amount,
+        `"${r.paymentMethod || 'SabuyPay Wallet'}"`,
+        r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : 'Paid'),
+        r.status
       ]);
       const bom = '\uFEFF';
       const content = bom + [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
@@ -7988,6 +8180,193 @@
       a.click();
       URL.revokeObjectURL(url);
       showToast('📥 ดาวน์โหลดรายการคำสั่งจองเรียบร้อยแล้ว');
+    }
+
+    // ========================================================
+    // 2B. INVOICE REPORT (PDF Page 89 / 91)
+    // ========================================================
+    let invMasterList = [];
+    let invCurrentPage = 1;
+    const INV_PER_PAGE = 10;
+
+    function getFilteredInvoices() {
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin) || {};
+      const isPartner = (currentAdmin.email || '').toLowerCase().includes('somchai') || (currentAdmin.email || '').toLowerCase().includes('phuket');
+      let list = invMasterList || [];
+      if (isPartner) {
+        list = list.filter(r => {
+          const p = (r.property || '').toLowerCase();
+          const s = (r.serviceName || '').toLowerCase();
+          const a = (r.agent || '').toLowerCase();
+          return p.includes('phuket') || p.includes('ภูเก็ต') || p.includes('สมชาย') || p.includes('andaman') || p.includes('tour') || p.includes('sealife') || s.includes('phuket') || s.includes('ภูเก็ต') || s.includes('sealife') || a.includes('gianttick');
+        });
+      }
+
+      const fromVal = (document.getElementById('inv-filter-from') && document.getElementById('inv-filter-from').value) || '';
+      const toVal = (document.getElementById('inv-filter-to') && document.getElementById('inv-filter-to').value) || '';
+      const q = ((document.getElementById('inv-filter-search') && document.getElementById('inv-filter-search').value) || '').trim().toLowerCase();
+      const methodFilter = (document.getElementById('inv-filter-method') && document.getElementById('inv-filter-method').value) || 'all';
+
+      return list.filter(r => {
+        const invDate = r.invoiceDate || (r.bookedOn || '').slice(0, 10);
+        if (fromVal && invDate < fromVal) return false;
+        if (toVal && invDate > toVal) return false;
+        if (methodFilter !== 'all' && !(r.paymentMethod || '').toLowerCase().includes(methodFilter.toLowerCase())) return false;
+        if (q) {
+          const invNo = (r.invoiceNo || ('INV-2026-' + r.id)).toLowerCase();
+          const bId = String(r.id || '').toLowerCase();
+          const guest = (r.guest || '').toLowerCase();
+          const prop = (r.property || '').toLowerCase();
+          if (!invNo.includes(q) && !bId.includes(q) && !guest.includes(q) && !prop.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderInvoiceReportTableWithPagination(reservationsList) {
+      if (reservationsList && Array.isArray(reservationsList)) invMasterList = reservationsList;
+      if (!invMasterList || invMasterList.length === 0) {
+        if (typeof TCStore !== 'undefined') invMasterList = TCStore.getState().reservations || [];
+      }
+
+      const currentAdmin = (typeof TCStore !== 'undefined' && TCStore.getState().auth && TCStore.getState().auth.currentAdmin) || {};
+      const isAuditor = (currentAdmin.email || '').toLowerCase().includes('auditor') || (currentAdmin.email || '').toLowerCase().includes('tat');
+      const filtered = getFilteredInvoices();
+
+      // Update KPI summary cards
+      let sumTotal = 0, sumPaid = 0, countPaid = 0, sumPending = 0, countPending = 0, sumComm = 0;
+      filtered.forEach(r => {
+        const amt = parseFloat(r.amount) || 0;
+        const pStatus = r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' || r.status === 'Pending' ? 'Pending' : 'Paid'));
+        sumTotal += amt;
+        if (pStatus === 'Paid') {
+          sumPaid += amt;
+          countPaid++;
+          sumComm += parseFloat(r.commission) || Math.round(amt * 0.05);
+        } else if (pStatus === 'Pending') {
+          sumPending += amt;
+          countPending++;
+        }
+      });
+
+      const kTot = document.getElementById('inv-kpi-total'); if (kTot) kTot.textContent = '฿' + sumTotal.toLocaleString('th-TH');
+      const kTotC = document.getElementById('inv-kpi-total-count'); if (kTotC) kTotC.textContent = `${filtered.length} ใบแจ้งหนี้`;
+      const kPaid = document.getElementById('inv-kpi-paid'); if (kPaid) kPaid.textContent = '฿' + sumPaid.toLocaleString('th-TH');
+      const kPaidC = document.getElementById('inv-kpi-paid-count'); if (kPaidC) kPaidC.textContent = `${countPaid} รายการ`;
+      const kPend = document.getElementById('inv-kpi-pending'); if (kPend) kPend.textContent = '฿' + sumPending.toLocaleString('th-TH');
+      const kPendC = document.getElementById('inv-kpi-pending-count'); if (kPendC) kPendC.textContent = `${countPending} รายการ`;
+      const kComm = document.getElementById('inv-kpi-commission'); if (kComm) kComm.textContent = '฿' + sumComm.toLocaleString('th-TH');
+
+      const totalPages = Math.max(1, Math.ceil(filtered.length / INV_PER_PAGE));
+      if (invCurrentPage > totalPages) invCurrentPage = totalPages;
+      if (invCurrentPage < 1) invCurrentPage = 1;
+
+      const startIdx = (invCurrentPage - 1) * INV_PER_PAGE;
+      const endIdx = Math.min(startIdx + INV_PER_PAGE, filtered.length);
+      const currentSlice = filtered.slice(startIdx, endIdx);
+
+      const tbody = document.getElementById('tbody-invoice-report');
+      if (tbody) {
+        if (currentSlice.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:30px; color:#64748b;">ไม่พบรายการใบแจ้งหนี้ตามเงื่อนไข</td></tr>`;
+        } else {
+          tbody.innerHTML = currentSlice.map(r => {
+            const cleanId = String(r.id || '').replace(/^BK-/i, '');
+            const invDate = r.invoiceDate || (r.bookedOn || '').slice(0, 10);
+            const invNo = r.invoiceNo || `INV-${invDate.slice(0, 4)}-${cleanId}`;
+            const pMethod = r.paymentMethod || 'SabuyPay Wallet';
+            const pStatus = r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' || r.status === 'Pending' ? 'Pending' : 'Paid'));
+            const badgeCls = pStatus === 'Paid' ? 'badge-success' : (pStatus === 'Refunded' ? 'badge-danger' : 'badge-warning');
+            const transferDate = r.transferDate || (pStatus === 'Paid' ? invDate : '-');
+            const bankAcc = r.bankAccountNo || 'KBank •••-•-8824-1';
+            return `
+            <tr>
+              <td>${invDate}</td>
+              <td><a href="javascript:void(0)" onclick="openBookingDetail('${cleanId}')" style="color:var(--primary-blue); font-weight:700; text-decoration:none;">${invNo}</a></td>
+              <td><b>BK-${cleanId}</b><br><small style="color:var(--text-muted);">${r.guest || '-'}</small></td>
+              <td>THB</td>
+              <td><b>฿${Number(r.amount || 0).toLocaleString('th-TH')}</b></td>
+              <td><span class="badge badge-info">${pMethod}</span></td>
+              <td><span class="badge ${badgeCls}">${pStatus}</span></td>
+              <td>${transferDate}</td>
+              <td style="font-family:monospace; font-size:12px;">${bankAcc}</td>
+              <td style="text-align:right; white-space:nowrap;">
+                ${(pStatus === 'Pending' && !isAuditor) ? `<button class="btn-action" style="padding:4px 9px; font-size:11px; background:#10b981; border-color:#10b981; margin-right:4px;" onclick="adminMarkInvoicePaid('${cleanId}')">✓ รับชำระ</button>` : ''}
+                <button class="btn-secondary" style="padding:4px 9px; font-size:11px;" onclick="openBookingDetail('${cleanId}')">Detail</button>
+              </td>
+            </tr>`;
+          }).join('');
+        }
+      }
+
+      const container = document.getElementById('invoice-report-pagination-container');
+      renderGenericPaginationFooter(container, invCurrentPage, totalPages, filtered.length, startIdx, endIdx, 'goToInvPage(');
+    }
+
+    function goToInvPage(p) {
+      const pageNum = parseInt(p, 10);
+      if (isNaN(pageNum) || pageNum < 1) return;
+      invCurrentPage = pageNum;
+      renderInvoiceReportTableWithPagination();
+    }
+
+    function applyInvoiceFilters() {
+      invCurrentPage = 1;
+      renderInvoiceReportTableWithPagination();
+    }
+
+    function resetInvoiceFilters() {
+      ['inv-filter-from', 'inv-filter-to', 'inv-filter-search'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const m = document.getElementById('inv-filter-method');
+      if (m) m.value = 'all';
+      invCurrentPage = 1;
+      renderInvoiceReportTableWithPagination();
+      showToast('รีเซ็ตตัวกรอง Invoice Report เรียบร้อย', 'info');
+    }
+
+    function adminMarkInvoicePaid(id) {
+      if (typeof TCStore === 'undefined') return;
+      const updated = TCStore.markReservationPaid(id);
+      if (updated) {
+        renderAdminFromStore();
+        showToast(`✅ ยืนยันรับชำระเงินใบแจ้งหนี้ ${updated.invoiceNo} (BK-${updated.id}) เรียบร้อย! อัปเดตสดไปยัง User Portal แล้ว`, 'success');
+      }
+    }
+
+    function exportInvoiceReportToCSV() {
+      const filtered = getFilteredInvoices();
+      const headers = ['Invoice Date', 'Invoice Number', 'Booking No', 'Guest', 'Currency', 'Amount', 'Payment Method', 'Payment Status', 'Transfer Date', 'Bank Account Number'];
+      const rows = filtered.map(r => {
+        const cleanId = String(r.id || '').replace(/^BK-/i, '');
+        const invDate = r.invoiceDate || (r.bookedOn || '').slice(0, 10);
+        const invNo = r.invoiceNo || `INV-${invDate.slice(0, 4)}-${cleanId}`;
+        const pStatus = r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' || r.status === 'Pending' ? 'Pending' : 'Paid'));
+        return [
+          invDate,
+          invNo,
+          `BK-${cleanId}`,
+          `"${(r.guest || '-').replace(/"/g, '""')}"`,
+          'THB',
+          r.amount || 0,
+          `"${r.paymentMethod || 'SabuyPay Wallet'}"`,
+          pStatus,
+          r.transferDate || '-',
+          `"${r.bankAccountNo || 'KBank •••-•-8824-1'}"`
+        ];
+      });
+      const bom = '\uFEFF';
+      const content = bom + [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ThailandConnex_Invoice_Report.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 ดาวน์โหลดรายงาน Invoice Report (CSV/Excel) เรียบร้อยแล้ว');
     }
 
     // ========================================================

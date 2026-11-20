@@ -803,6 +803,12 @@
         amount: 430,
         commission: 22,
         status: 'Confirmed',
+        paymentMethod: 'SabuyPay Wallet',
+        paymentStatus: 'Paid',
+        invoiceNo: 'INV-2026-128669226',
+        invoiceDate: '2026-11-20',
+        transferDate: '2026-11-21',
+        bankAccountNo: 'KBank •••-•-8824-1',
         notes: 'จองผ่านระบบ ThailandCONNEX Portal (ได้รับ 21.50 TCN)'
       },
       {
@@ -821,6 +827,12 @@
         amount: 8500,
         commission: 425,
         status: 'Confirmed',
+        paymentMethod: 'PromptPay QR',
+        paymentStatus: 'Paid',
+        invoiceNo: 'INV-2026-955397221',
+        invoiceDate: '2026-11-19',
+        transferDate: '2026-11-20',
+        bankAccountNo: 'SCB •••-•-4190-5',
         notes: 'จองห้องพักประเภท 1 Bedroom พร้อมอาหารเช้า'
       },
       {
@@ -839,6 +851,12 @@
         amount: 1200,
         commission: 60,
         status: 'Confirmed',
+        paymentMethod: 'Credit / Debit Card',
+        paymentStatus: 'Paid',
+        invoiceNo: 'INV-2026-436181225',
+        invoiceDate: '2026-11-16',
+        transferDate: '2026-11-17',
+        bankAccountNo: 'BBL •••-•-7302-9',
         notes: 'โต๊ะริมน้ำ 2 ท่าน'
       },
       {
@@ -857,6 +875,12 @@
         amount: 1400,
         commission: 70,
         status: 'Confirmed',
+        paymentMethod: 'Bank Transfer (B2B)',
+        paymentStatus: 'Paid',
+        invoiceNo: 'INV-2026-801188222',
+        invoiceDate: '2026-11-15',
+        transferDate: '2026-11-16',
+        bankAccountNo: 'KBank •••-•-3910-4',
         notes: 'นัดหมายรอบบ่าย 14:00 น.'
       },
       {
@@ -875,6 +899,12 @@
         amount: 860,
         commission: 43,
         status: 'Confirmed',
+        paymentMethod: 'SabuyPay Wallet',
+        paymentStatus: 'Paid',
+        invoiceNo: 'INV-2026-215983224',
+        invoiceDate: '2026-11-16',
+        transferDate: '2026-11-17',
+        bankAccountNo: 'SCB •••-•-9044-2',
         notes: 'ตั๋วเด็กและผู้ใหญ่ รวม 2 ใบ'
       },
       {
@@ -893,6 +923,12 @@
         amount: 9000,
         commission: 450,
         status: 'Confirmed',
+        paymentMethod: 'Bank Transfer (B2B)',
+        paymentStatus: 'Paid',
+        invoiceNo: 'INV-2026-100101',
+        invoiceDate: '2026-11-15',
+        transferDate: '2026-11-16',
+        bankAccountNo: 'KTB •••-•-5518-7',
         notes: 'ขอห้องชั้นบน ไม่สูบบุหรี่'
       },
       {
@@ -911,6 +947,12 @@
         amount: 6400,
         commission: 320,
         status: 'Cancelled',
+        paymentMethod: 'Credit / Debit Card',
+        paymentStatus: 'Refunded',
+        invoiceNo: 'INV-2026-100102',
+        invoiceDate: '2026-11-14',
+        transferDate: '-',
+        bankAccountNo: 'KTB •••-•-5518-7',
         notes: 'ยกเลิกเนื่องจากเที่ยวบินล่าช้า'
       },
       {
@@ -929,7 +971,13 @@
         amount: 7500,
         commission: 375,
         status: 'PendingConfirm',
-        notes: 'รอเอกสารยืนยันจากเอเจนต์'
+        paymentMethod: 'Pay at Property / Invoice',
+        paymentStatus: 'Pending',
+        invoiceNo: 'INV-2026-100103',
+        invoiceDate: '2026-11-13',
+        transferDate: '-',
+        bankAccountNo: 'KTB •••-•-5518-7',
+        notes: 'รอเอกสารยืนยันจากเอเจนต์และรอชำระเงิน'
       },
       {
         id: '100104',
@@ -947,6 +995,12 @@
         amount: 5600,
         commission: 280,
         status: 'Confirmed',
+        paymentMethod: 'PromptPay QR',
+        paymentStatus: 'Paid',
+        invoiceNo: 'INV-2026-100104',
+        invoiceDate: '2026-11-12',
+        transferDate: '2026-11-13',
+        bankAccountNo: 'KTB •••-•-5518-7',
         notes: 'ต้องการเตียงคู่'
       }
     ],
@@ -1216,6 +1270,43 @@
       this.setupStorageListener();
     }
 
+    normalizeReservations(list) {
+      if (!Array.isArray(list)) return false;
+      const bankPool = ['KBank •••-•-8824-1', 'SCB •••-•-4190-5', 'BBL •••-•-7302-9', 'KTB •••-•-5518-7'];
+      const methodPool = ['SabuyPay Wallet', 'PromptPay QR', 'Credit / Debit Card', 'Bank Transfer (B2B)'];
+      let changed = false;
+      list.forEach((r, idx) => {
+        if (!r || typeof r !== 'object') return;
+        const cleanId = String(r.id || (100100 + idx)).replace(/^BK-/i, '');
+        const invDate = (r.bookedOn || '2026-11-20').slice(0, 10);
+        if (!r.invoiceNo) {
+          r.invoiceNo = `INV-${invDate.slice(0, 4)}-${cleanId}`;
+          changed = true;
+        }
+        if (!r.invoiceDate) {
+          r.invoiceDate = invDate;
+          changed = true;
+        }
+        if (!r.paymentStatus) {
+          r.paymentStatus = r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' || r.status === 'Pending' ? 'Pending' : 'Paid');
+          changed = true;
+        }
+        if (!r.paymentMethod) {
+          r.paymentMethod = r.paymentStatus === 'Pending' ? 'Pay at Property / Invoice' : methodPool[idx % methodPool.length];
+          changed = true;
+        }
+        if (r.transferDate === undefined) {
+          r.transferDate = r.paymentStatus === 'Paid' ? invDate : '-';
+          changed = true;
+        }
+        if (!r.bankAccountNo) {
+          r.bankAccountNo = bankPool[idx % bankPool.length];
+          changed = true;
+        }
+      });
+      return changed;
+    }
+
     init() {
       const storage = getStorage();
       if (!storage) {
@@ -1239,6 +1330,7 @@
                 parsed.directory = DEPA_REAL_DATA.directory;
               }
             }
+            this.normalizeReservations(parsed.reservations);
             this._memoryCache = parsed;
             this.save(parsed, false);
           }
@@ -1254,7 +1346,11 @@
         try {
           const raw = storage.getItem(STORAGE_KEY);
           if (raw) {
-            this._memoryCache = JSON.parse(raw);
+            const parsed = JSON.parse(raw);
+            if (this.normalizeReservations(parsed.reservations)) {
+              try { storage.setItem(STORAGE_KEY, JSON.stringify(parsed)); } catch (e) {}
+            }
+            this._memoryCache = parsed;
             return this._memoryCache;
           }
         } catch (e) {
@@ -1323,14 +1419,45 @@
     addReservation(res) {
       const state = this.getState();
       const id = res.id || ('128' + Math.floor(100000 + Math.random() * 900000));
+      const cleanId = String(id).replace(/^BK-/i, '');
       const refNo = res.refNo || ('1675' + Math.floor(100000000000 + Math.random() * 900000000000));
       const now = getNowStr();
+      const todayDate = now.slice(0, 10);
+      const originalAmount = parseFloat(res.originalAmount !== undefined ? res.originalAmount : res.amount) || 0;
       const amount = parseFloat(res.amount) || 0;
+      const tokenUsed = Math.max(0, parseFloat(res.tokenUsed) || 0);
+      const tokenDiscount = Math.max(0, parseFloat(res.tokenDiscount) || 0);
       const commission = res.commission !== undefined ? res.commission : Math.round(amount * 0.05);
-
+      const status = res.status || 'Confirmed';
+      const paymentStatus = res.paymentStatus || (status === 'Cancelled' ? 'Refunded' : (status === 'PendingConfirm' || status === 'Pending' ? 'Pending' : 'Paid'));
+      const paymentMethod = res.paymentMethod || (paymentStatus === 'Pending' ? 'Pay at Property / Invoice' : 'SabuyPay Wallet');
+      const bankPool = ['KBank •••-•-8824-1', 'SCB •••-•-4190-5', 'BBL •••-•-7302-9', 'KTB •••-•-5518-7'];
+      const bankAccountNo = res.bankAccountNo || bankPool[Math.floor(Math.random() * bankPool.length)];
       const curUser = (state.auth && state.auth.currentUser) ? state.auth.currentUser : (state.user || {});
+
+      // Deduct redeemed TCN discount if used during checkout
+      if (tokenUsed > 0 && state.user && state.user.tokenBalance >= tokenUsed) {
+        state.user.tokenBalance = Math.round((state.user.tokenBalance - tokenUsed) * 100) / 100;
+        if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
+        this.syncUserBalanceToRegistered(state.user);
+        state.tokenLogs.unshift({
+          time: now,
+          userId: res.userId || curUser.id || state.user.id || 'TC-849204',
+          userName: res.guest || curUser.name || state.user.name,
+          action: 'Token Burning',
+          actionCode: '-',
+          detail: `ใช้ส่วนลดค่าจอง #${cleanId} (${tokenUsed.toLocaleString()} TCN = -฿${tokenDiscount.toLocaleString()})`,
+          amount: tokenUsed,
+          balance: state.user.tokenBalance,
+          txHash: generateHash(),
+          block: generateBlock(),
+          status: 'Confirmed'
+        });
+      }
+
+      const earnedPoints = Math.round(amount * 0.05 * 100) / 100;
       const newBooking = {
-        id: String(id),
+        id: cleanId,
         refNo: String(refNo),
         userId: res.userId || curUser.id || state.user.id || 'TC-849204',
         guest: res.guest || curUser.name || state.user.name,
@@ -1341,18 +1468,29 @@
         property: res.property || 'Partner Provider',
         checkin: res.checkin || '2026-11-20',
         checkout: res.checkout || '2026-11-21',
+        checkinTime: res.checkinTime || '14:00',
+        checkoutTime: res.checkoutTime || '12:00',
         bookedOn: res.bookedOn || now,
+        originalAmount: originalAmount,
+        tokenUsed: tokenUsed,
+        tokenDiscount: tokenDiscount,
         amount: amount,
         commission: commission,
-        status: res.status || 'Confirmed',
-        notes: res.notes || `จองออนไลน์ผ่าน ThailandCONNEX Platform (Earned ${(amount * 0.05).toFixed(1)} TCN)`
+        status: status,
+        paymentMethod: paymentMethod,
+        paymentStatus: paymentStatus,
+        invoiceNo: res.invoiceNo || `INV-${todayDate.slice(0, 4)}-${cleanId}`,
+        invoiceDate: res.invoiceDate || todayDate,
+        transferDate: res.transferDate !== undefined ? res.transferDate : (paymentStatus === 'Paid' ? todayDate : '-'),
+        bankAccountNo: bankAccountNo,
+        rewardMinted: paymentStatus === 'Paid',
+        notes: res.notes || `จองออนไลน์ผ่าน ThailandCONNEX (${paymentMethod} • ${paymentStatus === 'Paid' ? 'ชำระแล้ว' : 'รอชำระเงิน'})`
       };
 
       state.reservations.unshift(newBooking);
 
-      // Earn tokens (5% of booking value as TCN)
-      const earnedPoints = Math.round(amount * 0.05 * 100) / 100;
-      if (earnedPoints > 0) {
+      // Earn tokens (5% of paid value as TCN) when payment is Paid
+      if (paymentStatus === 'Paid' && earnedPoints > 0) {
         state.user.tokenBalance = Math.round((state.user.tokenBalance + earnedPoints) * 100) / 100;
         if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
         this.syncUserBalanceToRegistered(state.user);
@@ -1362,7 +1500,7 @@
           userName: newBooking.guest || state.user.name || 'คุณอลิสา ใจดี',
           action: 'Token Minting',
           actionCode: '+',
-          detail: `Earned from booking #${newBooking.id} (${newBooking.property})`,
+          detail: `Earned from booking #${newBooking.id} (${newBooking.property}) [${paymentMethod}]`,
           amount: earnedPoints,
           balance: state.user.tokenBalance,
           txHash: generateHash(),
@@ -1375,12 +1513,59 @@
       return newBooking;
     }
 
+    markReservationPaid(id, method) {
+      const state = this.getState();
+      const cleanId = String(id).replace('BK-', '');
+      const res = state.reservations.find(r => String(r.id).replace('BK-', '') === cleanId);
+      if (!res) return null;
+
+      const now = getNowStr();
+      const todayDate = now.slice(0, 10);
+      res.paymentStatus = 'Paid';
+      if (method) res.paymentMethod = method;
+      if (res.status === 'PendingConfirm' || res.status === 'Pending') {
+        res.status = 'Confirmed';
+      }
+      res.transferDate = todayDate;
+
+      const earnedPoints = Math.round((parseFloat(res.amount) || 0) * 0.05 * 100) / 100;
+      if (!res.rewardMinted && earnedPoints > 0) {
+        res.rewardMinted = true;
+        state.user.tokenBalance = Math.round((state.user.tokenBalance + earnedPoints) * 100) / 100;
+        if (state.auth && state.auth.currentUser) state.auth.currentUser.tokenBalance = state.user.tokenBalance;
+        this.syncUserBalanceToRegistered(state.user);
+        state.tokenLogs.unshift({
+          time: now,
+          userId: res.userId || state.user.id || 'TC-849204',
+          userName: res.guest || state.user.name || 'คุณอลิสา ใจดี',
+          action: 'Token Minting',
+          actionCode: '+',
+          detail: `Earned after payment #${res.id} (${res.property}) [${res.paymentMethod}]`,
+          amount: earnedPoints,
+          balance: state.user.tokenBalance,
+          txHash: generateHash(),
+          block: generateBlock(),
+          status: 'Confirmed'
+        });
+      }
+
+      this.save(state);
+      return res;
+    }
+
     updateReservationStatus(id, newStatus) {
       const state = this.getState();
       const cleanId = String(id).replace('BK-', '');
       const res = state.reservations.find(r => String(r.id).replace('BK-', '') === cleanId);
       if (res) {
         res.status = newStatus;
+        if (newStatus === 'Cancelled') {
+          res.paymentStatus = 'Refunded';
+          res.transferDate = '-';
+        } else if (newStatus === 'Confirmed' && res.paymentStatus === 'Pending') {
+          res.paymentStatus = 'Paid';
+          res.transferDate = getNowStr().slice(0, 10);
+        }
         this.save(state);
         return res;
       }

@@ -3658,26 +3658,26 @@
   <!-- MODAL: CONFIRM BOOKING (ยืนยันการจองห้องพักและการบริการ) -->
   <!-- ============================================== -->
   <div class="modal-backdrop" id="modal-confirm-booking" onclick="if(event.target===this) cancelBookingConfirmation()">
-    <div class="modal-box" style="max-width: 530px;">
+    <div class="modal-box" style="max-width: 610px;">
       <div class="modal-head" style="background: linear-gradient(135deg, #0b2240 0%, #173d6b 100%); color:#fff; padding:18px 22px;">
         <div style="display:flex; align-items:center; gap:10px;">
-          <span style="font-size:24px;">🛎️</span>
+          <span style="font-size:24px;">💳</span>
           <div>
-            <h3 style="margin:0; font-size:16px; font-weight:700; color:#fff;">ยืนยันคำสั่งจอง (Confirm Booking)</h3>
-            <p style="margin:2px 0 0 0; font-size:11.5px; color:rgba(255,255,255,0.8);">กรุณาตรวจสอบข้อมูลและยืนยันว่าต้องการจองจริงหรือไม่</p>
+            <h3 style="margin:0; font-size:16px; font-weight:700; color:#fff;">ยืนยันคำสั่งจองและชำระเงิน (Checkout & Payment)</h3>
+            <p style="margin:2px 0 0 0; font-size:11.5px; color:rgba(255,255,255,0.8);">ตรวจสอบวันเข้าพัก เลือกช่องทางชำระเงินจำลอง (PromptPay / SabuyPay / บัตรเครดิต)</p>
           </div>
         </div>
         <button class="btn-close" onclick="cancelBookingConfirmation()" style="background:rgba(255,255,255,0.15); color:#fff;">&times;</button>
       </div>
-      <div class="modal-body" id="confirm-booking-body" style="padding:20px; font-size:13px;">
+      <div class="modal-body" id="confirm-booking-body" style="padding:20px; font-size:13px; max-height:72vh; overflow-y:auto;">
         <!-- Populated dynamically by openConfirmBookingModal() -->
       </div>
-      <div class="modal-foot" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:14px 20px;">
+      <div class="modal-foot" style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:14px 20px; gap:10px;">
         <button type="button" class="btn-export" onclick="cancelBookingConfirmation()" style="padding:9px 18px; font-size:12.5px; font-weight:600; color:#64748b; background:#fff; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer;">
-          ✕ ยกเลิก (ไม่ต้องการจอง)
+          ✕ ยกเลิก
         </button>
         <button type="button" class="btn-book" id="btn-submit-confirm-booking" onclick="executeConfirmedBooking()" style="padding:10px 22px; font-size:13px; font-weight:700; background:linear-gradient(135deg, #10b981 0%, #059669 100%); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 3px 8px rgba(16,185,129,0.3);">
-          <span>✓ ยืนยันการจองจริง (Confirm)</span>
+          <span>💳 ชำระเงินและยืนยันการจอง</span>
         </button>
       </div>
     </div>
@@ -5322,16 +5322,89 @@
       }
     }
 
-    // Open booking confirmation modal
+    // Open booking confirmation modal with Simulated Payment & TCN Discount
+    let selectedCheckoutMethod = 'PromptPay QR';
+    let useTcnCheckoutDiscount = false;
+
+    function getCheckoutTotals() {
+      const data = state.activeConfirmBooking || { price: 0 };
+      const basePrice = Math.max(0, Number(data.price) || 0);
+      const userBal = Math.max(0, Number((state.user && state.user.tokenBalance) || 0));
+      const maxDiscountThb = Math.floor(basePrice * 0.5);
+      const maxUsableTcn = Math.min(userBal, maxDiscountThb * 10);
+      const tokenUsed = useTcnCheckoutDiscount ? Math.floor(maxUsableTcn / 10) * 10 : 0;
+      const discountThb = Math.floor(tokenUsed / 10);
+      const netPayable = Math.max(0, basePrice - discountThb);
+      const rewardTCP = Math.round(netPayable * 0.05);
+      return { basePrice, userBal, maxDiscountThb, tokenUsed, discountThb, netPayable, rewardTCP };
+    }
+
+    function updateCheckoutSummaryUI() {
+      const t = getCheckoutTotals();
+      const netEl = document.getElementById('checkout-net-payable');
+      const discRowEl = document.getElementById('checkout-discount-line');
+      const rewardEl = document.getElementById('checkout-reward-tcp');
+      const qrAmtEl = document.getElementById('checkout-qr-amount');
+      const sabuyAmtEl = document.getElementById('checkout-sabuypay-amount');
+      const submitBtn = document.getElementById('btn-submit-confirm-booking');
+
+      if (netEl) netEl.textContent = `฿${t.netPayable.toLocaleString('th-TH')}`;
+      if (discRowEl) {
+        discRowEl.textContent = t.discountThb > 0
+          ? `ลดราคาจาก ${t.tokenUsed.toLocaleString('th-TH')} TCN (-฿${t.discountThb.toLocaleString('th-TH')})`
+          : 'รวมภาษีมูลค่าเพิ่มและค่าบริการแล้ว';
+      }
+      if (rewardEl) rewardEl.textContent = `+${t.rewardTCP.toLocaleString('th-TH')} TCP`;
+      if (qrAmtEl) qrAmtEl.textContent = `฿${t.netPayable.toLocaleString('th-TH')}`;
+      if (sabuyAmtEl) sabuyAmtEl.textContent = `฿${t.netPayable.toLocaleString('th-TH')}`;
+      if (submitBtn && !submitBtn.disabled) {
+        if (selectedCheckoutMethod === 'Pay at Property / Invoice') {
+          submitBtn.innerHTML = `<span>📋 ยืนยันการจอง (ชำระเงินภายหลัง ฿${t.netPayable.toLocaleString('th-TH')})</span>`;
+          submitBtn.style.background = 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
+        } else {
+          submitBtn.innerHTML = `<span>💳 ชำระเงิน ฿${t.netPayable.toLocaleString('th-TH')} และยืนยันการจอง</span>`;
+          submitBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        }
+      }
+    }
+
+    function toggleTcnCheckoutDiscount(checked) {
+      useTcnCheckoutDiscount = !!checked;
+      updateCheckoutSummaryUI();
+    }
+
+    function selectCheckoutPaymentMethod(method) {
+      selectedCheckoutMethod = method;
+      document.querySelectorAll('.checkout-pay-opt').forEach(el => {
+        const isMatch = el.getAttribute('data-method') === method;
+        el.style.borderColor = isMatch ? '#0284c7' : '#e2e8f0';
+        el.style.background = isMatch ? '#f0f9ff' : '#fff';
+        el.style.boxShadow = isMatch ? '0 0 0 2px rgba(2,132,199,0.15)' : 'none';
+      });
+      const panels = {
+        'PromptPay QR': 'pay-detail-qr',
+        'SabuyPay Wallet': 'pay-detail-sabuypay',
+        'Credit / Debit Card': 'pay-detail-card',
+        'Pay at Property / Invoice': 'pay-detail-later'
+      };
+      Object.entries(panels).forEach(([k, id]) => {
+        const box = document.getElementById(id);
+        if (box) box.style.display = (k === method) ? 'block' : 'none';
+      });
+      updateCheckoutSummaryUI();
+    }
+
     function openConfirmBookingModal(data) {
       state.activeConfirmBooking = data;
+      selectedCheckoutMethod = 'PromptPay QR';
+      useTcnCheckoutDiscount = false;
       const body = document.getElementById('confirm-booking-body');
       if (!body) return;
 
       const todayStr = getTodayDateStr();
       const safeCheckin = (data.checkin && data.checkin >= todayStr) ? data.checkin : todayStr;
       const safeCheckout = (data.checkout && data.checkout >= safeCheckin) ? data.checkout : getFutureDateStr(2, safeCheckin);
-      const rewardTCP = Math.round(data.price * 0.05);
+      const t = getCheckoutTotals();
 
       body.innerHTML = `
         <div style="background:#f0f7ff; border:1px solid #bae6fd; border-radius:12px; padding:14px; margin-bottom:14px; display:flex; gap:12px; align-items:flex-start;">
@@ -5363,57 +5436,130 @@
             <input type="time" id="confirm-booking-checkout-time" value="12:00" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; color:#0f172a; background:#fff; font-family:inherit;">
           </div>
         </div>
-        <div style="font-size:11.5px; color:#059669; font-weight:600; margin-bottom:14px; display:flex; align-items:center; gap:5px;">
-          <span>✓</span> ระบบเปิดให้จองเฉพาะวันนี้ (${todayStr}) และวันในอนาคตเท่านั้น (ไม่อนุญาตให้จองย้อนหลัง)
+        <div style="font-size:11.5px; color:#059669; font-weight:600; margin-bottom:12px; display:flex; align-items:center; gap:5px;">
+          <span>✓</span> ระบบเปิดให้จองเฉพาะวันนี้ (${todayStr}) และวันในอนาคตเท่านั้น
         </div>
 
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 14px; margin-bottom:14px;">
-          <div style="font-size:11.5px; font-weight:700; color:#475569; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-            <span>👤</span> ข้อมูลผู้จอง (บัญชีที่ล็อกอินอยู่)
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; margin-bottom:12px;">
+          <div style="font-size:11.5px; font-weight:700; color:#475569; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+            <span>👤 ข้อมูลผู้จอง: <b style="color:#0f172a;">${state.user.name}</b></span>
+            <span style="font-weight:500; color:#64748b;">${state.user.phone || '-'}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:3px; font-size:12px;">
-            <span style="color:#64748b;">ชื่อ-นามสกุล:</span>
-            <span style="font-weight:700; color:#0f172a;">${state.user.name}</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:3px; font-size:12px;">
-            <span style="color:#64748b;">อีเมล:</span>
-            <span style="font-weight:500; color:#0f172a;">${state.user.email || '-'}</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; font-size:12px;">
-            <span style="color:#64748b;">เบอร์โทรศัพท์:</span>
-            <span style="font-weight:500; color:#0f172a;">${state.user.phone || '-'}</span>
-          </div>
+          <div style="font-size:11.5px; color:#64748b;">อีเมลรับใบแจ้งหนี้/E-Voucher: <b style="color:#0f172a;">${state.user.email || '-'}</b></div>
         </div>
 
-        <div style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1px solid #fde68a; border-radius:10px; padding:10px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:20px;">🪙</span>
-            <div>
-              <div style="font-size:12px; font-weight:700; color:#92400e;">สิทธิ์รับแต้มสะสม (Token Cash Back 5%)</div>
-              <div style="font-size:11px; color:#b45309;">ได้รับทันทีเข้า Wallet หลังยืนยันการจอง</div>
+        <!-- Optional TCN Point Discount -->
+        <div style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1px solid #fde68a; border-radius:10px; padding:10px 14px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:18px;">🪙</span>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#92400e;">แต้มสะสมคงเหลือ: ${t.userBal.toLocaleString('th-TH')} TCN</div>
+                <div style="font-size:11px; color:#b45309;">รับเพิ่ม <b id="checkout-reward-tcp">+${t.rewardTCP.toLocaleString('th-TH')} TCP</b> ทันทีหลังชำระเงินสำเร็จ</div>
+              </div>
             </div>
           </div>
-          <div style="font-size:15px; font-weight:800; color:#b45309;">
-            +${rewardTCP.toLocaleString()} TCP
+          ${t.userBal >= 10 && t.maxDiscountThb >= 1 ? `
+          <label style="display:flex; align-items:center; gap:8px; padding-top:6px; border-top:1px dashed #fcd34d; cursor:pointer; font-size:12px; color:#78350f; font-weight:600;">
+            <input type="checkbox" id="chk-use-tcn-discount" onchange="toggleTcnCheckoutDiscount(this.checked)" style="width:16px; height:16px; accent-color:#d97706;">
+            <span>ใช้คะแนน TCN ลดราคา (10 TCN = ฿1, สูงสุด 50%)</span>
+          </label>` : ''}
+        </div>
+
+        <!-- Simulated Payment Gateway Selection (อิง PDF หน้า 150 SabuyPay & หน้า 89 Payment Method) -->
+        <div style="border:1px solid #cbd5e1; border-radius:12px; padding:14px; margin-bottom:12px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:12.5px; font-weight:700; color:#0b2240;">💳 เลือกช่องทางชำระเงิน (Payment Gateway Demo)</span>
+            <span style="font-size:10.5px; background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:99px; font-weight:600;">SabuyPay / PromptPay Ready</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; margin-bottom:12px;">
+            <button type="button" class="checkout-pay-opt" data-method="PromptPay QR" onclick="selectCheckoutPaymentMethod('PromptPay QR')" style="text-align:left; padding:10px; border:1.5px solid #0284c7; background:#f0f9ff; border-radius:8px; cursor:pointer; font-family:inherit;">
+              <div style="font-size:12.5px; font-weight:700; color:#0f172a;">📱 QR PromptPay</div>
+              <div style="font-size:11px; color:#64748b;">สแกน QR พร้อมเพย์ทันที</div>
+            </button>
+            <button type="button" class="checkout-pay-opt" data-method="SabuyPay Wallet" onclick="selectCheckoutPaymentMethod('SabuyPay Wallet')" style="text-align:left; padding:10px; border:1.5px solid #e2e8f0; background:#fff; border-radius:8px; cursor:pointer; font-family:inherit;">
+              <div style="font-size:12.5px; font-weight:700; color:#0f172a;">💠 SabuyPay Wallet</div>
+              <div style="font-size:11px; color:#64748b;">กระเป๋าเงินแอปฯ (PDF น.150)</div>
+            </button>
+            <button type="button" class="checkout-pay-opt" data-method="Credit / Debit Card" onclick="selectCheckoutPaymentMethod('Credit / Debit Card')" style="text-align:left; padding:10px; border:1.5px solid #e2e8f0; background:#fff; border-radius:8px; cursor:pointer; font-family:inherit;">
+              <div style="font-size:12.5px; font-weight:700; color:#0f172a;">💳 บัตรเครดิต / เดบิต</div>
+              <div style="font-size:11px; color:#64748b;">Visa / Mastercard / JCB</div>
+            </button>
+            <button type="button" class="checkout-pay-opt" data-method="Pay at Property / Invoice" onclick="selectCheckoutPaymentMethod('Pay at Property / Invoice')" style="text-align:left; padding:10px; border:1.5px solid #e2e8f0; background:#fff; border-radius:8px; cursor:pointer; font-family:inherit;">
+              <div style="font-size:12.5px; font-weight:700; color:#0f172a;">🏨 ชำระภายหลัง / ใบแจ้งหนี้</div>
+              <div style="font-size:11px; color:#64748b;">สถานะ Pending รอชำระเงิน</div>
+            </button>
+          </div>
+
+          <!-- Method Sub-panels -->
+          <div id="pay-detail-qr" style="background:#f8fafc; border:1px dashed #93c5fd; border-radius:8px; padding:12px; display:block;">
+            <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+              <div style="background:#fff; padding:8px; border-radius:8px; border:1px solid #cbd5e1; width:88px; height:88px; display:grid; place-items:center; flex-shrink:0;">
+                <svg viewBox="0 0 60 60" width="70" height="70" aria-label="PromptPay QR Demo">
+                  <rect width="60" height="60" fill="#fff"/>
+                  <rect x="4" y="4" width="16" height="16" fill="#0b2240"/><rect x="7" y="7" width="10" height="10" fill="#fff"/><rect x="9" y="9" width="6" height="6" fill="#0b2240"/>
+                  <rect x="40" y="4" width="16" height="16" fill="#0b2240"/><rect x="43" y="7" width="10" height="10" fill="#fff"/><rect x="45" y="9" width="6" height="6" fill="#0b2240"/>
+                  <rect x="4" y="40" width="16" height="16" fill="#0b2240"/><rect x="7" y="43" width="10" height="10" fill="#fff"/><rect x="9" y="45" width="6" height="6" fill="#0b2240"/>
+                  <rect x="24" y="8" width="4" height="4" fill="#0b2240"/><rect x="30" y="12" width="6" height="4" fill="#0b2240"/>
+                  <rect x="24" y="24" width="12" height="12" fill="#0284c7"/><rect x="27" y="27" width="6" height="6" fill="#fff"/>
+                  <rect x="8" y="26" width="8" height="4" fill="#0b2240"/><rect x="42" y="26" width="10" height="4" fill="#0b2240"/>
+                  <rect x="26" y="42" width="6" height="6" fill="#0b2240"/><rect x="38" y="42" width="8" height="8" fill="#0b2240"/><rect x="48" y="48" width="8" height="8" fill="#0b2240"/>
+                </svg>
+              </div>
+              <div style="flex:1; min-width:180px;">
+                <div style="font-size:12px; font-weight:700; color:#0b2240;">Thai QR Payment (PromptPay Escrow)</div>
+                <div style="font-size:11.5px; color:#475569; margin-top:2px;">ชื่อบัญชี: <b>บจก. ทราวิซโก (ThailandCONNEX)</b></div>
+                <div style="font-size:11.5px; color:#475569;">ยอดโอน: <b id="checkout-qr-amount" style="color:#0284c7;">฿${t.netPayable.toLocaleString('th-TH')}</b></div>
+                <div style="font-size:10.5px; color:#059669; margin-top:4px;">✓ กดปุ่มสีเขียวด้านล่างเพื่อจำลองการสแกนและตรวจสอบยอดอัตโนมัติ</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="pay-detail-sabuypay" style="display:none; background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <b style="color:#0369a1; font-size:12.5px;">💠 SabuyPay Connected Account</b>
+              <span style="font-size:11px; color:#059669; font-weight:700;">● พร้อมใช้งาน</span>
+            </div>
+            <div style="font-size:11.5px; color:#334155;">ยอดเงินใน Wallet (จำลอง): <b>฿50,000.00</b> • ยอดตัดชำระ: <b id="checkout-sabuypay-amount" style="color:#0284c7;">฿${t.netPayable.toLocaleString('th-TH')}</b></div>
+            <div style="font-size:10.5px; color:#64748b; margin-top:4px;">อ้างอิงโครงสร้างโมดูล Topup / Payment & SabuyPay ในรายงาน PDF หน้า 150</div>
+          </div>
+
+          <div id="pay-detail-card" style="display:none; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <div style="grid-column:1/-1;">
+                <label style="font-size:11px; color:#64748b; display:block; margin-bottom:2px;">หมายเลขบัตร (Demo Card Number)</label>
+                <input type="text" id="checkout-card-no" value="4532 •••• •••• 8819" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; font-family:monospace;">
+              </div>
+              <div>
+                <label style="font-size:11px; color:#64748b; display:block; margin-bottom:2px;">วันหมดอายุ (MM/YY)</label>
+                <input type="text" value="12/28" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px;">
+              </div>
+              <div>
+                <label style="font-size:11px; color:#64748b; display:block; margin-bottom:2px;">CVV (จำลอง)</label>
+                <input type="password" value="888" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px;">
+              </div>
+            </div>
+          </div>
+
+          <div id="pay-detail-later" style="display:none; background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:12px; font-size:11.5px; color:#9a3412;">
+            <b>🏨 สำรองที่นั่ง / ชำระผ่านใบแจ้งหนี้ (Invoice Pending):</b> ระบบจะออกเลขที่ใบแจ้งหนี้ให้ทันที โดยสถานะการชำระจะแสดงเป็น <b>Pending (รอชำระเงิน)</b> ทั้งฝั่งลูกค้าและ Admin จนกว่าจะกดยืนยันรับยอด
           </div>
         </div>
 
         <div style="background:#f1f5f9; border-radius:10px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div style="font-size:11.5px; color:#64748b;">ยอดชำระสุทธิ (Total Amount)</div>
-            <div style="font-size:11px; color:#94a3b8;">รวมภาษีมูลค่าเพิ่มและค่าบริการแล้ว</div>
+            <div style="font-size:11.5px; color:#64748b;">ยอดชำระสุทธิ (Net Payable)</div>
+            <div id="checkout-discount-line" style="font-size:11px; color:#059669; font-weight:600;">รวมภาษีมูลค่าเพิ่มและค่าบริการแล้ว</div>
           </div>
-          <div style="font-size:22px; font-weight:800; color:#0284c7; font-family:'IBM Plex Sans Thai';">
-            ฿${Number(data.price).toLocaleString('th-TH')}
+          <div id="checkout-net-payable" style="font-size:22px; font-weight:800; color:#0284c7; font-family:'IBM Plex Sans Thai';">
+            ฿${t.netPayable.toLocaleString('th-TH')}
           </div>
-        </div>
-
-        <div style="margin-top:14px; padding:10px 12px; background:#fff7ed; border:1px dashed #fdba74; border-radius:8px; font-size:12px; color:#9a3412; display:flex; gap:8px; align-items:center;">
-          <span style="font-size:18px;">❓</span>
-          <span><b>ยืนยันคำสั่งจอง:</b> คุณต้องการจองบริการ/ห้องพักนี้จริงๆ หรือไม่? เมื่อกดยืนยัน ระบบจะทำการบันทึกและส่งข้อมูลไปยังระบบผู้ดูแลทันที</span>
         </div>
       `;
 
+      const submitBtn = document.getElementById('btn-submit-confirm-booking');
+      if (submitBtn) submitBtn.disabled = false;
+      updateCheckoutSummaryUI();
       openModal('modal-confirm-booking');
     }
 
@@ -5424,7 +5570,7 @@
       showToast('ℹ️ ยกเลิกรายการ ไม่ได้ทำการจอง', 'info');
     }
 
-    // Execute confirmed booking
+    // Execute confirmed booking (with simulated payment verification)
     function executeConfirmedBooking() {
       if (!state.activeConfirmBooking) return;
       if (!isUserLoggedIn()) {
@@ -5465,44 +5611,73 @@
         return;
       }
 
-      const newBooking = {
-        id: newId,
-        refNo: '1675' + Math.floor(100000000000 + Math.random() * 900000000000),
-        userId: state.user.id || 'TC-849204',
-        guest: state.user.name,
-        email: state.user.email,
-        phone: state.user.phone,
-        agent: b.type === 'directory' ? 'User Direct (Data Bank)' : 'User Direct (Web Portal)',
-        serviceName: b.title,
-        property: b.provider,
-        checkin: checkinVal,
-        checkout: checkoutVal,
-        checkinTime: checkinTimeVal,
-        checkoutTime: checkoutTimeVal,
-        bookedOn: nowStr,
-        amount: b.price,
-        commission: Math.round(b.price * 0.05),
-        status: 'Confirmed',
-        notes: `${b.type === 'directory' ? 'จองผ่าน Data Bank Directory' : 'จองออนไลน์ผ่าน ThailandCONNEX Platform'} (เช็คอิน ${checkinTimeVal} น. • เช็คเอาท์ ${checkoutTimeVal} น.)`
-      };
+      const totals = getCheckoutTotals();
+      const payMethod = selectedCheckoutMethod || 'PromptPay QR';
+      const isPayLater = payMethod === 'Pay at Property / Invoice';
+      const payStatus = isPayLater ? 'Pending' : 'Paid';
+      const bookStatus = isPayLater ? 'PendingConfirm' : 'Confirmed';
 
-      if (typeof TCStore !== 'undefined') {
-        TCStore.addReservation(newBooking);
-        syncStateFromStore();
-      } else {
-        state.reservations.unshift(newBooking);
-        state.user.tokenBalance += Math.round(b.price * 0.05);
+      const submitBtn = document.getElementById('btn-submit-confirm-booking');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = isPayLater
+          ? '<span>⏳ กำลังออกใบแจ้งหนี้...</span>'
+          : `<span>⏳ กำลังตรวจสอบการชำระ (${payMethod})...</span>`;
       }
 
-      updateHeaderBadges();
-      renderReservations();
-      renderTokenLogs();
+      setTimeout(() => {
+        const newBooking = {
+          id: newId,
+          refNo: '1675' + Math.floor(100000000000 + Math.random() * 900000000000),
+          userId: state.user.id || 'TC-849204',
+          guest: state.user.name,
+          email: state.user.email,
+          phone: state.user.phone,
+          agent: b.type === 'directory' ? 'User Direct (Data Bank)' : 'User Direct (Web Portal)',
+          serviceName: b.title,
+          property: b.provider,
+          checkin: checkinVal,
+          checkout: checkoutVal,
+          checkinTime: checkinTimeVal,
+          checkoutTime: checkoutTimeVal,
+          bookedOn: nowStr,
+          originalAmount: totals.basePrice,
+          tokenUsed: totals.tokenUsed,
+          tokenDiscount: totals.discountThb,
+          amount: totals.netPayable,
+          commission: Math.round(totals.netPayable * 0.05),
+          status: bookStatus,
+          paymentMethod: payMethod,
+          paymentStatus: payStatus,
+          invoiceNo: `INV-${todayStr.slice(0, 4)}-${newId}`,
+          invoiceDate: todayStr,
+          notes: `${b.type === 'directory' ? 'จองผ่าน Data Bank Directory' : 'จองออนไลน์ผ่าน ThailandCONNEX'} (${payMethod} • ${payStatus === 'Paid' ? 'ชำระแล้ว' : 'รอชำระเงิน'} • เช็คอิน ${checkinTimeVal} น.)`
+        };
 
-      closeModal('modal-confirm-booking');
-      state.activeConfirmBooking = null;
+        if (typeof TCStore !== 'undefined') {
+          TCStore.addReservation(newBooking);
+          syncStateFromStore();
+        } else {
+          state.reservations.unshift(newBooking);
+          if (totals.tokenUsed > 0) state.user.tokenBalance -= totals.tokenUsed;
+          if (payStatus === 'Paid') state.user.tokenBalance += totals.rewardTCP;
+        }
 
-      showToast(`ยืนยันการจองสำเร็จ! รหัสการจอง: BK-${newId} (รับ +${Math.round(b.price * 0.05)} TCP) ส่งข้อมูลสดไปยัง Admin เรียบร้อย`);
-      setTimeout(() => switchTab('view-reservations', 'ประวัติการจอง'), 600);
+        if (submitBtn) submitBtn.disabled = false;
+        updateHeaderBadges();
+        renderReservations();
+        renderTokenLogs();
+
+        closeModal('modal-confirm-booking');
+        state.activeConfirmBooking = null;
+
+        if (isPayLater) {
+          showToast(`บันทึกการจอง #BK-${newId} (ใบแจ้งหนี้ ${newBooking.invoiceNo}) สถานะรอชำระเงิน ส่งไปยัง Admin แล้ว`);
+        } else {
+          showToast(`✅ ชำระเงินสำเร็จ (${payMethod})! รหัส BK-${newId} • ใบแจ้งหนี้ ${newBooking.invoiceNo} (รับ +${totals.rewardTCP} TCP)`);
+        }
+        setTimeout(() => switchTab('view-reservations', 'ประวัติการจอง'), 500);
+      }, 650);
     }
 
     // Render Rewards Catalog
@@ -5766,14 +5941,21 @@
       }
 
       // 5. Render user's bookings
-      tbody.innerHTML = filtered.map(r => `
+      tbody.innerHTML = filtered.map(r => {
+        const payStatus = r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' ? 'Pending' : 'Paid'));
+        const payBadgeColor = payStatus === 'Paid' ? '#059669' : (payStatus === 'Refunded' ? '#dc2626' : '#d97706');
+        const payBadgeText = payStatus === 'Paid' ? '✓ ชำระแล้ว' : (payStatus === 'Refunded' ? '↩ คืนเงิน' : '⏳ รอชำระ');
+        return `
         <tr>
-          <td><b style="color:var(--blue); font-family: 'IBM Plex Sans Thai', sans-serif;">BK-${r.id}</b></td>
+          <td><b style="color:var(--blue); font-family: 'IBM Plex Sans Thai', sans-serif;">BK-${r.id}</b><br><small style="color:var(--muted); font-size:10.5px;">${r.invoiceNo || ('INV-2026-' + r.id)}</small></td>
           <td><b>${r.guest}</b><br><small style="color:var(--muted);">${r.phone || '-'}</small></td>
           <td>${r.serviceName}<br><small style="color:var(--muted);">${r.property}</small></td>
           <td>${r.checkin}</td>
           <td>${r.checkout}</td>
-          <td><b style="font-family:'IBM Plex Sans Thai';">฿${Number(r.amount).toLocaleString('th-TH')}</b></td>
+          <td>
+            <b style="font-family:'IBM Plex Sans Thai';">฿${Number(r.amount).toLocaleString('th-TH')}</b><br>
+            <small style="color:${payBadgeColor}; font-weight:600; font-size:10.5px;">${payBadgeText} (${r.paymentMethod || 'SabuyPay'})</small>
+          </td>
           <td><small style="color:var(--muted);">${r.bookedOn}</small></td>
           <td>
             <span class="status-badge ${r.status ? r.status.toLowerCase() : 'confirmed'}">
@@ -5786,7 +5968,8 @@
             </button>
           </td>
         </tr>
-      `).join('');
+      `;
+      }).join('');
 
       if (summaryEl) {
         summaryEl.textContent = `แสดงรายการที่ 1 ถึง ${filtered.length} จากประวัติการจองของคุณทั้งหมด ${userReservations.length} รายการ`;
@@ -5920,19 +6103,43 @@
       renderReservations();
     }
 
+    function payPendingBookingFromModal(bookingId) {
+      const sel = document.getElementById('pending-pay-method-select');
+      const method = (sel && sel.value) || 'PromptPay QR';
+      if (typeof TCStore !== 'undefined') {
+        TCStore.markReservationPaid(bookingId, method);
+        syncStateFromStore();
+      }
+      updateHeaderBadges();
+      renderReservations();
+      renderTokenLogs();
+      viewBookingDetail(bookingId);
+      showToast(`✅ ชำระเงินรายการ #BK-${bookingId} ผ่าน ${method} สำเร็จแล้ว! อัปเดตใบแจ้งหนี้และสถานะไปยัง Admin แล้ว`);
+    }
+
     function viewBookingDetail(bookingId) {
       const r = state.reservations.find(x => x.id === bookingId);
       if (!r) return;
 
+      const payStatus = r.paymentStatus || (r.status === 'Cancelled' ? 'Refunded' : (r.status === 'PendingConfirm' ? 'Pending' : 'Paid'));
+      const payMethod = r.paymentMethod || 'SabuyPay Wallet';
+      const invoiceNo = r.invoiceNo || ('INV-2026-' + r.id);
+      const payBg = payStatus === 'Paid' ? '#dcfce7' : (payStatus === 'Refunded' ? '#fee2e2' : '#fef3c7');
+      const payColor = payStatus === 'Paid' ? '#166534' : (payStatus === 'Refunded' ? '#991b1b' : '#92400e');
+      const payLabel = payStatus === 'Paid' ? '✓ ชำระเงินแล้ว (Paid)' : (payStatus === 'Refunded' ? '↩ คืนเงินแล้ว (Refunded)' : '⏳ รอชำระเงิน (Pending)');
+
       const body = document.getElementById('booking-modal-body');
       body.innerHTML = `
         <div style="background:#f8fafc; border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:18px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; flex-wrap:wrap;">
             <div>
-              <span style="font-size:11px; color:var(--muted);">หมายเลขการจอง (Booking ID)</span>
+              <span style="font-size:11px; color:var(--muted);">หมายเลขการจอง (Booking ID) • ใบแจ้งหนี้: <b>${invoiceNo}</b></span>
               <div style="font-size:20px; font-weight:800; color:var(--navy); font-family: 'IBM Plex Sans Thai', sans-serif;">BK-${r.id}</div>
             </div>
-            <span class="status-badge ${r.status.toLowerCase()}">${r.status}</span>
+            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+              <span style="padding:4px 10px; border-radius:99px; font-size:11.5px; font-weight:700; background:${payBg}; color:${payColor};">${payLabel}</span>
+              <span class="status-badge ${r.status.toLowerCase()}">${r.status}</span>
+            </div>
           </div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; font-size:13px;">
             <div><b>ผู้จอง:</b> ${r.guest}</div>
@@ -5954,19 +6161,40 @@
         </div>
 
         <div style="border:1px solid var(--line); border-radius:12px; padding:16px;">
-          <h4 style="margin:0 0 10px; color:var(--navy);">สรุปยอดเงินและการชำระ</h4>
-          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:13px;">
-            <span>ยอดชำระรวม (Total Price):</span>
-            <b>฿${r.amount.toLocaleString('th-TH')}</b>
+          <h4 style="margin:0 0 10px; color:var(--navy);">สรุปยอดเงินและการชำระ (Invoice & Payment)</h4>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12.5px;">
+            <span style="color:var(--muted);">ช่องทางชำระเงิน (Payment Method):</span>
+            <b>${payMethod}</b>
           </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12.5px;">
+            <span style="color:var(--muted);">เลขที่ใบแจ้งหนี้ (Invoice No.):</span>
+            <b>${invoiceNo}</b>
+          </div>
+          ${r.tokenDiscount > 0 ? `
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12.5px; color:#059669;">
+            <span>ส่วนลดจากแต้มสะสม (${(r.tokenUsed || 0).toLocaleString('th-TH')} TCN):</span>
+            <b>-฿${Number(r.tokenDiscount).toLocaleString('th-TH')}</b>
+          </div>` : ''}
           <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; color:var(--muted);">
             <span>ค่าธรรมเนียมแพลตฟอร์ม (Included):</span>
-            <span>฿${r.commission.toLocaleString('th-TH')}</span>
+            <span>฿${Number(r.commission || 0).toLocaleString('th-TH')}</span>
           </div>
           <div style="display:flex; justify-content:space-between; border-top:1px solid var(--line); padding-top:8px; font-size:15px; font-weight:700; color:var(--navy);">
-            <span>ยอดสุทธิ:</span>
-            <span>฿${r.amount.toLocaleString('th-TH')}</span>
+            <span>ยอดชำระสุทธิ:</span>
+            <span>฿${Number(r.amount).toLocaleString('th-TH')}</span>
           </div>
+          ${payStatus === 'Pending' ? `
+          <div style="margin-top:14px; padding:12px; background:#fffbeb; border:1px solid #fde68a; border-radius:8px;">
+            <div style="font-size:12px; font-weight:700; color:#92400e; margin-bottom:8px;">💳 รายการนี้ยังรอการชำระเงิน — เลือกช่องทางเพื่อชำระทันที:</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <select id="pending-pay-method-select" style="flex:1; min-width:160px; padding:7px 10px; border:1px solid #fcd34d; border-radius:6px; font-size:12px; background:#fff;">
+                <option value="PromptPay QR">📱 QR PromptPay</option>
+                <option value="SabuyPay Wallet">💠 SabuyPay Wallet</option>
+                <option value="Credit / Debit Card">💳 บัตรเครดิต / เดบิต</option>
+              </select>
+              <button type="button" onclick="payPendingBookingFromModal('${r.id}')" style="padding:8px 16px; border:none; border-radius:6px; background:#10b981; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">✓ ชำระเงิน ฿${Number(r.amount).toLocaleString('th-TH')} ทันที</button>
+            </div>
+          </div>` : ''}
         </div>
 
         <div style="margin-top:14px; font-size:12px; color:var(--muted);">

@@ -3541,8 +3541,15 @@
               </div>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <input type="text" id="search-api-keys" class="input-clean" placeholder="🔍 ค้นหา Client, Partner หรือ Key..." style="max-width:320px; flex:1;" onkeyup="handleApiKeysSearch(this.value)">
-              <span style="font-size:12px; color:var(--text-muted);">คีย์ทั้งหมดเชื่อมต่อไปยังสภาพแวดล้อมจริงของระบบ ThailandCONNEX</span>
+              <div style="display:flex; gap:8px; flex:1; max-width:460px;">
+                <input type="text" id="search-api-keys" class="input-clean" placeholder="🔍 ค้นหา Client, Partner หรือ Key..." style="width:100%;" onkeyup="handleApiKeysSearch(this.value)">
+                <button class="btn-action" onclick="handleApiKeysSearch(document.getElementById('search-api-keys').value)">Search</button>
+                <button class="btn-secondary" onclick="resetApiKeysFilters()">Reset</button>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="api-keys-count">6</b></span>
+                <span style="font-size:12px; color:var(--text-muted);">คีย์ทั้งหมดเชื่อมต่อไปยังระบบจริง ThailandCONNEX</span>
+              </div>
             </div>
             <div style="overflow-x:auto;">
               <table class="clean-table" id="table-api-keys">
@@ -3593,7 +3600,7 @@
 
               <!-- Headers Display -->
               <div style="font-size:11.5px; font-family:monospace; color:#475569; background:#fff; padding:8px 12px; border-radius:6px; border:1px solid #cbd5e1; margin-bottom:12px;">
-                <b>Headers:</b> Authorization: Bearer tk_live_9a71bf08d4924c5bb980d908271dfcc891 | Accept: application/json | X-Gateway: ThailandCONNEX-Core
+                <b>Headers:</b> Authorization: Bearer <span id="api-console-auth-token">tk_live_9a71bf08d4924c5bb980d908271dfcc891</span> | Accept: application/json | X-Gateway: ThailandCONNEX-Core
               </div>
 
               <!-- Response Area -->
@@ -4754,13 +4761,28 @@
         <button style="background:transparent; font-size:18px;" onclick="closeModal('modal-new-apikey')">✕</button>
       </div>
       <div class="modal-body">
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">Client / Service Name *</label>
-          <input type="text" id="new-api-client" class="input-clean" placeholder="เช่น TAT Tourism Open Gateway" style="width:100%; margin-top:4px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Client / Service Name *</label>
+            <input type="text" id="new-api-client" class="input-clean" placeholder="เช่น TAT Tourism Open Gateway" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Partner Organization</label>
+            <input type="text" id="new-api-org" class="input-clean" placeholder="เช่น Traveloka / Gianttick OTA" value="External Partner OTA" style="width:100%; margin-top:4px;">
+          </div>
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">Whitelisted IP Address</label>
-          <input type="text" id="new-api-ip" class="input-clean" placeholder="เช่น 128.199.100.55" value="128.199.100.55" style="width:100%; margin-top:4px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Environment</label>
+            <select id="new-api-env" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="Production">Production (Live)</option>
+              <option value="Sandbox">Sandbox (Test)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Whitelisted IP Address</label>
+            <input type="text" id="new-api-ip" class="input-clean" placeholder="เช่น 128.199.100.55" value="128.199.100.55" style="width:100%; margin-top:4px;">
+          </div>
         </div>
         <div style="margin-bottom:12px;">
           <label style="font-size:12px; font-weight:600;">Rate Limit</label>
@@ -6431,17 +6453,20 @@
     }
 
     function saveNewApiKey() {
-      const client = document.getElementById('new-api-client').value || 'New Client App';
-      const ip = document.getElementById('new-api-ip').value || '203.144.10.1';
+      const client = (document.getElementById('new-api-client').value || '').trim() || 'New Client App';
+      const org = (document.getElementById('new-api-org') && document.getElementById('new-api-org').value.trim()) || 'External Partner Developer';
+      const env = (document.getElementById('new-api-env') && document.getElementById('new-api-env').value) || 'Production';
+      const ip = (document.getElementById('new-api-ip').value || '').trim() || '203.144.10.1';
       const ratelimit = document.getElementById('new-api-ratelimit').value || '5,000 req/min';
-      const keyShort = 'tk_live_' + Math.random().toString(36).substring(2, 12) + '...';
-      const fullKey = 'tk_live_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const prefix = env === 'Sandbox' ? 'tk_test_' : 'tk_live_';
+      const keyShort = prefix + Math.random().toString(36).substring(2, 12) + '...';
+      const fullKey = prefix + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
       const newKeyObj = {
         id: 'KEY-' + Math.floor(100 + Math.random() * 900),
         client: client,
-        org: 'External Partner Developer',
-        environment: 'Production',
+        org: org,
+        environment: env,
         keyPrefix: keyShort,
         fullKey: fullKey,
         rateLimit: ratelimit,
@@ -6573,9 +6598,35 @@
 
     function prefillApiConsole(clientName, fullKey) {
       switchView('api-keys', document.getElementById('sub-btn-api-keys'));
+      const tokEl = document.getElementById('api-console-auth-token');
+      if (tokEl && fullKey) tokEl.textContent = fullKey;
       const box = document.getElementById('api-console-result-box');
       if (box) box.scrollIntoView({ behavior: 'smooth' });
-      showToast(`โหลดพารามิเตอร์สำหรับ ${clientName} ลงใน API Console เรียบร้อย`, 'info');
+      showToast(`โหลด API Key ของ ${clientName} ลงใน Console เรียบร้อย`, 'info');
+    }
+
+    function editApiKeyRow(keyId) {
+      if (!apiKeysMasterList) return;
+      const k = apiKeysMasterList.find(x => String(x.id) === String(keyId));
+      if (!k) return;
+      openUniversalEditModal(`แก้ไข API Key: ${k.client}`, [
+        { key: 'client', label: 'Client / Service Name', value: k.client || '' },
+        { key: 'org', label: 'Organization / Partner', value: k.org || '' },
+        { key: 'environment', label: 'Environment', value: k.environment || 'Production', type: 'select', options: ['Production', 'Sandbox'] },
+        { key: 'rateLimit', label: 'Rate Limit', value: k.rateLimit || '5,000 req/min', type: 'select', options: ['5,000 req/min', '10,000 req/min', '20,000 req/min'] },
+        { key: 'whitelistedIps', label: 'Whitelisted IP', value: k.whitelistedIps || 'Any' }
+      ], (v) => {
+        if (v.client.trim()) k.client = v.client.trim();
+        k.org = v.org.trim();
+        k.environment = v.environment;
+        k.rateLimit = v.rateLimit;
+        k.whitelistedIps = v.whitelistedIps.trim() || 'Any';
+        if (typeof TCStore !== 'undefined' && typeof TCStore.save === 'function') {
+          TCStore.save(TCStore.getState());
+        }
+        renderApiKeysTableWithPagination();
+        showToast(`บันทึกการแก้ไข API Key "${k.client}" เรียบร้อย!`, 'success');
+      });
     }
 
     function toggleApiKeyStatus(id) {
@@ -7992,6 +8043,9 @@
         return true;
       });
 
+      const countEl = document.getElementById('api-keys-count');
+      if (countEl) countEl.textContent = filtered.length;
+
       const totalPages = Math.max(1, Math.ceil(filtered.length / API_PER_PAGE));
       if (apiKeysCurrentPage > totalPages) apiKeysCurrentPage = totalPages;
       if (apiKeysCurrentPage < 1) apiKeysCurrentPage = 1;
@@ -8030,8 +8084,11 @@
                   <span class="badge ${isActive ? 'badge-success' : 'badge-danger'}" style="margin-left:6px; font-size:10.5px;">${k.status || 'Active'}</span>
                 </td>
                 <td style="text-align: right;">
-                  <button class="btn-secondary" style="font-size:11px; padding:3px 8px;" onclick="prefillApiConsole('${k.client}', '${k.fullKey || ''}')">🧪 Test</button>
-                  <button class="btn-secondary" style="font-size:11px; padding:3px 8px; color:#ef4444;" onclick="deleteApiKeyRow('${k.id}', '${k.client}')">🗑️</button>
+                  <div style="display:inline-flex; gap:4px; justify-content:flex-end;">
+                    <button class="btn-secondary" style="font-size:11px; padding:3px 8px;" onclick="prefillApiConsole('${k.client}', '${k.fullKey || ''}')">🧪 Test</button>
+                    <button class="btn-secondary" style="font-size:11px; padding:3px 7px;" onclick="editApiKeyRow('${k.id}')" title="แก้ไข API Key">✏️</button>
+                    <button class="btn-secondary" style="font-size:11px; padding:3px 7px; color:#ef4444;" onclick="deleteApiKeyRow('${k.id}', '${k.client}')" title="ลบ API Key">🗑️</button>
+                  </div>
                 </td>
               </tr>
             `;
@@ -8056,6 +8113,15 @@
       apiKeysSearchQuery = val || '';
       apiKeysCurrentPage = 1;
       renderApiKeysTableWithPagination();
+    }
+
+    function resetApiKeysFilters() {
+      const inp = document.getElementById('search-api-keys');
+      if (inp) inp.value = '';
+      apiKeysSearchQuery = '';
+      apiKeysCurrentPage = 1;
+      renderApiKeysTableWithPagination();
+      showToast('รีเซ็ตการค้นหา API Key เรียบร้อย', 'info');
     }
 
     // ========================================================

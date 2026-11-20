@@ -4186,10 +4186,10 @@
                   คลังสินค้าและบริการเชื่อมต่อข้อมูลจริงจาก DEPA Package_list.xlsx (แสดงผลแบบแบ่งหน้า รอบละ 10 รายการ)
                 </div>
               </div>
-              <button class="btn-action" onclick="openModal('modal-new-package')">+ เพิ่มแพ็กเกจใหม่</button>
+              <button class="btn-action" onclick="openNewPackageModal()">+ เพิ่มแพ็กเกจใหม่</button>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-packages" class="input-clean" placeholder="🔍 ค้นหาชื่อแพ็กเกจ ผู้ให้บริการ หรือพิกัด..." style="flex:1; min-width:240px;" onkeyup="handlePkgSearch(this.value)">
+              <input type="text" id="search-packages" class="input-clean" placeholder="🔍 ค้นหาชื่อแพ็กเกจ ผู้ให้บริการ หรือพิกัด..." style="flex:1; min-width:220px;" onkeyup="handlePkgSearch(this.value)">
               <select id="filter-package-cat" class="input-clean" onchange="handlePkgCategory(this.value)">
                 <option value="all">ทุกหมวดหมู่ (ที่พัก, ขนส่ง, ท่องเที่ยว, สปา, อาหาร, ของที่ระลึก)</option>
                 <option value="ที่พัก">เฉพาะ ที่พัก (Hotels & Resorts)</option>
@@ -4199,6 +4199,8 @@
                 <option value="อาหาร">เฉพาะ อาหาร/เครื่องดื่ม (Dining & Buffets)</option>
                 <option value="ของที่ระลึก">เฉพาะ สินค้าและของที่ระลึก (Souvenirs)</option>
               </select>
+              <button class="btn-action" onclick="handlePkgSearch(document.getElementById('search-packages').value)">Search</button>
+              <button class="btn-secondary" onclick="resetPackageFilters()">Reset</button>
               <button class="btn-secondary" onclick="exportAllPackagesToCSV()">Export CSV 📥</button>
               <span style="font-size:12.5px; color:var(--text-muted)">Total Records: <b id="package-count">1,190</b></span>
             </div>
@@ -4932,11 +4934,17 @@
           <label style="font-size:12px; font-weight:600;">ชื่อแพ็กเกจ (Package Name) *</label>
           <input type="text" id="new-pkg-name" class="input-clean" placeholder="เช่น เดย์ทัวร์เกาะพีพี อ่าวมาหยา เรือคาตามารัน" style="width:100%; margin-top:4px;">
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">ผู้ให้บริการ (Supplier) *</label>
-          <input type="text" id="new-pkg-supplier" class="input-clean" placeholder="เช่น อันดามัน เวฟ มาสเตอร์" style="width:100%; margin-top:4px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">ผู้ให้บริการ (Supplier) *</label>
+            <input type="text" id="new-pkg-supplier" class="input-clean" placeholder="เช่น อันดามัน เวฟ มาสเตอร์" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">จังหวัด / พิกัด (Location)</label>
+            <input type="text" id="new-pkg-location" class="input-clean" placeholder="เช่น กระบี่ / ภูเก็ต" value="ภูเก็ต" style="width:100%; margin-top:4px;">
+          </div>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
           <div>
             <label style="font-size:12px; font-weight:600;">หมวดหมู่ *</label>
             <select id="new-pkg-cat" class="input-clean" style="width:100%; margin-top:4px;">
@@ -4945,11 +4953,22 @@
               <option value="ขนส่ง">ขนส่ง</option>
               <option value="สุขภาพ/สปา">สุขภาพ/สปา</option>
               <option value="อาหาร/เครื่องดื่ม">อาหาร/เครื่องดื่ม</option>
+              <option value="ของที่ระลึก">ของที่ระลึก</option>
             </select>
           </div>
           <div>
             <label style="font-size:12px; font-weight:600;">ราคาขาย (THB) *</label>
-            <input type="text" id="new-pkg-price" class="input-clean" value="฿2,500.00" style="width:100%; margin-top:4px;">
+            <input type="text" id="new-pkg-price" class="input-clean" value="2500" style="width:100%; margin-top:4px;">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">Check-in Time (เวลาเช็คอิน)</label>
+            <input type="time" id="new-pkg-checkin" class="input-clean" value="14:00" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">Check-out Time (เวลาเช็คเอาท์)</label>
+            <input type="time" id="new-pkg-checkout" class="input-clean" value="12:00" style="width:100%; margin-top:4px;">
           </div>
         </div>
       </div>
@@ -6883,9 +6902,13 @@
                   <span class="badge badge-success" style="font-size:10.5px;">Available</span>
                 </td>
                 <td style="text-align: right;">
-                  <button class="btn-secondary" style="font-size:11.5px; padding:4px 10px;" onclick="openAdminHotelDetail('${s.id}')">
-                    ดูรายละเอียด 👁️
-                  </button>
+                  <div style="display:inline-flex; gap:4px; justify-content:flex-end;">
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 8px;" onclick="openAdminHotelDetail('${s.id}')">
+                      ดูรายละเอียด 👁️
+                    </button>
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 7px;" onclick="editProductRow('${s.id}')" title="แก้ไขแพ็กเกจ">✏️</button>
+                    <button class="btn-secondary" style="font-size:11.5px; padding:4px 7px; color:#ef4444;" onclick="deleteProductRow('${s.id}')" title="ลบแพ็กเกจ">🗑️</button>
+                  </div>
                 </td>
               </tr>
             `;
@@ -7102,21 +7125,53 @@
       openModal('modal-admin-hotel-detail');
     }
 
+    function openNewPackageModal() {
+      if (document.getElementById('new-pkg-name')) document.getElementById('new-pkg-name').value = '';
+      if (document.getElementById('new-pkg-supplier')) document.getElementById('new-pkg-supplier').value = '';
+      if (document.getElementById('new-pkg-location')) document.getElementById('new-pkg-location').value = 'ภูเก็ต';
+      if (document.getElementById('new-pkg-price')) document.getElementById('new-pkg-price').value = '2500';
+      openModal('modal-new-package');
+    }
+
+    function resetPackageFilters() {
+      const s = document.getElementById('search-packages');
+      if (s) s.value = '';
+      const c = document.getElementById('filter-package-cat');
+      if (c) c.value = 'all';
+      pkgSearchQuery = '';
+      pkgCategoryFilter = 'all';
+      pkgCurrentPage = 1;
+      renderPackagesTableWithPagination();
+      showToast('รีเซ็ตตัวกรองแพ็กเกจเรียบร้อย', 'info');
+    }
+
     function saveNewPackage() {
-      const name = document.getElementById('new-pkg-name').value || 'แพ็กเกจใหม่';
-      const supplier = document.getElementById('new-pkg-supplier').value || 'Supplier';
+      const name = (document.getElementById('new-pkg-name').value || '').trim() || 'แพ็กเกจใหม่';
+      const supplier = (document.getElementById('new-pkg-supplier').value || '').trim() || 'Supplier';
+      const location = (document.getElementById('new-pkg-location') && document.getElementById('new-pkg-location').value.trim()) || 'ประเทศไทย';
       const cat = document.getElementById('new-pkg-cat').value || 'สถานที่ท่องเที่ยว';
       const priceRaw = parseFloat(document.getElementById('new-pkg-price').value.replace(/[^0-9.]/g, '')) || 1500;
+      const checkIn = (document.getElementById('new-pkg-checkin') && document.getElementById('new-pkg-checkin').value) || '14:00';
+      const checkOut = (document.getElementById('new-pkg-checkout') && document.getElementById('new-pkg-checkout').value) || '12:00';
+
+      let catCode = 'attraction';
+      if (cat.includes('ที่พัก')) catCode = 'hotel';
+      else if (cat.includes('ขนส่ง')) catCode = 'transport';
+      else if (cat.includes('สุขภาพ') || cat.includes('สปา')) catCode = 'spa';
+      else if (cat.includes('อาหาร')) catCode = 'food';
+      else if (cat.includes('ของที่ระลึก')) catCode = 'souvenir';
 
       const newPkg = {
         id: 'SRV-CUSTOM-' + Math.floor(1000 + Math.random() * 9000),
         title: name,
         provider: supplier,
-        category: 'attraction',
+        category: catCode,
         categoryName: cat,
         price: priceRaw,
-        unit: 'รายการ',
-        location: 'ประเทศไทย',
+        unit: catCode === 'hotel' ? 'คืน' : 'รายการ',
+        location: location,
+        checkIn: checkIn + ' น.',
+        checkOut: checkOut + ' น.',
         allotment: 10,
         features: ['SHA Plus', 'พร้อมจำหน่าย'],
         image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&q=80'
@@ -7133,6 +7188,7 @@
 
       pkgCurrentPage = 1;
       renderPackagesTableWithPagination();
+      if (typeof renderProductsTableWithPagination === 'function') renderProductsTableWithPagination();
       closeModal('modal-new-package');
       showToast(`เพิ่มแพ็กเกจ ${name} สำเร็จ!`, 'success');
     }

@@ -2758,77 +2758,82 @@
         <div class="view-section" id="view-manage-profile">
           <div class="table-card">
             <div class="table-card-head">
-              <span>Manage Profile & Merchant Information (ข้อมูลนิติบุคคลและผู้ประกอบการ)</span>
+              <div>
+                <span>Manage Profile & Merchant Information (ข้อมูลนิติบุคคลและผู้ประกอบการ)</span>
+                <div style="font-size:11.5px; color:var(--text-muted); font-weight:400; margin-top:2px;">
+                  Created: <b>Jan 12th, 2023 - 10:15:22 AM</b> &nbsp;|&nbsp; Last Updated: <b id="prof-last-updated">Feb 8th, 2023 - 10:24:13 AM</b>
+                </div>
+              </div>
               <button class="btn-action" onclick="saveProfile()">💾 บันทึกข้อมูล (Save Changes)</button>
             </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
+            <div id="manage-profile-form" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Company Name</label>
-                <input type="text" class="input-clean" value="บริษัท ใบหยกสกาย จำกัด" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-company" class="input-clean" value="บริษัท ใบหยกสกาย จำกัด" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Service / Activity Name</label>
-                <input type="text" class="input-clean" value="Baiyoke Sky Buffet & Observation Deck" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-service-name" class="input-clean" value="Baiyoke Sky Buffet & Observation Deck" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Service / Activity type</label>
-                <input type="text" class="input-clean" value="Food & Drinks (อาหารและเครื่องดื่ม)" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-service-type" class="input-clean" value="Food & Drinks (อาหารและเครื่องดื่ม)" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Country</label>
-                <input type="text" class="input-clean" value="Thailand" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-country" class="input-clean" value="Thailand" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Province</label>
-                <input type="text" class="input-clean" value="กรุงเทพมหานคร" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-province" class="input-clean" value="กรุงเทพมหานคร" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">City / District</label>
-                <input type="text" class="input-clean" value="เขตราชเทวี" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-district" class="input-clean" value="เขตราชเทวี" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Sub-district (แขวง/ตำบล)</label>
-                <input type="text" class="input-clean" value="ถนนพญาไท" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-subdistrict" class="input-clean" value="ถนนพญาไท" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Postcode (รหัสไปรษณีย์)</label>
-                <input type="text" class="input-clean" value="10400" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-postcode" class="input-clean" value="10400" style="width:100%; margin-top:4px;">
               </div>
               <div style="grid-column: 1 / -1;">
                 <label style="font-size:12px; font-weight:600; color:#475569;">Address (ที่อยู่จดทะเบียน)</label>
-                <input type="text" class="input-clean" value="222 ถนนราชปรารภ แขวงถนนพญาไท เขตราชเทวี กรุงเทพฯ 10400" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-address" class="input-clean" value="222 ถนนราชปรารภ แขวงถนนพญาไท เขตราชเทวี กรุงเทพฯ 10400" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Tax ID no. (เลขประจำตัวผู้เสียภาษี)</label>
-                <input type="text" class="input-clean" value="0105536181307" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-taxid" class="input-clean" value="0105536181307" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Website (เว็บไซต์อย่างเป็นทางการ)</label>
-                <input type="text" class="input-clean" value="https://www.baiyokeskyhotel.com" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-website" class="input-clean" value="https://www.baiyokeskyhotel.com" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Contact Person (ผู้ประสานงานหลัก)</label>
-                <input type="text" class="input-clean" value="Panop Api" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-contact-person" class="input-clean" value="Panop Api" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Position (ตำแหน่ง)</label>
-                <input type="text" class="input-clean" value="F&B Manager" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-position" class="input-clean" value="F&B Manager" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Contact Email</label>
-                <input type="text" class="input-clean" value="panop.api@travizgotech.com" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-email" class="input-clean" value="panop.api@travizgotech.com" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Contact no. (เบอร์โทรศัพท์)</label>
-                <input type="text" class="input-clean" value="+66 2 656 3000" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-phone" class="input-clean" value="+66 2 656 3000" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Bank Name (ธนาคารเพื่อรับเงินโอน)</label>
-                <input type="text" class="input-clean" value="ธนาคารกสิกรไทย (KBANK)" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-bank" class="input-clean" value="ธนาคารกสิกรไทย (KBANK)" style="width:100%; margin-top:4px;">
               </div>
               <div>
                 <label style="font-size:12px; font-weight:600; color:#475569;">Bank Account Number (เลขที่บัญชี)</label>
-                <input type="text" class="input-clean" value="045-2-89102-4" style="width:100%; margin-top:4px;">
+                <input type="text" id="prof-bank-acc" class="input-clean" value="045-2-89102-4" style="width:100%; margin-top:4px;">
               </div>
             </div>
           </div>
@@ -2841,10 +2846,10 @@
           <div class="table-card">
             <div class="table-card-head">
               <span>List Product (รายการสินค้าและบริการของผู้ประกอบการ)</span>
-              <button class="btn-action" onclick="openModal('modal-new-product')">+ Add New Product</button>
+              <button class="btn-action" onclick="openNewProductModal()">+ Add New Product</button>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
-              <input type="text" id="search-products" class="input-clean" placeholder="🔍 ค้นหาชื่อสินค้า หรือ Product code..." style="flex:1; min-width:220px;" onkeyup="handleProdSearch(this.value)">
+              <input type="text" id="search-products" class="input-clean" placeholder="🔍 ค้นหาชื่อสินค้า หรือ Product code..." style="flex:1; min-width:200px;" onkeyup="handleProdSearch(this.value)">
               <select id="filter-product-cat" class="input-clean" onchange="handleProdCategory(this.value)">
                 <option value="all">ทุกหมวดหมู่สินค้า</option>
                 <option value="hotel">ที่พักและโรงแรม (Hotels & Resorts)</option>
@@ -2854,6 +2859,8 @@
                 <option value="food">ร้านอาหารและเครื่องดื่ม (Food & Dining)</option>
                 <option value="souvenir">ร้านค้าปลีกและของที่ระลึก (Souvenirs)</option>
               </select>
+              <button class="btn-action" onclick="handleProdSearch(document.getElementById('search-products').value)">Search</button>
+              <button class="btn-secondary" onclick="resetProductFilters()">Reset</button>
               <button class="btn-secondary" onclick="exportAllProductsToCSV()">Export CSV 📥</button>
               <span style="font-size:12.5px; color:var(--text-muted);">Total Records: <b id="product-count">1,190</b></span>
             </div>
@@ -2892,9 +2899,10 @@
               <button class="btn-action" onclick="openModal('modal-new-contract')">+ New Contract</button>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <div style="display:flex; gap:8px; flex:1; max-width:400px;">
+              <div style="display:flex; gap:8px; flex:1; max-width:480px;">
                 <input type="text" id="search-contracts" class="input-clean" placeholder="🔍 ค้นหาสัญญาตามชื่อ หรือรหัส..." style="width:100%;" onkeyup="filterTable('search-contracts', 'table-contracts', 'contract-count')">
                 <button class="btn-action" onclick="filterTable('search-contracts', 'table-contracts', 'contract-count')">Search</button>
+                <button class="btn-secondary" onclick="document.getElementById('search-contracts').value=''; filterTable('search-contracts', 'table-contracts', 'contract-count')">Reset</button>
               </div>
               <div style="display:flex; gap:10px; align-items:center;">
                 <span style="font-size:12.5px; color:var(--text-muted)">Total search result: <b id="contract-count">10</b></span>
@@ -4466,23 +4474,42 @@
           <label style="font-size:12px; font-weight:600;">Product Name (ชื่อสินค้าหรือบริการ) *</label>
           <input type="text" id="new-prod-name" class="input-clean" placeholder="เช่น ล่องเรือดินเนอร์เจ้าพระยา Princess Cruise" style="width:100%; margin-top:4px;">
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
           <div>
             <label style="font-size:12px; font-weight:600;">Product Code *</label>
             <input type="text" id="new-prod-code" class="input-clean" placeholder="ACT009999" style="width:100%; margin-top:4px;">
           </div>
           <div>
-            <label style="font-size:12px; font-weight:600;">จองล่วงหน้า (Book before)</label>
-            <input type="text" id="new-prod-time" class="input-clean" placeholder="12 hours" value="24 hours" style="width:100%; margin-top:4px;">
+            <label style="font-size:12px; font-weight:600;">Price (ราคาขาย - บาท) *</label>
+            <input type="number" id="new-prod-price" class="input-clean" placeholder="1500" value="1500" min="0" style="width:100%; margin-top:4px;">
           </div>
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px; font-weight:600;">หมวดหมู่</label>
-          <select id="new-prod-cat" class="input-clean" style="width:100%; margin-top:4px;">
-            <option value="ชมวิว">ดินเนอร์ & ชมวิว</option>
-            <option value="บัตร">บัตรเข้าชม (Aquarium & Ticket)</option>
-            <option value="ทัวร์">เดย์ทัวร์ (Day Tour)</option>
-          </select>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">จองล่วงหน้า (Book before service)</label>
+            <input type="text" id="new-prod-time" class="input-clean" placeholder="24 hours" value="24 hours" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">หมวดหมู่สินค้า (Category)</label>
+            <select id="new-prod-cat" class="input-clean" style="width:100%; margin-top:4px;">
+              <option value="hotel">ที่พักและโรงแรม (Hotels & Resorts)</option>
+              <option value="attraction" selected>แหล่งท่องเที่ยวและบัตรเข้าชม (Attraction & Tickets)</option>
+              <option value="food">ร้านอาหารและเครื่องดื่ม (Food & Dining)</option>
+              <option value="spa">สุขภาพและสปา (Wellness & Spa)</option>
+              <option value="transport">ยานพาหนะและรถรับส่ง (Transfers & Mobility)</option>
+              <option value="souvenir">ร้านค้าปลีกและของที่ระลึก (Souvenirs)</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:600;">ผู้ให้บริการ (Provider)</label>
+            <input type="text" id="new-prod-provider" class="input-clean" placeholder="บริษัท ใบหยกสกาย จำกัด" value="บริษัท ใบหยกสกาย จำกัด" style="width:100%; margin-top:4px;">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:600;">สถานที่ / จังหวัด (Location)</label>
+            <input type="text" id="new-prod-location" class="input-clean" placeholder="กรุงเทพมหานคร" value="กรุงเทพมหานคร" style="width:100%; margin-top:4px;">
+          </div>
         </div>
       </div>
       <div class="modal-foot">
@@ -5879,24 +5906,85 @@
       showToast('บันทึกการกำหนดสิทธิ์ระดับหน้าจอสำเร็จ (Permissions Saved)', 'success');
     }
 
+    const PROFILE_FIELD_IDS = [
+      'prof-company', 'prof-service-name', 'prof-service-type', 'prof-country',
+      'prof-province', 'prof-district', 'prof-subdistrict', 'prof-postcode',
+      'prof-address', 'prof-taxid', 'prof-website', 'prof-contact-person',
+      'prof-position', 'prof-email', 'prof-phone', 'prof-bank', 'prof-bank-acc'
+    ];
+
+    function loadSavedProfile() {
+      try {
+        const raw = localStorage.getItem('TC_MERCHANT_PROFILE');
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        PROFILE_FIELD_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && data[id] !== undefined) el.value = data[id];
+        });
+        const updEl = document.getElementById('prof-last-updated');
+        if (updEl && data.lastUpdated) updEl.textContent = data.lastUpdated;
+      } catch (e) {}
+    }
+
     function saveProfile() {
-      showToast('บันทึกข้อมูลนิติบุคคลและโปรไฟล์ผู้ประกอบการเรียบร้อยแล้ว!', 'success');
+      const data = {};
+      PROFILE_FIELD_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) data[id] = el.value;
+      });
+      const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      data.lastUpdated = nowStr;
+      try { localStorage.setItem('TC_MERCHANT_PROFILE', JSON.stringify(data)); } catch (e) {}
+      const updEl = document.getElementById('prof-last-updated');
+      if (updEl) updEl.textContent = nowStr;
+      showToast('บันทึกข้อมูลนิติบุคคลและโปรไฟล์ผู้ประกอบการลงระบบเรียบร้อยแล้ว!', 'success');
+    }
+
+    window.addEventListener('DOMContentLoaded', loadSavedProfile);
+
+    function openNewProductModal() {
+      if (document.getElementById('new-prod-name')) document.getElementById('new-prod-name').value = '';
+      if (document.getElementById('new-prod-code')) document.getElementById('new-prod-code').value = 'ACT00' + Math.floor(1000 + Math.random() * 9000);
+      if (document.getElementById('new-prod-price')) document.getElementById('new-prod-price').value = '1500';
+      if (document.getElementById('new-prod-time')) document.getElementById('new-prod-time').value = '24 hours';
+      openModal('modal-new-product');
+    }
+
+    function resetProductFilters() {
+      const s = document.getElementById('search-products');
+      if (s) s.value = '';
+      const c = document.getElementById('filter-product-cat');
+      if (c) c.value = 'all';
+      prodSearchQuery = '';
+      prodCategoryFilter = 'all';
+      prodCurrentPage = 1;
+      renderProductsTableWithPagination();
+      showToast('รีเซ็ตตัวกรองสินค้าเรียบร้อย', 'info');
     }
 
     function saveNewProduct() {
-      const name = document.getElementById('new-prod-name').value || 'แพ็กเกจนำเที่ยวใหม่';
-      const code = document.getElementById('new-prod-code').value || ('ACT00' + Math.floor(1000 + Math.random() * 9000));
-      const time = document.getElementById('new-prod-time').value || '24 hours';
+      const name = (document.getElementById('new-prod-name').value || '').trim() || 'แพ็กเกจนำเที่ยวใหม่';
+      const code = (document.getElementById('new-prod-code').value || '').trim() || ('ACT00' + Math.floor(1000 + Math.random() * 9000));
+      const time = (document.getElementById('new-prod-time').value || '').trim() || '24 hours';
+      const priceVal = parseFloat(document.getElementById('new-prod-price') ? document.getElementById('new-prod-price').value : '1500');
+      const catEl = document.getElementById('new-prod-cat');
+      const catCode = catEl ? catEl.value : 'attraction';
+      const catName = catEl && catEl.options[catEl.selectedIndex] ? catEl.options[catEl.selectedIndex].text : 'กิจกรรมและสถานที่ท่องเที่ยว';
+      const provider = (document.getElementById('new-prod-provider') && document.getElementById('new-prod-provider').value.trim()) || 'ผู้ประกอบการในระบบ (Verified)';
+      const location = (document.getElementById('new-prod-location') && document.getElementById('new-prod-location').value.trim()) || 'กรุงเทพมหานคร';
 
       const newProd = {
         id: 'pkg-custom-' + Date.now(),
         title: name,
-        provider: 'ผู้ประกอบการในระบบ (Verified)',
-        location: 'กรุงเทพมหานคร',
-        category: 'attraction',
-        categoryName: 'กิจกรรมและสถานที่ท่องเที่ยว',
+        code: code,
+        bookBefore: time,
+        provider: provider,
+        location: location,
+        category: catCode,
+        categoryName: catName,
         unit: time.includes('24') ? 'คืน' : 'ครั้ง',
-        price: 1500,
+        price: isNaN(priceVal) ? 1500 : Math.max(0, priceVal),
         status: 'Approved'
       };
 
@@ -7242,9 +7330,9 @@
             <tr>
               <td style="color:#94a3b8; cursor:grab;">☰</td>
               <td><b>${s.title}</b><br><small style="color:var(--text-muted)">โดย ${s.provider} (${s.location})</small></td>
-              <td><span class="badge badge-info">ACT00${1000 + rowIdx + 1}</span></td>
-              <td>${s.unit === 'คืน' ? '24 hours' : 'Same day'}</td>
-              <td><label class="switch-ui"><input type="checkbox" checked ${isAuditor ? 'disabled' : ''} onchange="toggleProductEnabled(this, 'ACT00${1000 + rowIdx + 1}')"><span class="switch-slider"></span></label></td>
+              <td><span class="badge badge-info">${s.code || ('ACT00' + (1000 + rowIdx + 1))}</span></td>
+              <td>${s.bookBefore || (s.unit === 'คืน' ? '24 hours' : 'Same day')}</td>
+              <td><label class="switch-ui"><input type="checkbox" checked ${isAuditor ? 'disabled' : ''} onchange="toggleProductEnabled(this, '${s.code || ('ACT00' + (1000 + rowIdx + 1))}')"><span class="switch-slider"></span></label></td>
               <td><span class="badge badge-success">${isAuditor ? 'Verified' : 'Approved'}</span></td>
               <td style="text-align: right;"><b style="color:var(--primary-navy)">฿${Number(s.price).toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</b></td>
               <td style="text-align: center;">
